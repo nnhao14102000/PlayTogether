@@ -1,20 +1,20 @@
-﻿#### Summary ####
-
-    - Service Description:
-    <br /> Auth: Login, Register for Hirer, Player, Admin, Charity
+﻿> #### Summary ####
+>
+> - Service Description:  
+>    Auth: Login, Register for Hirer, Player, Admin, Charity
     
 
-#### Database ####
+> #### Database ####
+>
+> - Using Asp.net core Identity for authentication and authorization function
 
-    - Using Asp.net core Identity for authentication and authorization function
-
-#### Tables involved ####
-
-    - Identity Db (7 tables)
-    <br /> AspNetRoleClaims
-    <br /> AspNetRoles
-    <br /> AspNetUserClaims
-    <br /> AspNetUserLogins
-    <br /> AspNetUserRoles
-    <br /> AspNetUsers
-    <br /> AspNetUserTokens
+> #### Tables involved ####
+>
+>    - Identity Db (7 tables)  
+>    AspNetRoleClaims  
+>    AspNetRoles  
+>    AspNetUserClaims  
+>    AspNetUserLogins  
+>    AspNetUserRoles  
+>    AspNetUsers  
+>    AspNetUserTokens  
