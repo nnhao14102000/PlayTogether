@@ -1,0 +1,39 @@
+name: Master - Continuous Integration and Deployment
+
+on: 
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_VERSION: '5.0.x'
+  AZURE_WEBAPP_NAME: play-together
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code 🛎️
+        uses: actions/checkout@v2
+        
+      - name: Setup .NET 5 👻
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies ⌚
+        run: dotnet restore
+
+      - name: Build app 🚀
+        run: dotnet build -c Release --no-restore
+      
+      - name: Publish app 📰
+        run: dotnet publish -c Release -o ./out
+
+      - name: Deploy to Azure Web App 🚢
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_SECRET_PTO }}
+          package: ./out
+
