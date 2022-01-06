@@ -42,6 +42,10 @@ namespace PlayTogether.Api.Helpers
                 optionsLifetime: ServiceLifetime.Transient
             );
 
+            // Config for automapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Config for DI
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
 

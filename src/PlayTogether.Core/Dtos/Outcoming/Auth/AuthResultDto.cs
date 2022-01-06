@@ -7,7 +7,7 @@ namespace PlayTogether.Core.Dtos.Outgoing.Auth
     {
         public string Message { get; set; }
 
-        public bool Success { get; set; }
+        public bool Success => Errors is null;
 
         public List<string> Errors { get; set; }
 

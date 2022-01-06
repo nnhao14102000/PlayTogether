@@ -19,6 +19,34 @@ namespace PlayTogether.Core.Services.Auth
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task<AuthResultDto> LoginHirerByGoogle(GoogleLoginDto loginEmailDto)
+        {
+            try {
+                if (loginEmailDto is null) {
+                    throw new ArgumentNullException(nameof(loginEmailDto));
+                }
+                return await _authRepository.LoginHirerByGoogle(loginEmailDto);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call LoginHirerByGoogle in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResultDto> LoginPlayerByGoogle(GoogleLoginDto loginEmailDto)
+        {
+            try {
+                if (loginEmailDto is null) {
+                    throw new ArgumentNullException(nameof(loginEmailDto));
+                }
+                return await _authRepository.LoginPlayerByGoogle(loginEmailDto);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call LoginPlayerByGoogle in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<AuthResultDto> LoginUserAsync(LoginDto loginDto)
         {
             try {
@@ -43,6 +71,48 @@ namespace PlayTogether.Core.Services.Auth
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResultDto> RegisterCharityAsync(RegisterDto registerDto)
+        {
+            try {
+                if (registerDto is null) {
+                    throw new ArgumentNullException(nameof(registerDto));
+                }
+                return await _authRepository.RegisterCharityAsync(registerDto);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call RegisterCharityAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResultDto> RegisterHirerAsync(RegisterDto registerDto)
+        {
+            try {
+                if (registerDto is null) {
+                    throw new ArgumentNullException(nameof(registerDto));
+                }
+                return await _authRepository.RegisterHirerAsync(registerDto);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call RegisterHirerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterDto registerDto)
+        {
+            try {
+                if (registerDto is null) {
+                    throw new ArgumentNullException(nameof(registerDto));
+                }
+                return await _authRepository.RegisterPlayerAsync(registerDto);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call RegisterPlayerAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

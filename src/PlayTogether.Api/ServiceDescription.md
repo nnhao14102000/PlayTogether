@@ -1,12 +1,13 @@
 ﻿> #### Summary ####
 >
 > - Service Description:  
->    Auth: Login, Register for Hirer, Player, Admin, Charity
+>    Auth: Login, Login google for Player, Login google for Hirer, Register for Hirer, Player, Admin, Charity
     
 
 > #### Database ####
 >
-> - Using Asp.net core Identity for authentication and authorization function
+> - PlayTogetherDb  
+
 
 > #### Tables involved ####
 >
@@ -18,3 +19,8 @@
 >    AspNetUserRoles  
 >    AspNetUsers  
 >    AspNetUserTokens  
+>   - Core Db  
+>   Admins  
+>   Charities  
+>   Players  
+>   Hirers  
