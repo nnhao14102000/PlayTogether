@@ -131,7 +131,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (payload is null) {
                 return new AuthResultDto {
-                    Message = "Invalid google id token."
+                    Errors = new List<string>() { "Invalid google authentication" }
                 };
             }
 
@@ -178,7 +178,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResultDto {
-                Message = "Invalid google authentication."
+                Errors = new List<string>() { "Invalid google authentication" }
             };
         }
 
@@ -188,7 +188,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (payload is null) {
                 return new AuthResultDto {
-                    Message = "Invalid google id token."
+                    Errors = new List<string>() { "Invalid google authentication" }
                 };
             }
 
@@ -235,7 +235,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResultDto {
-                Message = "Invalid google authentication."
+                Errors = new List<string>() { "Invalid google authentication" }
             };
         }
 
