@@ -114,7 +114,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
                     return new AuthResultDto {
-                        Message = "Charity create successfully!"
+                        Message = "Admin create successfully!"
                     };
                 }
             }
