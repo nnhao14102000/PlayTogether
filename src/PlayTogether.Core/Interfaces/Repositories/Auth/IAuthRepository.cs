@@ -6,12 +6,12 @@ namespace PlayTogether.Core.Interfaces.Repositories.Auth
 {
     public interface IAuthRepository
     {
+        Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto);
+        Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto);
         Task<AuthResultDto> LoginUserAsync(LoginDto loginDto);
-        Task<AuthResultDto> LoginHirerByGoogle(GoogleLoginDto loginEmailDto);
-        Task<AuthResultDto> LoginPlayerByGoogle(GoogleLoginDto loginEmailDto);
-        Task<AuthResultDto> RegisterAdminAsync(RegisterDto registerDto);
-        Task<AuthResultDto> RegisterCharityAsync(RegisterDto registerDto);
-        Task<AuthResultDto> RegisterPlayerAsync(RegisterDto registerDto);
-        Task<AuthResultDto> RegisterHirerAsync(RegisterDto registerDto);
+        Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoDto registerDto);
+        Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoDto registerDto);
+        Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoDto registerDto);
+        Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoDto registerDto);
     }
 }

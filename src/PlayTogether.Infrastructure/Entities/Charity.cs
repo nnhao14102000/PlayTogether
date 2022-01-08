@@ -2,15 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
 {
     public class Charity : BaseEntity
     {
         public string IdentityId { get; set; }
-
-        [MaxLength(50)]
-        public string Username { get; set; }
 
         [MaxLength(50)]
         public string OrganizationName { get; set; }
@@ -28,7 +26,7 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Email { get; set; }
 
-        [DataType("float")]
+        [Column(TypeName = "float")]
         public float Balance { get; set; }
 
         public bool IsActive { get; set; } = true;

@@ -19,13 +19,13 @@ namespace PlayTogether.Core.Services.Auth
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<AuthResultDto> LoginHirerByGoogle(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto)
         {
             try {
                 if (loginEmailDto is null) {
                     throw new ArgumentNullException(nameof(loginEmailDto));
                 }
-                return await _authRepository.LoginHirerByGoogle(loginEmailDto);
+                return await _authRepository.LoginHirerByGoogleAsync(loginEmailDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginHirerByGoogle in service class, Error Message: {ex}.");
@@ -33,13 +33,13 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> LoginPlayerByGoogle(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto)
         {
             try {
                 if (loginEmailDto is null) {
                     throw new ArgumentNullException(nameof(loginEmailDto));
                 }
-                return await _authRepository.LoginPlayerByGoogle(loginEmailDto);
+                return await _authRepository.LoginPlayerByGoogleAsync(loginEmailDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginPlayerByGoogle in service class, Error Message: {ex}.");
@@ -61,7 +61,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterAdminAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoDto registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -75,7 +75,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterCharityAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoDto registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -89,7 +89,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterHirerAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoDto registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -103,7 +103,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoDto registerDto)
         {
             try {
                 if (registerDto is null) {

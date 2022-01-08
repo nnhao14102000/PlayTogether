@@ -43,24 +43,24 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         public async Task<AuthResultDto> LoginUserAsync(LoginDto loginDto)
         {
             if (loginDto is null) {
-                throw new NullReferenceException("Login info is null");
+                throw new ArgumentNullException("Login info is null");
             }
 
-            var user = await _userManager.FindByNameAsync(loginDto.Username);
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user is null) {
                 return new AuthResultDto {
-                    Errors = new List<string>() { "Username is not found" }
+                    Errors = new List<string>() { "Email is not found" }
                 };
             }
 
-            //if (!await IsAdminOrCharity(user)) {
-            //    if (!user.EmailConfirmed) {
-            //        return new AuthResultDto {
-            //            Errors = new List<string>() { "User is not comfirm email" }
-            //        };
-            //    }
-            //}
+            if (!await IsAdminOrCharity(user)) {
+                if (!user.EmailConfirmed) {
+                    return new AuthResultDto {
+                        Errors = new List<string>() { "User is not comfirm email" }
+                    };
+                }
+            }
 
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
@@ -78,55 +78,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterAdminAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto)
         {
-            if (registerDto is null) {
-                throw new NullReferenceException("Register info is null");
+            if (loginEmailDto is null) {
+                throw new ArgumentNullException("Login info is null");
             }
 
-            if (registerDto.Password != registerDto.ConfirmPassword) {
-                return new AuthResultDto {
-                    Errors = new List<string>() { "Confirm password doesn't match the password" }
-                };
-            }
-            var ExistUser = await IsExistUser(registerDto.Username, registerDto.Email);
-            if (ExistUser is not null) {
-                return new AuthResultDto {
-                    Errors = new List<string>() { ExistUser }
-                };
-            }
-
-            var identityUser = new IdentityUser() {
-                Email = registerDto.Email,
-                UserName = registerDto.Username
-            };
-
-            var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
-            await SetRoleForUser(identityUser, AuthConstant.RoleAdmin);
-
-            if (result.Succeeded) {
-                var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(registerDto);
-                var userEntityModel = _mapper.Map<Admin>(basicUserInfoDto);
-                userEntityModel.IdentityId = identityUser.Id;
-                await _context.Admins.AddAsync(userEntityModel);
-
-                if (await _context.SaveChangesAsync() >= 0) {
-                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                    //var confirmLink = Url
-                    return new AuthResultDto {
-                        Message = "Admin create successfully!"
-                    };
-                }
-            }
-
-            return new AuthResultDto {
-                Message = "Admin create fail",
-                Errors = result.Errors.Select(e => e.Description).ToList()
-            };
-        }
-
-        public async Task<AuthResultDto> LoginHirerByGoogle(GoogleLoginDto loginEmailDto)
-        {
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
@@ -145,7 +102,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (user is null) {
                     user = new IdentityUser() {
                         Email = payload["email"].ToString(),
-                        UserName = loginEmailDto.Username
+                        UserName = payload["email"].ToString()
                     };
 
                     var result = await _userManager.CreateAsync(user);
@@ -153,9 +110,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     await _userManager.AddLoginAsync(user, info);
 
                     if (result.Succeeded) {
-                        var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(loginEmailDto);
-                        var userEntityModel = _mapper.Map<Hirer>(basicUserInfoDto);
+                        var userEntityModel = new Hirer();
                         userEntityModel.IdentityId = user.Id;
+                        userEntityModel.Firstname = payload["given_name"].ToString();
+                        userEntityModel.Lastname = payload["family_name"].ToString();
+                        userEntityModel.Email = payload["email"].ToString();
+                        userEntityModel.Avatar = payload["picture"].ToString();
                         await _context.Hirers.AddAsync(userEntityModel);
 
                         if (await _context.SaveChangesAsync() >= 0) {
@@ -182,8 +142,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> LoginPlayerByGoogle(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto)
         {
+            if (loginEmailDto is null) {
+                throw new ArgumentNullException("Login info is null");
+            }
+
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
@@ -202,7 +166,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (user is null) {
                     user = new IdentityUser() {
                         Email = payload["email"].ToString(),
-                        UserName = loginEmailDto.Username
+                        UserName = payload["email"].ToString()
                     };
 
                     var result = await _userManager.CreateAsync(user);
@@ -210,9 +174,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     await _userManager.AddLoginAsync(user, info);
 
                     if (result.Succeeded) {
-                        var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(loginEmailDto);
-                        var userEntityModel = _mapper.Map<Player>(basicUserInfoDto);
+                        var userEntityModel = new Player();
                         userEntityModel.IdentityId = user.Id;
+                        userEntityModel.Firstname = payload["given_name"].ToString();
+                        userEntityModel.Lastname = payload["family_name"].ToString();
+                        userEntityModel.Email = payload["email"].ToString();
+                        userEntityModel.Avatar = payload["picture"].ToString();
                         await _context.Players.AddAsync(userEntityModel);
 
                         if (await _context.SaveChangesAsync() >= 0) {
@@ -239,36 +206,69 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterCharityAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoDto registerDto)
         {
             if (registerDto is null) {
-                throw new NullReferenceException("Register info is null");
+                throw new ArgumentNullException("Register info is null");
             }
 
-            if (registerDto.Password != registerDto.ConfirmPassword) {
+            if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResultDto {
-                    Errors = new List<string>() { "Confirm password doesn't match the password" }
-                };
-            }
-            var ExistUser = await IsExistUser(registerDto.Username, registerDto.Email);
-            if (ExistUser is not null) {
-                return new AuthResultDto {
-                    Errors = new List<string>() { ExistUser }
+                    Errors = new List<string>() { "This user is exist" }
                 };
             }
 
             var identityUser = new IdentityUser() {
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.Email,
+                EmailConfirmed = registerDto.ConfirmEmail
+            };
+
+            var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
+            await SetRoleForUser(identityUser, AuthConstant.RoleAdmin);
+
+            if (result.Succeeded) {
+                var userEntityModel = _mapper.Map<Admin>(registerDto);
+                userEntityModel.IdentityId = identityUser.Id;
+                await _context.Admins.AddAsync(userEntityModel);
+
+                if (await _context.SaveChangesAsync() >= 0) {
+                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                    //var confirmLink = Url
+                    return new AuthResultDto {
+                        Message = "Admin create successfully!"
+                    };
+                }
+            }
+
+            return new AuthResultDto {
+                Errors = result.Errors.Select(e => e.Description).ToList()
+            };
+        }
+
+        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoDto registerDto)
+        {
+            if (registerDto is null) {
+                throw new ArgumentNullException("Register info is null");
+            }
+
+            if (await IsExistEmail(registerDto.Email)) {
+                return new AuthResultDto {
+                    Errors = new List<string>() { "This user is exist" }
+                };
+            }
+
+            var identityUser = new IdentityUser() {
+                Email = registerDto.Email,
+                UserName = registerDto.Email,
+                EmailConfirmed = registerDto.ConfirmEmail
             };
 
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
             await SetRoleForUser(identityUser, AuthConstant.RoleCharity);
 
             if (result.Succeeded) {
-                // Create basic user
-                var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(registerDto);
-                var userEntityModel = _mapper.Map<Charity>(basicUserInfoDto);
+                var userEntityModel = _mapper.Map<Charity>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 await _context.Charities.AddAsync(userEntityModel);
 
@@ -282,32 +282,26 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResultDto {
-                Message = "Charity create fail",
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
-        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoDto registerDto)
         {
             if (registerDto is null) {
-                throw new NullReferenceException("Register info is null");
+                throw new ArgumentNullException("Register info is null");
             }
 
-            if (registerDto.Password != registerDto.ConfirmPassword) {
+            if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResultDto {
-                    Errors = new List<string>() { "Confirm password doesn't match the password" }
-                };
-            }
-            var ExistUser = await IsExistUser(registerDto.Username, registerDto.Email);
-            if (ExistUser is not null) {
-                return new AuthResultDto {
-                    Errors = new List<string>() { ExistUser }
+                    Errors = new List<string>() { "This user is exist" }
                 };
             }
 
             var identityUser = new IdentityUser() {
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.Email,
+                EmailConfirmed = registerDto.ConfirmEmail
             };
 
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
@@ -315,8 +309,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (result.Succeeded) {
                 // Create basic user
-                var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(registerDto);
-                var userEntityModel = _mapper.Map<Player>(basicUserInfoDto);
+                var userEntityModel = _mapper.Map<Player>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 await _context.Players.AddAsync(userEntityModel);
 
@@ -330,32 +323,26 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResultDto {
-                Message = "Player create fail",
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
-        public async Task<AuthResultDto> RegisterHirerAsync(RegisterDto registerDto)
+        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoDto registerDto)
         {
             if (registerDto is null) {
-                throw new NullReferenceException("Register info is null");
+                throw new ArgumentNullException("Register info is null");
             }
 
-            if (registerDto.Password != registerDto.ConfirmPassword) {
+            if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResultDto {
-                    Errors = new List<string>() { "Confirm password doesn't match the password" }
-                };
-            }
-            var ExistUser = await IsExistUser(registerDto.Username, registerDto.Email);
-            if (ExistUser is not null) {
-                return new AuthResultDto {
-                    Errors = new List<string>() { ExistUser }
+                    Errors = new List<string>() { "This user is exist" }
                 };
             }
 
             var identityUser = new IdentityUser() {
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.Email,
+                EmailConfirmed = registerDto.ConfirmEmail
             };
 
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
@@ -363,8 +350,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (result.Succeeded) {
                 // Create basic user
-                var basicUserInfoDto = _mapper.Map<RegisterBasicInfoDto>(registerDto);
-                var userEntityModel = _mapper.Map<Hirer>(basicUserInfoDto);
+                var userEntityModel = _mapper.Map<Hirer>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 await _context.Hirers.AddAsync(userEntityModel);
 
@@ -378,7 +364,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResultDto {
-                Message = "Hirer create fail",
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
@@ -397,20 +382,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return false;
         }
 
-        private async Task<bool> IsCharity(IdentityUser user)
-        {
-            // return role
-            var roles = await _userManager.GetRolesAsync(user);
-
-            foreach (var item in roles) {
-                if (item == AuthConstant.RoleCharity) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private async Task SetRoleForUser(IdentityUser identityUser, string role)
         {
             if (!await _roleManager.RoleExistsAsync(role)) {
@@ -422,19 +393,13 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
         }
 
-        private async Task<string> IsExistUser(string username, string email)
+        private async Task<bool> IsExistEmail(string email)
         {
             var existEmail = await _userManager.FindByEmailAsync(email);
             if (existEmail is not null) {
-                return $"{email} is exist";
+                return true;
             }
-
-            var existUsername = await _userManager.FindByNameAsync(username);
-            if (existUsername is not null) {
-                return $"{username} is exist";
-            }
-
-            return null;
+            return false;
         }
 
         private SigningCredentials GetSigningCredentials()
@@ -449,11 +414,11 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             var claims = new List<Claim>
             {
-            new Claim("Id", user.Id),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Email, user.Email),
-        };
+                new Claim("Id", user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
 
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles) {
@@ -497,7 +462,5 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var tokenData = handler.ReadJwtToken(token);
             return tokenData.Payload;
         }
-
-
     }
 }

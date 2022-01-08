@@ -23,7 +23,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="loginDto"></param>
         /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login")]
-        public async Task<ActionResult<AuthResultDto>> LoginAsync(LoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -33,32 +33,32 @@ namespace PlayTogether.Api.Controllers.V1
         }
 
         /// <summary>
-        /// Login google for player
+        /// Login with google for player
         /// </summary>
         /// <param name="loginDto"></param>
         /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login-google-player")]
-        public async Task<ActionResult<AuthResultDto>> PlayerLoginGoogleAsync(GoogleLoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> PlayerLoginGoogle(GoogleLoginDto loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.LoginPlayerByGoogle(loginDto);
+            var response = await _authService.LoginPlayerByGoogleAsync(loginDto);
             return Ok(response);
         }
 
         /// <summary>
-        /// Login google for hirer
+        /// Login with google for hirer
         /// </summary>
         /// <param name="loginDto"></param>
-        /// <returns>Return login if login successfully</returns>
+        /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login-google-hirer")]
-        public async Task<ActionResult<AuthResultDto>> HirerLoginGoogleAsync(GoogleLoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> HirerLoginGoogle(GoogleLoginDto loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.LoginHirerByGoogle(loginDto);
+            var response = await _authService.LoginHirerByGoogleAsync(loginDto);
             return Ok(response);
         }
 
@@ -68,7 +68,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-admin")]
-        public async Task<ActionResult<AuthResultDto>> AdminRegisterAsync(RegisterDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> AdminRegister(RegisterAdminInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -83,7 +83,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-charity")]
-        public async Task<ActionResult<AuthResultDto>> CharityRegisterAsync(RegisterDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> CharityRegister(RegisterCharityInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -98,7 +98,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-player")]
-        public async Task<ActionResult<AuthResultDto>> PlayerRegisterAsync(RegisterDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> PlayerRegister(RegisterUserInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -113,7 +113,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-hirer")]
-        public async Task<ActionResult<AuthResultDto>> HirerRegisterAsync(RegisterDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> HirerRegister(RegisterUserInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

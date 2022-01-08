@@ -10,23 +10,10 @@ namespace PlayTogether.Infrastructure.Entities
         public string IdentityId { get; set; }
 
         [MaxLength(50)]
-        public string Username { get; set; }
-
-        [MaxLength(50)]
         public string Firstname { get; set; }
 
         [MaxLength(50)]
         public string Lastname { get; set; }
-
-        [MaxLength(50)]
-        public string Gender { get; set; }
-
-        public string Avatar { get; set; }
-
-        public string Description { get; set; }
-
-        [MaxLength(200)]
-        public string Address { get; set; }
 
         [MaxLength(10)]
         public string Phone { get; set; }

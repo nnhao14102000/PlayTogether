@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
 {
@@ -10,25 +11,18 @@ namespace PlayTogether.Infrastructure.Entities
         public string IdentityId { get; set; }
 
         [MaxLength(50)]
-        public string Username { get; set; }
-
-        [MaxLength(50)]
         public string Firstname { get; set; }
 
         [MaxLength(50)]
         public string Lastname { get; set; }
 
-        [MaxLength(50)]
-        public string Nickname { get; set; } 
-
-        [DataType("date")]
+        [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
 
         [MaxLength(50)]
         public string City { get; set; }
 
-        [MaxLength(50)]
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
 
         [MaxLength(10)]
         public string Phone { get; set; }
@@ -36,15 +30,15 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Email { get; set; }
 
-        [DataType("float")]
+        [Column(TypeName = "float")]
         public float Balance { get; set; }
 
         public string Description { get; set; }
 
-        [DataType("float")]
+        [Column(TypeName = "float")]
         public float PricePerHour { get; set; }
 
-        [DataType("float")]
+        [Column(TypeName = "float")]
         public float Rating { get; set; }
 
         public string Avatar { get; set; }
