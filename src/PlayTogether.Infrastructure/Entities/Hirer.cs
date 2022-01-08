@@ -24,9 +24,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         public bool Gender { get; set; }
 
-        [MaxLength(10)]
-        public string Phone { get; set; }
-
         [MaxLength(50)]
         public string Email { get; set; }
 

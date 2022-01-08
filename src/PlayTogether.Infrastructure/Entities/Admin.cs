@@ -15,9 +15,6 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Lastname { get; set; }
 
-        [MaxLength(10)]
-        public string Phone { get; set; }
-
         [MaxLength(50)]
         public string Email { get; set; }
 

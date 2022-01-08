@@ -11,9 +11,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Auth
         [MaxLength(200)]
         public string Address { get; set; }
 
-        [MaxLength(10)]
-        public string Phone { get; set; }
-
         public bool ConfirmEmail { get; set; }
     }
 }

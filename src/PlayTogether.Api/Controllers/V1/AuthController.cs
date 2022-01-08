@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
@@ -68,6 +69,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-admin")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<AuthResultDto>> AdminRegister(RegisterAdminInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
@@ -83,6 +85,7 @@ namespace PlayTogether.Api.Controllers.V1
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-charity")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<AuthResultDto>> CharityRegister(RegisterCharityInfoDto registerDto)
         {
             if (!ModelState.IsValid) {
