@@ -40,6 +40,14 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             _context = context;
         }
 
+        public async Task<bool> CheckExistEmailAsync(string email)
+        {
+            if (email is null) {
+                throw new ArgumentNullException("Email is null");
+            }
+            return await IsExistEmail(email);
+        }
+
         public async Task<AuthResultDto> LoginUserAsync(LoginDto loginDto)
         {
             if (loginDto is null) {

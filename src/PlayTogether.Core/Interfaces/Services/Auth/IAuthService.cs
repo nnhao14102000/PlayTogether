@@ -6,6 +6,7 @@ namespace PlayTogether.Core.Interfaces.Services.Auth
 {
     public interface IAuthService
     {
+        Task<bool> CheckExistEmailAsync(string email);
         Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto);
         Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto);
         Task<AuthResultDto> LoginUserAsync(LoginDto loginDto);

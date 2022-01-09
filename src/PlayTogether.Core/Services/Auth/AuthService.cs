@@ -18,6 +18,19 @@ namespace PlayTogether.Core.Services.Auth
             _authRepository = authRepository ?? throw new ArgumentNullException(nameof(authRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+        public async Task<bool> CheckExistEmailAsync(string email)
+        {
+            try {
+                if (email is null) {
+                    throw new ArgumentNullException(nameof(email));
+                }
+                return await _authRepository.CheckExistEmailAsync(email);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CheckExistEmailAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
 
         public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto)
         {

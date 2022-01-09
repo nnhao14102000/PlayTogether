@@ -6,7 +6,7 @@ using PlayTogether.Core.Dtos.Outgoing.Auth;
 using PlayTogether.Core.Interfaces.Services.Auth;
 using System.Threading.Tasks;
 
-namespace PlayTogether.Api.Controllers.V1
+namespace PlayTogether.Api.Controllers.V1.Auth
 {
     [ApiVersion("1.0")]
     public class AuthController :BaseController
@@ -31,6 +31,17 @@ namespace PlayTogether.Api.Controllers.V1
             }
             var response = await _authService.LoginUserAsync(loginDto);
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Check is email exist in database
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpGet, Route("check-exist-email")]
+        public async Task<bool> CheckEmailExist(string email)
+        {
+            return email == null ? false : await _authService.CheckExistEmailAsync(email);
         }
 
         /// <summary>
