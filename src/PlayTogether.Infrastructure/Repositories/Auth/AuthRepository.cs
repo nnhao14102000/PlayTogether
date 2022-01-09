@@ -110,7 +110,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (user is null) {
                     user = new IdentityUser() {
                         Email = payload["email"].ToString(),
-                        UserName = payload["email"].ToString()
+                        UserName = payload["email"].ToString(),
+                        EmailConfirmed = Convert.ToBoolean(payload["email_verified"].ToString())
                     };
 
                     var result = await _userManager.CreateAsync(user);
@@ -176,7 +177,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (user is null) {
                     user = new IdentityUser() {
                         Email = payload["email"].ToString(),
-                        UserName = payload["email"].ToString()
+                        UserName = payload["email"].ToString(),
+                        EmailConfirmed = Convert.ToBoolean(payload["email_verified"].ToString())
                     };
 
                     var result = await _userManager.CreateAsync(user);
