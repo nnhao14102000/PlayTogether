@@ -48,7 +48,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return await IsExistEmail(email);
         }
 
-        public async Task<AuthResultDto> LoginUserAsync(LoginDto loginDto)
+        public async Task<AuthResultDto> LoginUserAsync(LoginRequest loginDto)
         {
             if (loginDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -86,7 +86,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             if (loginEmailDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -153,7 +153,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             if (loginEmailDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -220,7 +220,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
@@ -234,8 +234,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             var identityUser = new IdentityUser() {
                 Email = registerDto.Email,
-                UserName = registerDto.Email,
-                EmailConfirmed = registerDto.ConfirmEmail
+                UserName = registerDto.Email
             };
 
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
@@ -262,7 +261,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
@@ -276,8 +275,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             var identityUser = new IdentityUser() {
                 Email = registerDto.Email,
-                UserName = registerDto.Email,
-                EmailConfirmed = registerDto.ConfirmEmail
+                UserName = registerDto.Email
             };
 
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
@@ -304,7 +302,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
@@ -347,7 +345,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             };
         }
 
-        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");

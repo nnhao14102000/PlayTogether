@@ -32,7 +32,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             try {
                 if (loginEmailDto is null) {
@@ -46,7 +46,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginDto loginEmailDto)
+        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             try {
                 if (loginEmailDto is null) {
@@ -60,7 +60,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> LoginUserAsync(LoginDto loginDto)
+        public async Task<AuthResultDto> LoginUserAsync(LoginRequest loginDto)
         {
             try {
                 if (loginDto is null) {
@@ -74,7 +74,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoRequest registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -88,7 +88,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoRequest registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -102,7 +102,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
         {
             try {
                 if (registerDto is null) {
@@ -116,7 +116,7 @@ namespace PlayTogether.Core.Services.Auth
             }
         }
 
-        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoDto registerDto)
+        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoRequest registerDto)
         {
             try {
                 if (registerDto is null) {

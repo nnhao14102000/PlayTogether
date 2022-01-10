@@ -24,7 +24,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="loginDto"></param>
         /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login")]
-        public async Task<ActionResult<AuthResultDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> Login(LoginRequest loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -50,7 +50,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="loginDto"></param>
         /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login-google-player")]
-        public async Task<ActionResult<AuthResultDto>> PlayerLoginGoogle(GoogleLoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> PlayerLoginGoogle(GoogleLoginRequest loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -65,7 +65,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="loginDto"></param>
         /// <returns>Return token if login successfully</returns>
         [HttpPost, Route("login-google-hirer")]
-        public async Task<ActionResult<AuthResultDto>> HirerLoginGoogle(GoogleLoginDto loginDto)
+        public async Task<ActionResult<AuthResultDto>> HirerLoginGoogle(GoogleLoginRequest loginDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -80,8 +80,8 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-admin")]
-        [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<AuthResultDto>> AdminRegister(RegisterAdminInfoDto registerDto)
+        //[Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<AuthResultDto>> AdminRegister(RegisterAdminInfoRequest registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -97,7 +97,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <returns></returns>
         [HttpPost, Route("register-charity")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<AuthResultDto>> CharityRegister(RegisterCharityInfoDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> CharityRegister(RegisterCharityInfoRequest registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -112,7 +112,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-player")]
-        public async Task<ActionResult<AuthResultDto>> PlayerRegister(RegisterUserInfoDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> PlayerRegister(RegisterUserInfoRequest registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -127,7 +127,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="registerDto"></param>
         /// <returns></returns>
         [HttpPost, Route("register-hirer")]
-        public async Task<ActionResult<AuthResultDto>> HirerRegister(RegisterUserInfoDto registerDto)
+        public async Task<ActionResult<AuthResultDto>> HirerRegister(RegisterUserInfoRequest registerDto)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

@@ -15,10 +15,10 @@ namespace PlayTogether.Infrastructure.Helpers
             // src => target
 
             // Auth
-            CreateMap<RegisterAdminInfoDto, Admin>();
-            CreateMap<RegisterCharityInfoDto, Charity>();
-            CreateMap<RegisterUserInfoDto, Player>();
-            CreateMap<RegisterUserInfoDto, Hirer>();
+            CreateMap<RegisterAdminInfoRequest, Admin>();
+            CreateMap<RegisterCharityInfoRequest, Charity>();
+            CreateMap<RegisterUserInfoRequest, Player>();
+            CreateMap<RegisterUserInfoRequest, Hirer>();
 
             // Get all service
             CreateMap<Admin, AdminResponseDto>();
