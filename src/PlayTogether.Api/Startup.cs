@@ -1,4 +1,3 @@
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using PlayTogether.Api.Helpers;
-using PlayTogether.Core.Dtos.Validators.Auth;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Text;
@@ -28,14 +26,7 @@ namespace PlayTogether.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(fv => {
-                fv.RegisterValidatorsFromAssemblyContaining<GoogleLoginRequestValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<RegisterAdminInfoRequestValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<RegisterCharityInfoRequestValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<RegisterUserInfoRequestValidator>();
-            });
+            services.AddControllers();
 
             services.ConfigureServiceInjection(Configuration);
 
