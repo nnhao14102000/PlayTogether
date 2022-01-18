@@ -21,10 +21,10 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<RegisterUserInfoRequest, Hirer>();
 
             // Get all service
-            CreateMap<Admin, AdminResponseDto>();
-            CreateMap<Hirer, HirerResponseDto>();
-            CreateMap<Charity, CharityResponseDto>();
-            CreateMap<Player, PlayerResponseDto>();
+            CreateMap<Admin, AdminResponse>();
+            CreateMap<Hirer, HirerResponse>();
+            CreateMap<Charity, CharityResponse>();
+            CreateMap<Player, PlayerResponse>();
         }
     }
 }

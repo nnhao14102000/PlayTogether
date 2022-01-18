@@ -20,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HirerResponseDto>>> GetAllHirers()
+        public async Task<ActionResult<IEnumerable<HirerResponse>>> GetAllHirers()
         {
             var response = await _hirerService.GetAllHirerAsync().ConfigureAwait(false);
             return response != null ? Ok(response) : NotFound();

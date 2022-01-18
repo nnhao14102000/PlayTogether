@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Admin
 {
     public interface IAdminService
     {
-        Task<IEnumerable<AdminResponseDto>> GetAllAdminAsync();
+        Task<IEnumerable<AdminResponse>> GetAllAdminAsync();
     }
 }

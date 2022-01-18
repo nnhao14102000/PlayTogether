@@ -20,11 +20,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<CharityResponseDto>> GetAllCharityAsync()
+        public async Task<IEnumerable<CharityResponse>> GetAllCharityAsync()
         {
             var charities = await _context.Admins.ToListAsync().ConfigureAwait(false);
             if (charities is not null) {
-                return _mapper.Map<IEnumerable<CharityResponseDto>>(charities);
+                return _mapper.Map<IEnumerable<CharityResponse>>(charities);
             }
             return null;
         }

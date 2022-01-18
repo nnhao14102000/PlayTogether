@@ -48,7 +48,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return await IsExistEmail(email);
         }
 
-        public async Task<AuthResultDto> LoginUserAsync(LoginRequest loginDto)
+        public async Task<AuthResult> LoginUserAsync(LoginRequest loginDto)
         {
             if (loginDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -57,14 +57,14 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user is null) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "Email is not found" }
                 };
             }
 
             if (!await IsAdminOrCharity(user)) {
                 if (!user.EmailConfirmed) {
-                    return new AuthResultDto {
+                    return new AuthResult {
                         Errors = new List<string>() { "User is not comfirm email" }
                     };
                 }
@@ -73,20 +73,20 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (!result) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "Invalid password" }
                 };
             }
 
             var token = await GenerateToken(user);
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Message = token[0],
                 ExpireDate = DateTime.Parse(token[1])
             };
         }
 
-        public async Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto)
+        public async Task<AuthResult> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             if (loginEmailDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -95,7 +95,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "Invalid google authentication" }
                 };
             }
@@ -131,7 +131,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                         if (await _context.SaveChangesAsync() >= 0) {
                             var token = await GenerateToken(user);
-                            return new AuthResultDto {
+                            return new AuthResult {
                                 Message = token[0],
                                 ExpireDate = DateTime.Parse(token[1])
                             };
@@ -142,18 +142,18 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             else {
                 await _userManager.AddLoginAsync(user, info);
                 var token = await GenerateToken(user);
-                return new AuthResultDto {
+                return new AuthResult {
                     Message = token[0],
                     ExpireDate = DateTime.Parse(token[1])
                 };
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = new List<string>() { "Invalid google authentication" }
             };
         }
 
-        public async Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto)
+        public async Task<AuthResult> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
             if (loginEmailDto is null) {
                 throw new ArgumentNullException("Login info is null");
@@ -162,7 +162,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "Invalid google authentication" }
                 };
             }
@@ -198,7 +198,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                         if (await _context.SaveChangesAsync() >= 0) {
                             var token = await GenerateToken(user);
-                            return new AuthResultDto {
+                            return new AuthResult {
                                 Message = token[0],
                                 ExpireDate = DateTime.Parse(token[1])
                             };
@@ -209,25 +209,25 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             else {
                 await _userManager.AddLoginAsync(user, info);
                 var token = await GenerateToken(user);
-                return new AuthResultDto {
+                return new AuthResult {
                     Message = token[0],
                     ExpireDate = DateTime.Parse(token[1])
                 };
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = new List<string>() { "Invalid google authentication" }
             };
         }
 
-        public async Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoRequest registerDto)
+        public async Task<AuthResult> RegisterAdminAsync(RegisterAdminInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
             }
 
             if (await IsExistEmail(registerDto.Email)) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
                 };
             }
@@ -250,25 +250,25 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (saveSuccess) {
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
-                    return new AuthResultDto {
+                    return new AuthResult {
                         Message = "Admin create successfully!"
                     };
                 }
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
-        public async Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoRequest registerDto)
+        public async Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
             }
 
             if (await IsExistEmail(registerDto.Email)) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
                 };
             }
@@ -291,25 +291,25 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (await _context.SaveChangesAsync() >= 0) {
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
-                    return new AuthResultDto {
+                    return new AuthResult {
                         Message = "Charity create successfully!"
                     };
                 }
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
-        public async Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoRequest registerDto)
+        public async Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
             }
 
             if (await IsExistEmail(registerDto.Email)) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
                 };
             }
@@ -334,25 +334,25 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (await _context.SaveChangesAsync() >= 0) {
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
-                    return new AuthResultDto {
+                    return new AuthResult {
                         Message = "Player create successfully!"
                     };
                 }
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
-        public async Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
+        public async Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
         {
             if (registerDto is null) {
                 throw new ArgumentNullException("Register info is null");
             }
 
             if (await IsExistEmail(registerDto.Email)) {
-                return new AuthResultDto {
+                return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
                 };
             }
@@ -377,13 +377,13 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (await _context.SaveChangesAsync() >= 0) {
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
-                    return new AuthResultDto {
+                    return new AuthResult {
                         Message = "Hirer create successfully!"
                     };
                 }
             }
 
-            return new AuthResultDto {
+            return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }

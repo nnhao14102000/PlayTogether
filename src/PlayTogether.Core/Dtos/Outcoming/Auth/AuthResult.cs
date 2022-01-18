@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PlayTogether.Core.Dtos.Outgoing.Auth
 {
-    public class AuthResultDto
+    public class AuthResult
     {
         public string Message { get; set; }
 

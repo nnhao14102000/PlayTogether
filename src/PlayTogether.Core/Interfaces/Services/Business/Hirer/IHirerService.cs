@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Hirer
 {
     public interface IHirerService
     {
-        Task<IEnumerable<HirerResponseDto>> GetAllHirerAsync();
+        Task<IEnumerable<HirerResponse>> GetAllHirerAsync();
     }
 }

@@ -20,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlayerResponseDto>>> GetAllPlayers()
+        public async Task<ActionResult<IEnumerable<PlayerResponse>>> GetAllPlayers()
         {
             var response = await _playerService.GetAllPlayerAsync().ConfigureAwait(false);
             return response != null ? Ok(response) : NotFound();

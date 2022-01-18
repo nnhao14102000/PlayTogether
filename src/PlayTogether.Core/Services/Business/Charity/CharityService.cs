@@ -19,7 +19,7 @@ namespace PlayTogether.Core.Services.Business.Charity
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<CharityResponseDto>> GetAllCharityAsync()
+        public async Task<IEnumerable<CharityResponse>> GetAllCharityAsync()
         {
             try {
                 return await _charityRepository.GetAllCharityAsync();

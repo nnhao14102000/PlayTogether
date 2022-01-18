@@ -1,9 +1,9 @@
 ﻿using PlayTogether.Core.Dtos.Outcoming.Generic;
 using System;
 
-namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
+namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 {
-    public class HirerResponseDto : BaseUserResponseDto
+    public class PlayerResponse : BaseUserResponse
     {
         public string IdentityId { get; set; }
 
@@ -21,10 +21,17 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
 
         public float Balance { get; set; }
 
+        public string Description { get; set; }
+
+        public float PricePerHour { get; set; }
+
+        public float Rating { get; set; }
+
         public string Avatar { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public string Status { get; set; }
+
     }
 }

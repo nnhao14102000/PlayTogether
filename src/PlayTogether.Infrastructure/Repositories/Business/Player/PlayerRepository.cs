@@ -20,11 +20,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<PlayerResponseDto>> GetAllPlayerAsync()
+        public async Task<IEnumerable<PlayerResponse>> GetAllPlayerAsync()
         {
             var players = await _context.Players.ToListAsync().ConfigureAwait(false);
             if (players is not null) {
-                return _mapper.Map<IEnumerable<PlayerResponseDto>>(players);
+                return _mapper.Map<IEnumerable<PlayerResponse>>(players);
             }
             return null;
         }

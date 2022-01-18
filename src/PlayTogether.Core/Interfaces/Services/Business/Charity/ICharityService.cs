@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Charity
 {
     public interface ICharityService
     {
-        Task<IEnumerable<CharityResponseDto>> GetAllCharityAsync();
+        Task<IEnumerable<CharityResponse>> GetAllCharityAsync();
     }
 }

@@ -20,11 +20,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<AdminResponseDto>> GetAllAdminAsync()
+        public async Task<IEnumerable<AdminResponse>> GetAllAdminAsync()
         {
             var admins = await _context.Admins.ToListAsync().ConfigureAwait(false);
             if (admins is not null) {
-                return _mapper.Map<IEnumerable<AdminResponseDto>>(admins);
+                return _mapper.Map<IEnumerable<AdminResponse>>(admins);
             }
             return null;
         }

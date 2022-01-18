@@ -19,7 +19,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<HirerResponseDto>> GetAllHirerAsync()
+        public async Task<IEnumerable<HirerResponse>> GetAllHirerAsync()
         {
             try {
                 return await _hirerRepository.GetAllHirerAsync();

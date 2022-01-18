@@ -2,7 +2,7 @@
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Admin
 {
-    public class AdminResponseDto : BaseUserResponseDto
+    public class AdminResponse : BaseUserResponse
     {
         public string IdentityId { get; set; }
 

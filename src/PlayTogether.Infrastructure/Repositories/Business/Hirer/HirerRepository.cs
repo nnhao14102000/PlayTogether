@@ -20,11 +20,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<HirerResponseDto>> GetAllHirerAsync()
+        public async Task<IEnumerable<HirerResponse>> GetAllHirerAsync()
         {
             var hirers = await _context.Hirers.ToListAsync().ConfigureAwait(false);
             if (hirers is not null) {
-                return _mapper.Map<IEnumerable<HirerResponseDto>>(hirers);
+                return _mapper.Map<IEnumerable<HirerResponse>>(hirers);
             }
             return null;
         }

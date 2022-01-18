@@ -20,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdminResponseDto>>> GetAllAdmins()
+        public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAllAdmins()
         {
             var response = await _adminService.GetAllAdminAsync().ConfigureAwait(false);
             return response != null ? Ok(response) : NotFound();

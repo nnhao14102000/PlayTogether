@@ -19,7 +19,7 @@ namespace PlayTogether.Core.Services.Business.Admin
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<AdminResponseDto>> GetAllAdminAsync()
+        public async Task<IEnumerable<AdminResponse>> GetAllAdminAsync()
         {
             try {
                 return await _adminRepository.GetAllAdminAsync();

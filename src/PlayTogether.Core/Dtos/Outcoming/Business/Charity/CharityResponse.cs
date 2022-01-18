@@ -2,7 +2,7 @@
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Charity
 {
-    public class CharityResponseDto : BaseUserResponseDto
+    public class CharityResponse : BaseUserResponse
     {
         public string IdentityId { get; set; }
 

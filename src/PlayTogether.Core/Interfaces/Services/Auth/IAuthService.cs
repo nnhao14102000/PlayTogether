@@ -7,12 +7,12 @@ namespace PlayTogether.Core.Interfaces.Services.Auth
     public interface IAuthService
     {
         Task<bool> CheckExistEmailAsync(string email);
-        Task<AuthResultDto> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto);
-        Task<AuthResultDto> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto);
-        Task<AuthResultDto> LoginUserAsync(LoginRequest loginDto);
-        Task<AuthResultDto> RegisterAdminAsync(RegisterAdminInfoRequest registerDto);
-        Task<AuthResultDto> RegisterCharityAsync(RegisterCharityInfoRequest registerDto);
-        Task<AuthResultDto> RegisterHirerAsync(RegisterUserInfoRequest registerDto);
-        Task<AuthResultDto> RegisterPlayerAsync(RegisterUserInfoRequest registerDto);
+        Task<AuthResult> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto);
+        Task<AuthResult> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto);
+        Task<AuthResult> LoginUserAsync(LoginRequest loginDto);
+        Task<AuthResult> RegisterAdminAsync(RegisterAdminInfoRequest registerDto);
+        Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest registerDto);
+        Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto);
+        Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto);
     }
 }

@@ -22,7 +22,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CharityResponseDto>>> GetAllChairities()
+        public async Task<ActionResult<IEnumerable<CharityResponse>>> GetAllChairities()
         {
             var response = await _charityService.GetAllCharityAsync().ConfigureAwait(false);
             return response != null ? Ok(response) : NotFound();

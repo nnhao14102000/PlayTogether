@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Player
 {
     public interface IPlayerService
     {
-        Task<IEnumerable<PlayerResponseDto>> GetAllPlayerAsync();
+        Task<IEnumerable<PlayerResponse>> GetAllPlayerAsync();
     }
 }

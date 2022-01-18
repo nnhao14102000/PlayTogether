@@ -19,7 +19,7 @@ namespace PlayTogether.Core.Services.Business.Player
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<PlayerResponseDto>> GetAllPlayerAsync()
+        public async Task<IEnumerable<PlayerResponse>> GetAllPlayerAsync()
         {
             try {
                 return await _playerRepository.GetAllPlayerAsync();

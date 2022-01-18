@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business.Player
 {
     public interface IPlayerRepository
     {
-        Task<IEnumerable<PlayerResponseDto>> GetAllPlayerAsync();
+        Task<IEnumerable<PlayerResponse>> GetAllPlayerAsync();
     }
 }

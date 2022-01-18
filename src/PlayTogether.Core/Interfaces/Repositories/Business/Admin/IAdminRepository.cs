@@ -7,6 +7,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business.Admin
 {
     public interface IAdminRepository
     {
-        Task<IEnumerable<AdminResponseDto>> GetAllAdminAsync();
+        Task<IEnumerable<AdminResponse>> GetAllAdminAsync();
     }
 }
