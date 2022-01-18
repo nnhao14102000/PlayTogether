@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
 {
-    public class Player: BaseEntity
+    public class Player : BaseEntity
     {
         public string IdentityId { get; set; }
 
@@ -45,5 +44,14 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(50)]
         public string Status { get; set; }
+
+        public IList<Order> Orders { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
+        public ICollection<Report> Reports { get; set; }
+        public ICollection<Donate> Donates { get; set; }
+        public ICollection<PlayerWithdraw> PlayerWithdraws { get; set; }
+        public IList<GameOfPlayer> GamesOfPlayers { get; set; }
+        public IList<RankOfPlayer> RankOfPlayers { get; set; }
+        public IList<MusicOfPlayer> MusicOfPlayers { get; set; }
     }
 }

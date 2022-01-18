@@ -15,5 +15,12 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Hirer> Hirers { get; set; }
         public DbSet<Charity> Charities { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
+        public DbSet<CharityWithdraw> CharityWithdraws { get; set; }
+        public DbSet<PlayerWithdraw> PlayerWithdraws { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<Donate> Donates { get; set; }
     }
 }

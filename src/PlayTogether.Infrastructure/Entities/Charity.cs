@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,5 +29,8 @@ namespace PlayTogether.Infrastructure.Entities
         public float Balance { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        public ICollection<Donate> Donates { get; set; }
+        public ICollection<CharityWithdraw> CharityWithdraws { get; set; }
     }
 }

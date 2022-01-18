@@ -125,7 +125,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userEntityModel.Lastname = payload["family_name"].ToString();
                         userEntityModel.Email = payload["email"].ToString();
                         userEntityModel.Avatar = payload["picture"].ToString();
-                        userEntityModel.AddedDate = DateTime.UtcNow;
+                        userEntityModel.CreatedDate = DateTime.UtcNow;
 
                         await _context.Hirers.AddAsync(userEntityModel);
 
@@ -192,7 +192,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userEntityModel.Lastname = payload["family_name"].ToString();
                         userEntityModel.Email = payload["email"].ToString();
                         userEntityModel.Avatar = payload["picture"].ToString();
-                        userEntityModel.AddedDate = DateTime.UtcNow;
+                        userEntityModel.CreatedDate = DateTime.UtcNow;
 
                         await _context.Players.AddAsync(userEntityModel);
 
@@ -243,7 +243,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (result.Succeeded) {
                 var userEntityModel = _mapper.Map<Admin>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.AddedDate = DateTime.UtcNow;
+                userEntityModel.CreatedDate = DateTime.UtcNow;
 
                 await _context.Admins.AddAsync(userEntityModel);
                 var saveSuccess = await _context.SaveChangesAsync() >= 0;
@@ -284,7 +284,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (result.Succeeded) {
                 var userEntityModel = _mapper.Map<Charity>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.AddedDate = DateTime.UtcNow;
+                userEntityModel.CreatedDate = DateTime.UtcNow;
 
                 await _context.Charities.AddAsync(userEntityModel);
 
@@ -327,7 +327,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 // Create basic user
                 var userEntityModel = _mapper.Map<Player>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.AddedDate = DateTime.UtcNow;
+                userEntityModel.CreatedDate = DateTime.UtcNow;
 
                 await _context.Players.AddAsync(userEntityModel);
 
@@ -370,7 +370,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 // Create basic user
                 var userEntityModel = _mapper.Map<Hirer>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.AddedDate = DateTime.UtcNow;
+                userEntityModel.CreatedDate = DateTime.UtcNow;
 
                 await _context.Hirers.AddAsync(userEntityModel);
 

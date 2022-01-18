@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,5 +37,10 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(50)]
         public string Status { get; set; }
+
+        public IList<Order> Orders { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
+        public ICollection<Report> Reports { get; set; }
+        public ICollection<Deposit> Deposits { get; set; }
     }
 }
