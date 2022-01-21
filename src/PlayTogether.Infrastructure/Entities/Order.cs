@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
@@ -12,8 +12,10 @@ namespace PlayTogether.Infrastructure.Entities
         public string HirerId { get; set; }
         public Hirer Hirer { get; set; }
 
-        public Rating Rating { get; set; }
-        public Report Report { get; set; }
+        //public Rating Rating { get; set; }
+        //public Report Report { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
+        public ICollection<Report> Reports { get; set; }
 
         public DateTime TimeStart { get; set; }
 

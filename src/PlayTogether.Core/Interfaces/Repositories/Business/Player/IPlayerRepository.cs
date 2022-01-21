@@ -1,11 +1,12 @@
 ﻿using PlayTogether.Core.Dtos.Outcoming.Business.Player;
-using System.Collections.Generic;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
+using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Interfaces.Repositories.Business.Player
 {
     public interface IPlayerRepository
     {
-        Task<IEnumerable<PlayerResponse>> GetAllPlayerAsync();
+        Task<PagedResult<PlayerResponse>> GetAllPlayerAsync(PlayerParameters param);
     }
 }

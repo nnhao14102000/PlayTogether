@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Hirer;
 using PlayTogether.Core.Interfaces.Services.Business.Hirer;
+using PlayTogether.Core.Parameters;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Business.Hirer
@@ -19,10 +20,10 @@ namespace PlayTogether.Core.Services.Business.Hirer
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<HirerResponse>> GetAllHirerAsync()
+        public async Task<PagedResult<HirerResponse>> GetAllHirersAsync(HirerParameters param)
         {
             try {
-                return await _hirerRepository.GetAllHirerAsync();
+                return await _hirerRepository.GetAllHirersAsync(param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllHirerAsync in service class, Error Message: {ex}.");

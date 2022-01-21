@@ -11,5 +11,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         public ICollection<Rank> Ranks { get; set; }
         public IList<GameOfPlayer> GamesOfPlayers { get; set; }
+        public IList<TypeOfGame> TypeOfGames { get; set; }
     }
 }
