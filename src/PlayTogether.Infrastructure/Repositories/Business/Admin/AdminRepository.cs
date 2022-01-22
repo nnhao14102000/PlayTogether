@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Admin;
+using PlayTogether.Core.Parameters;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Admin
@@ -20,12 +23,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<AdminResponse>> GetAllAdminAsync()
+        public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)
         {
-            var admins = await _context.Admins.ToListAsync().ConfigureAwait(false);
-            if (admins is not null) {
-                return _mapper.Map<IEnumerable<AdminResponse>>(admins);
+            List<Entities.Admin> admins = null;
+
+            admins = await _context.Admins.ToListAsync().ConfigureAwait(false);
+
+            if (!String.IsNullOrEmpty(param.Name)) {
+                var query = admins.AsQueryable();
+                query = query.Where(x => (x.Lastname + x.Firstname).ToLower().Contains(param.Name.ToLower()));
+                admins = query.ToList();
             }
+
+            if (admins is not null) {
+                var response = _mapper.Map<List<AdminResponse>>(admins);
+                return PagedResult<AdminResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+            }
+            
             return null;
         }
     }

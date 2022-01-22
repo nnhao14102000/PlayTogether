@@ -1,11 +1,9 @@
-﻿using PlayTogether.Core.Dtos.Outcoming.Generic;
+﻿using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Admin
 {
-    public class AdminResponse : BaseUserResponse
+    public class AdminResponse
     {
-        public string IdentityId { get; set; }
-
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -13,5 +11,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Admin
         public string Email { get; set; }
 
         public bool IsActive { get; set; }
+        public DateTime? AddedDate { get; set; }
     }
 }

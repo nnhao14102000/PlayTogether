@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Auth
 {
-    public class RegisterUserInfoRequest: RegisterRequest
+    public class RegisterUserInfoRequest : RegisterRequest
     {
         [Required]
         [MaxLength(50, ErrorMessage = "Firstname must less than 50 characters")]
@@ -23,7 +23,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Auth
         public bool Gender { get; set; }
 
         [Required]
-        [Compare("true", ErrorMessage = "Please confirm email")]
+        [Range(minimum: 1, maximum: 1, ErrorMessage = "Please verify email")]
         public bool ConfirmEmail { get; set; }
     }
 }

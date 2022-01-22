@@ -1,12 +1,9 @@
-﻿using PlayTogether.Core.Dtos.Outcoming.Generic;
-using System;
+﻿using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 {
-    public class PlayerResponse : BaseUserResponse
+    public class PlayerResponse
     {
-        public string IdentityId { get; set; }
-
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -32,6 +29,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
         public bool IsActive { get; set; } = true;
 
         public string Status { get; set; }
+
+        public DateTime? AddedDate { get; set; }
 
     }
 }

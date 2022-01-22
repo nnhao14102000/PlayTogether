@@ -21,10 +21,10 @@ namespace PlayTogether.Core.Services.Business.Player
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PagedResult<PlayerResponse>> GetAllPlayerAsync(PlayerParameters param)
+        public async Task<PagedResult<PlayerResponse>> GetAllPlayersAsync(PlayerParameters param)
         {
             try {
-                return await _playerRepository.GetAllPlayerAsync(param);
+                return await _playerRepository.GetAllPlayersAsync(param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllPlayerAsync in service class, Error Message: {ex}.");

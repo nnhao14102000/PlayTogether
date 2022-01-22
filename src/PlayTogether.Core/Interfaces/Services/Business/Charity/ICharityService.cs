@@ -1,11 +1,12 @@
 ﻿using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
-using System.Collections.Generic;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
+using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Interfaces.Services.Business.Charity
 {
     public interface ICharityService
     {
-        Task<IEnumerable<CharityResponse>> GetAllCharityAsync();
+        Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
     }
 }

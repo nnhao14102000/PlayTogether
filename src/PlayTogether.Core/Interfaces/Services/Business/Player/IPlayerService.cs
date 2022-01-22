@@ -8,6 +8,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Player
 {
     public interface IPlayerService
     {
-        Task<PagedResult<PlayerResponse>> GetAllPlayerAsync(PlayerParameters param);
+        Task<PagedResult<PlayerResponse>> GetAllPlayersAsync(PlayerParameters param);
     }
 }

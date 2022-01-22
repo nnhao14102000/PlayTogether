@@ -1,6 +1,6 @@
 namespace PlayTogether.Core.Parameters
 {
-    public class HirerParameters : QueryStringParameters
+    public class AdminParameters : QueryStringParameters
     {
         public string Name { get; set; }
     }

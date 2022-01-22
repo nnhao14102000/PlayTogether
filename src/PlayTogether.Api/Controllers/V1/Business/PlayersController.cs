@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business.Player;
@@ -12,20 +14,22 @@ namespace PlayTogether.Api.Controllers.V1.Business
     public class PlayersController : BaseController
     {
         private readonly IPlayerService _playerService;
+        
         public PlayersController(IPlayerService playerService)
         {
             _playerService = playerService;
         }
 
         /// <summary>
-        /// Get all Players
+        /// Get all players
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<PagedResult<PlayerResponse>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
-            var response = await _playerService.GetAllPlayerAsync(param).ConfigureAwait(false);
+            var response = await _playerService.GetAllPlayersAsync(param).ConfigureAwait(false);
 
             var metaData = new {
                 response.TotalCount,
@@ -36,6 +40,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             };
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            
             return response != null ? Ok(response) : NotFound();
         }
     }

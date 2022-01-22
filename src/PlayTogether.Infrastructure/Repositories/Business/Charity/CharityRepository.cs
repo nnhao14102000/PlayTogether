@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Charity;
+using PlayTogether.Core.Parameters;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Charity
@@ -20,12 +23,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<CharityResponse>> GetAllCharityAsync()
+        public async Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param)
         {
-            var charities = await _context.Admins.ToListAsync().ConfigureAwait(false);
-            if (charities is not null) {
-                return _mapper.Map<IEnumerable<CharityResponse>>(charities);
+            List<Entities.Charity> charities = null;
+            
+            charities = await _context.Charities.ToListAsync().ConfigureAwait(false);
+
+            if (!String.IsNullOrEmpty(param.Name)) {
+                var query = charities.AsQueryable();
+                query = query.Where(x => x.OrganizationName.ToLower().Contains(param.Name.ToLower()));
+                charities = query.ToList();
             }
+
+            if (charities is not null) {
+                var response = _mapper.Map<List<CharityResponse>>(charities);
+                return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+            }
+
             return null;
         }
     }

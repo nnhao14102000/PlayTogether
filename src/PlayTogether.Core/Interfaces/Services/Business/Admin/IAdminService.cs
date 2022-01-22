@@ -1,11 +1,12 @@
 ﻿using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
-using System.Collections.Generic;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
+using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Interfaces.Services.Business.Admin
 {
     public interface IAdminService
     {
-        Task<IEnumerable<AdminResponse>> GetAllAdminAsync();
+        Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param);
     }
 }

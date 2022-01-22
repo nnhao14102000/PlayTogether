@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business.Admin;
-using System.Collections.Generic;
+using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -10,6 +14,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
     public class AdminsController : BaseController
     {
         private readonly IAdminService _adminService;
+        
         public AdminsController (IAdminService adminService)
         {
             _adminService = adminService;
@@ -20,9 +25,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAllAdmins()
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<AdminResponse>>> GetAllAdmins(
+            [FromQuery] AdminParameters param
+        )
         {
-            var response = await _adminService.GetAllAdminAsync().ConfigureAwait(false);
+            var response = await _adminService.GetAllAdminsAsync(param).ConfigureAwait(false);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            
             return response != null ? Ok(response) : NotFound();
         }
     }

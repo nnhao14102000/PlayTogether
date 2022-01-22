@@ -7,6 +7,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business.Player
 {
     public interface IPlayerRepository
     {
-        Task<PagedResult<PlayerResponse>> GetAllPlayerAsync(PlayerParameters param);
+        Task<PagedResult<PlayerResponse>> GetAllPlayersAsync(PlayerParameters param);
     }
 }

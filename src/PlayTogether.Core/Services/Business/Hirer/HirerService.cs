@@ -26,7 +26,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
                 return await _hirerRepository.GetAllHirersAsync(param);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetAllHirerAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetAllHirersAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

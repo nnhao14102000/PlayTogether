@@ -23,24 +23,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<PagedResult<PlayerResponse>> GetAllPlayerAsync(PlayerParameters param)
+        public async Task<PagedResult<PlayerResponse>> GetAllPlayersAsync(PlayerParameters param)
         {
             List<Entities.Player> players = null;
+
             if (param.Gender is not null) {
                 players = await _context.Players.Where(x => x.Gender == param.Gender).ToListAsync();
             }
-            players = await _context.Players.ToListAsync().ConfigureAwait(false);
-            var query = players.AsQueryable();
+            else {
+
+                players = await _context.Players.ToListAsync().ConfigureAwait(false);
+            }
 
             if (!String.IsNullOrEmpty(param.Name)) {
-                query = query.Where(players => (players.Lastname + players.Firstname).Contains(param.Name));
+                var query = players.AsQueryable();
+                query = query.Where(players => (players.Lastname + players.Firstname).ToLower().Contains(param.Name.ToLower()));
+                players = query.ToList();
             }
-            players = query.ToList();
 
             if (players is not null) {
                 var response = _mapper.Map<List<PlayerResponse>>(players);
                 return PagedResult<PlayerResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
+            
             return null;
         }
     }

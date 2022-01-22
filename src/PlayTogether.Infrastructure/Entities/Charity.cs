@@ -16,14 +16,16 @@ namespace PlayTogether.Infrastructure.Entities
 
         public string Avatar { get; set; }
 
-        public string Description { get; set; }
+        public string Information { get; set; }
 
         [MaxLength(200)]
         public string Address { get; set; }
 
-
         [MaxLength(50)]
         public string Email { get; set; }
+
+        [MaxLength(15)]
+        public string Phone { get; set; }
 
         [Column(TypeName = "float")]
         public float Balance { get; set; }

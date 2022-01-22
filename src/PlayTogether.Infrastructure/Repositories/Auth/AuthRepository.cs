@@ -244,6 +244,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var userEntityModel = _mapper.Map<Admin>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.UtcNow;
+                userEntityModel.Firstname = registerDto.Firstname;
+                userEntityModel.Lastname = registerDto.Lastname;
 
                 await _context.Admins.AddAsync(userEntityModel);
                 var saveSuccess = await _context.SaveChangesAsync() >= 0;
@@ -285,6 +287,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var userEntityModel = _mapper.Map<Charity>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.UtcNow;
+                userEntityModel.OrganizationName = registerDto.OrganizationName;
 
                 await _context.Charities.AddAsync(userEntityModel);
 
@@ -328,6 +331,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var userEntityModel = _mapper.Map<Player>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.UtcNow;
+                
+                userEntityModel.Firstname = registerDto.Firstname;
+                userEntityModel.Lastname = registerDto.Lastname;
+                userEntityModel.City = registerDto.City;
+                userEntityModel.DateOfBirth = registerDto.DateOfBirth;
+                userEntityModel.Gender = registerDto.Gender;
 
                 await _context.Players.AddAsync(userEntityModel);
 
@@ -371,6 +380,12 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var userEntityModel = _mapper.Map<Hirer>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.UtcNow;
+
+                userEntityModel.Firstname = registerDto.Firstname;
+                userEntityModel.Lastname = registerDto.Lastname;
+                userEntityModel.City = registerDto.City;
+                userEntityModel.DateOfBirth = registerDto.DateOfBirth;
+                userEntityModel.Gender = registerDto.Gender;
 
                 await _context.Hirers.AddAsync(userEntityModel);
 
