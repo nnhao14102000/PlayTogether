@@ -1,0 +1,101 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+# Check exist email
+GET {{baseUrl}}/api/play-together/v1/auth/check-exist-email
+    ?email=admin01@example.com
+content-type: {{contentType}}
+
+###
+# Login with Google for player
+POST {{baseUrl}}/api/play-together/v1/auth/login-google-player
+content-type: {{contentType}}
+
+{
+  "providerName": "string",
+  "idToken": "string"
+}
+
+###
+# Login with Google for hirer
+POST {{baseUrl}}/api/play-together/v1/auth/login-google-hirer
+content-type: {{contentType}}
+
+{
+  "providerName": "string",
+  "idToken": "string"
+}
+
+###
+# Register admin
+POST {{baseUrl}}/api/play-together/v1/auth/register-admin
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "string",
+  "firstname": "string",
+  "lastname": "string"
+}
+
+###
+# Register charity
+POST {{baseUrl}}/api/play-together/v1/auth/register-charity
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "email": "user@example.com",
+  "password": "string",
+  "organizationName": "string"
+}
+
+###
+# Register player
+POST {{baseUrl}}/api/play-together/v1/auth/register-player
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "string",
+  "firstname": "string",
+  "lastname": "string",
+  "city": "string",
+  "dateOfBirth": "2002-01-22",
+  "gender": true,
+  "confirmEmail": false
+}
+
+###
+# Register hirer
+POST {{baseUrl}}/api/play-together/v1/auth/register-hirer
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "string",
+  "firstname": "string",
+  "lastname": "string",
+  "city": "string",
+  "dateOfBirth": "2002-01-22",
+  "gender": true,
+  "confirmEmail": false
+}

@@ -1,0 +1,34 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+# Get all admins
+GET {{baseUrl}}/api/play-together/v1/admins
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get all admins with paging, search
+GET {{baseUrl}}/api/play-together/v1/admins
+    ?Name=a
+    &PageNumber=1
+    &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
