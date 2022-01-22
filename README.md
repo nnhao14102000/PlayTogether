@@ -1,11 +1,5 @@
 # Play Together API
 
-## Table Of Contents
-
-- [Play Together API](#play-together-api)
-    * [Table Of Contents](#table-of-contents)
-    * [Technical vs Tools](#technical-vs-tools)
-
 ## Technical vs Tools
 
 This project is API build base on these technical:
