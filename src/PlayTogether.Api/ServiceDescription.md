@@ -13,7 +13,7 @@
 
     
 
-> #### Auth  
+> ## Auth  
 > [🔙](#table-of-contents)   [⬇️](#api-below)
 > - ``POST /api/play-together/v1/auth/login ``  
 >   ***Description***: Login all user account
@@ -43,7 +43,7 @@
 >
 >
 
-> #### Admin   
+> ## Admin   
 > [🔙](#table-of-contents)   [⬇️](#api-below)
 > - ``GET /api/play-together/v1/admins ``  
 >   ***Description***: Get all admins   
@@ -51,7 +51,7 @@
 >   ***Extension***: Paging, search by name  
 >
 
-> #### Charity  
+> ## Charity  
 > [🔙](#table-of-contents)   [⬇️](#api-below)
 > - ``GET /api/play-together/v1/charities ``  
 >   ***Description***: Get all charities   
@@ -59,7 +59,7 @@
 >   ***Extension***: Paging, search by name  
 >
 
-> #### Player  
+> ## Player  
 > [🔙](#table-of-contents)   [⬇️](#api-below)
 > - ``GET /api/play-together/v1/players ``  
 >   ***Description***: Get all players   
@@ -67,7 +67,7 @@
 >   ***Extension***: Paging, filter by gender, search by name 
 >
 
-> #### Hirer 
+> ## Hirer 
 > [🔙](#table-of-contents)   [⬇️](#api-below)
 > - ``GET /api/play-together/v1/hirers ``  
 >   ***Description***: Get all hirers   
@@ -75,5 +75,5 @@
 >   ***Extension***: Paging, search by name 
 >
 
-> #### Api below 
+> ## Api below 
 > [🔙](#table-of-contents)
