@@ -21,15 +21,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Players
+        /// Get all Players for Hirer
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleHirer)]
-        public async Task<ActionResult<PagedResult<PlayerResponse>>> GetAllPlayers(
+        [Authorize(Roles = AuthConstant.RoleHirer)]
+        public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
-            var response = await _playerService.GetAllPlayersAsync(param).ConfigureAwait(false);
+            var response = await _playerService.GetAllPlayersForHirerAsync(param).ConfigureAwait(false);
 
             var metaData = new {
                 response.TotalCount,
@@ -42,6 +42,48 @@ namespace PlayTogether.Api.Controllers.V1.Business
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
             
             return response != null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get Player Profile
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("profile")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<PlayerProfileResponse>> GetPlayerProfile()
+        {
+            var response = await _playerService.GetPlayerProfileByIdentityIdAsync(HttpContext.User);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get Player by Id for Player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{id}")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerById(string id)
+        {
+            var response = await _playerService.GetPlayerByIdAsync(id);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Update Player Information
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut, Route("{id}")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> UpdatePlayerInfomation(string id, PlayerUpdateInfoRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _playerService.UpdatePlayerInformationAsync(id, request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

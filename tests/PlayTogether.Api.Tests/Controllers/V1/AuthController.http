@@ -101,12 +101,12 @@ content-type: {{contentType}}
 # }
 
 {
-  "email": "VanAnh@example.com",
+  "email": "hirer01@example.com",
   "password": "Pa55w0rd!",
-  "firstname": "Anh",
-  "lastname": "Nguyen Van",
+  "firstname": "Hirer",
+  "lastname": "No.01",
   "city": "Long An City",
-  "dateOfBirth": "2016-08-22",
+  "dateOfBirth": "2011-08-22",
   "gender": false,
   "confirmEmail": true
 }

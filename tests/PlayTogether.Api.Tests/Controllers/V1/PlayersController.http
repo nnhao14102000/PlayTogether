@@ -14,22 +14,34 @@ POST {{baseUrl}}/api/play-together/v1/auth/login
 content-type: {{contentType}}
 
 {
-  "email": "nnhao@example.com",
+  "email": "player01@example.com",
   "password": "Pa55w0rd!"
 }
 
+
 ###
-# Get all players
-GET {{baseUrl}}/api/play-together/v1/players
+# Get Player Profile
+GET {{baseUrl}}/api/play-together/v1/players/profile
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
-# Get all players with paging, filter, search
-GET {{baseUrl}}/api/play-together/v1/players
-    ?Name=
-    &Gender=
-    &PageNumber=1
-    &PageSize=10
+# Get Player by Id
+GET {{baseUrl}}/api/play-together/v1/players/880e7e38-9295-43df-9966-ed1f901393b4
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
+### Update Player Profile by Id
+PUT {{baseUrl}}/api/play-together/v1/players/880e7e38-9295-43df-9966-ed1f901393b4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "avatar": "",
+  "firstname": "Player",
+  "lastname": "Test account 01",
+  "city": "None",
+  "dateOfBirth": "2022-01-23",
+  "description": "Test account player update infomation",
+  "gender": true
+}

@@ -44,23 +44,46 @@
 
 ## Player  
 > - ``GET /api/play-together/v1/players ``  
->   ***Description***: Get all Players   
->   ***Role Access***: Admin, Hirer  
+>   ***Description***: Get all Players for Hirer  
+>   ***Use for***: Search players in Hirer app   
+>   ***Role Access***: Hirer  
 >   ***Extension***: Paging, Filter by Gender, Search by Name 
+>
+> - ``GET /api/play-together/v1/players/profile ``  
+>   ***Description***: Get Player Profile  
+>   ***Use for***: Player get their own Profile   
+>   ***Role Access***: Player  
+> 
+> - ``GET /api/play-together/v1/players/{id} ``  
+>   ***Description***: Get a Player by Id for Player   
+>   ***Use for***: Player get their own information for update  
+>   ***Role Access***: Player  
+>
+> - ``PUT /api/play-together/v1/players/{id} ``  
+>   ***Description***: Update Player Info    
+>   ***Use for***: Update player own information    
+>   ***Role Access***: Player  
 >
 
 ## Hirer 
 > - ``GET /api/play-together/v1/hirers ``  
->   ***Description***: Get all Hirers   
+>   ***Description***: Get all Hirers  
+>   ***Use for***: Get all hirer account in Admin web   
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, Search by Name 
 >
 > - ``GET /api/play-together/v1/hirers/profile ``  
 >   ***Description***: Get Hirer Profile  
+>   ***Use for***: Hirer get their own Profile   
 >   ***Role Access***: Hirer  
 > 
 > - ``GET /api/play-together/v1/hirers/{id} ``  
 >   ***Description***: Get a Hirer by Id   
->   ***Role Access***: Admin  
+>   ***Use for***: Hirer get their own information for update  
+>   ***Role Access***: Hirer  
 > 
+> - ``PUT /api/play-together/v1/hirers/{id} ``  
+>   ***Description***: Update Hirer Info    
+>   ***Use for***: Update hirer own information    
+>   ***Role Access***: Hirer 
 >

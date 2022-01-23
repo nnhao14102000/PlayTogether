@@ -22,10 +22,10 @@ namespace PlayTogether.Core.Services.Business.Hirer
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HirerGetByIdForHirerResponse> GetHirerByIdAsync(string id)
+        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
         {
             try {
-                return await _hirerRepository.GetHirerByIdAsync(id);
+                return await _hirerRepository.GetHirerByIdForHirerAsync(id);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetHirerByIdAsync in service class, Error Message: {ex}.");
@@ -61,10 +61,10 @@ namespace PlayTogether.Core.Services.Business.Hirer
             }
         }
 
-        public async Task<PagedResult<HirerGetAllResponse>> GetAllHirersAsync(HirerParameters param)
+        public async Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
         {
             try {
-                return await _hirerRepository.GetAllHirersAsync(param);
+                return await _hirerRepository.GetAllHirersForAdminAsync(param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllHirersAsync in service class, Error Message: {ex}.");

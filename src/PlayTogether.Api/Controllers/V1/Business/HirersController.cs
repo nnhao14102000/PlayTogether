@@ -22,16 +22,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Hirer
+        /// Get all Hirer for Admin
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<IEnumerable<HirerGetAllResponse>>> GetAllHirers(
+        public async Task<ActionResult<IEnumerable<HirerGetAllResponseForAdmin>>> GetAllHirers(
             [FromQuery] HirerParameters param)
         {
-            var response = await _hirerService.GetAllHirersAsync(param).ConfigureAwait(false);
+            var response = await _hirerService.GetAllHirersForAdminAsync(param).ConfigureAwait(false);
 
             var metaData = new {
                 response.TotalCount,
@@ -42,7 +42,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             };
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-            
+
             return response is not null ? Ok(response) : NotFound();
         }
 
@@ -65,9 +65,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<HirerGetByIdForHirerResponse>> GetHirerById(string id)
+        public async Task<ActionResult<HirerGetByIdResponseForHirer>> GetHirerById(string id)
         {
-            var response = await _hirerService.GetHirerByIdAsync(id);
+            var response = await _hirerService.GetHirerByIdForHirerAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }
 
