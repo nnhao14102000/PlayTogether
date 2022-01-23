@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 {
-    public class PlayerGetAllResponseForHirer
+    public class GetAllPlayerResponseForHirer
     {
         public string Id { get; set; }
 

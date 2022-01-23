@@ -27,12 +27,12 @@ Authorization: {{authToken}}
 
 ###
 # Get Player by Id
-GET {{baseUrl}}/api/play-together/v1/players/880e7e38-9295-43df-9966-ed1f901393b4
+GET {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ### Update Player Profile by Id
-PUT {{baseUrl}}/api/play-together/v1/players/880e7e38-9295-43df-9966-ed1f901393b4
+PUT {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

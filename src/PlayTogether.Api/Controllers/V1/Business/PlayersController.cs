@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business.Player;
@@ -26,7 +27,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
+        public async Task<ActionResult<PagedResult<GetAllPlayerResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
             var response = await _playerService.GetAllPlayersForHirerAsync(param).ConfigureAwait(false);
@@ -50,7 +51,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PlayerProfileResponse>> GetPlayerProfile()
+        public async Task<ActionResult<GetPlayerProfileResponse>> GetPlayerProfile()
         {
             var response = await _playerService.GetPlayerProfileByIdentityIdAsync(HttpContext.User);
             return response is not null ? Ok(response) : NotFound();
@@ -63,9 +64,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerById(string id)
+        public async Task<ActionResult<GetPlayerByIdResponseForPlayer>> GetPlayerById(string id)
         {
-            var response = await _playerService.GetPlayerByIdAsync(id);
+            var response = await _playerService.GetPlayerByIdForPlayerAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }
 
@@ -77,7 +78,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> UpdatePlayerInfomation(string id, PlayerUpdateInfoRequest request)
+        public async Task<ActionResult> UpdatePlayerInfomation(string id, UpdatePlayerInfoRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

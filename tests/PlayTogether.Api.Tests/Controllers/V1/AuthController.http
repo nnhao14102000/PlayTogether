@@ -73,15 +73,26 @@ Authorization: {{authToken}}
 POST {{baseUrl}}/api/play-together/v1/auth/register-player
 content-type: {{contentType}}
 
+# {
+#   "email": "user@example.com",
+#   "password": "string",
+#   "firstname": "string",
+#   "lastname": "string",
+#   "city": "string",
+#   "dateOfBirth": "2002-01-22",
+#   "gender": true,
+#   "confirmEmail": false
+# }
+
 {
-  "email": "user@example.com",
-  "password": "string",
-  "firstname": "string",
-  "lastname": "string",
-  "city": "string",
-  "dateOfBirth": "2002-01-22",
+  "email": "player01@example.com",
+  "password": "Pa55w0rd!",
+  "firstname": "Player",
+  "lastname": "No.01",
+  "city": "None",
+  "dateOfBirth": "2001-01-11",
   "gender": true,
-  "confirmEmail": false
+  "confirmEmail": true
 }
 
 ###

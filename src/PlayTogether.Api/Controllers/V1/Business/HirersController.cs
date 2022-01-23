@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
-using PlayTogether.Core.Dtos.Incoming.Hirer;
+using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Interfaces.Services.Business.Hirer;
 using PlayTogether.Core.Parameters;
@@ -28,7 +28,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<IEnumerable<HirerGetAllResponseForAdmin>>> GetAllHirers(
+        public async Task<ActionResult<IEnumerable<GetAllHirerResponseForAdmin>>> GetAllHirers(
             [FromQuery] HirerParameters param)
         {
             var response = await _hirerService.GetAllHirersForAdminAsync(param).ConfigureAwait(false);
@@ -52,20 +52,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<HirerProfileResponse>> GetHirerProfile()
+        public async Task<ActionResult<GetHirerProfileResponse>> GetHirerProfile()
         {
             var response = await _hirerService.GetHirerProfileByIdentityIdAsync(HttpContext.User);
             return response is not null ? Ok(response) : NotFound();
         }
 
         /// <summary>
-        /// Get Hirer by Id
+        /// Get Hirer by Id for Hirer
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<HirerGetByIdResponseForHirer>> GetHirerById(string id)
+        public async Task<ActionResult<GetHirerByIdResponseForHirer>> GetHirerById(string id)
         {
             var response = await _hirerService.GetHirerByIdForHirerAsync(id);
             return response is not null ? Ok(response) : NotFound();
@@ -79,7 +79,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult> UpdateHirerInfomation(string id, HirerUpdateInfoRequest request)
+        public async Task<ActionResult> UpdateHirerInfomation(string id, UpdateHirerInfoRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

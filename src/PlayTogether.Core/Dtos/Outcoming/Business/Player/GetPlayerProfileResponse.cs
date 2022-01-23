@@ -1,10 +1,12 @@
 using System;
 
-namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
+namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 {
-    public class HirerProfileResponse
+    public class GetPlayerProfileResponse
     {
         public string Id { get; set; }
+        
+        public string Avatar { get; set; }
 
         public string Email { get; set; }
         

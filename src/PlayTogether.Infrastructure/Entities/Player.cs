@@ -53,5 +53,6 @@ namespace PlayTogether.Infrastructure.Entities
         public IList<GameOfPlayer> GamesOfPlayers { get; set; }
         public IList<RankOfPlayer> RankOfPlayers { get; set; }
         public IList<MusicOfPlayer> MusicOfPlayers { get; set; }
+        public ICollection<Image> Images { get; set; }
     }
 }

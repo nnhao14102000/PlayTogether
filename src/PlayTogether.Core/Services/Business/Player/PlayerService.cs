@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Player;
@@ -22,7 +23,7 @@ namespace PlayTogether.Core.Services.Business.Player
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
+        public async Task<PagedResult<GetAllPlayerResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
         {
             try {
                 return await _playerRepository.GetAllPlayersForHirerAsync(param);
@@ -33,10 +34,10 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
-        public async Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdAsync(string id)
+        public async Task<GetPlayerByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id)
         {
             try {
-                return await _playerRepository.GetPlayerByIdAsync(id);
+                return await _playerRepository.GetPlayerByIdForPlayerAsync(id);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetPlayerByIdAsync in service class, Error Message: {ex}.");
@@ -44,7 +45,7 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
-        public async Task<PlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<GetPlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
                 return await _playerRepository.GetPlayerProfileByIdentityIdAsync(principal);
@@ -55,7 +56,7 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
-        public async Task<bool> UpdatePlayerInformationAsync(string id, PlayerUpdateInfoRequest request)
+        public async Task<bool> UpdatePlayerInformationAsync(string id, UpdatePlayerInfoRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

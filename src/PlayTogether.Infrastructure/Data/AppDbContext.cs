@@ -20,6 +20,7 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<GameOfPlayer> GameOfPlayers { get; set; }
         public DbSet<GameType> GameTypes { get; set; }
         public DbSet<Hirer> Hirers { get; set; }
+        public DbSet<Image> Images { get; set; }
         public DbSet<Music> Musics { get; set; }
         public DbSet<MusicOfPlayer> MusicOfPlayers { get; set; }
         public DbSet<Order> Orders { get; set; }

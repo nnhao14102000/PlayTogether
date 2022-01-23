@@ -2,11 +2,9 @@ using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
 {
-    public class HirerGetByIdResponseForAdmin
+    public class GetHirerByIdResponseForHirer
     {
         public string Id { get; set; }
-
-        public string Email { get; set; }
         
         public string Firstname { get; set; }
 

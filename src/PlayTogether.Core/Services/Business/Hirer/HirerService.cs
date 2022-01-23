@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using PlayTogether.Core.Dtos.Incoming.Hirer;
+using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Hirer;
@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
+        public async Task<GetHirerByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
         {
             try {
                 return await _hirerRepository.GetHirerByIdForHirerAsync(id);
@@ -33,7 +33,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             }
         }
 
-        public async Task<HirerProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<GetHirerProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
                 return await _hirerRepository.GetHirerProfileByIdentityIdAsync(principal);
@@ -44,7 +44,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             }
         }
 
-        public async Task<bool> UpdateHirerInformationAsync(string id, HirerUpdateInfoRequest request)
+        public async Task<bool> UpdateHirerInformationAsync(string id, UpdateHirerInfoRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {
@@ -61,7 +61,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             }
         }
 
-        public async Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
+        public async Task<PagedResult<GetAllHirerResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
         {
             try {
                 return await _hirerRepository.GetAllHirersForAdminAsync(param);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Player;
@@ -27,7 +28,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
+        public async Task<PagedResult<GetAllPlayerResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
         {
             List<Entities.Player> players = null;
 
@@ -46,20 +47,30 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             }
 
             if (players is not null) {
-                var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
-                return PagedResult<PlayerGetAllResponseForHirer>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<GetAllPlayerResponseForHirer>>(players);
+                return PagedResult<GetAllPlayerResponseForHirer>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
             
             return null;
         }
 
-        public async Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdAsync(string id)
+        public async Task<GetPlayerByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id)
         {
             var player = await _context.Players.FindAsync(id);
-            return _mapper.Map<PlayerGetByIdResponseForPlayer>(player);
+
+            if(player is null){
+                return null;
+            }
+
+            _context.Entry(player)
+                .Collection(p => p.Images)
+                .Query()
+                .OrderByDescending(i => i.CreatedDate)
+                .Load();
+            return _mapper.Map<GetPlayerByIdResponseForPlayer>(player);
         }
 
-        public async Task<PlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<GetPlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -68,10 +79,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var playerProfile = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            return _mapper.Map<PlayerProfileResponse>(playerProfile);
+            return _mapper.Map<GetPlayerProfileResponse>(playerProfile);
         }
 
-        public async Task<bool> UpdatePlayerInformationAsync(string id, PlayerUpdateInfoRequest request)
+        public async Task<bool> UpdatePlayerInformationAsync(string id, UpdatePlayerInfoRequest request)
         {
             var player = await _context.Players.FindAsync(id);
             if (player is null) {

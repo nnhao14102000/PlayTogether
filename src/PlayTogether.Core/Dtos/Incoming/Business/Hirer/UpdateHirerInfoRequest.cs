@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PlayTogether.Core.Dtos.Incoming.Hirer
+namespace PlayTogether.Core.Dtos.Incoming.Business.Hirer
 {
-    public class HirerUpdateInfoRequest
+    public class UpdateHirerInfoRequest
     {
         [Required]
         public string Firstname { get; set; }
