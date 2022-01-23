@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
@@ -22,8 +23,14 @@ namespace PlayTogether.Infrastructure.Helpers
 
             // Get all service
             CreateMap<Admin, AdminResponse>();
-            CreateMap<Hirer, HirerResponse>();
+
+            CreateMap<Hirer, HirerGetAllResponse>();
+            CreateMap<Hirer, HirerProfileResponse>();
+            CreateMap<Hirer, HirerGetByIdForHirerResponse>();
+            CreateMap<HirerUpdateInfoRequest, Hirer>();
+
             CreateMap<Charity, CharityResponse>();
+
             CreateMap<Player, PlayerResponse>();
         }
     }

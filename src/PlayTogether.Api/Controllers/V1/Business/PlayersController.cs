@@ -21,7 +21,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all players
+        /// Get all Players
         /// </summary>
         /// <returns></returns>
         [HttpGet]

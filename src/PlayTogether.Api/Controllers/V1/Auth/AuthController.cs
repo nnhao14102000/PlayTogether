@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
 using PlayTogether.Core.Interfaces.Services.Auth;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
+using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business.Admin;
 using PlayTogether.Core.Parameters;
@@ -42,5 +43,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             
             return null;
         }
+
+        
     }
 }

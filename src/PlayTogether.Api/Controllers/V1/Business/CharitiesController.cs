@@ -22,7 +22,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all charities
+        /// Get all Charities
         /// </summary>
         /// <returns></returns>
         [HttpGet]

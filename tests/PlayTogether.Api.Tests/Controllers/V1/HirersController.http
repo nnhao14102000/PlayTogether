@@ -3,7 +3,7 @@
 @azurehost = play-together.azurewebsites.net
 @lchost = {{hostname}}:{{port}}
 @host = {{azurehost}}
-@baseUrl = https://{{host}}
+@baseUrl = https://{{lchost}}
 @contentType = application/json
 
 @token = {{login.response.body.$.message}}
@@ -15,21 +15,32 @@ POST {{baseUrl}}/api/play-together/v1/auth/login
 content-type: {{contentType}}
 
 {
-  "email": "admin01@example.com",
+  "email": "nnhao@example.com",
   "password": "Pa55w0rd!"
 }
 
 ###
-# Get all hirers
-GET {{baseUrl}}/api/play-together/v1/hirers
+# Get Hirer Profile
+GET {{baseUrl}}/api/play-together/v1/hirers/profile
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
-# Get all hirers with paging, search
-GET {{baseUrl}}/api/play-together/v1/hirers
-    ?Name=a
-    &PageNumber=1
-    &PageSize=10
+# Get Hirer by Id
+GET {{baseUrl}}/api/play-together/v1/hirers/d36ded19-c738-472a-845e-6fd9c88dc3de
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
+### Update Hirer Profile by Id
+PUT {{baseUrl}}/api/play-together/v1/hirers/d36ded19-c738-472a-845e-6fd9c88dc3de
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "firstname": "Hao",
+  "lastname": "Nguyen Nhut",
+  "city": "Long An Province",
+  "dateOfBirth": "2000-01-01",
+  "gender": true,
+  "avatar": ""
+}

@@ -21,7 +21,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all admins
+        /// Get all Admins
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -44,5 +44,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             
             return response != null ? Ok(response) : NotFound();
         }
+
+        
     }
 }

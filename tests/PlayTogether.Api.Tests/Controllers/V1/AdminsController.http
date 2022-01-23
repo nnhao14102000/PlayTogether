@@ -2,7 +2,7 @@
 @port = 5001
 @azurehost = play-together.azurewebsites.net
 @lchost = {{hostname}}:{{port}}
-@host = {{azurehost}}
+@host = {{lchost}}
 @baseUrl = https://{{host}}
 @contentType = application/json
 @token = {{login.response.body.$.message}}
@@ -27,6 +27,22 @@ Authorization: {{authToken}}
 ###
 # Get all admins with paging, search
 GET {{baseUrl}}/api/play-together/v1/admins
+    ?Name=a
+    &PageNumber=1
+    &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Get all hirers
+GET {{baseUrl}}/api/play-together/v1/hirers
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get all hirers with paging, search
+GET {{baseUrl}}/api/play-together/v1/hirers
     ?Name=a
     &PageNumber=1
     &PageSize=10

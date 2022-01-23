@@ -8,5 +8,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Admin
     public interface IAdminService
     {
         Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param);
+        
     }
 }

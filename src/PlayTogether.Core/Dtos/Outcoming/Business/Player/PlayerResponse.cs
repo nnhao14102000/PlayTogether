@@ -4,6 +4,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 {
     public class PlayerResponse
     {
+        public string Id { get; set; }
+        
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -30,7 +32,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 
         public string Status { get; set; }
 
-        public DateTime? AddedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
     }
 }

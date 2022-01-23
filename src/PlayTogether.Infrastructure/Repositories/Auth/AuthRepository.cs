@@ -26,7 +26,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
 
-        public AuthRepository(UserManager<IdentityUser> userManager,
+        public AuthRepository(
+            UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration,
             IMapper mapper,

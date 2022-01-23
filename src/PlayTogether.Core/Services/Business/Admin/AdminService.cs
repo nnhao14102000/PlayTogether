@@ -5,7 +5,6 @@ using PlayTogether.Core.Interfaces.Repositories.Business.Admin;
 using PlayTogether.Core.Interfaces.Services.Business.Admin;
 using PlayTogether.Core.Parameters;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Business.Admin
@@ -31,5 +30,7 @@ namespace PlayTogether.Core.Services.Business.Admin
                 throw;
             }
         }
+
+        
     }
 }

@@ -3,7 +3,7 @@
 @azurehost = play-together.azurewebsites.net
 @lchost = {{hostname}}:{{port}}
 @host = {{azurehost}}
-@baseUrl = https://{{host}}
+@baseUrl = https://{{lchost}}
 @contentType = application/json
 @token = {{login.response.body.$.message}}
 @authToken = bearer {{token}}
@@ -14,7 +14,7 @@ POST {{baseUrl}}/api/play-together/v1/auth/login
 content-type: {{contentType}}
 
 {
-  "email": "admin01@example.com",
+  "email": "nnhao@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -89,13 +89,25 @@ content-type: {{contentType}}
 POST {{baseUrl}}/api/play-together/v1/auth/register-hirer
 content-type: {{contentType}}
 
+# {
+#   "email": "user@example.com",
+#   "password": "string",
+#   "firstname": "string",
+#   "lastname": "string",
+#   "city": "string",
+#   "dateOfBirth": "2002-01-22",
+#   "gender": true,
+#   "confirmEmail": false
+# }
+
 {
-  "email": "user@example.com",
-  "password": "string",
-  "firstname": "string",
-  "lastname": "string",
-  "city": "string",
-  "dateOfBirth": "2002-01-22",
-  "gender": true,
-  "confirmEmail": false
+  "email": "VanAnh@example.com",
+  "password": "Pa55w0rd!",
+  "firstname": "Anh",
+  "lastname": "Nguyen Van",
+  "city": "Long An City",
+  "dateOfBirth": "2016-08-22",
+  "gender": false,
+  "confirmEmail": true
 }
+
