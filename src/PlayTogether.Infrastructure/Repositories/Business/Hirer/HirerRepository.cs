@@ -46,13 +46,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
                 var response = _mapper.Map<List<GetAllHirerResponseForAdmin>>(hirers);
                 return PagedResult<GetAllHirerResponseForAdmin>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
-            
+
             return null;
         }
 
         public async Task<GetHirerByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
         {
             var hirer = await _context.Hirers.FindAsync(id);
+
+            if (hirer is null) {
+                return null;
+            }
             return _mapper.Map<GetHirerByIdResponseForHirer>(hirer);
         }
 

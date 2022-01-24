@@ -42,7 +42,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
             
-            return response != null ? Ok(response) : NotFound();
+            return response is not null ? Ok(response) : NotFound();
         }
 
         /// <summary>
