@@ -1,0 +1,45 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "player01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+
+###
+# Create image for player
+POST {{baseUrl}}/api/play-together/v1/images
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "playerId": "39a6984a-189f-4530-bb7d-c5efad676b50",
+  "imageLink": "https://src.com/imagexxx1.jpg"
+}
+
+
+###
+# Get image by Id for player
+GET {{baseUrl}}/api/play-together/v1/images/580021c6-ab0e-4713-adde-3214107d57f4
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+DELETE {{baseUrl}}/api/play-together/v1/images/023589d9-032c-4526-851e-615dbb13d1b6
+Content-Type: {{contentType}}
+Authorization: {{authToken}}

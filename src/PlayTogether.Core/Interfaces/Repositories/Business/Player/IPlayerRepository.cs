@@ -9,9 +9,9 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business.Player
 {
     public interface IPlayerRepository
     {
-        Task<PagedResult<GetAllPlayerResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param);
-        Task<GetPlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal);
-        Task<GetPlayerByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id);
-        Task<bool> UpdatePlayerInformationAsync(string id, UpdatePlayerInfoRequest request);
+        Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param);
+        Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal);
+        Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id);
+        Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request);
     }
 }

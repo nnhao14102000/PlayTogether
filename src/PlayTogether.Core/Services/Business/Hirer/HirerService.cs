@@ -22,20 +22,26 @@ namespace PlayTogether.Core.Services.Business.Hirer
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<GetHirerByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
+        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
         {
             try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
                 return await _hirerRepository.GetHirerByIdForHirerAsync(id);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetHirerByIdAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetHirerByIdForHirerAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
 
-        public async Task<GetHirerProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
                 return await _hirerRepository.GetHirerProfileByIdentityIdAsync(principal);
             }
             catch (Exception ex) {
@@ -44,7 +50,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
             }
         }
 
-        public async Task<bool> UpdateHirerInformationAsync(string id, UpdateHirerInfoRequest request)
+        public async Task<bool> UpdateHirerInformationAsync(string id, HirerInfoUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {
@@ -56,18 +62,18 @@ namespace PlayTogether.Core.Services.Business.Hirer
                 return await _hirerRepository.UpdateHirerInformationAsync(id, request);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call UpdateHirerProfileAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call UpdateHirerInformationAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
 
-        public async Task<PagedResult<GetAllHirerResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
+        public async Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
         {
             try {
                 return await _hirerRepository.GetAllHirersForAdminAsync(param);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetAllHirersAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetAllHirersForAdminAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

@@ -28,7 +28,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<IEnumerable<GetAllHirerResponseForAdmin>>> GetAllHirers(
+        public async Task<ActionResult<IEnumerable<HirerGetAllResponseForAdmin>>> GetAllHirers(
             [FromQuery] HirerParameters param)
         {
             var response = await _hirerService.GetAllHirersForAdminAsync(param).ConfigureAwait(false);
@@ -52,7 +52,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<GetHirerProfileResponse>> GetHirerProfile()
+        public async Task<ActionResult<HirerGetProfileResponse>> GetHirerProfile()
         {
             var response = await _hirerService.GetHirerProfileByIdentityIdAsync(HttpContext.User);
             return response is not null ? Ok(response) : NotFound();
@@ -65,7 +65,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<GetHirerByIdResponseForHirer>> GetHirerById(string id)
+        public async Task<ActionResult<HirerGetByIdResponseForHirer>> GetHirerById(string id)
         {
             var response = await _hirerService.GetHirerByIdForHirerAsync(id);
             return response is not null ? Ok(response) : NotFound();
@@ -79,7 +79,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult> UpdateHirerInfomation(string id, UpdateHirerInfoRequest request)
+        public async Task<ActionResult> UpdateHirerInfomation(string id, HirerInfoUpdateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

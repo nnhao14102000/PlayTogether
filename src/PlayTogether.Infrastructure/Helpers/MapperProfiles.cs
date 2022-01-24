@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
+using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
+using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Infrastructure.Entities;
 
@@ -25,18 +27,21 @@ namespace PlayTogether.Infrastructure.Helpers
             // Business
             CreateMap<Admin, AdminResponse>();
 
-            CreateMap<Hirer, GetAllHirerResponseForAdmin>();
-            CreateMap<Hirer, GetHirerProfileResponse>();
-            CreateMap<Hirer, GetHirerByIdResponseForHirer>();
-            CreateMap<UpdateHirerInfoRequest, Hirer>();
+            CreateMap<Hirer, HirerGetAllResponseForAdmin>();
+            CreateMap<Hirer, HirerGetProfileResponse>();
+            CreateMap<Hirer, HirerGetByIdResponseForHirer>();
+            CreateMap<HirerInfoUpdateRequest, Hirer>();
 
             CreateMap<Charity, CharityResponse>();
 
-            CreateMap<Player, GetAllPlayerResponseForHirer>();
-            CreateMap<Player, GetPlayerProfileResponse>();
-            CreateMap<Player, GetPlayerByIdResponseForPlayer>();
+            CreateMap<Player, PlayerGetAllResponseForHirer>();
+            CreateMap<Player, PlayerGetProfileResponse>();
+            CreateMap<Player, PlayerGetByIdResponseForPlayer>();
             CreateMap<Image, ImagesOfPlayer>();
-            CreateMap<UpdatePlayerInfoRequest, Player>();
+            CreateMap<PlayerInfoUpdateRequest, Player>();
+
+            CreateMap<ImageCreateRequest, Image>();
+            CreateMap<Image, ImageGetByIdResponse>();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<PagedResult<GetAllHirerResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
+        public async Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
         {
             List<Entities.Hirer> hirers = null;
 
@@ -43,24 +43,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             }
 
             if (hirers is not null) {
-                var response = _mapper.Map<List<GetAllHirerResponseForAdmin>>(hirers);
-                return PagedResult<GetAllHirerResponseForAdmin>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<HirerGetAllResponseForAdmin>>(hirers);
+                return PagedResult<HirerGetAllResponseForAdmin>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
             return null;
         }
 
-        public async Task<GetHirerByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
+        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
         {
             var hirer = await _context.Hirers.FindAsync(id);
 
             if (hirer is null) {
                 return null;
             }
-            return _mapper.Map<GetHirerByIdResponseForHirer>(hirer);
+            return _mapper.Map<HirerGetByIdResponseForHirer>(hirer);
         }
 
-        public async Task<GetHirerProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -69,10 +69,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var hirerProfile = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            return _mapper.Map<GetHirerProfileResponse>(hirerProfile);
+            return _mapper.Map<HirerGetProfileResponse>(hirerProfile);
         }
 
-        public async Task<bool> UpdateHirerInformationAsync(string id, UpdateHirerInfoRequest request)
+        public async Task<bool> UpdateHirerInformationAsync(string id, HirerInfoUpdateRequest request)
         {
             var hirer = await _context.Hirers.FindAsync(id);
             if (hirer is null) {
@@ -80,7 +80,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             }
             _mapper.Map(request, hirer);
             _context.Hirers.Update(hirer);
-            return (await _context.SaveChangesAsync() > 0);
+            return (await _context.SaveChangesAsync() >= 0);
         }
     }
 }

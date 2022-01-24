@@ -27,6 +27,7 @@ namespace PlayTogether.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
 
             services.ConfigureServiceInjection(Configuration);
 
@@ -57,12 +58,15 @@ namespace PlayTogether.Api
                 });
 
             services.ConfigureSwagger();
+            services.AddCors();
 
             services.AddRouting(options => options.LowercaseUrls = true);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }

@@ -23,31 +23,37 @@ namespace PlayTogether.Core.Services.Business.Player
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PagedResult<GetAllPlayerResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
+        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
         {
             try {
                 return await _playerRepository.GetAllPlayersForHirerAsync(param);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetAllPlayerAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetAllPlayersForHirerAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
 
-        public async Task<GetPlayerByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id)
+        public async Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id)
         {
             try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
                 return await _playerRepository.GetPlayerByIdForPlayerAsync(id);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetPlayerByIdAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetPlayerByIdForPlayerAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
 
-        public async Task<GetPlayerProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
                 return await _playerRepository.GetPlayerProfileByIdentityIdAsync(principal);
             }
             catch (Exception ex) {
@@ -56,7 +62,7 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
-        public async Task<bool> UpdatePlayerInformationAsync(string id, UpdatePlayerInfoRequest request)
+        public async Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

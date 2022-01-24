@@ -27,7 +27,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<PagedResult<GetAllPlayerResponseForHirer>>> GetAllPlayers(
+        public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
             var response = await _playerService.GetAllPlayersForHirerAsync(param).ConfigureAwait(false);
@@ -51,7 +51,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<GetPlayerProfileResponse>> GetPlayerProfile()
+        public async Task<ActionResult<PlayerGetProfileResponse>> GetPlayerProfile()
         {
             var response = await _playerService.GetPlayerProfileByIdentityIdAsync(HttpContext.User);
             return response is not null ? Ok(response) : NotFound();
@@ -64,7 +64,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<GetPlayerByIdResponseForPlayer>> GetPlayerById(string id)
+        public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerById(string id)
         {
             var response = await _playerService.GetPlayerByIdForPlayerAsync(id);
             return response is not null ? Ok(response) : NotFound();
@@ -78,7 +78,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> UpdatePlayerInfomation(string id, UpdatePlayerInfoRequest request)
+        public async Task<ActionResult> UpdatePlayerInfomation(string id, PlayerInfoUpdateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();

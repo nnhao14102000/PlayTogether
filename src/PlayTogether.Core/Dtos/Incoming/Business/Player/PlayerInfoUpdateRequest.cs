@@ -1,26 +1,30 @@
 using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
+namespace PlayTogether.Core.Dtos.Incoming.Business.Player
 {
-    public class GetPlayerByIdResponseForPlayer
+    public class PlayerInfoUpdateRequest
     {
-        public string Id { get; set; }
-        
         public string Avatar { get; set; }
-        
+
+        [Required]        
         public string Firstname { get; set; }
 
+        [Required]  
         public string Lastname { get; set; }
 
+        [Required]  
         public string City { get; set; }
 
+        [Required]  
         public DateTime DateOfBirth { get; set; }
-
-        public ICollection<ImagesOfPlayer> Images { get; set; }
         
+        [Required]  
         public string Description { get; set; }
         
+        [Required]  
         public bool Gender { get; set; }
+
+        public DateTime UpdateDate = DateTime.Now;
     }
 }

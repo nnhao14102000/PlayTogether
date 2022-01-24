@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Business.Hirer
 {
-    public class UpdateHirerInfoRequest
+    public class HirerInfoUpdateRequest
     {
         [Required]
         public string Firstname { get; set; }

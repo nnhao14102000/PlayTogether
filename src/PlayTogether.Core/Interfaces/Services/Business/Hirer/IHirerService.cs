@@ -9,9 +9,9 @@ namespace PlayTogether.Core.Interfaces.Services.Business.Hirer
 {
     public interface IHirerService
     {
-        Task<PagedResult<GetAllHirerResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param);
-        Task<GetHirerProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal);
-        Task<GetHirerByIdResponseForHirer> GetHirerByIdForHirerAsync(string id);
-        Task<bool> UpdateHirerInformationAsync(string id, UpdateHirerInfoRequest request);
+        Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param);
+        Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal);
+        Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id);
+        Task<bool> UpdateHirerInformationAsync(string id, HirerInfoUpdateRequest request);
     }
 }

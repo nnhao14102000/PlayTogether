@@ -2,7 +2,7 @@
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
 {
-    public class GetAllHirerResponseForAdmin
+    public class HirerGetAllResponseForAdmin
     {
         public string Id { get; set; }
         

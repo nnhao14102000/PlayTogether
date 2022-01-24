@@ -65,6 +65,26 @@
 >   ***Role Access***: Player  
 >
 
+## Image
+> - ``GET /api/play-together/v1/images/{id} ``  
+>   ***Description***: Get Image by Id for Player and Hirer  
+>   ***Use for***: View image of Player   
+>   ***Role Access***: Player, Hirer  
+>
+> - ``POST /api/play-together/v1/images ``  
+>   ***Description***: Add New an Image of Player   
+>   ***Use for***: Player add a new image to their image collection   
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/images/{id} ``  
+>   ***Description***: Delete an Image of Player    
+>   ***Use for***: Player delete an image from their image collection  
+>   ***Role Access***: Player  
+>
+>
+>
+>
+
 ## Hirer 
 > - ``GET /api/play-together/v1/hirers ``  
 >   ***Description***: Get all Hirers  

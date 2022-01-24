@@ -8,6 +8,7 @@
 @token = {{login.response.body.$.message}}
 @authToken = bearer {{token}}
 
+
 ###
 # @name login
 POST {{baseUrl}}/api/play-together/v1/auth/login
@@ -25,11 +26,13 @@ GET {{baseUrl}}/api/play-together/v1/players/profile
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
+
 ###
 # Get Player by Id
 GET {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
 
 ### Update Player Profile by Id
 PUT {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
