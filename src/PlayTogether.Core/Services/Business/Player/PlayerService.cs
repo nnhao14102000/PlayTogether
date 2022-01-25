@@ -34,6 +34,20 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
+        public async Task<PlayerGetByIdResponseForHirer> GetPlayerByIdForHirerAsync(string id)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                return await _playerRepository.GetPlayerByIdForHirerAsync(id);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetPlayerByIdForHirerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id)
         {
             try {
@@ -62,6 +76,20 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
+        public async Task<PlayerServiceInfoResponseForPlayer> GetPlayerServiceInfoByIdForPlayerAsync(string id)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                return await _playerRepository.GetPlayerServiceInfoByIdForPlayerAsync(id);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetPlayerServiceInfoByIdForPlayerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request)
         {
             try {
@@ -75,6 +103,23 @@ namespace PlayTogether.Core.Services.Business.Player
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call UpdatePlayerInformationAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdatePlayerServiceInfoAsync(string id, PlayerServiceInfoUpdateRequest request)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _playerRepository.UpdatePlayerServiceInfoAsync(id, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdatePlayerServiceInfoAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

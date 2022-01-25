@@ -26,6 +26,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [ApiVersion("1.1")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
@@ -64,9 +65,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerById(string id)
+        public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerByIdForPlayer(string id)
         {
             var response = await _playerService.GetPlayerByIdForPlayerAsync(id);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get Player by Id for Hirer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>        
+        [HttpGet, Route("{id}")]
+        [ApiVersion("1.1")]
+        [Authorize(Roles = AuthConstant.RoleHirer)]
+        public async Task<ActionResult<PlayerGetByIdResponseForHirer>> GetPlayerByIdForHirer(string id)
+        {
+            var response = await _playerService.GetPlayerByIdForHirerAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }
 
@@ -84,6 +99,36 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _playerService.UpdatePlayerInformationAsync(id, request);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Get Player Service Info by Id for Player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>        
+        [HttpGet, Route("service-info/{id}")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<PlayerServiceInfoResponseForPlayer>> GetPlayerServiceInfoById(string id)
+        {
+            var response = await _playerService.GetPlayerServiceInfoByIdForPlayerAsync(id);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Update Player Service Info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut, Route("service-info/{id}")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> UpdatePlayerInfoService(string id, PlayerServiceInfoUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _playerService.UpdatePlayerServiceInfoAsync(id, request);
             return response ? NoContent() : NotFound();
         }
     }

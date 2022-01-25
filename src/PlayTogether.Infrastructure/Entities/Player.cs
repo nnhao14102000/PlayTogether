@@ -35,6 +35,9 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float PricePerHour { get; set; }
 
+        [Range(1, 3)]
+        public int MaxHourHire { get; set; } = 1;
+
         [Column(TypeName = "float")]
         public float Rating { get; set; }
 
@@ -43,7 +46,7 @@ namespace PlayTogether.Infrastructure.Entities
         public bool IsActive { get; set; } = true;
 
         [MaxLength(50)]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Offline";
 
         public IList<Order> Orders { get; set; }
         public ICollection<Rating> Ratings { get; set; }

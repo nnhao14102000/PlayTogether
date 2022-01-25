@@ -85,10 +85,10 @@ content-type: {{contentType}}
 # }
 
 {
-  "email": "player02@example.com",
+  "email": "player01@example.com",
   "password": "Pa55w0rd!",
   "firstname": "Player",
-  "lastname": "No.02",
+  "lastname": "No.01",
   "city": "None",
   "dateOfBirth": "2001-01-11",
   "gender": true,

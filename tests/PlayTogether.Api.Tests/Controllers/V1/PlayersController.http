@@ -28,14 +28,14 @@ Authorization: {{authToken}}
 
 
 ###
-# Get Player by Id
-GET {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
+# Get Player by Id for player
+GET {{baseUrl}}/api/play-together/v1/players/3dffdce4-cdd6-479d-a97e-5f598c1a8946
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ### Update Player Profile by Id
-PUT {{baseUrl}}/api/play-together/v1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
+PUT {{baseUrl}}/api/play-together/v1/players/3dffdce4-cdd6-479d-a97e-5f598c1a8946
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -47,4 +47,24 @@ Authorization: {{authToken}}
   "dateOfBirth": "2022-01-23",
   "description": "Test account player update infomation",
   "gender": true
+}
+
+
+
+###
+# Get Player service info by Id for player
+GET {{baseUrl}}/api/play-together/v1/players/service-info/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+### Update Player service info by Id
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "status": true,
+  "maxHourHire": 1,
+  "pricePerHour": 15000
 }

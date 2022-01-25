@@ -47,16 +47,23 @@ Authorization: {{authToken}}
 
 ###
 # Get all players
-GET {{baseUrl}}/api/play-together/v1/players
+GET {{baseUrl}}/api/play-together/v1.1/players
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Get all players with paging, filter, search
-GET {{baseUrl}}/api/play-together/v1/players
+GET {{baseUrl}}/api/play-together/v1.1/players
     ?Name=
     &Gender=
     &PageNumber=1
     &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+### 
+# Get Player by Id for hirer
+GET {{baseUrl}}/api/play-together/v1.1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
 content-type: {{contentType}}
 Authorization: {{authToken}}

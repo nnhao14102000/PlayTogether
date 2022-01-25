@@ -43,7 +43,7 @@
 >
 
 ## Player  
-> - ``GET /api/play-together/v1/players ``  
+> - ``GET /api/play-together/v1.1/players ``  
 >   ***Description***: Get all Players for Hirer  
 >   ***Use for***: Search players in Hirer app   
 >   ***Role Access***: Hirer  
@@ -56,12 +56,27 @@
 > 
 > - ``GET /api/play-together/v1/players/{id} ``  
 >   ***Description***: Get a Player by Id for Player   
->   ***Use for***: Player get their own information for update  
->   ***Role Access***: Player  
+>   ***Use for***: Player get their own information  
+>   ***Role Access***: Player 
+>
+> - ``GET /api/play-together/v1.1/players/{id} ``  
+>   ***Description***: Get a Player by Id for Hirer   
+>   ***Use for***: Hire get player by Id to view their info  
+>   ***Role Access***: Hirer  
 >
 > - ``PUT /api/play-together/v1/players/{id} ``  
 >   ***Description***: Update Player Info    
 >   ***Use for***: Update player own information    
+>   ***Role Access***: Player  
+>
+> - ``GET /api/play-together/v1/players/service-info/{id} ``  
+>   ***Description***: Get a Player service info (like is ready for hire, price per hour,...) by Id for Player   
+>   ***Use for***: Player get their own service information
+>   ***Role Access***: Player  
+>
+> - ``PUT /api/play-together/v1/players/service-info/{id} ``  
+>   ***Description***: Update Player service info (like is ready for hire, price per hour,...)    
+>   ***Use for***: Update player own service information    
 >   ***Role Access***: Player  
 >
 
