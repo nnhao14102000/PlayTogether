@@ -4,9 +4,8 @@ using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Services.Business.Charity;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business

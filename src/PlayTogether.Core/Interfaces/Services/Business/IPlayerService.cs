@@ -5,9 +5,9 @@ using PlayTogether.Core.Parameters;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace PlayTogether.Core.Interfaces.Repositories.Business.Player
+namespace PlayTogether.Core.Interfaces.Services.Business
 {
-    public interface IPlayerRepository
+    public interface IPlayerService
     {
         Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param);
         Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal);

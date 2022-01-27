@@ -3,7 +3,7 @@ using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
-namespace PlayTogether.Core.Interfaces.Services.Business.Admin
+namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IAdminService
     {

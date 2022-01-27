@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Hirer;
+using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Parameters;
 using PlayTogether.Infrastructure.Data;
 using System;
@@ -36,13 +36,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
 
             hirers = await _context.Hirers.ToListAsync().ConfigureAwait(false);
 
-            if (!String.IsNullOrEmpty(param.Name)) {
-                var query = hirers.AsQueryable();
-                query = query.Where(x => (x.Lastname + x.Firstname).ToLower().Contains(param.Name.ToLower()));
-                hirers = query.ToList();
-            }
-
             if (hirers is not null) {
+                if (!String.IsNullOrEmpty(param.Name)) {
+                    var query = hirers.AsQueryable();
+                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower().Contains(param.Name.ToLower()));
+                    hirers = query.ToList();
+                }
+
                 var response = _mapper.Map<List<HirerGetAllResponseForAdmin>>(hirers);
                 return PagedResult<HirerGetAllResponseForAdmin>.ToPagedList(response, param.PageNumber, param.PageSize);
             }

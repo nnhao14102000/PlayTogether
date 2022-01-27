@@ -1,7 +1,7 @@
 using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
-using PlayTogether.Core.Interfaces.Repositories.Business.Image;
+using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
         public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
         {
             var model = _mapper.Map<Entities.Image>(request);
-            _context.Add(model);
+            _context.Images.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return _mapper.Map<ImageGetByIdResponse>(model);
             }

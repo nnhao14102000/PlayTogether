@@ -2,8 +2,8 @@
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Player;
-using PlayTogether.Core.Interfaces.Services.Business.Player;
+using PlayTogether.Core.Interfaces.Repositories.Business;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;

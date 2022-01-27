@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
-using PlayTogether.Core.Interfaces.Repositories.Business.Image;
-using PlayTogether.Core.Interfaces.Services.Business.Image;
+using PlayTogether.Core.Interfaces.Repositories.Business;
+using PlayTogether.Core.Interfaces.Services.Business;
 using System;
 using System.Threading.Tasks;
 

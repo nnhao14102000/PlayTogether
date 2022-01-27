@@ -2,8 +2,8 @@
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Hirer;
-using PlayTogether.Core.Interfaces.Services.Business.Hirer;
+using PlayTogether.Core.Interfaces.Repositories.Business;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System;
 using System.Security.Claims;

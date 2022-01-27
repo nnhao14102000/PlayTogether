@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
-using PlayTogether.Core.Interfaces.Services.Business.Hirer;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Collections.Generic;
 using System.Threading.Tasks;

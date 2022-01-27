@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Charity;
-using PlayTogether.Core.Interfaces.Services.Business.Charity;
+using PlayTogether.Core.Interfaces.Repositories.Business;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;

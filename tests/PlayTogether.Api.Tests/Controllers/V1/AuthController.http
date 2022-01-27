@@ -50,10 +50,10 @@ POST {{baseUrl}}/api/play-together/v1/auth/register-admin
 content-type: {{contentType}}
 
 {
-  "email": "user@example.com",
-  "password": "string",
-  "firstname": "string",
-  "lastname": "string"
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!",
+  "firstname": "Admin",
+  "lastname": "No.01"
 }
 
 ###

@@ -5,7 +5,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Player;
+using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Parameters;
 using PlayTogether.Infrastructure.Data;
 using System;
@@ -41,13 +41,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
                 players = await _context.Players.ToListAsync().ConfigureAwait(false);
             }
 
-            if (!String.IsNullOrEmpty(param.Name)) {
-                var query = players.AsQueryable();
-                query = query.Where(players => (players.Lastname + players.Firstname).ToLower().Contains(param.Name.ToLower()));
-                players = query.ToList();
-            }
-
             if (players is not null) {
+                if (!String.IsNullOrEmpty(param.Name)) {
+                    var query = players.AsQueryable();
+                    query = query.Where(players => (players.Lastname + players.Firstname).ToLower().Contains(param.Name.ToLower()));
+                    players = query.ToList();
+                }
+
                 var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
                 return PagedResult<PlayerGetAllResponseForHirer>.ToPagedList(response, param.PageNumber, param.PageSize);
             }

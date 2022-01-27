@@ -2,20 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PlayTogether.Core.Interfaces.Repositories.Auth;
-using PlayTogether.Core.Interfaces.Repositories.Business.Admin;
-using PlayTogether.Core.Interfaces.Repositories.Business.Charity;
-using PlayTogether.Core.Interfaces.Repositories.Business.Hirer;
-using PlayTogether.Core.Interfaces.Repositories.Business.Image;
-using PlayTogether.Core.Interfaces.Repositories.Business.Player;
+using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Auth;
-using PlayTogether.Core.Interfaces.Services.Business.Admin;
-using PlayTogether.Core.Interfaces.Services.Business.Charity;
-using PlayTogether.Core.Interfaces.Services.Business.Hirer;
-using PlayTogether.Core.Interfaces.Services.Business.Image;
-using PlayTogether.Core.Interfaces.Services.Business.Player;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Services.Auth;
 using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.Charity;
+using PlayTogether.Core.Services.Business.GameType;
 using PlayTogether.Core.Services.Business.Hirer;
 using PlayTogether.Core.Services.Business.Image;
 using PlayTogether.Core.Services.Business.Player;
@@ -23,6 +16,7 @@ using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
 using PlayTogether.Infrastructure.Repositories.Business.Charity;
+using PlayTogether.Infrastructure.Repositories.Business.GameType;
 using PlayTogether.Infrastructure.Repositories.Business.Hirer;
 using PlayTogether.Infrastructure.Repositories.Business.Image;
 using PlayTogether.Infrastructure.Repositories.Business.Player;
@@ -88,6 +82,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Image service DI
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IImageRepository, ImageRepository>();
+
+            // Config for GameType service DI
+            services.AddScoped<IGameTypeService, GameTypeService>();
+            services.AddScoped<IGameTypeRepository, GameTypeRepository>();
 
             services.AddHttpClient();
 

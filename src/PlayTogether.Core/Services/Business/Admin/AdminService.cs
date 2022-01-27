@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Repositories.Business.Admin;
-using PlayTogether.Core.Interfaces.Services.Business.Admin;
+using PlayTogether.Core.Interfaces.Repositories.Business;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System;
 using System.Threading.Tasks;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
-using PlayTogether.Core.Interfaces.Services.Business.Image;
+using PlayTogether.Core.Interfaces.Services.Business;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
@@ -46,6 +48,14 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<ImageCreateRequest, Image>();
             CreateMap<Image, ImageGetByIdResponse>();
+
+            CreateMap<GameType, GameTypeGetAllResponse>();
+            CreateMap<GameType, GameTypeGetByIdResponse>();
+            CreateMap<GameTypeUpdateRequest, GameType>();
+            CreateMap<GameTypeCreateRequest, GameType>();
+            CreateMap<GameType, GameTypeCreateResponse>();
+
+            // src => target
         }
     }
 }

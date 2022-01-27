@@ -5,9 +5,9 @@ using PlayTogether.Core.Parameters;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace PlayTogether.Core.Interfaces.Services.Business.Hirer
+namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
-    public interface IHirerService
+    public interface IHirerRepository
     {
         Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param);
         Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal);

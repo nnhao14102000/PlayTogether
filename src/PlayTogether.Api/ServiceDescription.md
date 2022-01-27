@@ -42,6 +42,34 @@
 >   ***Extension***: Paging, Search by Name  
 >
 
+## GameType
+> - ``GET /api/play-together/v1/gametypes ``  
+>   ***Description***: Get all Game Types  
+>   ***Use for***: Admin get to view all game types  
+>   ***Role Access***: Admin  
+>   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/gametypes/{id} ``  
+>   ***Description***: Get a Game Type By Id  
+>   ***Use for***: Admin view a game type in detail  
+>   ***Role Access***: Admin  
+>
+> - ``POST /api/play-together/v1/gametypes ``  
+>   ***Description***: Add New a Game Type  
+>   ***Use for***: Admin add new game type   
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/gametypes/{id} ``  
+>   ***Description***: Update a Game Type  
+>   ***Use for***: Admin update game type    
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/gametypes/{id} ``  
+>   ***Description***: Delete a Game Type       
+>   ***Use for***: Admin delete a game type  
+>   ***Role Access***: Admin  
+>
+
 ## Player  
 > - ``GET /api/play-together/v1.1/players ``  
 >   ***Description***: Get all Players for Hirer  
@@ -71,7 +99,7 @@
 >
 > - ``GET /api/play-together/v1/players/service-info/{id} ``  
 >   ***Description***: Get a Player service info (like is ready for hire, price per hour,...) by Id for Player   
->   ***Use for***: Player get their own service information
+>   ***Use for***: Player get their own service information    
 >   ***Role Access***: Player  
 >
 > - ``PUT /api/play-together/v1/players/service-info/{id} ``  
@@ -96,9 +124,7 @@
 >   ***Use for***: Player delete an image from their image collection  
 >   ***Role Access***: Player  
 >
->
->
->
+
 
 ## Hirer 
 > - ``GET /api/play-together/v1/hirers ``  

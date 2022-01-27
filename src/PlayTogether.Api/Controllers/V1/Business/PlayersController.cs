@@ -5,7 +5,7 @@ using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
-using PlayTogether.Core.Interfaces.Services.Business.Player;
+using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
@@ -31,7 +31,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
-            var response = await _playerService.GetAllPlayersForHirerAsync(param).ConfigureAwait(false);
+            var response = await _playerService.GetAllPlayersForHirerAsync(param);
 
             var metaData = new {
                 response.TotalCount,
