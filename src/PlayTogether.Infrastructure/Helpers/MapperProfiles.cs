@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
+using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
+using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
+using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
 
 namespace PlayTogether.Infrastructure.Helpers
@@ -54,6 +58,19 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<GameTypeUpdateRequest, GameType>();
             CreateMap<GameTypeCreateRequest, GameType>();
             CreateMap<GameType, GameTypeCreateResponse>();
+            CreateMap<TypeOfGame, TypeOfGameResponseForGameType>();
+            CreateMap<Game, GameResponseForGameType>();
+
+            CreateMap<Game, GameGetAllResponse>();
+            CreateMap<Game, GameGetByIdResponse>();
+            CreateMap<GameUpdateRequest, Game>();
+            CreateMap<GameCreateRequest, Game>();
+            CreateMap<Game, GameCreateResponse>();
+            CreateMap<TypeOfGame, TypeOfGameResponseForGame>();
+            CreateMap<GameType, GameTypeResponseForGame>();
+
+            CreateMap<TypeOfGameCreateRequest, TypeOfGame>();
+            CreateMap<TypeOfGame, TypeOfGameGetByIdResponse>();
 
             // src => target
         }

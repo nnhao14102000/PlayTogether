@@ -17,8 +17,10 @@ namespace PlayTogether.Core.Services.Business.Charity
 
         public CharityService(ICharityRepository charityRepository, ILogger<CharityService> logger)
         {
-            _charityRepository = charityRepository ?? throw new ArgumentNullException(nameof(charityRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _charityRepository = charityRepository 
+                ?? throw new ArgumentNullException(nameof(charityRepository));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param)

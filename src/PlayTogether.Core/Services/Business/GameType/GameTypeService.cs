@@ -15,10 +15,14 @@ namespace PlayTogether.Core.Services.Business.GameType
         private readonly IGameTypeRepository _gameTypeRepository;
         private readonly ILogger<GameTypeService> _logger;
 
-        public GameTypeService(IGameTypeRepository gameTypeRepository, ILogger<GameTypeService> logger)
+        public GameTypeService(
+            IGameTypeRepository gameTypeRepository, 
+            ILogger<GameTypeService> logger)
         {
-            _gameTypeRepository = gameTypeRepository ?? throw new ArgumentNullException(nameof(gameTypeRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _gameTypeRepository = gameTypeRepository 
+                ?? throw new ArgumentNullException(nameof(gameTypeRepository));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request)
@@ -38,13 +42,13 @@ namespace PlayTogether.Core.Services.Business.GameType
         public async Task<bool> DeleteGameTypeAsync(string id)
         {
             try {
-                if (id is null) {
+                if (String.IsNullOrEmpty(id)) {
                     throw new ArgumentNullException(nameof(id));
                 }
                 return await _gameTypeRepository.DeleteGameTypeAsync(id);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call DeleteImageAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call DeleteGameTypeAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

@@ -70,6 +70,34 @@
 >   ***Role Access***: Admin  
 >
 
+## Game
+> - ``GET /api/play-together/v1/games ``  
+>   ***Description***: Get all Games   
+>   ***Use for***: Get to view all games  
+>   ***Role Access***: Admin, Player  
+>   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/games/{id} ``  
+>   ***Description***: Get a Game By Id  
+>   ***Use for***: View a game in detail  
+>   ***Role Access***: Admin, Player  
+>
+> - ``POST /api/play-together/v1/games ``  
+>   ***Description***: Add New a Game  
+>   ***Use for***: Admin add new game   
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/games/{id} ``  
+>   ***Description***: Update a Game  
+>   ***Use for***: Admin update game    
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/games/{id} ``  
+>   ***Description***: Delete a Game       
+>   ***Use for***: Admin delete a game  
+>   ***Role Access***: Admin  
+>
+
 ## Player  
 > - ``GET /api/play-together/v1.1/players ``  
 >   ***Description***: Get all Players for Hirer  
@@ -106,6 +134,23 @@
 >   ***Description***: Update Player service info (like is ready for hire, price per hour,...)    
 >   ***Use for***: Update player own service information    
 >   ***Role Access***: Player  
+>
+
+## TypeOfGame
+> - ``GET /api/play-together/v1/typeofgames/{id} ``  
+>   ***Description***: Get Type of Game  
+>   ***Use for***: Support to view types of game  
+>   ***Role Access***: Admin  
+>
+> - ``POST /api/play-together/v1/typeofgames ``  
+>   ***Description***: Add type of game  
+>   ***Use for***: Support to add type of game   
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/typeofgames/{id} ``  
+>   ***Description***: Delete type of game    
+>   ***Use for***: Delete type of game 
+>   ***Role Access***: Admin  
 >
 
 ## Image

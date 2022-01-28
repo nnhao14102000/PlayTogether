@@ -16,10 +16,14 @@ namespace PlayTogether.Core.Services.Business.Hirer
         private readonly IHirerRepository _hirerRepository;
         private readonly ILogger<HirerService> _logger;
 
-        public HirerService(IHirerRepository HirerRepository, ILogger<HirerService> logger)
+        public HirerService(
+            IHirerRepository HirerRepository, 
+            ILogger<HirerService> logger)
         {
-            _hirerRepository = HirerRepository ?? throw new ArgumentNullException(nameof(HirerRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _hirerRepository = HirerRepository 
+                ?? throw new ArgumentNullException(nameof(HirerRepository));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)

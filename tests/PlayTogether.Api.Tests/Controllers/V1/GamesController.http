@@ -20,48 +20,50 @@ content-type: {{contentType}}
 
 
 ###
-# Get all game type
-GET {{baseUrl}}/api/play-together/v1/gametypes
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
-# Get all game type with search
-GET {{baseUrl}}/api/play-together/v1/gametypes
-  ?name=mo
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
+  ?name=
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
-# Create a new game type
-POST {{baseUrl}}/api/play-together/v1/gametypes
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "typeName": "Action"
-}
-
-###
-# Get by Id
-GET {{baseUrl}}/api/play-together/v1/gametypes/1c880885-0409-4466-91f7-9ef908639548
+# Get Game by Id
+GET {{baseUrl}}/api/play-together/v1/games/641e4aac-1a60-461a-a878-e9750d588da6
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
-# Update game type
-PUT {{baseUrl}}/api/play-together/v1/gametypes/44e7bb53-0158-4e94-bb31-cdf617698b4a
+# Create a new game
+POST {{baseUrl}}/api/play-together/v1/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "typeName": "Puzzle"
+  "name": "CSGO",
+  "displayName": ""
 }
 
 ###
-# Delete
-DELETE {{baseUrl}}/api/play-together/v1/gametypes/01f5a4e8-cd3f-4a2e-ba85-7f082f3a744e
+# Update a game
+PUT {{baseUrl}}/api/play-together/v1/games/310c8cf1-053a-40f7-b5eb-bfaca7c96ac3
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "name": "CSGO",
+  "displayName": ""
+}
+
+###
+# Delete a game
+DELETE {{baseUrl}}/api/play-together/v1/games/310c8cf1-053a-40f7-b5eb-bfaca7c96ac3
 content-type: {{contentType}}
 Authorization: {{authToken}}

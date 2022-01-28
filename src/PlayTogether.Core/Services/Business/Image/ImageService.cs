@@ -13,10 +13,14 @@ namespace PlayTogether.Core.Services.Business.Image
         private readonly IImageRepository _imageRepository;
         private readonly ILogger<ImageService> _logger;
 
-        public ImageService(IImageRepository imageRepository, ILogger<ImageService> logger)
+        public ImageService(
+            IImageRepository imageRepository, 
+            ILogger<ImageService> logger)
         {
-            _imageRepository = imageRepository ?? throw new ArgumentNullException(nameof(imageRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _imageRepository = imageRepository 
+                ?? throw new ArgumentNullException(nameof(imageRepository));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
@@ -36,7 +40,7 @@ namespace PlayTogether.Core.Services.Business.Image
         public async Task<bool> DeleteImageAsync(string id)
         {
             try {
-                if (id is null) {
+                if (String.IsNullOrEmpty(id)) {
                     throw new ArgumentNullException(nameof(id));
                 }
                 return await _imageRepository.DeleteImageAsync(id);
@@ -50,6 +54,9 @@ namespace PlayTogether.Core.Services.Business.Image
         public async Task<ImageGetByIdResponse> GetImageByIdAsync(string id)
         {
             try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
                 return await _imageRepository.GetImageByIdAsync(id);
             }
             catch (Exception ex) {

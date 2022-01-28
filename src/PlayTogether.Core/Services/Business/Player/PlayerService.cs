@@ -17,10 +17,14 @@ namespace PlayTogether.Core.Services.Business.Player
         private readonly IPlayerRepository _playerRepository;
         private readonly ILogger<PlayerService> _logger;
 
-        public PlayerService(IPlayerRepository PlayerRepository, ILogger<PlayerService> logger)
+        public PlayerService(
+            IPlayerRepository PlayerRepository, 
+            ILogger<PlayerService> logger)
         {
-            _playerRepository = PlayerRepository ?? throw new ArgumentNullException(nameof(PlayerRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _playerRepository = PlayerRepository 
+                ?? throw new ArgumentNullException(nameof(PlayerRepository));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)

@@ -68,11 +68,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
         {
             var type = await _context.GameTypes.FindAsync(id);
 
-            if (type is not null) {
-                return _mapper.Map<GameTypeGetByIdResponse>(type);
+            if (type is null) {
+                return null;
             }
 
-            return null;
+            await _context.Entry(type)
+                .Collection(t => t.TypeOfGames)
+                .Query()
+                .Include(tog => tog.Game)
+                .LoadAsync();
+
+            return _mapper.Map<GameTypeGetByIdResponse>(type);
         }
 
         public async Task<bool> UpdateGameTypeAsync(string id, GameTypeUpdateRequest request)

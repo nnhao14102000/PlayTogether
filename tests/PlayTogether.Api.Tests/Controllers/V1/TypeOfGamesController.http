@@ -1,0 +1,42 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+# Create type of game
+POST {{baseUrl}}/api/play-together/v1/typeofgames
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "gameTypeId": "22e0d8c3-324a-4a78-b486-4c5186b9cfa3",
+  "gameId": "641e4aac-1a60-461a-a878-e9750d588da6"
+}
+
+###
+# Get type of game by Id
+GET {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Delete type of game by Id
+DELETE {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
+content-type: {{contentType}}
+Authorization: {{authToken}}

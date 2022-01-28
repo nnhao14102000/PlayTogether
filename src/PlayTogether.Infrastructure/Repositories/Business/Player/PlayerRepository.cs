@@ -80,11 +80,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
                 return null;
             }
 
-            _context.Entry(player)
+            await _context.Entry(player)
                 .Collection(p => p.Images)
                 .Query()
                 .OrderByDescending(i => i.CreatedDate)
-                .Load();
+                .LoadAsync();
             return _mapper.Map<PlayerGetByIdResponseForPlayer>(player);
         }
 
