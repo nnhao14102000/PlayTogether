@@ -27,6 +27,25 @@ Authorization: {{authToken}}
 
 
 ###
+# Get all Ranks in game
+GET {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6/ranks
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Create a new rank in game
+POST {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6/ranks
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "no": 10,
+  "name": "Vô Hạng"
+}
+
+
+###
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
   ?name=
@@ -36,7 +55,7 @@ Authorization: {{authToken}}
 
 ###
 # Get Game by Id
-GET {{baseUrl}}/api/play-together/v1/games/641e4aac-1a60-461a-a878-e9750d588da6
+GET {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -47,8 +66,8 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "CSGO",
-  "displayName": ""
+  "name": "Lien Quan Mobile",
+  "displayName": "AoV"
 }
 
 ###

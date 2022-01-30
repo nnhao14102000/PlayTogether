@@ -6,7 +6,7 @@ namespace PlayTogether.Infrastructure.Entities
     public class Rank : BaseEntity
     {
         [Required]
-        public int Index { get; set; }
+        public int NO { get; set; }
 
         [Required]
         [MaxLength(50)]

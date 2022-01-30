@@ -41,10 +41,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
                 return false;
             }
             _context.GameTypes.Remove(type);
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return true;
-            }
-            return false;
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public async Task<PagedResult<GameTypeGetAllResponse>> GetAllGameTypesAsync(GameTypeParameter param)

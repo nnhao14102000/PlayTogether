@@ -13,6 +13,7 @@ using PlayTogether.Core.Services.Business.GameType;
 using PlayTogether.Core.Services.Business.Hirer;
 using PlayTogether.Core.Services.Business.Image;
 using PlayTogether.Core.Services.Business.Player;
+using PlayTogether.Core.Services.Business.Rank;
 using PlayTogether.Core.Services.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
@@ -23,6 +24,7 @@ using PlayTogether.Infrastructure.Repositories.Business.GameType;
 using PlayTogether.Infrastructure.Repositories.Business.Hirer;
 using PlayTogether.Infrastructure.Repositories.Business.Image;
 using PlayTogether.Infrastructure.Repositories.Business.Player;
+using PlayTogether.Infrastructure.Repositories.Business.Rank;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
 using System;
 
@@ -98,6 +100,10 @@ namespace PlayTogether.Api.Helpers
             // Config for TypeOfGame service DI
             services.AddScoped<ITypeOfGameService, TypeOfGameService>();
             services.AddScoped<ITypeOfGameRepository, TypeOfGameRepository>();
+
+            // Config for Rank service DI
+            services.AddScoped<IRankService, RankService>();
+            services.AddScoped<IRankRepository, RankRepository>();
 
             services.AddHttpClient();
 

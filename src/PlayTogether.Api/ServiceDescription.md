@@ -77,6 +77,16 @@
 >   ***Role Access***: Admin, Player  
 >   ***Extension***: Paging, Search by Name  
 >
+> - ``GET /api/play-together/v1/games/{gameId}/ranks ``  
+>   ***Description***: Get all Ranks in Game   
+>   ***Use for***: Get to view all ranks in game  
+>   ***Role Access***: Admin, Player  
+>
+> - ``POST /api/play-together/v1/games/{gameId}/ranks ``  
+>   ***Description***: Create a rank in game   
+>   ***Use for***: Add rank to game  
+>   ***Role Access***: Admin  
+>
 > - ``GET /api/play-together/v1/games/{id} ``  
 >   ***Description***: Get a Game By Id  
 >   ***Use for***: View a game in detail  
@@ -134,6 +144,23 @@
 >   ***Description***: Update Player service info (like is ready for hire, price per hour,...)    
 >   ***Use for***: Update player own service information    
 >   ***Role Access***: Player  
+>
+
+## Ranks
+> - ``GET /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Get Rank by Id  
+>   ***Use for***: Get rank by Id  
+>   ***Role Access***: Admin, Player  
+>
+> - ``PUT /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Update rank  
+>   ***Use for***: Update rank info   
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Delete rank    
+>   ***Use for***: Delete rank 
+>   ***Role Access***: Admin  
 >
 
 ## TypeOfGame

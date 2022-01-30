@@ -35,10 +35,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TypeOfGame
                 return false;
             }
             _context.TypeOfGames.Remove(model);
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return true;
-            }
-            return false;
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public async Task<TypeOfGameGetByIdResponse> GetTypeOfGameByIdAsync(string id)

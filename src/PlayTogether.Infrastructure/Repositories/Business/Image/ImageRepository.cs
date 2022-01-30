@@ -37,10 +37,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
                 return false;
             }
             _context.Images.Remove(image);
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return true;
-            }
-            return false;
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public async Task<ImageGetByIdResponse> GetImageByIdAsync(string id)

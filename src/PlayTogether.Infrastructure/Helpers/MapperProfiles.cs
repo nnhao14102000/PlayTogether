@@ -5,6 +5,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
+using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
@@ -13,6 +14,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
 
@@ -68,9 +70,15 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Game, GameCreateResponse>();
             CreateMap<TypeOfGame, TypeOfGameResponseForGame>();
             CreateMap<GameType, GameTypeResponseForGame>();
+            CreateMap<Rank, RankResponseForGame>();
 
             CreateMap<TypeOfGameCreateRequest, TypeOfGame>();
             CreateMap<TypeOfGame, TypeOfGameGetByIdResponse>();
+
+            CreateMap<Rank, RankGetByIdResponse>();
+            CreateMap<RankUpdateRequest, Rank>();
+            CreateMap<RankCreateRequest, Rank>();
+            CreateMap<Rank, RankCreateResponse>();
 
             // src => target
         }

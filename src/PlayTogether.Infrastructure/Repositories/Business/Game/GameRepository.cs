@@ -41,10 +41,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
                 return false;
             }
             _context.Games.Remove(game);
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return true;
-            }
-            return false;
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param)
@@ -76,6 +73,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
                 .Collection(g => g.TypeOfGames)
                 .Query()
                 .Include(tog => tog.GameType)
+                .LoadAsync();
+
+            await _context.Entry(game)
+                .Collection(g => g.Ranks)
+                .Query()
+                .OrderBy(r => r.NO)
                 .LoadAsync();
 
             return _mapper.Map<GameGetByIdResponse>(game);

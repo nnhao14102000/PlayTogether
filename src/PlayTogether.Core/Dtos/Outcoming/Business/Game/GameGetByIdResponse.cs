@@ -1,4 +1,3 @@
-using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using System.Collections.Generic;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Game
@@ -13,6 +12,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Game
 
         public IList<TypeOfGameResponseForGame> TypeOfGames { get; set; }
 
-        // list rank
+        public ICollection<RankResponseForGame> Ranks { get; set; }
     }
 }

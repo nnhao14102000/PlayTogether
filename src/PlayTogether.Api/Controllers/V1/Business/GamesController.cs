@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
+using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -15,10 +18,12 @@ namespace PlayTogether.Api.Controllers.V1.Business
     public class GamesController : BaseController
     {
         private readonly IGameService _gameService;
+        private readonly IRankService _rankService;
 
-        public GamesController(IGameService gameService)
+        public GamesController(IGameService gameService, IRankService rankService)
         {
             _gameService = gameService;
+            _rankService = rankService;
         }
 
         /// <summary>
@@ -43,6 +48,37 @@ namespace PlayTogether.Api.Controllers.V1.Business
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
             return response is not null ? Ok(response) : NotFound();
+        }
+        
+        /// <summary>
+        /// Get all Ranks in Game for Admin, Player
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
+        [HttpGet("{gameId}/ranks")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
+        public async Task<ActionResult<IEnumerable<RankGetByIdResponse>>> GetAllRanksInGame(string gameId)
+        {
+            var response = await _rankService.GetAllRanksInGameAsync(gameId);
+            return response is not null ? Ok(response) : NotFound();
+        }
+        
+
+        /// <summary>
+        /// Create a Rank in Game for Admin
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("{gameId}/ranks")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<RankCreateResponse>> CreateRank(string gameId, RankCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _rankService.CreateRankAsync(gameId, request);
+            return CreatedAtRoute(nameof(RanksController.GetRankById), new { id = response.Id }, response);
         }
 
         /// <summary>

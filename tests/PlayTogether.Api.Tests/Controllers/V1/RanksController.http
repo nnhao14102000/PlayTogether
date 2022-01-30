@@ -19,24 +19,25 @@ content-type: {{contentType}}
 }
 
 ###
-# Create type of game
-POST {{baseUrl}}/api/play-together/v1/typeofgames
+# Get rank by Id
+GET {{baseUrl}}/api/play-together/v1/ranks/8d1557f0-0cf1-44d1-bed5-3b3bc512e1d1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Update rank
+PUT {{baseUrl}}/api/play-together/v1/ranks/fffaa2d5-2078-41fc-93b2-80a3a11a174e
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "gameTypeId": "0df07328-4d4a-4b41-b754-d63b4dcf24cf",
-  "gameId": "c48d1335-2f48-47ea-87ae-357434d62332"
+  "no": 8,
+  "name": "Chiến Tướng"
 }
 
 ###
-# Get type of game by Id
-GET {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
+# Delete rank by Id
+DELETE {{baseUrl}}/api/play-together/v1/ranks/8d1557f0-0cf1-44d1-bed5-3b3bc512e1d1
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
-###
-# Delete type of game by Id
-DELETE {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
-content-type: {{contentType}}
-Authorization: {{authToken}}
