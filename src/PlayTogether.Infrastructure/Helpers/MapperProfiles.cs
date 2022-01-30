@@ -4,6 +4,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
+using PlayTogether.Core.Dtos.Incoming.Business.Music;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
@@ -13,6 +14,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
+using PlayTogether.Core.Dtos.Outcoming.Business.Music;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
@@ -79,6 +81,10 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<RankUpdateRequest, Rank>();
             CreateMap<RankCreateRequest, Rank>();
             CreateMap<Rank, RankCreateResponse>();
+
+            CreateMap<MusicCreateRequest, Music>();
+            CreateMap<MusicUpdateRequest, Music>();
+            CreateMap<Music, MusicGetByIdResponse>();
 
             // src => target
         }

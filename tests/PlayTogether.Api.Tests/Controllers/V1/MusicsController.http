@@ -1,0 +1,67 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+
+###
+# Get all music
+GET {{baseUrl}}/api/play-together/v1/musics
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Get all music with search
+GET {{baseUrl}}/api/play-together/v1/musics
+  ?name=mo
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Create a new music
+POST {{baseUrl}}/api/play-together/v1/musics
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "Name": "Pops"
+}
+
+###
+# Get music by Id
+GET {{baseUrl}}/api/play-together/v1/musics/2051b9bd-0dac-4857-b852-f930daf2ae0e
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Update music
+PUT {{baseUrl}}/api/play-together/v1/musics/2051b9bd-0dac-4857-b852-f930daf2ae0e
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "Name": "Nhac Tre"
+}
+
+###
+# Delete music
+DELETE {{baseUrl}}/api/play-together/v1/musics/2051b9bd-0dac-4857-b852-f930daf2ae0e
+content-type: {{contentType}}
+Authorization: {{authToken}}

@@ -27,7 +27,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
         public async Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request)
         {
             var model = _mapper.Map<Entities.GameType>(request);
-            _context.GameTypes.Add(model);
+            await _context.GameTypes.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return _mapper.Map<GameTypeCreateResponse>(model);
             }

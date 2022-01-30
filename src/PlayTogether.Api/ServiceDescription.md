@@ -159,7 +159,7 @@
 > 
 > - ``DELETE /api/play-together/v1/ranks/{id} ``  
 >   ***Description***: Delete rank    
->   ***Use for***: Delete rank 
+>   ***Use for***: Delete rank  
 >   ***Role Access***: Admin  
 >
 
@@ -176,7 +176,7 @@
 > 
 > - ``DELETE /api/play-together/v1/typeofgames/{id} ``  
 >   ***Description***: Delete type of game    
->   ***Use for***: Delete type of game 
+>   ***Use for***: Delete type of game  
 >   ***Role Access***: Admin  
 >
 
@@ -219,4 +219,31 @@
 >   ***Description***: Update Hirer Info    
 >   ***Use for***: Update hirer own information    
 >   ***Role Access***: Hirer 
+>
+## Music
+> - ``GET /api/play-together/v1/musics ``  
+>   ***Description***: Get all Musics   
+>   ***Use for***: Get all musics  
+>   ***Role Access***: Admin, Player  
+>   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/musics/{id} ``  
+>   ***Description***: Get Music By Id  
+>   ***Use for***: View music in detail  
+>   ***Role Access***: Admin, Player   
+>
+> - ``POST /api/play-together/v1/musics ``  
+>   ***Description***: Add New Music  
+>   ***Use for***: Add music   
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/musics/{id} ``  
+>   ***Description***: Update Music  
+>   ***Use for***: Update music    
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/musics/{id} ``  
+>   ***Description***: Delete Music       
+>   ***Use for***: Delete music  
+>   ***Role Access***: Admin  
 >
