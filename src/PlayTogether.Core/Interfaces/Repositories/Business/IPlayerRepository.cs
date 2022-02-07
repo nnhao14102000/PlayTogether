@@ -16,5 +16,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PlayerGetByIdResponseForHirer> GetPlayerByIdForHirerAsync(string id);
         Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request);
         Task<bool> UpdatePlayerServiceInfoAsync(string id, PlayerServiceInfoUpdateRequest request);
+
+        // Get player skill by player Id
     }
 }

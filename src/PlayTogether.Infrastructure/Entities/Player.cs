@@ -54,7 +54,6 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<Donate> Donates { get; set; }
         public ICollection<PlayerWithdraw> PlayerWithdraws { get; set; }
         public IList<GameOfPlayer> GamesOfPlayers { get; set; }
-        public IList<RankInGameOfPlayer> RankInGameOfPlayers { get; set; }
         public IList<MusicOfPlayer> MusicOfPlayers { get; set; }
         public ICollection<Image> Images { get; set; }
     }
