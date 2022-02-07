@@ -27,7 +27,7 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Player> Players { get; set; }
         public DbSet<PlayerWithdraw> PlayerWithdraws { get; set; }
         public DbSet<Rank> Ranks { get; set; }
-        public DbSet<RankOfPlayer> RankOfPlayers { get; set; }
+        public DbSet<RankInGameOfPlayer> RankInGameOfPlayers { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<TypeOfGame> TypeOfGames { get; set; }

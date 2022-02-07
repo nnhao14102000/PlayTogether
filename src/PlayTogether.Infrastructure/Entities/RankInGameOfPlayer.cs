@@ -1,6 +1,6 @@
 ﻿namespace PlayTogether.Infrastructure.Entities
 {
-    public class RankOfPlayer : BaseEntity
+    public class RankInGameOfPlayer : BaseEntity
     {
         public string RankId { get; set; }
         public Rank Rank { get; set; }

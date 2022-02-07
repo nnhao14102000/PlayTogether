@@ -15,6 +15,6 @@ namespace PlayTogether.Infrastructure.Entities
         public string GameId { get; set; }
         public Game Game { get; set; }
 
-        public IList<RankOfPlayer> RankOfPlayers { get; set; }
+        public IList<RankInGameOfPlayer> RankInGameOfPlayers { get; set; }
     }
 }

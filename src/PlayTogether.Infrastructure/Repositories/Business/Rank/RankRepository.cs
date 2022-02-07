@@ -52,7 +52,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             if(game is null){
                 return null;
             }
-            var ranksInGame = await _context.Ranks.Where(x => x.GameId == gameId).ToListAsync();
+            var ranksInGame = await _context.Ranks.Where(x => x.GameId == gameId).OrderBy(x => x.NO).ToListAsync();
             return _mapper.Map<IEnumerable<RankGetByIdResponse>>(ranksInGame);
         }
 
