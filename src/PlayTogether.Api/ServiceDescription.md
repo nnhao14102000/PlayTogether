@@ -165,6 +165,16 @@
 >   ***Use for***: Player add new a music which him/her can play  
 >   ***Role Access***: Player  
 >
+> - ``GET /api/play-together/v1/players/{id}/other-skills ``  
+>   ***Description***: Get a Player other Skills   
+>   ***Use for***: Player get their other skills    
+>   ***Role Access***: Player  
+>
+> - ``PUT /api/play-together/v1/players/{id}/other-skills ``  
+>   ***Description***: Update Player other Skill    
+>   ***Use for***: Update player other skill    
+>   ***Role Access***: Player 
+>
 
 ## GameOfPlayer
 > - ``GET /api/play-together/v1/gameofplayers/{id} ``  
