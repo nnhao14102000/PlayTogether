@@ -66,6 +66,20 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
+        public async Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                return await _playerRepository.GetPlayerOtherSkillByIdAsync(id);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetPlayerOtherSkillByIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
@@ -107,6 +121,23 @@ namespace PlayTogether.Core.Services.Business.Player
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call UpdatePlayerInformationAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _playerRepository.UpdatePlayerOtherSkillAsync(id, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdatePlayerOtherSkillAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

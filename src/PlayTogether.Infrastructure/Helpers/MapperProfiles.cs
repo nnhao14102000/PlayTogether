@@ -53,6 +53,8 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Player, PlayerGetByIdResponseForPlayer>();
             CreateMap<Player, PlayerGetByIdResponseForHirer>();
             CreateMap<Player, PlayerServiceInfoResponseForPlayer>();
+            CreateMap<Player, PlayerOtherSkillResponse>();
+            CreateMap<OtherSkillUpdateRequest, Player>();
             
             CreateMap<Image, ImagesOfPlayer>();
             CreateMap<PlayerInfoUpdateRequest, Player>();

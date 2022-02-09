@@ -23,7 +23,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         public bool Gender { get; set; }
 
-
         [MaxLength(50)]
         public string Email { get; set; }
 
@@ -31,6 +30,8 @@ namespace PlayTogether.Infrastructure.Entities
         public float Balance { get; set; }
 
         public string Description { get; set; }
+
+        public string OtherSkill { get; set; }
 
         [Column(TypeName = "float")]
         public float PricePerHour { get; set; }

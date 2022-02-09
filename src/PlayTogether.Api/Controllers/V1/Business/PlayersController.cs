@@ -152,6 +152,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
+        /// Get Player Other Skills by Id for Player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{id}/other-skills")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<PlayerOtherSkillResponse>> GetPlayerOtherSkillByIdForPlayer(string id)
+        {
+            var response = await _playerService.GetPlayerOtherSkillByIdAsync(id);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
         /// Get Player by Id for Hirer
         /// </summary>
         /// <param name="id"></param>
@@ -179,6 +192,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _playerService.UpdatePlayerInformationAsync(id, request);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Update Player other Skills
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut, Route("{id}/other-skills")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> UpdatePlayerOtherSkill(string id, OtherSkillUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _playerService.UpdatePlayerOtherSkillAsync(id, request);
             return response ? NoContent() : NotFound();
         }
 

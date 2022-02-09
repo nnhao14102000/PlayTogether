@@ -89,6 +89,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             return _mapper.Map<PlayerGetByIdResponseForPlayer>(player);
         }
 
+        public async Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id)
+        {
+            var player = await _context.Players.FindAsync(id);
+
+            if (player is null) {
+                return null;
+            }
+            return _mapper.Map<PlayerOtherSkillResponse>(player);
+        }
+
         public async Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
@@ -111,6 +121,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
         }
 
         public async Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request)
+        {
+            var player = await _context.Players.FindAsync(id);
+            if (player is null) {
+                return false;
+            }
+            _mapper.Map(request, player);
+            _context.Players.Update(player);
+            return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request)
         {
             var player = await _context.Players.FindAsync(id);
             if (player is null) {

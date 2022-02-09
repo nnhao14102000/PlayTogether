@@ -106,3 +106,21 @@ Authorization: {{authToken}}
 {
   "musicId": "7a0da60b-0bee-4d28-b770-5d662a5ff710"
 }
+
+
+###
+# Get Player other Skill
+GET {{baseUrl}}/api/play-together/v1/players/36b93d20-73dd-4430-b9ae-c338f7c6b928/other-skills
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Update Player other Skill
+PUT {{baseUrl}}/api/play-together/v1/players/36b93d20-73dd-4430-b9ae-c338f7c6b928/other-skills
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "otherSkill": "Múa quạt, nhảy điệu cha cha cha"
+}
