@@ -41,13 +41,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Music
 
         public async Task<PagedResult<MusicGetByIdResponse>> GetAllMusicsAsync(MusicParameter param)
         {
-            var musics = await _context.Musics.ToListAsync();
+            var musics = await _context.Musics.OrderByDescending(x => x.CreatedDate).ToListAsync();
 
             if (musics is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = musics.AsQueryable();
                     query = query.Where(x => x.Name.ToLower()
-                                                   .Contains(param.Name.ToLower()));
+                                                   .Contains(param.Name.ToLower())).OrderByDescending(x => x.CreatedDate);
                     musics = query.ToList();
                 }
                 var response = _mapper.Map<List<MusicGetByIdResponse>>(musics);

@@ -1,0 +1,35 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+Content-type: {{contentType}}
+
+{
+  "email": "player01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+
+
+###
+# Get Music of Player by Id
+GET {{baseUrl}}/api/play-together/v1/musicofplayers/3b50cab1-f7a8-43dc-9e35-d9ab3aa24a04
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Delete Music of Player by Id
+DELETE {{baseUrl}}/api/play-together/v1/musicofplayers/b69070f4-c792-4c50-8fa6-866fd6f3a514
+Content-type: {{contentType}}
+Authorization: {{authToken}}

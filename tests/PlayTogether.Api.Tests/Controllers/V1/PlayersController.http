@@ -87,3 +87,22 @@ Authorization: {{authToken}}
   "gameId": "e496ca73-1a85-4cf5-bb15-c122abd04c7c",
   "rankId": "4e2879e4-e7fe-4f4e-a1c7-30abc487ffde"
 }
+
+
+###
+# Get all Music of Player by Player Id for player
+GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/musics
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+
+###
+# Add Music of Player
+POST {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/musics
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "musicId": "7a0da60b-0bee-4d28-b770-5d662a5ff710"
+}

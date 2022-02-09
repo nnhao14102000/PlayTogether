@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
+using PlayTogether.Core.Dtos.Incoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
+using PlayTogether.Core.Dtos.Outcoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -19,13 +21,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
     {
         private readonly IPlayerService _playerService;
         private readonly IGameOfPlayerService _gameOfPlayerService;
+        private readonly IMusicOfPlayerService _musicOfPlayerService;
 
         public PlayersController(
             IPlayerService playerService,
-            IGameOfPlayerService gameOfPlayerService)
+            IGameOfPlayerService gameOfPlayerService,
+            IMusicOfPlayerService musicOfPlayerService)
         {
             _playerService = playerService;
             _gameOfPlayerService = gameOfPlayerService;
+            _musicOfPlayerService = musicOfPlayerService;
         }
 
         /// <summary>
@@ -59,6 +64,40 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<IEnumerable<GamesInPlayerGetAllResponse>>> GetAllGameOfPlayer(string playerId)
         {
             var response = await _gameOfPlayerService.GetAllGameOfPlayerAsync(playerId);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Create Music of Player
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("{playerId}/musics")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<MusicOfPlayerGetByIdResponse>> CreateMusicOfPlayer(
+            string playerId,
+            MusicOfPlayerCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+
+            var response = await _musicOfPlayerService.CreateMusicOfPlayerAsync(playerId, request);
+
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(MusicOfPlayersController.GetMusicOfPlayerById), new { id = response.Id }, response);
+        }
+
+        /// <summary>
+        /// Get all Music of Player
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
+        [HttpGet("{playerId}/musics")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<IEnumerable<MusicOfPlayerGetAllResponse>>> GetAllMusicOfPlayer(string playerId)
+        {
+            var response = await _musicOfPlayerService.GetALlMusicOfPlayerAsync(playerId);
             return response is not null ? Ok(response) : NotFound();
         }
 

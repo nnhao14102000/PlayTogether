@@ -41,7 +41,7 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "Name": "Pops"
+  "Name": "Nhạc Trịnh"
 }
 
 ###

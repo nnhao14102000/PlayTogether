@@ -14,6 +14,7 @@ using PlayTogether.Core.Services.Business.GameType;
 using PlayTogether.Core.Services.Business.Hirer;
 using PlayTogether.Core.Services.Business.Image;
 using PlayTogether.Core.Services.Business.Music;
+using PlayTogether.Core.Services.Business.MusicOfPlayer;
 using PlayTogether.Core.Services.Business.Player;
 using PlayTogether.Core.Services.Business.Rank;
 using PlayTogether.Core.Services.Business.TypeOfGame;
@@ -27,6 +28,7 @@ using PlayTogether.Infrastructure.Repositories.Business.GameType;
 using PlayTogether.Infrastructure.Repositories.Business.Hirer;
 using PlayTogether.Infrastructure.Repositories.Business.Image;
 using PlayTogether.Infrastructure.Repositories.Business.Music;
+using PlayTogether.Infrastructure.Repositories.Business.MusicOfPlayer;
 using PlayTogether.Infrastructure.Repositories.Business.Player;
 using PlayTogether.Infrastructure.Repositories.Business.Rank;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
@@ -113,9 +115,13 @@ namespace PlayTogether.Api.Helpers
             services.AddScoped<IMusicService, MusicService>();
             services.AddScoped<IMusicRepository, MusicRepository>();
 
-            // Config for Music service DI
+            // Config for GameOfPlayer service DI
             services.AddScoped<IGameOfPlayerService, GameOfPlayerService>();
             services.AddScoped<IGameOfPlayerRepository, GameOfPlayerRepository>();
+
+            // Config for MusicOfPlayer service DI
+            services.AddScoped<IMusicOfPlayerService, MusicOfPlayerService>();
+            services.AddScoped<IMusicOfPlayerRepository, MusicOfPlayerRepository>();
 
             services.AddHttpClient();
 

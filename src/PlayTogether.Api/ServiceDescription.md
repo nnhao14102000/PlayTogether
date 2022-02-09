@@ -145,6 +145,55 @@
 >   ***Use for***: Update player own service information    
 >   ***Role Access***: Player  
 >
+> - ``GET /api/play-together/v1/players/{playerId}/games ``  
+>   ***Description***: Get all Games of Player   
+>   ***Use for***: Player get their games  
+>   ***Role Access***: Player  
+>
+> - ``POST /api/play-together/v1/players/{playerId}/games ``  
+>   ***Description***: Create a New Game for Player   
+>   ***Use for***: Player add new a game which him/her can play  
+>   ***Role Access***: Player  
+>
+> - ``GET /api/play-together/v1/players/{playerId}/musics ``  
+>   ***Description***: Get all Musics of Player   
+>   ***Use for***: Player get their musics  
+>   ***Role Access***: Player  
+>
+> - ``POST /api/play-together/v1/players/{playerId}/musics ``  
+>   ***Description***: Create a New Music for Player   
+>   ***Use for***: Player add new a music which him/her can play  
+>   ***Role Access***: Player  
+>
+
+## GameOfPlayer
+> - ``GET /api/play-together/v1/gameofplayers/{id} ``  
+>   ***Description***: Get Game of Player by Id  
+>   ***Use for***: Get Game of Player  
+>   ***Role Access***: Player  
+>
+> - ``PUT /api/play-together/v1/gameofplayers/{id} ``  
+>   ***Description***: Update Game of Player  
+>   ***Use for***: Update Game of Player   
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/gameofplayers/{id} ``  
+>   ***Description***: Delete Game of Player    
+>   ***Use for***: Delete Game of Player  
+>   ***Role Access***: Player  
+>
+
+## MusicOfPlayer
+> - ``GET /api/play-together/v1/musicofplayers/{id} ``  
+>   ***Description***: Get Music of Player by Id  
+>   ***Use for***: Get Music of Player  
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/musicofplayers/{id} ``  
+>   ***Description***: Delete Music of Player    
+>   ***Use for***: Delete Music of Player  
+>   ***Role Access***: Player  
+>
 
 ## Ranks
 > - ``GET /api/play-together/v1/ranks/{id} ``  
