@@ -8,16 +8,10 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Image
 {
-    public class ImageRepository : IImageRepository
+    public class ImageRepository : BaseRepository, IImageRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public ImageRepository(
-            IMapper mapper, AppDbContext context)
+        public ImageRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)

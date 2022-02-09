@@ -42,7 +42,7 @@ namespace PlayTogether.Core.Services.Business.Game
         public async Task<bool> DeleteGameAsync(string id)
         {
             try {
-                if (id is null) {
+                if (String.IsNullOrEmpty(id)) {
                     throw new ArgumentNullException(nameof(id));
                 }
                 return await _gameRepository.DeleteGameAsync(id);

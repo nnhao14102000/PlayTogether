@@ -31,7 +31,6 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "no": 8,
   "name": "Chiến Tướng"
 }
 

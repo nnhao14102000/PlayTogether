@@ -16,17 +16,16 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Player
 {
-    public class PlayerRepository : IPlayerRepository
+    public class PlayerRepository : BaseRepository, IPlayerRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public PlayerRepository(IMapper mapper, AppDbContext context, UserManager<IdentityUser> userManager)
+        public PlayerRepository(
+            IMapper mapper,
+            AppDbContext context,
+            UserManager<IdentityUser> userManager) : base(mapper, context)
         {
-            _mapper = mapper;
             _userManager = userManager;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
@@ -34,7 +33,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             List<Entities.Player> players = null;
 
             if (param.Gender is not null) {
-                players = await _context.Players.Where(x => x.Gender == param.Gender).ToListAsync();
+                players = await _context.Players.Where(x => x.Gender == param.Gender)
+                                                .ToListAsync();
             }
             else {
 
@@ -44,7 +44,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             if (players is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = players.AsQueryable();
-                    query = query.Where(players => (players.Lastname + players.Firstname).ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(players => (players.Lastname + players.Firstname).ToLower()
+                                                                                         .Contains(param.Name.ToLower()));
                     players = query.ToList();
                 }
 

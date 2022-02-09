@@ -12,15 +12,10 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Charity
 {
-    public class CharityRepository : ICharityRepository
+    public class CharityRepository : BaseRepository, ICharityRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public CharityRepository(IMapper mapper, AppDbContext context)
+        public CharityRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param)
@@ -32,7 +27,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             if (charities is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = charities.AsQueryable();
-                    query = query.Where(x => x.OrganizationName.ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => x.OrganizationName.ToLower()
+                                                               .Contains(param.Name.ToLower()));
                     charities = query.ToList();
                 }
 

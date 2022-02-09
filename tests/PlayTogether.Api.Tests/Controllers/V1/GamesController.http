@@ -28,20 +28,20 @@ Authorization: {{authToken}}
 
 ###
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6/ranks
+GET {{baseUrl}}/api/play-together/v1/games/e496ca73-1a85-4cf5-bb15-c122abd04c7c/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
 # Create a new rank in game
-POST {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6/ranks
+POST {{baseUrl}}/api/play-together/v1/games/e496ca73-1a85-4cf5-bb15-c122abd04c7c/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "no": 10,
-  "name": "Vô Hạng"
+  "no": 7,
+  "name": "Thách Đấu"
 }
 
 
@@ -66,8 +66,8 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "Lien Quan Mobile",
-  "displayName": "AoV"
+  "name": "Leagua Of Legend",
+  "displayName": "LoL"
 }
 
 ###

@@ -29,13 +29,13 @@ Authorization: {{authToken}}
 
 ###
 # Get Player by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ### Update Player Profile by Id
-PUT {{baseUrl}}/api/play-together/v1/players/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+PUT {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -50,16 +50,15 @@ Authorization: {{authToken}}
 }
 
 
-
 ###
 # Get Player service info by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/service-info/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+GET {{baseUrl}}/api/play-together/v1/players/service-info/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ### Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/3dffdce4-cdd6-479d-a97e-5f598c1a8946
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -67,4 +66,24 @@ Authorization: {{authToken}}
   "status": true,
   "maxHourHire": 1,
   "pricePerHour": 15000
+}
+
+
+###
+# Get all Game of Player by Player Id for player
+GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/games
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+
+###
+# Add Game of Player
+POST {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/games
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "gameId": "e496ca73-1a85-4cf5-bb15-c122abd04c7c",
+  "rankId": "4e2879e4-e7fe-4f4e-a1c7-30abc487ffde"
 }

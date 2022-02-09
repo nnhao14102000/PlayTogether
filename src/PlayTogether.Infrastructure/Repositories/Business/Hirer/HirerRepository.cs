@@ -15,19 +15,16 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
 {
-    public class HirerRepository : IHirerRepository
+    public class HirerRepository : BaseRepository, IHirerRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
         public HirerRepository(
-            UserManager<IdentityUser> userManager,
-            IMapper mapper, AppDbContext context)
+            IMapper mapper,
+            AppDbContext context,
+            UserManager<IdentityUser> userManager) : base(mapper, context)
         {
-            _mapper = mapper;
             _userManager = userManager;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param)
@@ -39,7 +36,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             if (hirers is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = hirers.AsQueryable();
-                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
+                                                                       .Contains(param.Name.ToLower()));
                     hirers = query.ToList();
                 }
 

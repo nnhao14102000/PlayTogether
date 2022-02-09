@@ -9,6 +9,7 @@ using PlayTogether.Core.Services.Auth;
 using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.Charity;
 using PlayTogether.Core.Services.Business.Game;
+using PlayTogether.Core.Services.Business.GameOfPlayer;
 using PlayTogether.Core.Services.Business.GameType;
 using PlayTogether.Core.Services.Business.Hirer;
 using PlayTogether.Core.Services.Business.Image;
@@ -21,6 +22,7 @@ using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
 using PlayTogether.Infrastructure.Repositories.Business.Charity;
 using PlayTogether.Infrastructure.Repositories.Business.Game;
+using PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer;
 using PlayTogether.Infrastructure.Repositories.Business.GameType;
 using PlayTogether.Infrastructure.Repositories.Business.Hirer;
 using PlayTogether.Infrastructure.Repositories.Business.Image;
@@ -110,6 +112,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Music service DI
             services.AddScoped<IMusicService, MusicService>();
             services.AddScoped<IMusicRepository, MusicRepository>();
+
+            // Config for Music service DI
+            services.AddScoped<IGameOfPlayerService, GameOfPlayerService>();
+            services.AddScoped<IGameOfPlayerRepository, GameOfPlayerRepository>();
 
             services.AddHttpClient();
 

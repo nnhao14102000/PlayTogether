@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -15,10 +18,48 @@ namespace PlayTogether.Api.Controllers.V1.Business
     public class PlayersController : BaseController
     {
         private readonly IPlayerService _playerService;
-        
-        public PlayersController(IPlayerService playerService)
+        private readonly IGameOfPlayerService _gameOfPlayerService;
+
+        public PlayersController(
+            IPlayerService playerService,
+            IGameOfPlayerService gameOfPlayerService)
         {
             _playerService = playerService;
+            _gameOfPlayerService = gameOfPlayerService;
+        }
+
+        /// <summary>
+        /// Create Game of Player
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("{playerId}/games")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<GameOfPlayerGetByIdResponse>> CreateGameOfPlayer(
+            string playerId,
+            GameOfPlayerCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+
+            var response = await _gameOfPlayerService.CreateGameOfPlayerAsync(playerId, request);
+
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(GameOfPlayersController.GetGameOfPlayerById), new { id = response.Id }, response);
+        }
+
+        /// <summary>
+        /// Get all Game of Player
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
+        [HttpGet("{playerId}/games")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<IEnumerable<GamesInPlayerGetAllResponse>>> GetAllGameOfPlayer(string playerId)
+        {
+            var response = await _gameOfPlayerService.GetAllGameOfPlayerAsync(playerId);
+            return response is not null ? Ok(response) : NotFound();
         }
 
         /// <summary>
@@ -42,7 +83,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             };
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-            
+
             return response is not null ? Ok(response) : NotFound();
         }
 

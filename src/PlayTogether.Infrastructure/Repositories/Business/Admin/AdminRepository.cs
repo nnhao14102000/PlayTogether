@@ -12,15 +12,10 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Admin
 {
-    public class AdminRepository : IAdminRepository
+    public class AdminRepository : BaseRepository, IAdminRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public AdminRepository(IMapper mapper, AppDbContext context)
+        public AdminRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)
@@ -32,7 +27,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             if (admins is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = admins.AsQueryable();
-                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
+                                                                       .Contains(param.Name.ToLower()));
                     admins = query.ToList();
                 }
 

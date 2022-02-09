@@ -71,7 +71,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameTypeService.CreateGameTypeAsync(request);
-            return CreatedAtRoute(nameof(GetGameTypeById), new { id = response.Id }, response);
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetGameTypeById), new { id = response.Id }, response);
         }
 
         /// <summary>

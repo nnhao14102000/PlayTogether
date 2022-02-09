@@ -2,9 +2,10 @@ using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace PlayTogether.Core.Interfaces.Repositories.Business
+
+namespace PlayTogether.Core.Interfaces.Services.Business
 {
-    public interface IGameOfPlayerRepository
+    public interface IGameOfPlayerService
     {
         Task<IEnumerable<GamesInPlayerGetAllResponse>> GetAllGameOfPlayerAsync(string playerId);
 
@@ -15,6 +16,5 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<bool> UpdateGameOfPlayerAsync(string id, GameOfPlayerUpdateRequest request);
 
         Task<bool> DeleteGameOfPlayerAsync(string id);
-
     }
 }

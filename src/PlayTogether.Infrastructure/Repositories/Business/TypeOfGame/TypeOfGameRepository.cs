@@ -7,19 +7,26 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.TypeOfGame
 {
-    public class TypeOfGameRepository : ITypeOfGameRepository
+    public class TypeOfGameRepository : BaseRepository, ITypeOfGameRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public TypeOfGameRepository(IMapper mapper, AppDbContext context)
+        public TypeOfGameRepository(
+            IMapper mapper,
+            AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context;
         }
 
         public async Task<TypeOfGameGetByIdResponse> CreateTypeOfGameAsync(TypeOfGameCreateRequest request)
         {
+            var game = await _context.Games.FindAsync(request.GameId);
+            if (game is null) {
+                return null;
+            }
+
+            var gameType = await _context.GameTypes.FindAsync(request.GameTypeId);
+            if (gameType is null) {
+                return null;
+            }
+
             var model = _mapper.Map<Entities.TypeOfGame>(request);
             await _context.TypeOfGames.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {

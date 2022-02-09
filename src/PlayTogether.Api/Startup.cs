@@ -28,7 +28,6 @@ namespace PlayTogether.Api
         {
             services.AddControllers();
             
-
             services.ConfigureServiceInjection(Configuration);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options => {

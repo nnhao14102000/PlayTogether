@@ -51,10 +51,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> LoginUserAsync(LoginRequest loginDto)
         {
-            if (loginDto is null) {
-                throw new ArgumentNullException("Login info is null");
-            }
-
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user is null) {
@@ -89,10 +85,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
-            if (loginEmailDto is null) {
-                throw new ArgumentNullException("Login info is null");
-            }
-
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
@@ -156,10 +148,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto)
         {
-            if (loginEmailDto is null) {
-                throw new ArgumentNullException("Login info is null");
-            }
-
             var payload = PayloadInfo(loginEmailDto.IdToken);
 
             if (payload is null) {
@@ -223,10 +211,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> RegisterAdminAsync(RegisterAdminInfoRequest registerDto)
         {
-            if (registerDto is null) {
-                throw new ArgumentNullException("Register info is null");
-            }
-
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
@@ -266,10 +250,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest registerDto)
         {
-            if (registerDto is null) {
-                throw new ArgumentNullException("Register info is null");
-            }
-
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
@@ -308,10 +288,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto)
         {
-            if (registerDto is null) {
-                throw new ArgumentNullException("Register info is null");
-            }
-
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }
@@ -357,10 +333,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
         public async Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
         {
-            if (registerDto is null) {
-                throw new ArgumentNullException("Register info is null");
-            }
-
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
                     Errors = new List<string>() { "This user is exist" }

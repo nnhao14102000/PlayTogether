@@ -78,7 +78,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _rankService.CreateRankAsync(gameId, request);
-            return CreatedAtRoute(nameof(RanksController.GetRankById), new { id = response.Id }, response);
+            
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(RanksController.GetRankById), new { id = response.Id }, response);
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameService.CreateGameAsync(request);
-            return CreatedAtRoute(nameof(GetGameById), new { id = response.Id }, response);
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetGameById), new { id = response.Id }, response);
         }
 
         /// <summary>

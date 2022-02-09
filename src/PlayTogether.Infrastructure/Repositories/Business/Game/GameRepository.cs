@@ -13,15 +13,10 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Game
 {
-    public class GameRepository : IGameRepository
+    public class GameRepository : BaseRepository, IGameRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public GameRepository(IMapper mapper, AppDbContext context)
+        public GameRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context;
         }
 
         public async Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request)
@@ -51,7 +46,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (games is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = games.AsQueryable();
-                    query = query.Where(x => x.Name.ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => x.Name.ToLower()
+                                                   .Contains(param.Name.ToLower()));
                     games = query.ToList();
                 }
                 var response = _mapper.Map<List<GameGetAllResponse>>(games);

@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Auth
         public async Task<bool> CheckExistEmailAsync(string email)
         {
             try {
-                if (email is null) {
+                if (String.IsNullOrEmpty(email)) {
                     throw new ArgumentNullException(nameof(email));
                 }
                 return await _authRepository.CheckExistEmailAsync(email);

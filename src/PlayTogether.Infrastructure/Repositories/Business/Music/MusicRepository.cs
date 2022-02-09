@@ -13,17 +13,12 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Music
 {
-    public class MusicRepository : IMusicRepository
+    public class MusicRepository : BaseRepository, IMusicRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public MusicRepository(IMapper mapper, AppDbContext context)
+        public MusicRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context;
         }
-        
+
         public async Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request)
         {
             var model = _mapper.Map<Entities.Music>(request);
@@ -51,7 +46,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Music
             if (musics is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = musics.AsQueryable();
-                    query = query.Where(x => x.Name.ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => x.Name.ToLower()
+                                                   .Contains(param.Name.ToLower()));
                     musics = query.ToList();
                 }
                 var response = _mapper.Map<List<MusicGetByIdResponse>>(musics);

@@ -13,15 +13,10 @@ using System.Linq;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.GameType
 {
-    public class GameTypeRepository : IGameTypeRepository
+    public class GameTypeRepository : BaseRepository, IGameTypeRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public GameTypeRepository(IMapper mapper, AppDbContext context)
+        public GameTypeRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context;
         }
 
         public async Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request)
@@ -51,7 +46,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             if (types is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = types.AsQueryable();
-                    query = query.Where(x => x.TypeName.ToLower().Contains(param.Name.ToLower()));
+                    query = query.Where(x => x.TypeName.ToLower()
+                                                       .Contains(param.Name.ToLower()));
                     types = query.ToList();
                 }
                 var response = _mapper.Map<List<GameTypeGetAllResponse>>(types);

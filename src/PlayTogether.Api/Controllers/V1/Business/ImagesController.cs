@@ -44,7 +44,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _imageService.CreateImageAsync(request);
-            return CreatedAtRoute(nameof(GetImageById), new { id = response.Id }, response);
+            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetImageById), new { id = response.Id }, response);
         }
 
         /// <summary>

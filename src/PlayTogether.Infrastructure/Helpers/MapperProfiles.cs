@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
+using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
@@ -11,6 +12,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
@@ -85,6 +87,11 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<MusicCreateRequest, Music>();
             CreateMap<MusicUpdateRequest, Music>();
             CreateMap<Music, MusicGetByIdResponse>();
+
+            CreateMap<GameOfPlayerCreateRequest, GameOfPlayer>();
+            CreateMap<GameOfPlayerUpdateRequest, GameOfPlayer>();
+            CreateMap<GameOfPlayer, GameOfPlayerGetByIdResponse>();
+            CreateMap<GameOfPlayer, GamesInPlayerGetAllResponse>();
 
             // src => target
         }

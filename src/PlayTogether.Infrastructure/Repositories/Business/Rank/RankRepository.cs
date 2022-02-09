@@ -10,23 +10,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Rank
 {
-    public class RankRepository : IRankRepository
+    public class RankRepository : BaseRepository, IRankRepository
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
-        public RankRepository(IMapper mapper, AppDbContext context)
+        public RankRepository(
+            IMapper mapper,
+            AppDbContext context) : base(mapper, context)
         {
-            _mapper = mapper;
-            _context = context;
         }
 
         public async Task<RankCreateResponse> CreateRankAsync(string gameId, RankCreateRequest request)
         {
             var game = await _context.Games.FindAsync(gameId);
-            if(game is null){
+            if (game is null) {
                 return null;
             }
+
+            var existNO = await _context.Ranks.Where(x => x.GameId == gameId)
+                                              .AnyAsync(x => x.NO == request.NO);
+            if (existNO) {
+                return null;
+            }
+            
             var model = _mapper.Map<Entities.Rank>(request);
             model.GameId = gameId;
             await _context.Ranks.AddAsync(model);
@@ -49,10 +53,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
         public async Task<IEnumerable<RankGetByIdResponse>> GetAllRanksInGameAsync(string gameId)
         {
             var game = await _context.Games.FindAsync(gameId);
-            if(game is null){
+            if (game is null) {
                 return null;
             }
-            var ranksInGame = await _context.Ranks.Where(x => x.GameId == gameId).OrderBy(x => x.NO).ToListAsync();
+            var ranksInGame = await _context.Ranks.Where(x => x.GameId == gameId)
+                                                  .OrderBy(x => x.NO)
+                                                  .ToListAsync();
+
             return _mapper.Map<IEnumerable<RankGetByIdResponse>>(ranksInGame);
         }
 

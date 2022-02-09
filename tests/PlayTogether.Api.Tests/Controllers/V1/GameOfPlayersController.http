@@ -1,0 +1,46 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/auth/login
+content-type: {{contentType}}
+
+{
+  "email": "player01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+
+###
+# Get Game of Player by Id
+GET {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Update Game of Player by Id
+PUT {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "rankId": "7737ab60-079b-438d-a0d0-2c43dcfd1400"
+}
+
+###
+# Delete Game of Player by Id
+DELETE {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+
+
