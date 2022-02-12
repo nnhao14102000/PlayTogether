@@ -28,19 +28,19 @@ Authorization: {{authToken}}
 
 ###
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/e496ca73-1a85-4cf5-bb15-c122abd04c7c/ranks
+GET {{baseUrl}}/api/play-together/v1/games/7caacf43-a337-4df0-b4bf-f1e07a37fe7e/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
 # Create a new rank in game
-POST {{baseUrl}}/api/play-together/v1/games/e496ca73-1a85-4cf5-bb15-c122abd04c7c/ranks
+POST {{baseUrl}}/api/play-together/v1/games/7caacf43-a337-4df0-b4bf-f1e07a37fe7e/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "no": 7,
+  "no": 8,
   "name": "Thách Đấu"
 }
 
@@ -66,8 +66,8 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "Leagua Of Legend",
-  "displayName": "LoL"
+  "name": "CSGO",
+  "displayName": ""
 }
 
 ###

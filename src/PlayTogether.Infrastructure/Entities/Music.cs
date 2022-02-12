@@ -8,6 +8,7 @@ namespace PlayTogether.Infrastructure.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+        
         public IList<MusicOfPlayer> MusicOfPlayers { get; set; }
     }
 }

@@ -2,6 +2,6 @@ namespace PlayTogether.Core.Parameters
 {
     public class GameTypeParameter : QueryStringParameters
     {
-        public string Name { get; set; }
+        public string SearchString { get; set; }
     }
 }

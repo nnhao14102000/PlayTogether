@@ -34,11 +34,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer
                               .Reference(x => x.Game)
                               .Query()
                               .LoadAsync();
-
-                await _context.Entry(item)
-                              .Reference(x => x.Rank)
-                              .Query()
-                              .LoadAsync();
             }
 
             return _mapper.Map<IEnumerable<GamesInPlayerGetAllResponse>>(gamesOfPlayer);
@@ -55,19 +50,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer
             var game = await _context.Games.FindAsync(request.GameId);
             if (game is null) {
                 return null;
-            }
-
-            if (!String.IsNullOrEmpty(request.RankId)) {
-                var rank = await _context.Ranks.FindAsync(request.RankId);
-                if (rank is null) {
-                    return null;
-                }
-
-                var existRankInGame = await _context.Ranks.Where(x => x.GameId == request.GameId)
-                                                          .AnyAsync(x => x.Id == request.RankId);
-                if (!existRankInGame) {
-                    return null;
-                }
             }
 
             var existGame = await _context.GameOfPlayers.Where(x => x.PlayerId == playerId).AnyAsync(x => x.GameId == request.GameId);
@@ -106,11 +88,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer
                               .Query()
                               .LoadAsync();
 
-            await _context.Entry(gameOfPlayer)
-                          .Reference(x => x.Rank)
-                          .Query()
-                          .LoadAsync();
-
             return _mapper.Map<GameOfPlayerGetByIdResponse>(gameOfPlayer);
         }
 
@@ -119,18 +96,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer
             var gameOfPlayer = await _context.GameOfPlayers.FindAsync(id);
             if (gameOfPlayer is null) {
                 return false;
-            }
-
-            if (!String.IsNullOrEmpty(request.RankId)) {
-                var rank = await _context.Ranks.FindAsync(request.RankId);
-                if (rank is null) {
-                    return false;
-                }
-                var existRankInGame = await _context.Ranks.Where(x => x.GameId == gameOfPlayer.GameId)
-                                                          .AnyAsync(x => x.Id == request.RankId);
-                if (!existRankInGame) {
-                    return false;
-                }
             }
 
             var model = _mapper.Map(request, gameOfPlayer);

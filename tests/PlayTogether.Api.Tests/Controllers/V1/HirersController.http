@@ -56,6 +56,12 @@ Authorization: {{authToken}}
 GET {{baseUrl}}/api/play-together/v1.1/players
     ?Name=
     &Gender=
+    &IsRecent=
+    &GameId=
+    &MusicId=
+    &IsOrderByFirstName=
+    &IsOrderByRating=
+    &IsOrderByPricing=
     &PageNumber=1
     &PageSize=10
 content-type: {{contentType}}

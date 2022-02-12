@@ -84,16 +84,49 @@ content-type: {{contentType}}
 #   "confirmEmail": false
 # }
 
-{
-  "email": "player01@example.com",
-  "password": "Pa55w0rd!",
-  "firstname": "Player",
-  "lastname": "No.01",
-  "city": "None",
-  "dateOfBirth": "2001-01-11",
-  "gender": true,
-  "confirmEmail": true
-}
+# {
+#   "email": "player01@example.com",
+#   "password": "Pa55w0rd!",
+#   "firstname": "Player",
+#   "lastname": "No.01",
+#   "city": "None",
+#   "dateOfBirth": "2001-01-11",
+#   "gender": true,
+#   "confirmEmail": true
+# }
+
+# {
+#   "email": "Tham@example.com",
+#   "password": "Pa55w0rd!",
+#   "firstname": "Tham",
+#   "lastname": "Nguyen Hong",
+#   "city": "HCM",
+#   "dateOfBirth": "2001-01-11",
+#   "gender": false,
+#   "confirmEmail": true
+# }
+
+# {
+#   "email": "Hung@example.com",
+#   "password": "Pa55w0rd!",
+#   "firstname": "Hung",
+#   "lastname": "Lill",
+#   "city": "HaNoi",
+#   "dateOfBirth": "2001-01-11",
+#   "gender": true,
+#   "confirmEmail": true
+# }
+
+# {
+#   "email": "Hao@example.com",
+#   "password": "Pa55w0rd!",
+#   "firstname": "Hao",
+#   "lastname": "Kel",
+#   "city": "LongAn",
+#   "dateOfBirth": "2001-01-11",
+#   "gender": true,
+#   "confirmEmail": true
+# }
 
 ###
 # Register hirer

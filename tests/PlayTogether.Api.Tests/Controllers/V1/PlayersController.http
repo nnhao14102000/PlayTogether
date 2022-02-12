@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/auth/login
 content-type: {{contentType}}
 
 {
-  "email": "player01@example.com",
+  "email": "Hao@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -71,7 +71,7 @@ Authorization: {{authToken}}
 
 ###
 # Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/games
+GET {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -79,19 +79,19 @@ Authorization: {{authToken}}
 
 ###
 # Add Game of Player
-POST {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/games
+POST {{baseUrl}}/api/play-together/v1/players/43a7bd79-6cfa-4d39-8b2c-b6e46c56ac0a/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "gameId": "e496ca73-1a85-4cf5-bb15-c122abd04c7c",
-  "rankId": "4e2879e4-e7fe-4f4e-a1c7-30abc487ffde"
+  "gameId": "f55b36ac-e108-4bd0-90c1-c462fa024963",
+  "rankId": ""
 }
 
 
 ###
 # Get all Music of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/musics
+GET {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/musics
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -99,7 +99,7 @@ Authorization: {{authToken}}
 
 ###
 # Add Music of Player
-POST {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf/musics
+POST {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/musics
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -10,6 +10,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Game
 
         public string DisplayName { get; set; }
 
+        public string OtherName { get; set; }
+
         public IList<TypeOfGameResponseForGame> TypeOfGames { get; set; }
 
         public ICollection<RankResponseForGame> Ranks { get; set; }

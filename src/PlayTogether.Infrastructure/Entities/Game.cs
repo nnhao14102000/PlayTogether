@@ -9,8 +9,11 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Name { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(50)]
         public string DisplayName { get; set; }
+
+        [MaxLength(200)]
+        public string OtherName { get; set; }
 
         public ICollection<Rank> Ranks { get; set; }
         public IList<GameOfPlayer> GamesOfPlayers { get; set; }

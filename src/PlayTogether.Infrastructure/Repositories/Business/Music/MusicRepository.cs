@@ -46,7 +46,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Music
             if (musics is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = musics.AsQueryable();
-                    query = query.Where(x => x.Name.ToLower()
+                    query = query.Where(x => (x.Name).ToLower()
                                                    .Contains(param.Name.ToLower())).OrderByDescending(x => x.CreatedDate);
                     musics = query.ToList();
                 }

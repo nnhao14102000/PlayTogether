@@ -27,10 +27,12 @@ namespace PlayTogether.Core.Services.Business.Player
                 ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param)
+        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
+            ClaimsPrincipal principal,
+            PlayerParameters param)
         {
             try {
-                return await _playerRepository.GetAllPlayersForHirerAsync(param);
+                return await _playerRepository.GetAllPlayersForHirerAsync(principal, param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllPlayersForHirerAsync in service class, Error Message: {ex}.");

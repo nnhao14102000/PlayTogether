@@ -8,9 +8,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer
         public string Id { get; set; }
         public string GameId { get; set; }
         public GameGetAllResponse Game { get; set; }
-
-        public string RankId { get; set; }
-        public RankGetByIdResponse Rank { get; set; }
+        public string Rank { get; set; }
         public string PlayerId { get; set; }
     }
 }

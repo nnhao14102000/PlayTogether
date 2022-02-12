@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IPlayerRepository
-    {
-        Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(PlayerParameters param);
+    {        
         Task<PlayerGetProfileResponse> GetPlayerProfileByIdentityIdAsync(ClaimsPrincipal principal);
         Task<PlayerGetByIdResponseForPlayer> GetPlayerByIdForPlayerAsync(string id);
         Task<PlayerServiceInfoResponseForPlayer> GetPlayerServiceInfoByIdForPlayerAsync(string id);
@@ -19,6 +18,10 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         
         Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id);
         Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request);
+
+        // Main page of Hirer
+        Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(ClaimsPrincipal principal, PlayerParameters param);
+        // Task<PagedResult<PlayerGetAllResponseForHirer>> GetPlayersRecentHireAsync(string hireId);
 
     }
 }

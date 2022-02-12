@@ -8,6 +8,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Music
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
         public DateTime CreatedDate = DateTime.Now;
     }
 }

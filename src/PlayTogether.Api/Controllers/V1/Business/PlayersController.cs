@@ -111,7 +111,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
-            var response = await _playerService.GetAllPlayersForHirerAsync(param);
+            var response = await _playerService.GetAllPlayersForHirerAsync(HttpContext.User ,param);
 
             var metaData = new {
                 response.TotalCount,

@@ -26,12 +26,12 @@ Authorization: {{authToken}}
 
 ###
 # Update rank
-PUT {{baseUrl}}/api/play-together/v1/ranks/fffaa2d5-2078-41fc-93b2-80a3a11a174e
+PUT {{baseUrl}}/api/play-together/v1/ranks/5d37a5fe-dfa2-4a44-8f33-5255e1a26ae3
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "Chiến Tướng"
+  "name": "Bạch Kim"
 }
 
 ###

@@ -46,7 +46,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (games is not null) {
                 if (!String.IsNullOrEmpty(param.Name)) {
                     var query = games.AsQueryable();
-                    query = query.Where(x => x.Name.ToLower()
+                    query = query.Where(x => (x.Name + " "  + x.DisplayName + " "  + x.OtherName).ToLower()
                                                    .Contains(param.Name.ToLower()));
                     games = query.ToList();
                 }

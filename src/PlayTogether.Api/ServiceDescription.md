@@ -113,7 +113,7 @@
 >   ***Description***: Get all Players for Hirer  
 >   ***Use for***: Search players in Hirer app   
 >   ***Role Access***: Hirer  
->   ***Extension***: Paging, Filter by Gender, Search by Name 
+>   ***Extension***: Paging, Filter by Gender, Game, Music, Search by Name, Order by First Name, Rating, Pricing, Recent hired  
 >
 > - ``GET /api/play-together/v1/players/profile ``  
 >   ***Description***: Get Player Profile  

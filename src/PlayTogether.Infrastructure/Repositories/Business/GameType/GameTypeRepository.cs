@@ -44,10 +44,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             var types = await _context.GameTypes.ToListAsync();
 
             if (types is not null) {
-                if (!String.IsNullOrEmpty(param.Name)) {
+                if (!String.IsNullOrEmpty(param.SearchString)) {
                     var query = types.AsQueryable();
-                    query = query.Where(x => x.TypeName.ToLower()
-                                                       .Contains(param.Name.ToLower()));
+                    query = query.Where(x => (x.Name + " " + x.ShortName + " "  + x.OtherName + " " + x.Description).ToLower()
+                                                       .Contains(param.SearchString.ToLower()));
                     types = query.ToList();
                 }
                 var response = _mapper.Map<List<GameTypeGetAllResponse>>(types);
