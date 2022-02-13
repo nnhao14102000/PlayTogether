@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 namespace PlayTogether.Api.Controllers.V1.Auth
 {
     [ApiVersion("1.0")]
-    public class AccountController :BaseController
+    public class AccountsController :BaseController
     {
         private readonly IAccountService _accountService;
 
-        public AccountController(IAccountService accountService)
+        public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
         }
@@ -133,6 +134,36 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             }
             var response = await _accountService.RegisterHirerAsync(registerDto);
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Register for multi player
+        /// </summary>
+        /// <param name="registerDtos"></param>
+        /// <returns></returns>
+        [HttpPost, Route("register-multi-player")]
+        public async Task<ActionResult> MultiPlayerRegister(List<RegisterUserInfoRequest> registerDtos)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _accountService.RegisterMultiPlayerAsync(registerDtos);
+            return response is true ? Ok() : BadRequest();
+        }
+
+        /// <summary>
+        /// Register for multi hirer
+        /// </summary>
+        /// <param name="registerDtos"></param>
+        /// <returns></returns>
+        [HttpPost, Route("register-multi-hirer")]
+        public async Task<ActionResult> MultiHirerRegister(List<RegisterUserInfoRequest> registerDtos)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _accountService.RegisterMultiHirerAsync(registerDtos);
+            return response is true ? Ok() : BadRequest();
         }
     }
 }

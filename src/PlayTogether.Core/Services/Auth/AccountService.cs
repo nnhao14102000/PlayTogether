@@ -4,6 +4,7 @@ using PlayTogether.Core.Dtos.Outgoing.Auth;
 using PlayTogether.Core.Interfaces.Repositories.Auth;
 using PlayTogether.Core.Interfaces.Services.Auth;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Auth
@@ -112,6 +113,34 @@ namespace PlayTogether.Core.Services.Auth
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterHirerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> RegisterMultiHirerAsync(List<RegisterUserInfoRequest> registerDtos)
+        {
+            try {
+                if (registerDtos is null) {
+                    throw new ArgumentNullException(nameof(registerDtos));
+                }
+                return await _accountRepository.RegisterMultiHirerAsync(registerDtos);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call RegisterMultiHirerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> RegisterMultiPlayerAsync(List<RegisterUserInfoRequest> registerDtos)
+        {
+            try {
+                if (registerDtos is null) {
+                    throw new ArgumentNullException(nameof(registerDtos));
+                }
+                return await _accountRepository.RegisterMultiPlayerAsync(registerDtos);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call RegisterMultiPlayerAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

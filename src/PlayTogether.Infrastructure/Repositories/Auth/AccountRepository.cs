@@ -308,7 +308,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var userEntityModel = _mapper.Map<Player>(registerDto);
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.Now;
-                
+
                 userEntityModel.Firstname = registerDto.Firstname;
                 userEntityModel.Lastname = registerDto.Lastname;
                 userEntityModel.City = registerDto.City;
@@ -329,6 +329,46 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
+        }
+
+        public async Task<bool> RegisterMultiPlayerAsync(List<RegisterUserInfoRequest> registerDtos)
+        {
+            foreach (var registerDto in registerDtos) {
+                if (await IsExistEmail(registerDto.Email)) {
+                    return false;
+                }
+
+                var identityUser = new IdentityUser() {
+                    Email = registerDto.Email,
+                    UserName = registerDto.Email,
+                    EmailConfirmed = registerDto.ConfirmEmail
+                };
+
+                var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
+                await SetRoleForUser(identityUser, AuthConstant.RolePlayer);
+
+                if (result.Succeeded) {
+                    // Create basic user
+                    var userEntityModel = _mapper.Map<Player>(registerDto);
+                    userEntityModel.IdentityId = identityUser.Id;
+                    userEntityModel.CreatedDate = DateTime.Now;
+
+                    userEntityModel.Firstname = registerDto.Firstname;
+                    userEntityModel.Lastname = registerDto.Lastname;
+                    userEntityModel.City = registerDto.City;
+                    userEntityModel.DateOfBirth = registerDto.DateOfBirth;
+                    userEntityModel.Gender = registerDto.Gender;
+
+                    await _context.Players.AddAsync(userEntityModel);
+
+                    if (await _context.SaveChangesAsync() < 0) {
+                        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                        //var confirmLink = Url
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         public async Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto)
@@ -374,6 +414,44 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return new AuthResult {
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
+        }
+
+        public async Task<bool> RegisterMultiHirerAsync(List<RegisterUserInfoRequest> registerDtos)
+        {
+            foreach (var registerDto in registerDtos) {
+                if (await IsExistEmail(registerDto.Email)) {
+                    return false;
+                }
+
+                var identityUser = new IdentityUser() {
+                    Email = registerDto.Email,
+                    UserName = registerDto.Email,
+                    EmailConfirmed = registerDto.ConfirmEmail
+                };
+
+                var result = await _userManager.CreateAsync(identityUser, registerDto.Password);
+                await SetRoleForUser(identityUser, AuthConstant.RoleHirer);
+
+                if (result.Succeeded) {
+                    // Create basic user
+                    var userEntityModel = _mapper.Map<Hirer>(registerDto);
+                    userEntityModel.IdentityId = identityUser.Id;
+                    userEntityModel.CreatedDate = DateTime.Now;
+
+                    userEntityModel.Firstname = registerDto.Firstname;
+                    userEntityModel.Lastname = registerDto.Lastname;
+                    userEntityModel.City = registerDto.City;
+                    userEntityModel.DateOfBirth = registerDto.DateOfBirth;
+                    userEntityModel.Gender = registerDto.Gender;
+
+                    await _context.Hirers.AddAsync(userEntityModel);
+
+                    if ((await _context.SaveChangesAsync() < 0)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private async Task<bool> IsAdminOrCharity(IdentityUser user)

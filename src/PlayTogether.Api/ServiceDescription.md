@@ -1,29 +1,29 @@
 ﻿# Service Description  
 ## Account  
-> - ``POST /api/play-together/v1/account/login ``  
+> - ``POST /api/play-together/v1/accounts/login ``  
 >   ***Description***: Login all User Account
 >
-> - ``GET /api/play-together/v1/account/check-exist-email ``  
+> - ``GET /api/play-together/v1/accounts/check-exist-email ``  
 >   ***Description***: Check Exist Email
 >
-> - ``POST /api/play-together/v1/account/login-google-player ``  
+> - ``POST /api/play-together/v1/accounts/login-google-player ``  
 >   ***Description***: Sign in with Google for PDlayer
 >
-> - ``POST /api/play-together/v1/account/login-google-hirer ``  
+> - ``POST /api/play-together/v1/accounts/login-google-hirer ``  
 >   ***Description***: Sign in with Google for Hirer
 >
-> - ``POST /api/play-together/v1/account/register-admin ``  
+> - ``POST /api/play-together/v1/accounts/register-admin ``  
 >   ***Description***: Register Admin  
 >   ***Role Access***: Admin  
 >
-> - ``POST /api/play-together/v1/account/register-charity ``  
+> - ``POST /api/play-together/v1/accounts/register-charity ``  
 >   ***Description***: Register Charity  
 >   ***Role Access***: Admin  
 >
-> - ``POST /api/play-together/v1/account/register-player ``  
+> - ``POST /api/play-together/v1/accounts/register-player ``  
 >   ***Description***: Register a Normal Player Account  
 >
-> - ``POST /api/play-together/v1/account/register-hirer ``  
+> - ``POST /api/play-together/v1/accounts/register-hirer ``  
 >   ***Description***: Register a Normal Hirer Account  
 >
 >

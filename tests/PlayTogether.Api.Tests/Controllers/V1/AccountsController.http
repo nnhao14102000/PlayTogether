@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/account/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
@@ -20,13 +20,13 @@ content-type: {{contentType}}
 
 ###
 # Check exist email
-GET {{baseUrl}}/api/play-together/v1/account/check-exist-email
+GET {{baseUrl}}/api/play-together/v1/accounts/check-exist-email
     ?email=admin01@example.com
 content-type: {{contentType}}
 
 ###
 # Login with Google for player
-POST {{baseUrl}}/api/play-together/v1/account/login-google-player
+POST {{baseUrl}}/api/play-together/v1/accounts/login-google-player
 content-type: {{contentType}}
 
 {
@@ -36,7 +36,7 @@ content-type: {{contentType}}
 
 ###
 # Login with Google for hirer
-POST {{baseUrl}}/api/play-together/v1/account/login-google-hirer
+POST {{baseUrl}}/api/play-together/v1/accounts/login-google-hirer
 content-type: {{contentType}}
 
 {
@@ -46,7 +46,7 @@ content-type: {{contentType}}
 
 ###
 # Register admin
-POST {{baseUrl}}/api/play-together/v1/account/register-admin
+POST {{baseUrl}}/api/play-together/v1/accounts/register-admin
 content-type: {{contentType}}
 
 {
@@ -58,7 +58,7 @@ content-type: {{contentType}}
 
 ###
 # Register charity
-POST {{baseUrl}}/api/play-together/v1/account/register-charity
+POST {{baseUrl}}/api/play-together/v1/accounts/register-charity
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -70,7 +70,7 @@ Authorization: {{authToken}}
 
 ###
 # Register player
-POST {{baseUrl}}/api/play-together/v1/account/register-player
+POST {{baseUrl}}/api/play-together/v1/accounts/register-player
 content-type: {{contentType}}
 
 # {
@@ -131,7 +131,7 @@ content-type: {{contentType}}
 
 ###
 # Register hirer
-POST {{baseUrl}}/api/play-together/v1/account/register-hirer
+POST {{baseUrl}}/api/play-together/v1/accounts/register-hirer
 content-type: {{contentType}}
 
 # {
