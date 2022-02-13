@@ -51,7 +51,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
 
             FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
-            FilterPlayerSuggestForHirer(ref queryPlayer, param.IsSuggest, hirer.Id);
             FilterPlayerByGameId(ref queryPlayer, param.GameId);
             FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
             FilterPlayerByGender(ref queryPlayer, param.Gender);
@@ -70,30 +69,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
                     param.PageNumber,
                     param.PageSize);
 
-        }
-
-        /// <summary>
-        /// Suggest for Hirer những người mà họ đã thuê, và có rating cao
-        /// </summary>
-        /// <param name="queryPlayer"></param>
-        /// <param name="hireId"></param>
-        private void FilterPlayerSuggestForHirer(ref IQueryable<Entities.Player> queryPlayer, bool? isSuggest, string hireId)
-        {
-            if (!queryPlayer.Any()
-                || String.IsNullOrEmpty(hireId)
-                || String.IsNullOrWhiteSpace(hireId)) {
-                return;
-            }
-
-            var orders = _context.Orders.Where(x => x.HirerId == hireId && x.Status == OrderStatusConstant.Success)
-                                        .OrderByDescending(x => x.CreatedDate)
-                                        .ToList();
-            List<Entities.Player> players = new();
-            foreach (var item in orders) {
-                players.Add(item.Player);
-            }
-
-            queryPlayer = players.AsQueryable().OrderByDescending(x => x.Rating);
         }
 
         /// <summary>

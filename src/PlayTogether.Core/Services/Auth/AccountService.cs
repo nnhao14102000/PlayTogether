@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Auth
 {
-    public class AuthService : IAuthService
+    public class AccountService : IAccountService
     {
-        private readonly IAuthRepository _authRepository;
-        private readonly ILogger<AuthService> _logger;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ILogger<AccountService> _logger;
 
-        public AuthService(IAuthRepository authRepository, ILogger<AuthService> logger)
+        public AccountService(IAccountRepository accountRepository, ILogger<AccountService> logger)
         {
-            _authRepository = authRepository ?? throw new ArgumentNullException(nameof(authRepository));
+            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public async Task<bool> CheckExistEmailAsync(string email)
@@ -24,7 +24,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (String.IsNullOrEmpty(email)) {
                     throw new ArgumentNullException(nameof(email));
                 }
-                return await _authRepository.CheckExistEmailAsync(email);
+                return await _accountRepository.CheckExistEmailAsync(email);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call CheckExistEmailAsync in service class, Error Message: {ex}.");
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (loginEmailDto is null) {
                     throw new ArgumentNullException(nameof(loginEmailDto));
                 }
-                return await _authRepository.LoginHirerByGoogleAsync(loginEmailDto);
+                return await _accountRepository.LoginHirerByGoogleAsync(loginEmailDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginHirerByGoogle in service class, Error Message: {ex}.");
@@ -52,7 +52,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (loginEmailDto is null) {
                     throw new ArgumentNullException(nameof(loginEmailDto));
                 }
-                return await _authRepository.LoginPlayerByGoogleAsync(loginEmailDto);
+                return await _accountRepository.LoginPlayerByGoogleAsync(loginEmailDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginPlayerByGoogle in service class, Error Message: {ex}.");
@@ -66,7 +66,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (loginDto is null) {
                     throw new ArgumentNullException(nameof(loginDto));
                 }
-                return await _authRepository.LoginUserAsync(loginDto);
+                return await _accountRepository.LoginUserAsync(loginDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginUserAsync in service class, Error Message: {ex}.");
@@ -80,7 +80,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (registerDto is null) {
                     throw new ArgumentNullException(nameof(registerDto));
                 }
-                return await _authRepository.RegisterAdminAsync(registerDto);
+                return await _accountRepository.RegisterAdminAsync(registerDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterAdminAsync in service class, Error Message: {ex}.");
@@ -94,7 +94,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (registerDto is null) {
                     throw new ArgumentNullException(nameof(registerDto));
                 }
-                return await _authRepository.RegisterCharityAsync(registerDto);
+                return await _accountRepository.RegisterCharityAsync(registerDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterCharityAsync in service class, Error Message: {ex}.");
@@ -108,7 +108,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (registerDto is null) {
                     throw new ArgumentNullException(nameof(registerDto));
                 }
-                return await _authRepository.RegisterHirerAsync(registerDto);
+                return await _accountRepository.RegisterHirerAsync(registerDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterHirerAsync in service class, Error Message: {ex}.");
@@ -122,7 +122,7 @@ namespace PlayTogether.Core.Services.Auth
                 if (registerDto is null) {
                     throw new ArgumentNullException(nameof(registerDto));
                 }
-                return await _authRepository.RegisterPlayerAsync(registerDto);
+                return await _accountRepository.RegisterPlayerAsync(registerDto);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterPlayerAsync in service class, Error Message: {ex}.");

@@ -11,6 +11,5 @@
         public bool? IsOrderByRating { get; set; } // true is from highest rating
         public bool? IsOrderByPricing { get; set; } // true is from lowest pricing
         public bool? IsRecent { get; set; }
-        public bool? IsSuggest { get; set; }
     }
 }

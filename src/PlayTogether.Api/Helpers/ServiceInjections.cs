@@ -72,8 +72,8 @@ namespace PlayTogether.Api.Helpers
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Config for DI
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             // Config for Admin service DI
             services.AddScoped<IAdminService, AdminService>();

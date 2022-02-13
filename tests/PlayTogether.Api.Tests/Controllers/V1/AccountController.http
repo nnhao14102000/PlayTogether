@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/auth/login
+POST {{baseUrl}}/api/play-together/v1/account/login
 content-type: {{contentType}}
 
 {
@@ -20,13 +20,13 @@ content-type: {{contentType}}
 
 ###
 # Check exist email
-GET {{baseUrl}}/api/play-together/v1/auth/check-exist-email
+GET {{baseUrl}}/api/play-together/v1/account/check-exist-email
     ?email=admin01@example.com
 content-type: {{contentType}}
 
 ###
 # Login with Google for player
-POST {{baseUrl}}/api/play-together/v1/auth/login-google-player
+POST {{baseUrl}}/api/play-together/v1/account/login-google-player
 content-type: {{contentType}}
 
 {
@@ -36,7 +36,7 @@ content-type: {{contentType}}
 
 ###
 # Login with Google for hirer
-POST {{baseUrl}}/api/play-together/v1/auth/login-google-hirer
+POST {{baseUrl}}/api/play-together/v1/account/login-google-hirer
 content-type: {{contentType}}
 
 {
@@ -46,7 +46,7 @@ content-type: {{contentType}}
 
 ###
 # Register admin
-POST {{baseUrl}}/api/play-together/v1/auth/register-admin
+POST {{baseUrl}}/api/play-together/v1/account/register-admin
 content-type: {{contentType}}
 
 {
@@ -58,7 +58,7 @@ content-type: {{contentType}}
 
 ###
 # Register charity
-POST {{baseUrl}}/api/play-together/v1/auth/register-charity
+POST {{baseUrl}}/api/play-together/v1/account/register-charity
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -70,7 +70,7 @@ Authorization: {{authToken}}
 
 ###
 # Register player
-POST {{baseUrl}}/api/play-together/v1/auth/register-player
+POST {{baseUrl}}/api/play-together/v1/account/register-player
 content-type: {{contentType}}
 
 # {
@@ -117,20 +117,21 @@ content-type: {{contentType}}
 #   "confirmEmail": true
 # }
 
-# {
-#   "email": "Hao@example.com",
-#   "password": "Pa55w0rd!",
-#   "firstname": "Hao",
-#   "lastname": "Kel",
-#   "city": "LongAn",
-#   "dateOfBirth": "2001-01-11",
-#   "gender": true,
-#   "confirmEmail": true
-# }
+{
+  "email": "Vu@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "firstname": "Hao",
+  "lastname": "Kel",
+  "city": "LongAn",
+  "dateOfBirth": "2001-01-11",
+  "gender": true,
+  "confirmEmail": true
+}
 
 ###
 # Register hirer
-POST {{baseUrl}}/api/play-together/v1/auth/register-hirer
+POST {{baseUrl}}/api/play-together/v1/account/register-hirer
 content-type: {{contentType}}
 
 # {
@@ -147,6 +148,7 @@ content-type: {{contentType}}
 {
   "email": "hirer01@example.com",
   "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
   "firstname": "Hirer",
   "lastname": "No.01",
   "city": "Long An City",

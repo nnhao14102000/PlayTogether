@@ -11,7 +11,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/auth/login
+POST {{baseUrl}}/api/play-together/v1/account/login
 content-type: {{contentType}}
 
 {

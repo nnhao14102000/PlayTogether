@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace PlayTogether.Api.Controllers.V1.Auth
 {
     [ApiVersion("1.0")]
-    public class AuthController :BaseController
+    public class AccountController :BaseController
     {
-        private readonly IAuthService _authService;
+        private readonly IAccountService _accountService;
 
-        public AuthController(IAuthService authService)
+        public AccountController(IAccountService accountService)
         {
-            _authService = authService;
+            _accountService = accountService;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.LoginUserAsync(loginDto);
+            var response = await _accountService.LoginUserAsync(loginDto);
             return Ok(response);
         }
 
@@ -40,7 +40,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         [HttpGet, Route("check-exist-email")]
         public async Task<bool> CheckEmailExist(string email)
         {
-            return email == null ? false : await _authService.CheckExistEmailAsync(email);
+            return email == null ? false : await _accountService.CheckExistEmailAsync(email);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.LoginPlayerByGoogleAsync(loginDto);
+            var response = await _accountService.LoginPlayerByGoogleAsync(loginDto);
             return Ok(response);
         }
 
@@ -69,7 +69,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.LoginHirerByGoogleAsync(loginDto);
+            var response = await _accountService.LoginHirerByGoogleAsync(loginDto);
             return Ok(response);
         }
 
@@ -85,7 +85,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.RegisterAdminAsync(registerDto);
+            var response = await _accountService.RegisterAdminAsync(registerDto);
             return Ok(response);
         }
 
@@ -101,7 +101,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.RegisterCharityAsync(registerDto);
+            var response = await _accountService.RegisterCharityAsync(registerDto);
             return Ok(response);
         }
 
@@ -116,7 +116,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.RegisterPlayerAsync(registerDto);
+            var response = await _accountService.RegisterPlayerAsync(registerDto);
             return Ok(response);
         }
 
@@ -131,7 +131,7 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _authService.RegisterHirerAsync(registerDto);
+            var response = await _accountService.RegisterHirerAsync(registerDto);
             return Ok(response);
         }
     }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Interfaces.Services.Auth
 {
-    public interface IAuthService
+    public interface IAccountService
     {
         Task<bool> CheckExistEmailAsync(string email);
         Task<AuthResult> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto);

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Auth
 {
-    public class AuthRepository : IAuthRepository
+    public class AccountRepository : IAccountRepository
     {
         private UserManager<IdentityUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
@@ -26,7 +26,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
 
-        public AuthRepository(
+        public AccountRepository(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration,
