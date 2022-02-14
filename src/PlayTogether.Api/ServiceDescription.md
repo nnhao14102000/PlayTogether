@@ -26,6 +26,12 @@
 > - ``POST /api/play-together/v1/accounts/register-hirer ``  
 >   ***Description***: Register a Normal Hirer Account  
 >
+> - ``POST /api/play-together/v1/accounts/register-multi-player ``  
+>   ***Description***: Register multi Normal Player Account  
+>
+> - ``POST /api/play-together/v1/accounts/register-multi-hirer ``  
+>   ***Description***: Register multi Normal Hirer Account  
+>
 >
 
 ## Admin   

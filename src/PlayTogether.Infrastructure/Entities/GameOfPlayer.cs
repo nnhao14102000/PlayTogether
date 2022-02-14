@@ -4,9 +4,7 @@
     {
         public string GameId { get; set; }
         public Game Game { get; set; }
-
-        // public string RankId { get; set; }
-        // public Rank Rank { get; set; }
+        
         public string Rank { get; set; }
         
         public string PlayerId { get; set; }
