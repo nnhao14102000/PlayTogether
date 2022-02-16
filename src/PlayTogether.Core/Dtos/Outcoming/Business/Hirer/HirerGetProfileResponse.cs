@@ -17,5 +17,9 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
         public DateTime DateOfBirth { get; set; }
         
         public float Balance { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public string Avatar { get; set; }
     }
 }

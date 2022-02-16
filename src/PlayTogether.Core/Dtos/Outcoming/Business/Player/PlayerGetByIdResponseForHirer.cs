@@ -5,9 +5,9 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
     public class PlayerGetByIdResponseForHirer
     {
         public string Id { get; set; }
-        
+
         public string Avatar { get; set; }
-        
+
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -16,11 +16,15 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 
         public string Description { get; set; }
 
+        public string OtherSkill { get; set; }
+
         public float Rating { get; set; }
 
         // public ICollection<Rating> Ratings { get; set; }
-        
+
         public string Status { get; set; }
+
+        public int MaxHourHire { get; set; }
 
         public float PricePerHour { get; set; }
 

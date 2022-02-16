@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
@@ -23,8 +24,12 @@ namespace PlayTogether.Infrastructure.Entities
 
         [Column(TypeName = "float")]
         public float TotalPrices { get; set; }
+
+        [MaxLength(100)]
+        public string Message { get; set; }
         public string Status { get; set; }
         public bool IsDonate => Donate != null;
+        
         public Donate Donate { get; set; }
     }
 }

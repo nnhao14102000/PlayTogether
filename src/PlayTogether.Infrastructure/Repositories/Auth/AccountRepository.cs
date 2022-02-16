@@ -67,6 +67,42 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 }
             }
 
+            var hirer = _context.Hirers.FirstOrDefault(x => x.IdentityId == user.Id);
+            var player = _context.Players.FirstOrDefault(x => x.IdentityId == user.Id);
+            var charity = _context.Charities.FirstOrDefault(x => x.IdentityId == user.Id);
+            var admin = _context.Admins.FirstOrDefault(x => x.IdentityId == user.Id);
+            if (hirer is not null) {
+                if (hirer.IsActive == false) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Account is disable" }
+                    };
+                }
+            }
+
+            if (player is not null) {
+                if (player.IsActive == false) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Account is disable" }
+                    };
+                }
+            }
+
+            if (charity is not null) {
+                if (charity.IsActive == false) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Account is disable" }
+                    };
+                }
+            }
+
+            if (admin is not null) {
+                if (admin.IsActive == false) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Account is disable" }
+                    };
+                }
+            }
+
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (!result) {

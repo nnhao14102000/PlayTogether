@@ -76,6 +76,18 @@
 >   ***Role Access***: Admin  
 >
 
+## Order
+> - ``GET /api/play-together/v1/orders/{id} ``  
+>   ***Description***: Get order by Id  
+>   ***Use for***: Get order by Id  
+>   ***Role Access***: Hirer, Player  
+>
+> - ``PUT /api/play-together/v1/orders/{id} ``  
+>   ***Description***: Finish the order  
+>   ***Use for***: Finish the order   
+>   ***Role Access***: Hirer, Player   
+>
+
 ## Game
 > - ``GET /api/play-together/v1/games ``  
 >   ***Description***: Get all Games   
@@ -181,6 +193,17 @@
 >   ***Use for***: Update player other skill    
 >   ***Role Access***: Player 
 >
+> - ``GET /api/play-together/v1/players/orders ``  
+>   ***Description***: Get a Player all Orders   
+>   ***Use for***: Player get their orders    
+>   ***Role Access***: Player  
+>   ***Extension***: Paging  
+>
+> - ``PUT /api/play-together/v1/players/orders/{orderId}/process ``  
+>   ***Description***: Process the incoming order (Accept or reject)   
+>   ***Use for***: Accept or reject a order request    
+>   ***Role Access***: Player  
+>
 
 ## GameOfPlayer
 > - ``GET /api/play-together/v1/gameofplayers/{id} ``  
@@ -285,6 +308,23 @@
 >   ***Use for***: Update hirer own information    
 >   ***Role Access***: Hirer 
 >
+> - ``GET /api/play-together/v1/hirers/orders ``  
+>   ***Description***: Get a Hirer all Orders   
+>   ***Use for***: Hirer get their orders    
+>   ***Role Access***: Hirer  
+>   ***Extension***: Paging  
+>
+> - ``POST /api/play-together/v1/hirers/orders/{playerId} ``  
+>   ***Description***: Create an Order   
+>   ***Use for***: Hirer create an Order to Player    
+>   ***Role Access***: Hirer    
+>
+> - ``PUT /api/play-together/v1/hirers/cancel/orders/{orderId} ``  
+>   ***Description***: Cancel an order   
+>   ***Use for***: Hirer cancel order    
+>   ***Role Access***: Hirer    
+>
+
 ## Music
 > - ``GET /api/play-together/v1/musics ``  
 >   ***Description***: Get all Musics   

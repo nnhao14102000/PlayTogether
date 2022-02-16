@@ -19,5 +19,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
         public DateTime DateOfBirth { get; set; }
         
         public float Balance { get; set; }
+
+        public bool IsActive {get; set; }
     }
 }

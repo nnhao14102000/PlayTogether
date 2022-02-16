@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.MusicOfPlayer;
+using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.MusicOfPlayer;
+using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -22,15 +24,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IPlayerService _playerService;
         private readonly IGameOfPlayerService _gameOfPlayerService;
         private readonly IMusicOfPlayerService _musicOfPlayerService;
+        private readonly IOrderService _orderService;
 
         public PlayersController(
             IPlayerService playerService,
             IGameOfPlayerService gameOfPlayerService,
-            IMusicOfPlayerService musicOfPlayerService)
+            IMusicOfPlayerService musicOfPlayerService,
+            IOrderService orderService)
         {
             _playerService = playerService;
             _gameOfPlayerService = gameOfPlayerService;
             _musicOfPlayerService = musicOfPlayerService;
+            _orderService = orderService;
         }
 
         /// <summary>
@@ -239,6 +244,44 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _playerService.UpdatePlayerServiceInfoAsync(id, request);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Get all Orders for Players
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpGet("orders")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult<IEnumerable<OrderGetByIdResponse>>> GetAllOrderForPlayer(
+            [FromQuery] PlayerOrderParameter param)
+        {
+            var response = await _orderService.GetAllOrderRequestByPlayerAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Process the Order Request
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("orders/{orderId}/process")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request){
+            var response = await _orderService.ProcessOrderRequestByPlayerAsync(orderId, HttpContext.User, request);
             return response ? NoContent() : NotFound();
         }
     }

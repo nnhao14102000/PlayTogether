@@ -77,16 +77,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
         /// <param name="queryPlayer"></param>
         /// <param name="isRecent"></param>
         /// <param name="hireId"></param>
-        private void FilterPlayerRecentHired(ref IQueryable<Entities.Player> queryPlayer, bool? isRecent, string hireId)
+        private void FilterPlayerRecentHired(ref IQueryable<Entities.Player> queryPlayer, bool? isRecent, string hirerId)
         {
-            if (!queryPlayer.Any()
+            if ((!queryPlayer.Any())
                 || isRecent is null
                 || isRecent is false
-                || String.IsNullOrEmpty(hireId)
-                || String.IsNullOrWhiteSpace(hireId)) {
+                || String.IsNullOrEmpty(hirerId)
+                || String.IsNullOrWhiteSpace(hirerId)) {
                 return;
             }
-            var orders = _context.Orders.Where(x => x.HirerId == hireId && x.Status == OrderStatusConstant.Success)
+            var orders = _context.Orders.Where(x => x.HirerId == hirerId)
                                         .OrderByDescending(x => x.CreatedDate)
                                         .ToList();
             List<Entities.Player> players = new();

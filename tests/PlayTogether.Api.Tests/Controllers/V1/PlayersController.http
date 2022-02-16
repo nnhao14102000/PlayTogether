@@ -11,11 +11,11 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/account/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "Hao@example.com",
+  "email": "Tham@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -52,20 +52,20 @@ Authorization: {{authToken}}
 
 ###
 # Get Player service info by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/service-info/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
+GET {{baseUrl}}/api/play-together/v1/players/service-info/35817416-edbc-4124-9b08-4c7e9cfb5295
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ### Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/35817416-edbc-4124-9b08-4c7e9cfb5295
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "status": true,
-  "maxHourHire": 1,
-  "pricePerHour": 15000
+  "maxHourHire": 3,
+  "pricePerHour": 0
 }
 
 
@@ -117,10 +117,46 @@ Authorization: {{authToken}}
 
 ###
 # Update Player other Skill
-PUT {{baseUrl}}/api/play-together/v1/players/36b93d20-73dd-4430-b9ae-c338f7c6b928/other-skills
+PUT {{baseUrl}}/api/play-together/v1/players/35817416-edbc-4124-9b08-4c7e9cfb5295/other-skills
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "otherSkill": "Múa quạt, nhảy điệu cha cha cha"
 }
+
+
+###
+# Get all Player orders
+GET {{baseUrl}}/api/play-together/v1/players/orders
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Get order by Id
+GET {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get Hirer by Id
+GET {{baseUrl}}/api/play-together/v1/hirers/d971f853-b95b-4e62-911c-106d2e5cb14c
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Process Order request
+PUT {{baseUrl}}/api/play-together/v1/players/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b/process
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isAccept": true
+}
+
+###
+# Finish order
+PUT {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+Content-Type: {{contentType}}
+Authorization: {{authToken}}

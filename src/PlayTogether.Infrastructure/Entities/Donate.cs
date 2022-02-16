@@ -11,10 +11,10 @@ namespace PlayTogether.Infrastructure.Entities
         public Order Order { get; set; }
         public string OrderId { get; set; }
 
-        public Player PlayerMakeDonate { get; set; }
-        public string PlayerMakeDonateId { get; set; }
+        public Player Player { get; set; }
+        public string PlayerId { get; set; }
 
-        public Charity CharityReceiveDonate { get; set; }
-        public string CharityReceiveDonateId { get; set; }
+        public Charity Charity { get; set; }
+        public string CharityId { get; set; }
     }
 }

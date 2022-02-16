@@ -18,10 +18,8 @@ namespace PlayTogether.Core.Services.Business.MusicOfPlayer
             IMusicOfPlayerRepository musicOfPlayerRepository,
             ILogger<MusicOfPlayerService> logger)
         {
-            _musicOfPlayerRepository = musicOfPlayerRepository
-                ?? throw new ArgumentNullException(nameof(musicOfPlayerRepository));
-            _logger = logger
-                ?? throw new ArgumentNullException(nameof(logger));
+            _musicOfPlayerRepository = musicOfPlayerRepository;                
+            _logger = logger;                
         }
         public async Task<MusicOfPlayerGetByIdResponse> CreateMusicOfPlayerAsync(
             string playerId,

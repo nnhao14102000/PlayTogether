@@ -27,7 +27,7 @@ Authorization: {{authToken}}
 
 ###
 # Get Hirer by Id
-GET {{baseUrl}}/api/play-together/v1/hirers/d36ded19-c738-472a-845e-6fd9c88dc3de
+GET {{baseUrl}}/api/play-together/v1/hirers/d971f853-b95b-4e62-911c-106d2e5cb14c
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -59,9 +59,11 @@ GET {{baseUrl}}/api/play-together/v1.1/players
     &IsRecent=
     &GameId=
     &MusicId=
+    &PlayerStatus=
     &IsOrderByFirstName=
     &IsOrderByRating=
     &IsOrderByPricing=
+    &IsRecent=true
     &PageNumber=1
     &PageSize=10
 content-type: {{contentType}}
@@ -70,6 +72,41 @@ Authorization: {{authToken}}
 
 ### 
 # Get Player by Id for hirer
-GET {{baseUrl}}/api/play-together/v1.1/players/1d5d279c-e712-4073-aa73-f8bbb610f1bc
+GET {{baseUrl}}/api/play-together/v1.1/players/35817416-edbc-4124-9b08-4c7e9cfb5295
 content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get all hirer orders
+GET {{baseUrl}}/api/play-together/v1/hirers/orders
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Create Order to player
+POST {{baseUrl}}/api/play-together/v1/hirers/orders/35817416-edbc-4124-9b08-4c7e9cfb5295
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "totalTimes": 1,
+  "message": "Bạn ơi chơi game lol vs mình không"
+}
+
+###
+# Get order by Id
+GET {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Cancel order request
+PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/0e7f91da-b21b-4342-8a27-b06c784dd814
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Finish order
+PUT {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+Content-Type: {{contentType}}
 Authorization: {{authToken}}
