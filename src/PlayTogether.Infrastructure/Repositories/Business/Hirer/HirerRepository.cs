@@ -48,14 +48,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             return null;
         }
 
-        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
+        public async Task<HirerGetByIdResponse> GetHirerByIdForHirerAsync(string id)
         {
             var hirer = await _context.Hirers.FindAsync(id);
 
             if (hirer is null) {
                 return null;
             }
-            return _mapper.Map<HirerGetByIdResponseForHirer>(hirer);
+            return _mapper.Map<HirerGetByIdResponse>(hirer);
         }
 
         public async Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal)

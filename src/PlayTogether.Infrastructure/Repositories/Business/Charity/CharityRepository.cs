@@ -23,20 +23,39 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             List<Entities.Charity> charities = null;
 
             charities = await _context.Charities.ToListAsync();
+            var queryCharity = charities.AsQueryable();
+            
+            FilterActiveCharities(ref queryCharity);
+            SearchCharitiesByName(ref queryCharity, param.Name);
+            
+            charities = queryCharity.ToList();
+            var response = _mapper.Map<List<CharityResponse>>(charities);
+            return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
 
-            if (charities is not null) {
-                if (!String.IsNullOrEmpty(param.Name)) {
-                    var query = charities.AsQueryable();
-                    query = query.Where(x => x.OrganizationName.ToLower()
-                                                               .Contains(param.Name.ToLower()));
-                    charities = query.ToList();
-                }
-
-                var response = _mapper.Map<List<CharityResponse>>(charities);
-                return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        private void SearchCharitiesByName(ref IQueryable<Entities.Charity> queryCharity, string name)
+        {
+            if (!queryCharity.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
+                return;
             }
+            queryCharity = queryCharity.Where(x => x.OrganizationName.ToLower().Contains(name.ToLower()));
+        }
 
-            return null;
+        private void FilterActiveCharities(ref IQueryable<Entities.Charity> queryCharity)
+        {
+            if (!queryCharity.Any()) {
+                return;
+            }
+            queryCharity = queryCharity.Where(x => x.IsActive == true);
+        }
+
+        public async Task<CharityResponse> GetCharityByIdAsync(string id)
+        {
+            var charity = await _context.Charities.FindAsync(id);
+            if (charity is null) {
+                return null;
+            }
+            return _mapper.Map<CharityResponse>(charity);
         }
     }
 }

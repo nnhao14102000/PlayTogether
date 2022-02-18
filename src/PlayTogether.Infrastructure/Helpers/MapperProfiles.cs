@@ -45,7 +45,7 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<Hirer, HirerGetAllResponseForAdmin>();
             CreateMap<Hirer, HirerGetProfileResponse>();
-            CreateMap<Hirer, HirerGetByIdResponseForHirer>();
+            CreateMap<Hirer, HirerGetByIdResponse>();
             CreateMap<HirerInfoUpdateRequest, Hirer>();
 
             CreateMap<Charity, CharityResponse>();

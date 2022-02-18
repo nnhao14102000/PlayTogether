@@ -5,11 +5,11 @@
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
-        public Player PlayerMakeReport { get; set; }
-        public string PlayerMakeReportId { get; set; }
+        public Player Player { get; set; }
+        public string PlayerId { get; set; }
 
-        public Hirer HirerReceiveReport { get; set; }
-        public string HirerReceiveReportId { get; set; }
+        public Hirer Hirer { get; set; }
+        public string HirerId { get; set; }
 
         public string ReportMessage { get; set; }
         public bool IsApprove { get; set; }

@@ -69,7 +69,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer + "," + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<HirerGetByIdResponseForHirer>> GetHirerById(string id)
+        public async Task<ActionResult<HirerGetByIdResponse>> GetHirerById(string id)
         {
             var response = await _hirerService.GetHirerByIdForHirerAsync(id);
             return response is not null ? Ok(response) : NotFound();

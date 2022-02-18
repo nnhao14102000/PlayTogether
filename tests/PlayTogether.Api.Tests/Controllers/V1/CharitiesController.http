@@ -32,3 +32,9 @@ GET {{baseUrl}}/api/play-together/v1/charities
     &PageSize=10
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+# Get a charity by Id
+GET {{baseUrl}}/api/play-together/v1/charities/
+content-type: {{contentType}}
+Authorization: {{authToken}}

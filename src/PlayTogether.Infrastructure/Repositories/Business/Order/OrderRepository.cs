@@ -40,14 +40,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (hirer is null || hirer.IsActive is false) {
+            if (hirer is null
+                || hirer.IsActive is false
+                || hirer.Status is not HirerStatusConstants.Online) {
                 return null;
             }
 
             // Check player and status of player
             var player = await _context.Players.FindAsync(playerId);
             if (player is null
-                || player.Status is not PlayerStatusConstants.Ready
+                || player.Status is not PlayerStatusConstants.Online
                 || player.IsActive is false) {
                 return null;
             }
@@ -66,6 +68,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             _context.Orders.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 player.Status = PlayerStatusConstants.Processing; // change status of Player
+                hirer.Status = HirerStatusConstants.Processing;
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return null;
                 }
@@ -136,22 +139,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             if (loggedInUser is null) {
                 return false;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (hirer is null) {
+            if (hirer is null || hirer.Status is not HirerStatusConstants.Processing) {
                 return false;
             }
 
             var order = await _context.Orders.FindAsync(id);
-            if (order is null) {
-                return false;
-            }
-
-            if (order.Status is OrderStatusConstant.Cancel
-                || order.Status is OrderStatusConstant.Interrupt
-                || order.Status is OrderStatusConstant.Start
-                || order.Status is OrderStatusConstant.Finish ) {
+            if (order is null || order.Status is not OrderStatusConstant.Processing) {
                 return false;
             }
 
@@ -160,8 +156,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(order)
                .Reference(x => x.Player)
                .LoadAsync();
-               
-            order.Player.Status = PlayerStatusConstants.Ready; // Cancel Order => Change status of Player to Ready
+
+            await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
+
+            order.Player.Status = PlayerStatusConstants.Online;
+            order.Hirer.Status = HirerStatusConstants.Online;
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return true;
@@ -178,26 +179,28 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (player is null) {
+            if (player is null || player.IsActive is false || player.Status is not PlayerStatusConstants.Processing) {
                 return false;
             }
 
             var order = await _context.Orders.FindAsync(id);
-            if (order is null) {
+            if (order is null || order.Status is not OrderStatusConstant.Processing) {
                 return false;
             }
 
-            if (order.Status is OrderStatusConstant.Cancel || order.Status is OrderStatusConstant.Interrupt) {
-                return false;
-            }
+            await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
 
             if (request.IsAccept == false) {
-                player.Status = PlayerStatusConstants.Ready; // Reject Order => Change status of Player to Ready
+                player.Status = PlayerStatusConstants.Online;
+                order.Hirer.Status = HirerStatusConstants.Online;
                 order.Status = OrderStatusConstant.Cancel;
             }
             else {
                 await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-                player.Status = PlayerStatusConstants.Hired; // If Accept => Change status of Player to Hired
+                player.Status = PlayerStatusConstants.Hiring;
+                order.Hirer.Status = HirerStatusConstants.Hiring;
                 order.TimeStart = DateTime.Now; // Time start
                 // Change balance
                 player.Balance = player.Balance + order.TotalPrices;
@@ -219,16 +222,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (order.Status is OrderStatusConstant.Cancel
-                || order.Status is OrderStatusConstant.Interrupt
-                || order.Status is OrderStatusConstant.Processing
-                || order.Status is OrderStatusConstant.Finish) {
+            if (order.Status is not OrderStatusConstant.Start) {
                 return false;
             }
 
             await _context.Entry(order).Reference(x => x.Player).LoadAsync();
             order.Status = OrderStatusConstant.Finish;
-            order.Player.Status = PlayerStatusConstants.Ready;
+            order.Player.Status = PlayerStatusConstants.Online;
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return true;

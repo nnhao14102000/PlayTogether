@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 
 ###
 # Get Player by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
+GET {{baseUrl}}/api/play-together/v1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -52,13 +52,13 @@ Authorization: {{authToken}}
 
 ###
 # Get Player service info by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/service-info/35817416-edbc-4124-9b08-4c7e9cfb5295
+GET {{baseUrl}}/api/play-together/v1/players/service-info/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ### Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/35817416-edbc-4124-9b08-4c7e9cfb5295
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -71,7 +71,7 @@ Authorization: {{authToken}}
 
 ###
 # Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/games
+GET {{baseUrl}}/api/play-together/v1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -135,19 +135,19 @@ Authorization: {{authToken}}
 
 ###
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+GET {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Get Hirer by Id
-GET {{baseUrl}}/api/play-together/v1/hirers/d971f853-b95b-4e62-911c-106d2e5cb14c
+GET {{baseUrl}}/api/play-together/v1/hirers/810deb2c-7740-4691-ad7f-4372a79a1a8c
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b/process
+PUT {{baseUrl}}/api/play-together/v1/players/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a/process
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -156,7 +156,22 @@ Authorization: {{authToken}}
 }
 
 ###
+# Get all charities with paging, search
+GET {{baseUrl}}/api/play-together/v1/charities
+    ?Name=
+    &PageNumber=1
+    &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get a charity by Id
+GET {{baseUrl}}/api/play-together/v1/charities/f7301ce1-25dc-49af-8aaf-25d89a99ca1b
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
 # Finish order
-PUT {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+PUT {{baseUrl}}/api/play-together/v1/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a
 Content-Type: {{contentType}}
 Authorization: {{authToken}}

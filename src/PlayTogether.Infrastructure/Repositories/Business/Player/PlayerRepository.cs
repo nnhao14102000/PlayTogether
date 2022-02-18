@@ -39,7 +39,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
 
             var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (hirer is null) {
+            if (hirer is null || hirer.IsActive is false) {
                 return null;
             }
 
@@ -93,7 +93,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             foreach (var item in orders) {
                 players.Add(item.Player);
             }
-            queryPlayer = players.AsQueryable();
+            queryPlayer = players.AsQueryable().Distinct();
         }
 
         private void FilterPlayerStatus(ref IQueryable<Entities.Player> queryPlayer, string playerStatus)
@@ -281,12 +281,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
         public async Task<bool> UpdatePlayerServiceInfoAsync(string id, PlayerServiceInfoUpdateRequest request)
         {
             var player = await _context.Players.FindAsync(id);
-            if (player is null) {
+            if (player is null || player.Status is PlayerStatusConstants.NotAcceptPolicy) {
                 return false;
             }
 
             if (request.Status) {
-                player.Status = PlayerStatusConstants.Ready;
+                player.Status = PlayerStatusConstants.Online;
             }
             else {
                 player.Status = PlayerStatusConstants.Offline;
@@ -298,6 +298,30 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             return (await _context.SaveChangesAsync() >= 0);
         }
 
+        public async Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            
+            if (player is null || player.Status is not PlayerStatusConstants.NotAcceptPolicy || player.IsActive is false) {
+                return false;
+            }
+
+            if (request.Accept is false) {
+                return true;
+            }
+
+            player.Status = PlayerStatusConstants.Offline;
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                return true;
+            }
+            return false;
+        }
 
     }
 }

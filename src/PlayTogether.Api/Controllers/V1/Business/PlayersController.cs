@@ -284,5 +284,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _orderService.ProcessOrderRequestByPlayerAsync(orderId, HttpContext.User, request);
             return response ? NoContent() : NotFound();
         }
+
+        /// <summary>
+        /// Player Accept App Policy
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("accept-policy")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> AcceptPolicy(PlayerAcceptPolicyRequest request){
+            var response = await _playerService.AcceptPolicyAsync(HttpContext.User, request);
+            return response ? NoContent() : BadRequest();
+        }
     }
 }

@@ -27,10 +27,10 @@
 >   ***Description***: Register a Normal Hirer Account  
 >
 > - ``POST /api/play-together/v1/accounts/register-multi-player ``  
->   ***Description***: Register multi Normal Player Account  
+>   ***Description***: Register multi Normal Player Account **for TEST**  
 >
 > - ``POST /api/play-together/v1/accounts/register-multi-hirer ``  
->   ***Description***: Register multi Normal Hirer Account  
+>   ***Description***: Register multi Normal Hirer Account **for TEST**  
 >
 >
 
@@ -46,6 +46,11 @@
 >   ***Description***: Get all Charities   
 >   ***Role Access***: Admin, Player  
 >   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/charities/{id} ``  
+>   ***Description***: Get a Charity by Id   
+>   ***Role Access***: Admin, Player   
+>
 >
 
 ## GameType
@@ -202,6 +207,11 @@
 > - ``PUT /api/play-together/v1/players/orders/{orderId}/process ``  
 >   ***Description***: Process the incoming order (Accept or reject)   
 >   ***Use for***: Accept or reject a order request    
+>   ***Role Access***: Player  
+>
+> - ``PUT ​/api​/play-together​/v1​/players​/accept-policy ``  
+>   ***Description***: Player Accept the Policy   
+>   ***Use for***: Player confirm that his/her accept or not the policy    
 >   ***Role Access***: Player  
 >
 

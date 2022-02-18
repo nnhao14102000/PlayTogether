@@ -59,11 +59,10 @@ GET {{baseUrl}}/api/play-together/v1.1/players
     &IsRecent=
     &GameId=
     &MusicId=
-    &PlayerStatus=
+    &PlayerStatus=Online
     &IsOrderByFirstName=
     &IsOrderByRating=
     &IsOrderByPricing=
-    &IsRecent=true
     &PageNumber=1
     &PageSize=10
 content-type: {{contentType}}
@@ -72,7 +71,7 @@ Authorization: {{authToken}}
 
 ### 
 # Get Player by Id for hirer
-GET {{baseUrl}}/api/play-together/v1.1/players/35817416-edbc-4124-9b08-4c7e9cfb5295
+GET {{baseUrl}}/api/play-together/v1.1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -84,7 +83,7 @@ Authorization: {{authToken}}
 
 ###
 # Create Order to player
-POST {{baseUrl}}/api/play-together/v1/hirers/orders/35817416-edbc-4124-9b08-4c7e9cfb5295
+POST {{baseUrl}}/api/play-together/v1/hirers/orders/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -95,18 +94,18 @@ Authorization: {{authToken}}
 
 ###
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+GET {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Cancel order request
-PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/0e7f91da-b21b-4342-8a27-b06c784dd814
+PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Finish order
-PUT {{baseUrl}}/api/play-together/v1/orders/5b674f8f-0c47-4913-8f0f-e5f63f76d14b
+PUT {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
 Content-Type: {{contentType}}
 Authorization: {{authToken}}

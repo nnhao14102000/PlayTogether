@@ -27,11 +27,30 @@ namespace PlayTogether.Core.Services.Business.Player
                 ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                
+                return await _playerRepository.AcceptPolicyAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call AcceptPolicyAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
             ClaimsPrincipal principal,
             PlayerParameters param)
         {
             try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+
                 return await _playerRepository.GetAllPlayersForHirerAsync(principal, param);
             }
             catch (Exception ex) {

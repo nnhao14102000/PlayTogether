@@ -5,14 +5,15 @@
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
-        public Player PlayerReceiveFeedback { get; set; }
-        public string PlayerReceiveFeedbackId { get; set; }
+        public Player Player { get; set; }
+        public string PlayerId { get; set; }
 
-        public Hirer HirerMakeFeedback { get; set; }
-        public string HirerMakeFeedbackId { get; set; }
+        public Hirer Hirer { get; set; }
+        public string HirerId { get; set; }
 
         public string Comment { get; set; }
         public float Rate { get; set; }
         public bool IsViolate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

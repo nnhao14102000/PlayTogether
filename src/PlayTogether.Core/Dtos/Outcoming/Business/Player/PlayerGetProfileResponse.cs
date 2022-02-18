@@ -21,5 +21,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
         public float Balance { get; set; }
 
         public bool IsActive {get; set; }
+        
+        public string Status { get; set; }
     }
 }

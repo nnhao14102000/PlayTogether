@@ -14,7 +14,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "nnhao@example.com",
+  "email": "admin01@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -64,10 +64,10 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "email": "user@example.com",
-  "password": "string",
+  "email": "tienphong123@example.com",
+  "password": "Pa55w0rd!",
   "confirmPassword": "Pa55w0rd!",
-  "organizationName": "string"
+  "organizationName": "Hoi Cuu tro Tien Phong"
 }
 
 ###

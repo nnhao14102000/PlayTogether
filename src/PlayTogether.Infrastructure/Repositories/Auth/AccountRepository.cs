@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
 using PlayTogether.Core.Interfaces.Repositories.Auth;
 using PlayTogether.Infrastructure.Data;
@@ -350,6 +351,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.City = registerDto.City;
                 userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                 userEntityModel.Gender = registerDto.Gender;
+                userEntityModel.Status = PlayerStatusConstants.NotAcceptPolicy;
 
                 await _context.Players.AddAsync(userEntityModel);
 
@@ -394,6 +396,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.City = registerDto.City;
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
+                    userEntityModel.Status = PlayerStatusConstants.Online;
 
                     await _context.Players.AddAsync(userEntityModel);
 

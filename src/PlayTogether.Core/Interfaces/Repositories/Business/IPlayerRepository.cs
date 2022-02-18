@@ -18,6 +18,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         
         Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id);
         Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request);
+        Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request);
 
         // Main page of Hirer
         Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(ClaimsPrincipal principal, PlayerParameters param);

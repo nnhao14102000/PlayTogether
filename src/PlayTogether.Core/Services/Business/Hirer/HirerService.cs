@@ -26,7 +26,7 @@ namespace PlayTogether.Core.Services.Business.Hirer
                 ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id)
+        public async Task<HirerGetByIdResponse> GetHirerByIdForHirerAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

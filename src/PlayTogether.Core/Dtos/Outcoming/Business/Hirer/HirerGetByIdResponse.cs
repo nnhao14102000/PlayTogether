@@ -2,10 +2,10 @@ using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
 {
-    public class HirerGetByIdResponseForHirer
+    public class HirerGetByIdResponse
     {
         public string Id { get; set; }
-        
+
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -19,6 +19,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
         public float Balance { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string Status { get; set; }
 
         public string Avatar { get; set; }
     }

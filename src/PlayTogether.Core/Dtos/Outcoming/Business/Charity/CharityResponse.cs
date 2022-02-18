@@ -4,6 +4,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Charity
 {
     public class CharityResponse
     {
+        public string Id { get; set; }
+        
         public string OrganizationName { get; set; }
 
         public string Avatar { get; set; }
@@ -13,7 +15,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Charity
         public string Address { get; set; }
 
         public string Email { get; set; }
-        
+
         public string Phone { get; set; }
 
         public float Balance { get; set; }

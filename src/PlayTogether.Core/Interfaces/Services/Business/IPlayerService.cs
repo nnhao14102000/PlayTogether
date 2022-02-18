@@ -16,6 +16,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<PlayerGetByIdResponseForHirer> GetPlayerByIdForHirerAsync(string id);
         Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request);
         Task<bool> UpdatePlayerServiceInfoAsync(string id, PlayerServiceInfoUpdateRequest request);
+        Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request);
 
         Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id);
         Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request);

@@ -12,7 +12,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PagedResult<HirerGetAllResponseForAdmin>> GetAllHirersForAdminAsync(HirerParameters param);
         
         Task<HirerGetProfileResponse> GetHirerProfileByIdentityIdAsync(ClaimsPrincipal principal);
-        Task<HirerGetByIdResponseForHirer> GetHirerByIdForHirerAsync(string id);
+        Task<HirerGetByIdResponse> GetHirerByIdForHirerAsync(string id);
         Task<bool> UpdateHirerInformationAsync(string id, HirerInfoUpdateRequest request);
     }
 }

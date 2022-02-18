@@ -36,7 +36,7 @@ namespace PlayTogether.Infrastructure.Entities
         public bool IsActive { get; set; } = true;
 
         [MaxLength(50)]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Online";
 
         public IList<Order> Orders { get; set; }
         public ICollection<Rating> Ratings { get; set; }

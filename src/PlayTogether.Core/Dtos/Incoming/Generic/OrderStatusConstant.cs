@@ -1,4 +1,4 @@
-namespace PlayTogether.Core.Dtos.Incoming.Business.Order
+namespace PlayTogether.Core.Dtos.Incoming.Generic
 {
     public class OrderStatusConstant
     {

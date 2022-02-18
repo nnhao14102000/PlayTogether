@@ -17,10 +17,8 @@ namespace PlayTogether.Core.Services.Business.Charity
 
         public CharityService(ICharityRepository charityRepository, ILogger<CharityService> logger)
         {
-            _charityRepository = charityRepository 
-                ?? throw new ArgumentNullException(nameof(charityRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _charityRepository = charityRepository;
+            _logger = logger;
         }
 
         public async Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param)
@@ -30,6 +28,20 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllCharitiesAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<CharityResponse> GetCharityByIdAsync(string id)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                return await _charityRepository.GetCharityByIdAsync(id);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetCharityByIdAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
