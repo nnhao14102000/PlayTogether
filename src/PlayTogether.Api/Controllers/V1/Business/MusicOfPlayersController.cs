@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outcoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 namespace PlayTogether.Api.Controllers.V1.Business
 {
     [ApiVersion("1.0")]
+    [Route("api/" + ApiConstants.ServiceName + "/v{api-version:apiVersion}/musics-of-player")]
     public class MusicOfPlayersController : BaseController
     {
         private readonly IMusicOfPlayerService _musicOfPlayerService;

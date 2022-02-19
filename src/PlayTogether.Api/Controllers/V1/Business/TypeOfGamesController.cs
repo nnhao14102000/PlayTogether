@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace PlayTogether.Api.Controllers.V1.Business
 {
     [ApiVersion("1.0")]
+    [Route("api/" + ApiConstants.ServiceName + "/v{api-version:apiVersion}/types-of-game")]
     public class TypeOfGamesController : BaseController
     {
         private readonly ITypeOfGameService _typeOfGameService;

@@ -20,7 +20,7 @@ content-type: {{contentType}}
 
 ###
 # Create type of game
-POST {{baseUrl}}/api/play-together/v1/typeofgames
+POST {{baseUrl}}/api/play-together/v1/types-of-game
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -31,12 +31,12 @@ Authorization: {{authToken}}
 
 ###
 # Get type of game by Id
-GET {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
+GET {{baseUrl}}/api/play-together/v1/types-of-game/5e2e0a11-ff2f-4598-a105-24681627841b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Delete type of game by Id
-DELETE {{baseUrl}}/api/play-together/v1/typeofgames/5e2e0a11-ff2f-4598-a105-24681627841b
+DELETE {{baseUrl}}/api/play-together/v1/types-of-game/5e2e0a11-ff2f-4598-a105-24681627841b
 content-type: {{contentType}}
 Authorization: {{authToken}}

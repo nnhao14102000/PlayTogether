@@ -21,14 +21,14 @@ content-type: {{contentType}}
 
 ###
 # Get Game of Player by Id
-GET {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+GET {{baseUrl}}/api/play-together/v1/games-of-player/810dde93-9108-4ce6-819c-5fe61b694b2f
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
 # Update Game of Player by Id
-PUT {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+PUT {{baseUrl}}/api/play-together/v1/games-of-player/810dde93-9108-4ce6-819c-5fe61b694b2f
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -38,7 +38,7 @@ Authorization: {{authToken}}
 
 ###
 # Delete Game of Player by Id
-DELETE {{baseUrl}}/api/play-together/v1/gameofplayers/810dde93-9108-4ce6-819c-5fe61b694b2f
+DELETE {{baseUrl}}/api/play-together/v1/games-of-player/810dde93-9108-4ce6-819c-5fe61b694b2f
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -21,14 +21,14 @@ content-type: {{contentType}}
 
 ###
 # Get all game type
-GET {{baseUrl}}/api/play-together/v1/gametypes
+GET {{baseUrl}}/api/play-together/v1/game-types
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
 # Get all game type with search
-GET {{baseUrl}}/api/play-together/v1/gametypes
+GET {{baseUrl}}/api/play-together/v1/game-types
   ?name=mo
 content-type: {{contentType}}
 Authorization: {{authToken}}
@@ -36,7 +36,7 @@ Authorization: {{authToken}}
 
 ###
 # Create a new game type
-POST {{baseUrl}}/api/play-together/v1/gametypes
+POST {{baseUrl}}/api/play-together/v1/game-types
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -46,13 +46,13 @@ Authorization: {{authToken}}
 
 ###
 # Get by Id
-GET {{baseUrl}}/api/play-together/v1/gametypes/1c880885-0409-4466-91f7-9ef908639548
+GET {{baseUrl}}/api/play-together/v1/game-types/1c880885-0409-4466-91f7-9ef908639548
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Update game type
-PUT {{baseUrl}}/api/play-together/v1/gametypes/44e7bb53-0158-4e94-bb31-cdf617698b4a
+PUT {{baseUrl}}/api/play-together/v1/game-types/44e7bb53-0158-4e94-bb31-cdf617698b4a
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -62,6 +62,6 @@ Authorization: {{authToken}}
 
 ###
 # Delete
-DELETE {{baseUrl}}/api/play-together/v1/gametypes/01f5a4e8-cd3f-4a2e-ba85-7f082f3a744e
+DELETE {{baseUrl}}/api/play-together/v1/game-types/01f5a4e8-cd3f-4a2e-ba85-7f082f3a744e
 content-type: {{contentType}}
 Authorization: {{authToken}}

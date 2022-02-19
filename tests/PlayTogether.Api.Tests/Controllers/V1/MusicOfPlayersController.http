@@ -23,13 +23,13 @@ Content-type: {{contentType}}
 
 ###
 # Get Music of Player by Id
-GET {{baseUrl}}/api/play-together/v1/musicofplayers/3b50cab1-f7a8-43dc-9e35-d9ab3aa24a04
+GET {{baseUrl}}/api/play-together/v1/musics-of-player/3b50cab1-f7a8-43dc-9e35-d9ab3aa24a04
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
 # Delete Music of Player by Id
-DELETE {{baseUrl}}/api/play-together/v1/musicofplayers/b69070f4-c792-4c50-8fa6-866fd6f3a514
+DELETE {{baseUrl}}/api/play-together/v1/musics-of-player/b69070f4-c792-4c50-8fa6-866fd6f3a514
 Content-type: {{contentType}}
 Authorization: {{authToken}}

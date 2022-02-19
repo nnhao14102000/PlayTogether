@@ -54,28 +54,28 @@
 >
 
 ## GameType
-> - ``GET /api/play-together/v1/gametypes ``  
+> - ``GET /api/play-together/v1/game-types ``  
 >   ***Description***: Get all Game Types  
 >   ***Use for***: Admin get to view all game types  
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, Search by Name  
 >
-> - ``GET /api/play-together/v1/gametypes/{id} ``  
+> - ``GET /api/play-together/v1/game-types/{id} ``  
 >   ***Description***: Get a Game Type By Id  
 >   ***Use for***: Admin view a game type in detail  
 >   ***Role Access***: Admin  
 >
-> - ``POST /api/play-together/v1/gametypes ``  
+> - ``POST /api/play-together/v1/game-types ``  
 >   ***Description***: Add New a Game Type  
 >   ***Use for***: Admin add new game type   
 >   ***Role Access***: Admin  
 >
-> - ``PUT /api/play-together/v1/gametypes/{id} ``  
+> - ``PUT /api/play-together/v1/game-types/{id} ``  
 >   ***Description***: Update a Game Type  
 >   ***Use for***: Admin update game type    
 >   ***Role Access***: Admin  
 > 
-> - ``DELETE /api/play-together/v1/gametypes/{id} ``  
+> - ``DELETE /api/play-together/v1/game-types/{id} ``  
 >   ***Description***: Delete a Game Type       
 >   ***Use for***: Admin delete a game type  
 >   ***Role Access***: Admin  
@@ -216,29 +216,29 @@
 >
 
 ## GameOfPlayer
-> - ``GET /api/play-together/v1/gameofplayers/{id} ``  
+> - ``GET /api/play-together/v1/games-of-player/{id} ``  
 >   ***Description***: Get Game of Player by Id  
 >   ***Use for***: Get Game of Player  
 >   ***Role Access***: Player  
 >
-> - ``PUT /api/play-together/v1/gameofplayers/{id} ``  
+> - ``PUT /api/play-together/v1/games-of-player/{id} ``  
 >   ***Description***: Update Game of Player  
 >   ***Use for***: Update Game of Player   
 >   ***Role Access***: Player  
 > 
-> - ``DELETE /api/play-together/v1/gameofplayers/{id} ``  
+> - ``DELETE /api/play-together/v1/games-of-player/{id} ``  
 >   ***Description***: Delete Game of Player    
 >   ***Use for***: Delete Game of Player  
 >   ***Role Access***: Player  
 >
 
 ## MusicOfPlayer
-> - ``GET /api/play-together/v1/musicofplayers/{id} ``  
+> - ``GET /api/play-together/v1/musics-of-player/{id} ``  
 >   ***Description***: Get Music of Player by Id  
 >   ***Use for***: Get Music of Player  
 >   ***Role Access***: Player  
 > 
-> - ``DELETE /api/play-together/v1/musicofplayers/{id} ``  
+> - ``DELETE /api/play-together/v1/musics-of-player/{id} ``  
 >   ***Description***: Delete Music of Player    
 >   ***Use for***: Delete Music of Player  
 >   ***Role Access***: Player  
@@ -262,17 +262,17 @@
 >
 
 ## TypeOfGame
-> - ``GET /api/play-together/v1/typeofgames/{id} ``  
+> - ``GET /api/play-together/v1/types-of-game/{id} ``  
 >   ***Description***: Get Type of Game  
 >   ***Use for***: Support to view types of game  
 >   ***Role Access***: Admin  
 >
-> - ``POST /api/play-together/v1/typeofgames ``  
+> - ``POST /api/play-together/v1/types-of-game ``  
 >   ***Description***: Add type of game  
 >   ***Use for***: Support to add type of game   
 >   ***Role Access***: Admin  
 > 
-> - ``DELETE /api/play-together/v1/typeofgames/{id} ``  
+> - ``DELETE /api/play-together/v1/types-of-game/{id} ``  
 >   ***Description***: Delete type of game    
 >   ***Use for***: Delete type of game  
 >   ***Role Access***: Admin  
