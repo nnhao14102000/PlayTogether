@@ -18,10 +18,8 @@ namespace PlayTogether.Core.Services.Business.Rank
             IRankRepository rankRepository,
             ILogger<RankService> logger)
         {
-            _rankRepository = rankRepository
-                ?? throw new ArgumentNullException(nameof(rankRepository));
-            _logger = logger
-                ?? throw new ArgumentNullException(nameof(logger));
+            _rankRepository = rankRepository;
+            _logger = logger;
         }
 
         public async Task<RankCreateResponse> CreateRankAsync(string gameId, RankCreateRequest request)

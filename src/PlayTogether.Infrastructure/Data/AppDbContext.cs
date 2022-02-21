@@ -30,5 +30,6 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<TypeOfGame> TypeOfGames { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

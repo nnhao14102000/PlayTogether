@@ -17,10 +17,8 @@ namespace PlayTogether.Core.Services.Business.TypeOfGame
             ITypeOfGameRepository typeOfGameRepository, 
             ILogger<TypeOfGameService> logger)
         {
-            _typeOfGameRepository = typeOfGameRepository 
-                ?? throw new ArgumentNullException(nameof(typeOfGameRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _typeOfGameRepository = typeOfGameRepository;
+            _logger = logger;
         }
 
         public async Task<TypeOfGameGetByIdResponse> CreateTypeOfGameAsync(

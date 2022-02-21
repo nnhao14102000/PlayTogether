@@ -397,6 +397,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = PlayerStatusConstants.Online;
+                    userEntityModel.Balance = 1000000;
 
                     await _context.Players.AddAsync(userEntityModel);
 
@@ -482,6 +483,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.City = registerDto.City;
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
+                    userEntityModel.Balance = 1000000;
 
                     await _context.Hirers.AddAsync(userEntityModel);
 

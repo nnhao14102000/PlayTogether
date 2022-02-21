@@ -19,10 +19,8 @@ namespace PlayTogether.Core.Services.Business.Game
             IGameRepository gameRepository, 
             ILogger<GameService> logger)
         {
-            _gameRepository = gameRepository 
-                ?? throw new ArgumentNullException(nameof(gameRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _gameRepository = gameRepository;
+            _logger = logger;
         }
 
         public async Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request)

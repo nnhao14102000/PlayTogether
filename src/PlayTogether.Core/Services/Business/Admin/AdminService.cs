@@ -16,10 +16,8 @@ namespace PlayTogether.Core.Services.Business.Admin
 
         public AdminService(IAdminRepository adminRepository, ILogger<AdminService> logger)
         {
-            _adminRepository = adminRepository 
-                ?? throw new ArgumentNullException(nameof(adminRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _adminRepository = adminRepository;
+            _logger = logger;
         }
 
         public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)

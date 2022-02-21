@@ -87,9 +87,14 @@
 >   ***Use for***: Get order by Id  
 >   ***Role Access***: Hirer, Player  
 >
-> - ``PUT /api/play-together/v1/orders/{id} ``  
+> - ``PUT /api/play-together/v1/orders/finish/{id} ``  
 >   ***Description***: Finish the order  
->   ***Use for***: Finish the order   
+>   ***Use for***: Finish the order when end of time, auto call this api from Player App   
+>   ***Role Access***: Player   
+>
+> - ``PUT /api/play-together/v1/orders/finish-soon/{id} ``  
+>   ***Description***: Finish soon order  
+>   ***Use for***: Hirer or Player make finish soon order request   
 >   ***Role Access***: Hirer, Player   
 >
 

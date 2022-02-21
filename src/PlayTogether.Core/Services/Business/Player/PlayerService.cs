@@ -21,10 +21,8 @@ namespace PlayTogether.Core.Services.Business.Player
             IPlayerRepository PlayerRepository, 
             ILogger<PlayerService> logger)
         {
-            _playerRepository = PlayerRepository 
-                ?? throw new ArgumentNullException(nameof(PlayerRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _playerRepository = PlayerRepository;
+            _logger = logger;
         }
 
         public async Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request)

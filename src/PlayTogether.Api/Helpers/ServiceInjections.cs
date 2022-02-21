@@ -65,9 +65,7 @@ namespace PlayTogether.Api.Helpers
             // Play together Db config
             services.AddDbContext<AppDbContext>
             (
-                optionsAction: options => options.UseSqlServer(playTogetherDbConnectionString),
-                contextLifetime: ServiceLifetime.Transient,
-                optionsLifetime: ServiceLifetime.Transient
+                optionsAction: options => options.UseSqlServer(playTogetherDbConnectionString)
             );
 
             // Config for automapper

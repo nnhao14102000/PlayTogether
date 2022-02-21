@@ -86,10 +86,10 @@ content-type: {{contentType}}
   "gender": true,
   "confirmEmail": false
 }
-
-
-
 ###
+
+
+
 # Register multi player
 POST {{baseUrl}}/api/play-together/v1/accounts/register-multi-player
 content-type: {{contentType}}
@@ -151,8 +151,10 @@ content-type: {{contentType}}
     "confirmEmail": true
   }
 ]
-
 ###
+
+
+
 # Register hirer
 POST {{baseUrl}}/api/play-together/v1/accounts/register-hirer
 content-type: {{contentType}}

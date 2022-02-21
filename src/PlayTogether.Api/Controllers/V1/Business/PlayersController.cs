@@ -116,7 +116,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<PagedResult<PlayerGetAllResponseForHirer>>> GetAllPlayers(
             [FromQuery] PlayerParameters param)
         {
-            var response = await _playerService.GetAllPlayersForHirerAsync(HttpContext.User ,param);
+            var response = await _playerService.GetAllPlayersForHirerAsync(HttpContext.User, param);
 
             var metaData = new {
                 response.TotalCount,
@@ -280,7 +280,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut("orders/{orderId}/process")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request){
+        public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request)
+        {
             var response = await _orderService.ProcessOrderRequestByPlayerAsync(orderId, HttpContext.User, request);
             return response ? NoContent() : NotFound();
         }
@@ -292,7 +293,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <returns></returns>
         [HttpPut("accept-policy")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> AcceptPolicy(PlayerAcceptPolicyRequest request){
+        public async Task<ActionResult> AcceptPolicy(PlayerAcceptPolicyRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
             var response = await _playerService.AcceptPolicyAsync(HttpContext.User, request);
             return response ? NoContent() : BadRequest();
         }

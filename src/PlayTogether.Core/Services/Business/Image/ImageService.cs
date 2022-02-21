@@ -17,10 +17,8 @@ namespace PlayTogether.Core.Services.Business.Image
             IImageRepository imageRepository, 
             ILogger<ImageService> logger)
         {
-            _imageRepository = imageRepository 
-                ?? throw new ArgumentNullException(nameof(imageRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _imageRepository = imageRepository;
+            _logger = logger;
         }
 
         public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)

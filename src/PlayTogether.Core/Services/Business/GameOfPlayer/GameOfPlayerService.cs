@@ -18,10 +18,8 @@ namespace PlayTogether.Core.Services.Business.GameOfPlayer
             IGameOfPlayerRepository gameOfPlayerRepository,
             ILogger<GameOfPlayerService> logger)
         {
-            _gameOfPlayerRepository = gameOfPlayerRepository
-                ?? throw new ArgumentNullException(nameof(gameOfPlayerRepository));
-            _logger = logger
-                ?? throw new ArgumentNullException(nameof(logger));
+            _gameOfPlayerRepository = gameOfPlayerRepository;
+            _logger = logger;
         }
 
         public async Task<GameOfPlayerGetByIdResponse> CreateGameOfPlayerAsync(string playerId, GameOfPlayerCreateRequest request)

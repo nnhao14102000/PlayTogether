@@ -19,10 +19,8 @@ namespace PlayTogether.Core.Services.Business.Music
             IMusicRepository musicRepository, 
             ILogger<MusicService> logger)
         {
-            _musicRepository = musicRepository 
-                ?? throw new ArgumentNullException(nameof(musicRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _musicRepository = musicRepository;
+            _logger = logger;
         }
         public async Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request)
         {

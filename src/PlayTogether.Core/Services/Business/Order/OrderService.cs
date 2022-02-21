@@ -76,6 +76,26 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
+        public async Task<bool> FinishOrderSoonAsync(string id, ClaimsPrincipal principal, FinishSoonRequest request)
+        {
+            try {
+                if (String.IsNullOrEmpty(id)) {
+                    throw new ArgumentNullException(nameof(id));
+                }
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _orderRepository.FinishOrderSoonAsync(id, principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call FinishOrderAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<OrderGetByIdResponse>> GetAllOrderRequestByHirerAsync(ClaimsPrincipal principal, HirerOrderParameter param)
         {
             try {

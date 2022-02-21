@@ -16,5 +16,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<bool> ProcessOrderRequestByPlayerAsync(string id, ClaimsPrincipal principal, OrderProcessByPlayerRequest request);
         Task<bool> CancelOrderRequestByHirerAsync(string id, ClaimsPrincipal principal);
         Task<bool> FinishOrderAsync(string id);
+        Task<bool> FinishOrderSoonAsync(string id, ClaimsPrincipal principal, FinishSoonRequest request);
     }
 }

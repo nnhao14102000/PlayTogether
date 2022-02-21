@@ -20,10 +20,8 @@ namespace PlayTogether.Core.Services.Business.Hirer
             IHirerRepository HirerRepository, 
             ILogger<HirerService> logger)
         {
-            _hirerRepository = HirerRepository 
-                ?? throw new ArgumentNullException(nameof(HirerRepository));
-            _logger = logger 
-                ?? throw new ArgumentNullException(nameof(logger));
+            _hirerRepository = HirerRepository;
+            _logger = logger;
         }
 
         public async Task<HirerGetByIdResponse> GetHirerByIdForHirerAsync(string id)

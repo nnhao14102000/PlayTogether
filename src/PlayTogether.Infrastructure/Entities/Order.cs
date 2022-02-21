@@ -28,7 +28,9 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(100)]
         public string Message { get; set; }
         public string Status { get; set; }
-        public bool IsDonate => Donate != null;
+
+        public DateTime ProcessExpired {get; set; }
+        public DateTime TimeFinish {get; set; }
         
         public Donate Donate { get; set; }
     }
