@@ -59,6 +59,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer
 
             var model = _mapper.Map<Entities.GameOfPlayer>(request);
             model.PlayerId = playerId;
+            if (String.IsNullOrEmpty(request.Rank) || String.IsNullOrWhiteSpace(request.Rank)) {
+                model.Rank = "None Rank";
+            }
             await _context.GameOfPlayers.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return _mapper.Map<GameOfPlayerGetByIdResponse>(model);

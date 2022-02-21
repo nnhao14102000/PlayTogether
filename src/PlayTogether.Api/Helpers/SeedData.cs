@@ -238,7 +238,7 @@ namespace PlayTogether.Api.Helpers
                     );
 
                 }
-
+                dbContext.SaveChanges();
                 if (!dbContext.GameTypes.Any()) {
                     dbContext.GameTypes.AddRange(
                         new Infrastructure.Entities.GameType {
@@ -666,7 +666,7 @@ namespace PlayTogether.Api.Helpers
                         }
                     );
                 }
-
+                dbContext.SaveChanges();
                 if (!dbContext.Musics.Any()) {
                     dbContext.Musics.AddRange(
                         new Infrastructure.Entities.Music {
@@ -852,151 +852,151 @@ namespace PlayTogether.Api.Helpers
 
                     );
                 }
-
-                if(!dbContext.Ranks.Any()){
+                dbContext.SaveChanges();
+                if (!dbContext.Ranks.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
                     dbContext.AddRange(
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 1, 
+                            NO = 1,
                             Name = "Đồng",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 2, 
+                            NO = 2,
                             Name = "Bạc",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 3, 
+                            NO = 3,
                             Name = "Vàng",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 4, 
+                            NO = 4,
                             Name = "Bạch Kim",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 5, 
+                            NO = 5,
                             Name = "Kim Cương",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 6, 
+                            NO = 6,
                             Name = "Tinh Anh",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 7, 
+                            NO = 7,
                             Name = "Cao Thủ",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 8, 
+                            NO = 8,
                             Name = "Chiến Tướng",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 9, 
+                            NO = 9,
                             Name = "Thách Đấu",
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 1, 
+                            NO = 1,
                             Name = "Sắt",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 2, 
+                            NO = 2,
                             Name = "Đồng",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 3, 
+                            NO = 3,
                             Name = "Bạc",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 4, 
+                            NO = 4,
                             Name = "Vàng",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 5, 
+                            NO = 5,
                             Name = "Bạch Kim",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 6, 
+                            NO = 6,
                             Name = "Kim Cương",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 7, 
+                            NO = 7,
                             Name = "Cao Thủ",
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.Rank{
+                        new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
-                            NO = 8, 
+                            NO = 8,
                             Name = "Thách Đấu",
                             GameId = lol.Id
                         }
                     );
                 }
-                
-                if(!dbContext.TypeOfGames.Any()){
+                dbContext.SaveChanges();
+                if (!dbContext.TypeOfGames.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
                     var among = dbContext.Games.FirstOrDefault(x => x.Name == "Among Us");
@@ -1005,30 +1005,29 @@ namespace PlayTogether.Api.Helpers
                     var moba = dbContext.GameTypes.FirstOrDefault(x => x.ShortName == "MOBA");
 
                     dbContext.TypeOfGames.AddRange(
-                        new Infrastructure.Entities.TypeOfGame{
+                        new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
                             GameTypeId = moba.Id,
                             GameId = lol.Id
                         },
-                        new Infrastructure.Entities.TypeOfGame{
+                        new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
                             GameTypeId = moba.Id,
                             GameId = aov.Id
                         },
-                        new Infrastructure.Entities.TypeOfGame{
+                        new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
                             GameTypeId = survival.Id,
                             GameId = among.Id
-                        }                        
+                        }
                     );
                 }
-
                 dbContext.SaveChanges();
             }
         }

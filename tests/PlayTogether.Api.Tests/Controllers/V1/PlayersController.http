@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "Tham@example.com",
+  "email": "player01@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -71,7 +71,7 @@ Authorization: {{authToken}}
 
 ###
 # Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b/games
+GET {{baseUrl}}/api/play-together/v1/players/66de6fcb-9d20-468a-b684-ceb5a8b1f1f8/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -79,13 +79,13 @@ Authorization: {{authToken}}
 
 ###
 # Add Game of Player
-POST {{baseUrl}}/api/play-together/v1/players/43a7bd79-6cfa-4d39-8b2c-b6e46c56ac0a/games
+POST {{baseUrl}}/api/play-together/v1/players/66de6fcb-9d20-468a-b684-ceb5a8b1f1f8/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "gameId": "f55b36ac-e108-4bd0-90c1-c462fa024963",
-  "rankId": ""
+  "gameId": "67494aec-87b5-4743-b936-221debf4a897",
+  "rank": ""
 }
 
 

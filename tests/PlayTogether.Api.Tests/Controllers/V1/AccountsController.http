@@ -172,6 +172,8 @@ content-type: {{contentType}}
 }
 
 ###
+
+
 # Register multi hirer
 POST {{baseUrl}}/api/play-together/v1/accounts/register-multi-hirer
 content-type: {{contentType}}

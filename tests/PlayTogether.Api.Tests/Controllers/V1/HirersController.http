@@ -59,7 +59,7 @@ GET {{baseUrl}}/api/play-together/v1.1/players
     &IsRecent=
     &GameId=
     &MusicId=
-    &PlayerStatus=Online
+    &PlayerStatus=
     &IsOrderByFirstName=
     &IsOrderByRating=
     &IsOrderByPricing=
