@@ -20,6 +20,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Music;
 using PlayTogether.Core.Dtos.Outcoming.Business.MusicOfPlayer;
+using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
@@ -105,6 +106,8 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<OrderCreateRequest, Order>();
             CreateMap<Order, OrderGetByIdResponse>();
+
+            CreateMap<Notification, NotificationGetResponse>();
 
             // src => target
         }

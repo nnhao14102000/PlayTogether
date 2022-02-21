@@ -20,9 +20,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
 
         public async Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param)
         {
-            List<Entities.Charity> charities = null;
-
-            charities = await _context.Charities.ToListAsync();
+            var charities = await _context.Charities.ToListAsync();
             var queryCharity = charities.AsQueryable();
             
             FilterActiveCharities(ref queryCharity);

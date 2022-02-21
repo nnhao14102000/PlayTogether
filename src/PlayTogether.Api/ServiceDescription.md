@@ -367,3 +367,21 @@
 >   ***Use for***: Delete music  
 >   ***Role Access***: Admin  
 >
+
+## Notification
+> - ``GET /api/play-together/v1/notification ``  
+>   ***Description***: Get all Notifications   
+>   ***Use for***: Get all notifications  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>   ***Extension***: Paging, Order by Created Date  
+>
+> - ``GET /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Get Notification By Id  
+>   ***Use for***: View Notification in detail  
+>   ***Role Access***: Admin, Player, Hirer, Charity   
+> 
+> - ``DELETE /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Delete Notification       
+>   ***Use for***: Delete notification  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>
