@@ -56,7 +56,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (admin is not null) {
                 FilterByReceiverId(ref query, admin.Id);
-                OrderByCreatedDate(ref query, param.OrderByCreatedDate);
+                OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
@@ -65,7 +65,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (player is not null) {
                 FilterByReceiverId(ref query, player.Id);
-                OrderByCreatedDate(ref query, param.OrderByCreatedDate);
+                OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
@@ -74,7 +74,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (hirer is not null) {
                 FilterByReceiverId(ref query, hirer.Id);
-                OrderByCreatedDate(ref query, param.OrderByCreatedDate);
+                OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
@@ -83,7 +83,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (charity is not null) {
                 FilterByReceiverId(ref query, charity.Id);
-                OrderByCreatedDate(ref query, param.OrderByCreatedDate);
+                OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetResponse>>(notifications);

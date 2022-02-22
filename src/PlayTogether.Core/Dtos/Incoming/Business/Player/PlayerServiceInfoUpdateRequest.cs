@@ -9,7 +9,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Player
         public bool Status { get; set; } // true ~ ready, false ~ offline
 
         [Required]
-        [Range(1, 3)]
+        [Range(1, 5)]
         public int MaxHourHire { get; set; }
 
         [Required]

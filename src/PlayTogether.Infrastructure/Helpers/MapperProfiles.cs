@@ -10,6 +10,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
+using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
@@ -24,6 +25,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
 
@@ -108,6 +110,10 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Order, OrderGetByIdResponse>();
 
             CreateMap<Notification, NotificationGetResponse>();
+            
+            CreateMap<RatingCreateRequest, Rating>();
+            CreateMap<Rating, RatingGetResponse>();
+            CreateMap<Hirer, HirerRateResponse>();
 
             // src => target
         }

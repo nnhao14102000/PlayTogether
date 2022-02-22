@@ -371,7 +371,7 @@
 ## Notification
 > - ``GET /api/play-together/v1/notification ``  
 >   ***Description***: Get all Notifications   
->   ***Use for***: Get all notifications  
+>   ***Use for***: View all notifications  
 >   ***Role Access***: Admin, Player, Hirer, Charity  
 >   ***Extension***: Paging, Order by Created Date  
 >
@@ -384,4 +384,17 @@
 >   ***Description***: Delete Notification       
 >   ***Use for***: Delete notification  
 >   ***Role Access***: Admin, Player, Hirer, Charity  
+>
+
+## Rating
+> - ``GET /api/play-together/v1/rating/{playerId} ``  
+>   ***Description***: Get all Ratings of a Player   
+>   ***Use for***: View all ratings of one specific Player   
+>   ***Role Access***: Player, Hirer  
+>   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
+>
+> - ``POST /api/play-together/v1/rating/{orderId} ``  
+>   ***Description***: Create a Rating for Player base in current Order  
+>   ***Use for***: Make rate, feedback about player after order his/her  
+>   ***Role Access***: Hirer    
 >
