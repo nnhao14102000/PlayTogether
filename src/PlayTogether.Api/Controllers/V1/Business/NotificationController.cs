@@ -30,7 +30,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                         + AuthConstant.RoleCharity + "," 
                         + AuthConstant.RoleHirer + "," 
                         + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PagedResult<NotificationGetResponse>>> GetAllNotifications(
+        public async Task<ActionResult<PagedResult<NotificationGetAllResponse>>> GetAllNotifications(
             [FromQuery] NotificationParameters param)
         {
             var response = await _notificationService.GetAllNotificationsAsync(HttpContext.User, param);
@@ -57,7 +57,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                         + AuthConstant.RoleCharity + "," 
                         + AuthConstant.RoleHirer + "," 
                         + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<NotificationGetResponse>> GetNotificationById(string id){
+        public async Task<ActionResult<NotificationGetDetailResponse>> GetNotificationById(string id){
             var response = await _notificationService.GetNotificationByIdAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }

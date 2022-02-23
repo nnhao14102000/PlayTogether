@@ -374,7 +374,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         UpdateDate = null,
                         ReceiverId = order.PlayerId,
                         Title = $"{order.Hirer.Firstname} đã yêu cầu kết thúc sớm",
-                        Message = (!String.IsNullOrEmpty(request.Message) || !String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
                         Status = NotificationStatusConstants.NotRead
                     }
                 );
@@ -386,7 +386,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         UpdateDate = null,
                         ReceiverId = order.HirerId,
                         Title = $"{order.Player.Firstname} đã yêu cầu kết thúc sớm",
-                        Message = (!String.IsNullOrEmpty(request.Message) || !String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
                         Status = NotificationStatusConstants.NotRead
                     }
                 );

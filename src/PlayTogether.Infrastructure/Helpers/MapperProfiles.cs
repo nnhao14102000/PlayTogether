@@ -109,7 +109,8 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<OrderCreateRequest, Order>();
             CreateMap<Order, OrderGetByIdResponse>();
 
-            CreateMap<Notification, NotificationGetResponse>();
+            CreateMap<Notification, NotificationGetDetailResponse>();
+            CreateMap<Notification, NotificationGetAllResponse>();
             
             CreateMap<RatingCreateRequest, Rating>();
             CreateMap<Rating, RatingGetResponse>();

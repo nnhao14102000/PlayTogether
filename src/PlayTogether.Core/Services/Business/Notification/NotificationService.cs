@@ -34,7 +34,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             }
         }
 
-        public async Task<PagedResult<NotificationGetResponse>> GetAllNotificationsAsync(
+        public async Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(
             ClaimsPrincipal principal,
             NotificationParameters param)
         {
@@ -50,7 +50,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             }
         }
 
-        public async Task<NotificationGetResponse> GetNotificationByIdAsync(string id)
+        public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

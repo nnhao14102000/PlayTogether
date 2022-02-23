@@ -119,6 +119,13 @@ Authorization: {{authToken}}
 
 ###
 
+# Get Notification in detail
+GET {{baseUrl}}/api/play-together/v1/notification/ec479d05-bf73-4fe3-b072-b26967b231ab
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 # Rate 
 POST {{baseUrl}}/api/play-together/v1/rating/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
 Content-Type: {{contentType}}

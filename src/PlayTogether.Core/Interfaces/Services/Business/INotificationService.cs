@@ -8,9 +8,9 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface INotificationService
     {
-        Task<PagedResult<NotificationGetResponse>> GetAllNotificationsAsync(ClaimsPrincipal principal, NotificationParameters param);
+        Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(ClaimsPrincipal principal, NotificationParameters param);
 
-        Task<NotificationGetResponse> GetNotificationByIdAsync(string id);
+        Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id);
 
         Task<bool> DeleteNotificationAsync(string id);
     }

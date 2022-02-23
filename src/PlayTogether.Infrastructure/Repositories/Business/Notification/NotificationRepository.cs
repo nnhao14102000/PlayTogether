@@ -36,7 +36,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async Task<PagedResult<NotificationGetResponse>> GetAllNotificationsAsync(
+        public async Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(
             ClaimsPrincipal principal,
             NotificationParameters param)
         {
@@ -59,8 +59,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
-                return PagedResult<NotificationGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
             if (player is not null) {
@@ -68,8 +68,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
-                return PagedResult<NotificationGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
             if (hirer is not null) {
@@ -77,8 +77,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
-                return PagedResult<NotificationGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
             if (charity is not null) {
@@ -86,8 +86,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetResponse>>(notifications);
-                return PagedResult<NotificationGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
             return null;
@@ -115,7 +115,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             }
         }
 
-        public async Task<NotificationGetResponse> GetNotificationByIdAsync(string id)
+        public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
         {
             var noti = await _context.Notifications.FindAsync(id);
             if (noti is null) {
@@ -127,7 +127,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 return null;
             }
 
-            return _mapper.Map<NotificationGetResponse>(noti);
+            return _mapper.Map<NotificationGetDetailResponse>(noti);
         }
     }
 }
