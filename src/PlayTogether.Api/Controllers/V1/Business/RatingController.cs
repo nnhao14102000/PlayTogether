@@ -20,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             _ratingService = ratingService;
         }
-        
+
         /// <summary>
         /// Make Rating Feedback 
         /// </summary>
@@ -45,9 +45,10 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpGet("{playerId}")]
-        [Authorize(Roles = AuthConstant.RoleHirer + "," 
-                        + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllRatings(string playerId, RatingParameters param)
+        [Authorize(Roles = AuthConstant.RoleHirer + ","
+                        + AuthConstant.RolePlayer + ","
+                        + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllRatings(string playerId, [FromQuery] RatingParameters param)
         {
             var response = await _ratingService.GetAllRatingsAsync(playerId, param);
             var metaData = new {
@@ -61,6 +62,55 @@ namespace PlayTogether.Api.Controllers.V1.Business
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
             return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Report violate feedback
+        /// </summary>
+        /// <param name="rateId"></param>
+        /// <returns></returns>
+        [HttpPut("violate/{rateId}")]
+        [Authorize(Roles = AuthConstant.RolePlayer)]
+        public async Task<ActionResult> ReportViolateFeedback(string rateId)
+        {
+            var response = await _ratingService.ViolateFeedbackAsync(rateId);
+            return response ? Ok() : NotFound();
+        }
+
+        /// <summary>
+        /// Get all violate ratings
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpGet("violates")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
+        {
+            var response = await _ratingService.GetAllViolateRatingsForAdminAsync(param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Disable violate feedback
+        /// </summary>
+        /// <param name="rateId"></param>
+        /// <returns></returns>
+        [HttpPut("disable/{rateId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> DisableFeedback(string rateId)
+        {
+            var response = await _ratingService.DisableFeedbackAsync(rateId);
+            return response ? Ok() : NotFound();
         }
     }
 }

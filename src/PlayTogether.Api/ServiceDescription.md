@@ -393,8 +393,23 @@
 >   ***Role Access***: Player, Hirer  
 >   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
 >
+> - ``GET /api/play-together/v1/rating/violates ``  
+>   ***Description***: Get all Violate Ratings of a Player   
+>   ***Use for***: Admin get all violate ratings   
+>   ***Role Access***: Admin  
+>   ***Extension***: Paging, Order by Created Date, Filter by active/ disable violate ratings  
+>
 > - ``POST /api/play-together/v1/rating/{orderId} ``  
 >   ***Description***: Create a Rating for Player base in current Order  
 >   ***Use for***: Make rate, feedback about player after order his/her  
 >   ***Role Access***: Hirer    
 >
+> - ``PUT /api/play-together/v1/rating/violate/{rateId} ``  
+>   ***Description***: Report violate Feedback   
+>   ***Use for***: Player report the violate feedback   
+>   ***Role Access***: Player    
+>
+> - ``PUT /api/play-together/v1/rating/disable/{rateId} ``  
+>   ***Description***: Disable violate Feedback  
+>   ***Use for***: Admin disable the violate feedback  
+>   ***Role Access***: Admin 

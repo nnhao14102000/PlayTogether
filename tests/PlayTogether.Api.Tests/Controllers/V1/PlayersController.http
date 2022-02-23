@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "player01@example.com",
+  "email": "Tham@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 
 ###
 # Get Player by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
+GET {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -51,27 +51,30 @@ Authorization: {{authToken}}
 
 
 ###
+
+
 # Get Player service info by Id for player
 GET {{baseUrl}}/api/play-together/v1/players/service-info/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
+### 
 
-### Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
+# Update Player service info by Id
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "status": true,
   "maxHourHire": 3,
-  "pricePerHour": 0
+  "pricePerHour": 100
 }
 
 
 ###
 # Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/66de6fcb-9d20-468a-b684-ceb5a8b1f1f8/games
+GET {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -79,7 +82,7 @@ Authorization: {{authToken}}
 
 ###
 # Add Game of Player
-POST {{baseUrl}}/api/play-together/v1/players/66de6fcb-9d20-468a-b684-ceb5a8b1f1f8/games
+POST {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -132,22 +135,35 @@ GET {{baseUrl}}/api/play-together/v1/players/orders
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
-
 ###
-# Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
+
+# Get all player Notification
+GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+# Get order by Id
+GET {{baseUrl}}/api/play-together/v1/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
 # Get Hirer by Id
-GET {{baseUrl}}/api/play-together/v1/hirers/810deb2c-7740-4691-ad7f-4372a79a1a8c
+GET {{baseUrl}}/api/play-together/v1/hirers/2181af98-904a-4df9-9b9a-96bc925956ff
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
 # Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a/process
+PUT {{baseUrl}}/api/play-together/v1/players/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0/process
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -156,6 +172,19 @@ Authorization: {{authToken}}
 }
 
 ###
+
+# Finish soon order
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "Minh bận đột xuất mong bạn thông cảm..."
+}
+
+###
+
+
 # Get all charities with paging, search
 GET {{baseUrl}}/api/play-together/v1/charities
     ?Name=
@@ -173,5 +202,24 @@ Authorization: {{authToken}}
 ###
 # Finish order
 PUT {{baseUrl}}/api/play-together/v1/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Get all player rating
+GET {{baseUrl}}/api/play-together/v1/rating/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+?IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Report violate Feedback
+PUT {{baseUrl}}/api/play-together/v1/rating/violate/5472b317-6902-4fa1-ab9b-99e6e77c1227
 Content-Type: {{contentType}}
 Authorization: {{authToken}}

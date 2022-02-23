@@ -71,7 +71,7 @@ Authorization: {{authToken}}
 
 ### 
 # Get Player by Id for hirer
-GET {{baseUrl}}/api/play-together/v1.1/players/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
+GET {{baseUrl}}/api/play-together/v1.1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -83,7 +83,7 @@ Authorization: {{authToken}}
 
 ###
 # Create Order to player
-POST {{baseUrl}}/api/play-together/v1/hirers/orders/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
+POST {{baseUrl}}/api/play-together/v1/hirers/orders/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -109,3 +109,22 @@ Authorization: {{authToken}}
 PUT {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+# Get all Hirer Notification
+GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Rate 
+POST {{baseUrl}}/api/play-together/v1/rating/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "comment": "Danh hay qua, nhu game thu chuyen nghiep",
+  "rate": 5
+}

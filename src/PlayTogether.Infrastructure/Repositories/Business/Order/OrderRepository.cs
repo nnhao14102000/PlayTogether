@@ -55,7 +55,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             // Check balance of hirer
-            if ((request.TotalTimes * player.PricePerHour) < hirer.Balance) {
+            if ((request.TotalTimes * player.PricePerHour) > hirer.Balance) {
                 return null;
             }
 

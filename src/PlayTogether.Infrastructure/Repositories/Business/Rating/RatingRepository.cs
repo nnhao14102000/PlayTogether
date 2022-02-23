@@ -23,15 +23,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
         public async Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order is not null || order.Status is not OrderStatusConstant.Finish) {
+            if (order is null || order.Status is not OrderStatusConstant.Finish) {
                 return false;
             }
+
             await _context.Entry(order).Collection(x => x.Ratings).LoadAsync();
             if (order.Ratings.Count >= 1) {
                 return false;
             }
 
             await _context.Entry(order).Reference(x => x.Player).LoadAsync();
+            await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
 
             var model = _mapper.Map<Entities.Rating>(request);
             model.OrderId = orderId;
@@ -51,7 +53,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     Status = NotificationStatusConstants.NotRead
                 }
             );
+
+
             if ((await _context.SaveChangesAsync() >= 0)) {
+                var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.PlayerId == order.PlayerId).Average(x => x.Rate);
+
+                order.Player.Rating = rateOfPlayer;
+                if ((await _context.SaveChangesAsync() < 0)) {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -64,37 +74,104 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return null;
             }
 
-            var feedbacks = await _context.Ratings.ToListAsync();
-            var query = feedbacks.AsQueryable();
+            var ratings = await _context.Ratings.ToListAsync();
+            var query = ratings.AsQueryable();
 
+            FilterActiveFeedback(ref query, true);
             FilterByVote(ref query, param.Vote);
             OrderByCreatedDate(ref query, param.IsNew);
-            
-            feedbacks = query.ToList();
-            var response = _mapper.Map<List<RatingGetResponse>>(feedbacks);
+
+            ratings = query.ToList();
+            foreach (var item in ratings)
+            {
+                await _context.Entry(item).Reference(x => x.Hirer).LoadAsync();
+            }
+            var response = _mapper.Map<List<RatingGetResponse>>(ratings);
             return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        public async Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param){
+            var ratings = await _context.Ratings.Where(x => x.IsViolate == true).ToListAsync();
+            var query = ratings.AsQueryable();
+
+            FilterActiveFeedback(ref query, param.IsActive);
+            OrderByCreatedDate(ref query, param.IsNew);
+
+            ratings = query.ToList();
+            foreach (var item in ratings)
+            {
+                await _context.Entry(item).Reference(x => x.Hirer).LoadAsync();
+            }
+            var response = _mapper.Map<List<RatingGetResponse>>(ratings);
+            return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void FilterActiveFeedback(ref IQueryable<Entities.Rating> query, bool? isActive)
+        {
+            if (!query.Any() || isActive is null) {
+                return;
+            }
+            if (isActive is true) {
+                query = query.Where(x => x.IsActive == true);
+            }
+            if (isActive is false) {
+                query = query.Where(x => x.IsActive == false);
+            }
         }
 
         private void OrderByCreatedDate(ref IQueryable<Entities.Rating> query, bool? isNew)
         {
-            if(!query.Any() || isNew is null){
+            if (!query.Any() || isNew is null) {
                 return;
             }
-            if(isNew is true){
+            if (isNew is true) {
                 query = query.OrderByDescending(x => x.CreatedDate);
             }
-            if(isNew is false){
+            if (isNew is false) {
                 query = query.OrderBy(x => x.CreatedDate);
             }
         }
 
         private void FilterByVote(ref IQueryable<Entities.Rating> query, float vote)
         {
-            if(!query.Any() || vote == 0 || vote > 5 || vote < 0){
+            if (!query.Any() || vote == 0 || vote > 5 || vote < 0) {
                 return;
             }
 
             query = query.Where(x => x.Rate == vote);
+        }
+
+        public async Task<bool> ViolateFeedbackAsync(string ratingId)
+        {
+            var rating = await _context.Ratings.FindAsync(ratingId);
+            if (rating is null) {
+                return false;
+            }
+
+            rating.IsViolate = true;
+            return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<bool> DisableFeedbackAsync(string ratingId)
+        {
+            var rating = await _context.Ratings.FindAsync(ratingId);
+            if (rating is null) {
+                return false;
+            }
+
+            await _context.Entry(rating).Reference(x => x.Player).LoadAsync();
+            rating.IsActive = false;
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.PlayerId == rating.PlayerId).Average(x => x.Rate);
+                rating.Player.Rating = rateOfPlayer;
+                
+                if ((await _context.SaveChangesAsync() < 0)) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

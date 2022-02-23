@@ -48,3 +48,19 @@ GET {{baseUrl}}/api/play-together/v1/hirers
     &PageSize=10
 content-type: {{contentType}}
 Authorization: {{authToken}}
+###
+
+
+# Get all player rating violate
+GET {{baseUrl}}/api/play-together/v1/rating/violates
+?IsNew=true
+&IsActive=
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Disable violate rating
+PUT {{baseUrl}}/api/play-together/v1/rating/disable/5472b317-6902-4fa1-ab9b-99e6e77c1227
+Content-Type: {{contentType}}
+Authorization: {{authToken}}

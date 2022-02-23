@@ -10,5 +10,8 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     {
         Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request);
         Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string playerId, RatingParameters param);
+        Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param);
+        Task<bool> ViolateFeedbackAsync(string ratingId);
+        Task<bool> DisableFeedbackAsync (string ratingId);
     }
 }

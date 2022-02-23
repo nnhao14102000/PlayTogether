@@ -38,6 +38,20 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
+        public async Task<bool> DisableFeedbackAsync(string ratingId)
+        {
+            try {
+                if (String.IsNullOrEmpty(ratingId)) {
+                    throw new ArgumentNullException(nameof(ratingId));
+                }
+                return await _ratingRepository.DisableFeedbackAsync(ratingId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call DisableFeedbackAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string playerId, RatingParameters param)
         {
             try {
@@ -48,6 +62,31 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllRatingsAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param)
+        {
+            try {
+                return await _ratingRepository.GetAllViolateRatingsForAdminAsync(param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllViolateRatingsForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> ViolateFeedbackAsync(string ratingId)
+        { 
+            try {
+                if (String.IsNullOrEmpty(ratingId)) {
+                    throw new ArgumentNullException(nameof(ratingId));
+                }
+                return await _ratingRepository.ViolateFeedbackAsync(ratingId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ViolateFeedbackAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
