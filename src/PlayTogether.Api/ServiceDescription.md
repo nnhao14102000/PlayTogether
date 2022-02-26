@@ -207,7 +207,7 @@
 >   ***Description***: Get a Player all Orders   
 >   ***Use for***: Player get their orders    
 >   ***Role Access***: Player  
->   ***Extension***: Paging  
+>   ***Extension***: Paging, Filter by status  
 >
 > - ``PUT /api/play-together/v1/players/orders/{orderId}/process ``  
 >   ***Description***: Process the incoming order (Accept or reject)   

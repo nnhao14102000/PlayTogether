@@ -128,12 +128,25 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             var ordersOfPlayer = await _context.Orders.Where(x => x.PlayerId == player.Id).ToListAsync();
+            var query = ordersOfPlayer.AsQueryable();
+            
+            FilterOrderByStatus(ref query, param.Status);
+
+            ordersOfPlayer = query.ToList();
             var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfPlayer);
             return PagedResult<OrderGetByIdResponse>
                 .ToPagedList(
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterOrderByStatus(ref IQueryable<Entities.Order> query, string status)
+        {
+            if(!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)){
+                return ;
+            }
+            query = query.Where(x => x.Status == status);
         }
 
         public async Task<OrderGetByIdResponse> GetOrderByIdAsync(string id)
