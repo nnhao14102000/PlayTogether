@@ -100,17 +100,31 @@ Authorization: {{authToken}}
 
 ###
 # Cancel order request
-PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
+PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/b80b69d7-28d3-4b5e-892c-5282643930a7
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Finish order
-PUT {{baseUrl}}/api/play-together/v1/orders/7e591c17-b30a-4a34-8da8-b6ecba4a73a2
+PUT {{baseUrl}}/api/play-together/v1/orders/finish/b80b69d7-28d3-4b5e-892c-5282643930a7
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+# Finish soon order
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/b80b69d7-28d3-4b5e-892c-5282643930a7
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message" : "Mình bận đột xuất, cám ơn bạn đã thông cảm...:))"
+}
+
+###
+
+
 
 # Get all Hirer Notification
 GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
@@ -127,11 +141,11 @@ Authorization: {{authToken}}
 ###
 
 # Rate 
-POST {{baseUrl}}/api/play-together/v1/rating/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+POST {{baseUrl}}/api/play-together/v1/rating/b80b69d7-28d3-4b5e-892c-5282643930a7
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "comment": "Danh hay qua, nhu game thu chuyen nghiep",
+  "comment": "Danh hay qua, tuyet vời",
   "rate": 5
 }

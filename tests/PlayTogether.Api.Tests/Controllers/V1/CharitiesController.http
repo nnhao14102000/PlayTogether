@@ -3,18 +3,18 @@
 @azurehost = play-together.azurewebsites.net
 @lchost = {{hostname}}:{{port}}
 @host = {{azurehost}}
-@baseUrl = https://{{host}}
+@baseUrl = https://{{lchost}}
 @contentType = application/json
 @token = {{login.response.body.$.message}}
 @authToken = bearer {{token}}
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/account/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "admin01@example.com",
+  "email": "tienphong123@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -27,9 +27,9 @@ Authorization: {{authToken}}
 ###
 # Get all charities with paging, search
 GET {{baseUrl}}/api/play-together/v1/charities
-    ?Name=a
-    &PageNumber=1
-    &PageSize=10
+    ?Name=
+    &PageNumber=
+    &PageSize=
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -37,4 +37,20 @@ Authorization: {{authToken}}
 # Get a charity by Id
 GET {{baseUrl}}/api/play-together/v1/charities/
 content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get number of donate in today
+GET {{baseUrl}}/api/play-together/v1/charities/number-of-donate
+?IsCalculateNumberOfDonateInDate=true
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all charity Notification
+GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
+Content-Type: {{contentType}}
 Authorization: {{authToken}}

@@ -104,6 +104,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             var ordersOfHirer = await _context.Orders.Where(x => x.HirerId == hirer.Id).ToListAsync();
+            var query = ordersOfHirer.AsQueryable();
+
+            FilterOrderByStatus(ref query, param.Status);
+
+            ordersOfHirer = query.ToList();
             var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfHirer);
             return PagedResult<OrderGetByIdResponse>
                 .ToPagedList(

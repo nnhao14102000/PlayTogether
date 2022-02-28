@@ -8,6 +8,9 @@ using PlayTogether.Infrastructure.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Globalization;
+using PlayTogether.Core.Parameters;
+using System.Collections.Generic;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Donate
 {
@@ -21,12 +24,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             _userManager = userManager;
         }
 
-        public async Task<int> CalculateTurnDonateInDayAsync(ClaimsPrincipal principal)
+        public async Task<int> CalculateDonateAsync(ClaimsPrincipal principal, DonateParameters param)
         {
-            var toDay = DateTime.Now;
-            var dateTime = toDay.ToString().Split(" ");
-            var date = dateTime[0];
-
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
                 return -1;
@@ -39,11 +38,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                 return -1;
             }
 
-            var donate = await (from d in _context.Donates
-                                where d.CharityId == charity.Id && d.CreatedDate.ToString().Contains(date)
-                                select d).ToListAsync();
+            var donate = await _context.Donates.Where(x => x.CharityId == charity.Id).ToListAsync();
+            int count = -1;
+            count = CountNumberOfDonateInDay(donate, param.IsCalculateNumberOfDonateInDate);
+            return count;
+        }
 
-            return donate.Count;
+        private int CountNumberOfDonateInDay(List<Entities.Donate> donates, bool? isCalculateNumberOfDonateInDate)
+        {
+            if(!donates.Any() || isCalculateNumberOfDonateInDate is null || isCalculateNumberOfDonateInDate is false) {
+                return 0;
+            }
+            string strDate = DateTime.Now.ToString("M/dd/yyyy");
+            int count = 0;
+            foreach (var item in donates)
+            {
+                var date = item.CreatedDate.ToString();
+                if(date.Contains(strDate)){
+                    count ++;
+                }
+            }
+            return count;
         }
     }
 }

@@ -132,6 +132,7 @@ Authorization: {{authToken}}
 ###
 # Get all Player orders
 GET {{baseUrl}}/api/play-together/v1/players/orders
+?status=
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -146,7 +147,7 @@ Authorization: {{authToken}}
 
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+GET {{baseUrl}}/api/play-together/v1/orders/b80b69d7-28d3-4b5e-892c-5282643930a7
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -163,12 +164,13 @@ Authorization: {{authToken}}
 
 
 # Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0/process
+PUT {{baseUrl}}/api/play-together/v1/players/orders/b80b69d7-28d3-4b5e-892c-5282643930a7/process
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "isAccept": true
+  "isAccept": true,
+  "charityId": "e7f3c57a-11e5-45d8-bc1c-4ba861a9f281"
 }
 
 ###

@@ -14,10 +14,12 @@ namespace PlayTogether.Api.Controllers.V1.Business
     public class CharitiesController : BaseController
     {
         private readonly ICharityService _charityService;
+        private readonly IDonateService _donateService;
         
-        public CharitiesController(ICharityService charityService)
+        public CharitiesController(ICharityService charityService, IDonateService donateService)
         {
             _charityService = charityService;
+            _donateService = donateService;
         }
 
         /// <summary>
@@ -43,12 +45,25 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             return response is not null ? Ok(response) : NotFound();
         }
-
+        
+        /// <summary>
+        /// Get charity by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<CharityResponse>> GetCharityById(string id){
             var response = await _charityService.GetCharityByIdAsync(id);
             return response is not null ? Ok(response) : NotFound();
+        }
+
+
+        [HttpGet("number-of-donate")]
+        [Authorize(Roles = AuthConstant.RoleCharity)]
+        public async Task<ActionResult> GetNumberOfDonateInDay([FromQuery] DonateParameters param){
+            var response = await _donateService.CalculateDonateAsync(HttpContext.User, param);
+            return response >= 0 ? Ok(response) : BadRequest();
         }
     }
 }
