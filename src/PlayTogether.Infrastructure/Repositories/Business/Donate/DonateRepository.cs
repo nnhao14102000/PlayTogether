@@ -49,7 +49,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             if(!donates.Any() || isCalculateNumberOfDonateInDate is null || isCalculateNumberOfDonateInDate is false) {
                 return 0;
             }
-            string strDate = DateTime.Now.ToString("M/dd/yyyy");
+            string strDate = DateTime.Now.ToString("M/d/yyyy");
             int count = 0;
             foreach (var item in donates)
             {
