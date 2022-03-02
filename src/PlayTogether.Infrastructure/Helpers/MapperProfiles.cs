@@ -108,6 +108,8 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<OrderCreateRequest, Order>();
             CreateMap<Order, OrderGetByIdResponse>();
+            CreateMap<Player, PlayerOrderResponse>();
+            CreateMap<Hirer, HirerOrderResponse>();
 
             CreateMap<Notification, NotificationGetDetailResponse>();
             CreateMap<Notification, NotificationGetAllResponse>();
@@ -115,6 +117,8 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<RatingCreateRequest, Rating>();
             CreateMap<Rating, RatingGetResponse>();
             CreateMap<Hirer, HirerRateResponse>();
+
+            
 
             // src => target
         }

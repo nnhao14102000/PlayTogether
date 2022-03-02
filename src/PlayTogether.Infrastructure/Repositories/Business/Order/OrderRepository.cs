@@ -107,8 +107,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var query = ordersOfHirer.AsQueryable();
 
             FilterOrderByStatus(ref query, param.Status);
+            FilterOrderRecent(ref query, param.IsNew);
 
             ordersOfHirer = query.ToList();
+
+            foreach (var order in ordersOfHirer) {
+                await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
+
+                await _context.Entry(order)
+                    .Reference(x => x.Player)
+                    .LoadAsync();
+            }
+
             var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfHirer);
             return PagedResult<OrderGetByIdResponse>
                 .ToPagedList(
@@ -134,10 +146,22 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             var ordersOfPlayer = await _context.Orders.Where(x => x.PlayerId == player.Id).ToListAsync();
             var query = ordersOfPlayer.AsQueryable();
-            
+
             FilterOrderByStatus(ref query, param.Status);
+            FilterOrderRecent(ref query, param.IsNew);
 
             ordersOfPlayer = query.ToList();
+
+            foreach (var order in ordersOfPlayer) {
+                await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
+
+                await _context.Entry(order)
+                    .Reference(x => x.Player)
+                    .LoadAsync();
+            }
+
             var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfPlayer);
             return PagedResult<OrderGetByIdResponse>
                 .ToPagedList(
@@ -146,10 +170,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     param.PageSize);
         }
 
+        private void FilterOrderRecent(ref IQueryable<Entities.Order> query, bool? isNew)
+        {
+            if (!query.Any() || isNew is null) {
+                return;
+            }
+            if (isNew is true) {
+                query = query.OrderByDescending(x => x.CreatedDate);
+            }
+            else {
+                query = query.OrderBy(x => x.CreatedDate);
+            }
+        }
+
         private void FilterOrderByStatus(ref IQueryable<Entities.Order> query, string status)
         {
-            if(!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)){
-                return ;
+            if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
+                return;
             }
             query = query.Where(x => x.Status == status);
         }
@@ -161,6 +198,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             if (order is null) {
                 return null;
             }
+
+            await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
+
+            await _context.Entry(order)
+                .Reference(x => x.Player)
+                .LoadAsync();
+
             return _mapper.Map<OrderGetByIdResponse>(order);
         }
 
@@ -249,6 +295,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(order)
                .Reference(x => x.Hirer)
                .LoadAsync();
+            await _context.Entry(order)
+                .Reference(x => x.Player)
+                .LoadAsync();
 
             if (request.IsAccept == false) {
                 order.Status = OrderStatusConstant.Cancel;
@@ -268,8 +317,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 );
             }
             else {
-                await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-
                 if (!String.IsNullOrEmpty(request.CharityId) || !String.IsNullOrWhiteSpace(request.CharityId)) {
                     var charity = await _context.Charities.FindAsync(request.CharityId);
                     if (charity is null || charity.IsActive is false) {
@@ -296,8 +343,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             CreatedDate = DateTime.Now,
                             UpdateDate = null,
                             ReceiverId = order.HirerId,
-                            Title = $"{player.Lastname + player.Firstname} đã quyên góp {order.TotalPrices}!",
-                            Message = $"{player.Lastname + player.Firstname} đã quyên góp số tiền bạn thuê tới tổ chức {charity.OrganizationName} lúc {DateTime.Now}.",
+                            Title = $"{player.Lastname + " " + player.Firstname} đã quyên góp {order.TotalPrices}!",
+                            Message = $"{player.Lastname + " " + player.Firstname} đã quyên góp số tiền bạn thuê tới tổ chức {charity.OrganizationName} lúc {DateTime.Now}.",
                             Status = NotificationStatusConstants.NotRead
                         },
                         new Entities.Notification {
@@ -315,7 +362,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             UpdateDate = null,
                             ReceiverId = request.CharityId,
                             Title = $"{player.Firstname} đã quyên góp cho tổ chức của bạn.",
-                            Message = $"{player.Lastname + player.Firstname} đã quyên góp cho tổ chức của bạn lúc {DateTime.Now} với số tiền {order.TotalPrices}. Vui lòng kiểm tra tài khoản",
+                            Message = $"{player.Lastname + " " + player.Firstname} đã quyên góp cho tổ chức của bạn lúc {DateTime.Now} với số tiền {order.TotalPrices}. Vui lòng kiểm tra tài khoản",
                             Status = NotificationStatusConstants.NotRead
                         }
                     );
@@ -392,11 +439,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         UpdateDate = null,
                         ReceiverId = order.PlayerId,
                         Title = $"{order.Hirer.Firstname} đã yêu cầu kết thúc sớm",
-                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.Hirer.Firstname} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
                         Status = NotificationStatusConstants.NotRead
                     }
                 );
-            }else{
+            }
+            else {
                 await _context.Notifications.AddRangeAsync(
                     new Entities.Notification {
                         Id = Guid.NewGuid().ToString(),
@@ -404,7 +452,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         UpdateDate = null,
                         ReceiverId = order.HirerId,
                         Title = $"{order.Player.Firstname} đã yêu cầu kết thúc sớm",
-                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{request.Message} . Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.Player.Firstname} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
                         Status = NotificationStatusConstants.NotRead
                     }
                 );

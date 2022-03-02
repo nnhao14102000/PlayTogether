@@ -1,5 +1,28 @@
 ﻿# Service Description  
-## Account  
+
+<h2 id="table-of-contents">Table Of Contents</h2>  
+1. <a href="#table-of-contents" target="_self">Table Of Contents</a> <br>
+2. <a href="#account" target="_self">Account</a> <br>
+3. <a href="#admin" target="_self">Admin</a> <br>
+4. <a href="#charity" target="_self">Charity</a> <br>
+5. <a href="#hirer" target="_self">Hirer</a> <br>
+6. <a href="#player" target="_self">Player</a> <br>
+7. <a href="#order" target="_self">Order</a> <br>
+8. <a href="#game-type" target="_self">Game Type</a> <br>
+9. <a href="#types-of-game" target="_self">Types Of Game</a> <br>
+10. <a href="#game" target="_self">Game</a> <br>
+11. <a href="#rank" target="_self">Rank</a> <br>
+12. <a href="#games-of-player" target="_self">Games Of Player</a> <br>
+13. <a href="#music" target="_self">Music</a> <br>
+14. <a href="#musics-of-player" target="_self">Music Of Player</a> <br>
+15. <a href="#image" target="_self">Image</a> <br>
+16. <a href="#rating" target="_self">Rating</a> <br>
+17. <a href="#notification" target="_self">Notification</a> <br>
+18. <a href="#api" target="_self">PlayTogether API</a> <br>
+
+
+<h2 id="account">Account <a href="#table-of-contents" target="_self">🔙</a></h2>
+
 > - ``POST /api/play-together/v1/accounts/login ``  
 >   ***Description***: Login all User Account
 >
@@ -32,16 +55,17 @@
 > - ``POST /api/play-together/v1/accounts/register-multi-hirer ``  
 >   ***Description***: Register multi Normal Hirer Account **for TEST**  
 >
->
 
-## Admin   
+<h2 id="admin">Admin <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
 > - ``GET /api/play-together/v1/admins ``  
 >   ***Description***: Get all Admins   
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, Search by Name  
 >
 
-## Charity  
+<h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
+
 > - ``GET /api/play-together/v1/charities ``  
 >   ***Description***: Get all Charities   
 >   ***Role Access***: Admin, Player  
@@ -51,92 +75,51 @@
 >   ***Description***: Get a Charity by Id   
 >   ***Role Access***: Admin, Player   
 >
->
 
-## GameType
-> - ``GET /api/play-together/v1/game-types ``  
->   ***Description***: Get all Game Types  
->   ***Use for***: Admin get to view all game types  
+
+<h2 id="hirer">Hirer  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/hirers ``  
+>   ***Description***: Get all Hirers  
+>   ***Use for***: Get all hirer account in Admin web   
 >   ***Role Access***: Admin  
->   ***Extension***: Paging, Search by Name  
+>   ***Extension***: Paging, Search by Name 
 >
-> - ``GET /api/play-together/v1/game-types/{id} ``  
->   ***Description***: Get a Game Type By Id  
->   ***Use for***: Admin view a game type in detail  
->   ***Role Access***: Admin  
->
-> - ``POST /api/play-together/v1/game-types ``  
->   ***Description***: Add New a Game Type  
->   ***Use for***: Admin add new game type   
->   ***Role Access***: Admin  
->
-> - ``PUT /api/play-together/v1/game-types/{id} ``  
->   ***Description***: Update a Game Type  
->   ***Use for***: Admin update game type    
->   ***Role Access***: Admin  
+> - ``GET /api/play-together/v1/hirers/profile ``  
+>   ***Description***: Get Hirer Profile  
+>   ***Use for***: Hirer get their own Profile   
+>   ***Role Access***: Hirer  
 > 
-> - ``DELETE /api/play-together/v1/game-types/{id} ``  
->   ***Description***: Delete a Game Type       
->   ***Use for***: Admin delete a game type  
->   ***Role Access***: Admin  
->
-
-## Order
-> - ``GET /api/play-together/v1/orders/{id} ``  
->   ***Description***: Get order by Id  
->   ***Use for***: Get order by Id  
->   ***Role Access***: Hirer, Player  
->
-> - ``PUT /api/play-together/v1/orders/finish/{id} ``  
->   ***Description***: Finish the order  
->   ***Use for***: Finish the order when end of time, auto call this api from Player App   
->   ***Role Access***: Player   
->
-> - ``PUT /api/play-together/v1/orders/finish-soon/{id} ``  
->   ***Description***: Finish soon order  
->   ***Use for***: Hirer or Player make finish soon order request   
->   ***Role Access***: Hirer, Player   
->
-
-## Game
-> - ``GET /api/play-together/v1/games ``  
->   ***Description***: Get all Games   
->   ***Use for***: Get to view all games  
->   ***Role Access***: Admin, Player  
->   ***Extension***: Paging, Search by Name  
->
-> - ``GET /api/play-together/v1/games/{gameId}/ranks ``  
->   ***Description***: Get all Ranks in Game   
->   ***Use for***: Get to view all ranks in game  
->   ***Role Access***: Admin, Player  
->
-> - ``POST /api/play-together/v1/games/{gameId}/ranks ``  
->   ***Description***: Create a rank in game   
->   ***Use for***: Add rank to game  
->   ***Role Access***: Admin  
->
-> - ``GET /api/play-together/v1/games/{id} ``  
->   ***Description***: Get a Game By Id  
->   ***Use for***: View a game in detail  
->   ***Role Access***: Admin, Player  
->
-> - ``POST /api/play-together/v1/games ``  
->   ***Description***: Add New a Game  
->   ***Use for***: Admin add new game   
->   ***Role Access***: Admin  
->
-> - ``PUT /api/play-together/v1/games/{id} ``  
->   ***Description***: Update a Game  
->   ***Use for***: Admin update game    
->   ***Role Access***: Admin  
+> - ``GET /api/play-together/v1/hirers/{id} ``  
+>   ***Description***: Get a Hirer by Id   
+>   ***Use for***: Hirer get their own information for update  
+>   ***Role Access***: Hirer  
 > 
-> - ``DELETE /api/play-together/v1/games/{id} ``  
->   ***Description***: Delete a Game       
->   ***Use for***: Admin delete a game  
->   ***Role Access***: Admin  
+> - ``PUT /api/play-together/v1/hirers/{id} ``  
+>   ***Description***: Update Hirer Info    
+>   ***Use for***: Update hirer own information    
+>   ***Role Access***: Hirer 
+>
+> - ``GET /api/play-together/v1/hirers/orders ``  
+>   ***Description***: Get a Hirer all Orders   
+>   ***Use for***: Hirer get their orders    
+>   ***Role Access***: Hirer  
+>   ***Extension***: Paging, Filter by Status , Order by Create Date  
+>
+> - ``POST /api/play-together/v1/hirers/orders/{playerId} ``  
+>   ***Description***: Create an Order   
+>   ***Use for***: Hirer create an Order to Player    
+>   ***Role Access***: Hirer    
+>
+> - ``PUT /api/play-together/v1/hirers/cancel/orders/{orderId} ``  
+>   ***Description***: Cancel an order   
+>   ***Use for***: Hirer cancel order    
+>   ***Role Access***: Hirer    
 >
 
-## Player  
+
+<h2 id="player">Player  <a href="#table-of-contents" target="_self">🔙</a></h2>    
+
 > - ``GET /api/play-together/v1.1/players ``  
 >   ***Description***: Get all Players for Hirer  
 >   ***Use for***: Search players in Hirer app   
@@ -207,7 +190,7 @@
 >   ***Description***: Get a Player all Orders   
 >   ***Use for***: Player get their orders    
 >   ***Role Access***: Player  
->   ***Extension***: Paging, Filter by status  
+>   ***Extension***: Paging, Filter by status, Order by Create Date    
 >
 > - ``PUT /api/play-together/v1/players/orders/{orderId}/process ``  
 >   ***Description***: Process the incoming order (Accept or reject)   
@@ -220,53 +203,58 @@
 >   ***Role Access***: Player  
 >
 
-## GameOfPlayer
-> - ``GET /api/play-together/v1/games-of-player/{id} ``  
->   ***Description***: Get Game of Player by Id  
->   ***Use for***: Get Game of Player  
->   ***Role Access***: Player  
+
+<h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/orders/{id} ``  
+>   ***Description***: Get order by Id  
+>   ***Use for***: Get order by Id  
+>   ***Role Access***: Hirer, Player  
 >
-> - ``PUT /api/play-together/v1/games-of-player/{id} ``  
->   ***Description***: Update Game of Player  
->   ***Use for***: Update Game of Player   
->   ***Role Access***: Player  
-> 
-> - ``DELETE /api/play-together/v1/games-of-player/{id} ``  
->   ***Description***: Delete Game of Player    
->   ***Use for***: Delete Game of Player  
->   ***Role Access***: Player  
+> - ``PUT /api/play-together/v1/orders/finish/{id} ``  
+>   ***Description***: Finish the order  
+>   ***Use for***: Finish the order when end of time, auto call this api from Player App   
+>   ***Role Access***: Player   
+>
+> - ``PUT /api/play-together/v1/orders/finish-soon/{id} ``  
+>   ***Description***: Finish soon order  
+>   ***Use for***: Hirer or Player make finish soon order request   
+>   ***Role Access***: Hirer, Player   
 >
 
-## MusicOfPlayer
-> - ``GET /api/play-together/v1/musics-of-player/{id} ``  
->   ***Description***: Get Music of Player by Id  
->   ***Use for***: Get Music of Player  
->   ***Role Access***: Player  
-> 
-> - ``DELETE /api/play-together/v1/musics-of-player/{id} ``  
->   ***Description***: Delete Music of Player    
->   ***Use for***: Delete Music of Player  
->   ***Role Access***: Player  
->
 
-## Ranks
-> - ``GET /api/play-together/v1/ranks/{id} ``  
->   ***Description***: Get Rank by Id  
->   ***Use for***: Get rank by Id  
->   ***Role Access***: Admin, Player  
->
-> - ``PUT /api/play-together/v1/ranks/{id} ``  
->   ***Description***: Update rank  
->   ***Use for***: Update rank info   
+<h2 id="game-type">Game Type  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``GET /api/play-together/v1/game-types ``  
+>   ***Description***: Get all Game Types  
+>   ***Use for***: Admin get to view all game types  
 >   ***Role Access***: Admin  
-> 
-> - ``DELETE /api/play-together/v1/ranks/{id} ``  
->   ***Description***: Delete rank    
->   ***Use for***: Delete rank  
+>   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/game-types/{id} ``  
+>   ***Description***: Get a Game Type By Id  
+>   ***Use for***: Admin view a game type in detail  
 >   ***Role Access***: Admin  
 >
+> - ``POST /api/play-together/v1/game-types ``  
+>   ***Description***: Add New a Game Type  
+>   ***Use for***: Admin add new game type   
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/game-types/{id} ``  
+>   ***Description***: Update a Game Type  
+>   ***Use for***: Admin update game type    
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/game-types/{id} ``  
+>   ***Description***: Delete a Game Type       
+>   ***Use for***: Admin delete a game type  
+>   ***Role Access***: Admin  
+>
 
-## TypeOfGame
+
+<h2 id="types-of-game">Types Of Game  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
 > - ``GET /api/play-together/v1/types-of-game/{id} ``  
 >   ***Description***: Get Type of Game  
 >   ***Use for***: Support to view types of game  
@@ -283,64 +271,87 @@
 >   ***Role Access***: Admin  
 >
 
-## Image
-> - ``GET /api/play-together/v1/images/{id} ``  
->   ***Description***: Get Image by Id for Player and Hirer  
->   ***Use for***: View image of Player   
->   ***Role Access***: Player, Hirer  
->
-> - ``POST /api/play-together/v1/images ``  
->   ***Description***: Add New an Image of Player   
->   ***Use for***: Player add a new image to their image collection   
->   ***Role Access***: Player  
-> 
-> - ``DELETE /api/play-together/v1/images/{id} ``  
->   ***Description***: Delete an Image of Player    
->   ***Use for***: Player delete an image from their image collection  
->   ***Role Access***: Player  
->
 
+<h2 id="game">Game  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
-## Hirer 
-> - ``GET /api/play-together/v1/hirers ``  
->   ***Description***: Get all Hirers  
->   ***Use for***: Get all hirer account in Admin web   
+> - ``GET /api/play-together/v1/games ``  
+>   ***Description***: Get all Games   
+>   ***Use for***: Get to view all games  
+>   ***Role Access***: Admin, Player  
+>   ***Extension***: Paging, Search by Name  
+>
+> - ``GET /api/play-together/v1/games/{gameId}/ranks ``  
+>   ***Description***: Get all Ranks in Game   
+>   ***Use for***: Get to view all ranks in game  
+>   ***Role Access***: Admin, Player  
+>
+> - ``POST /api/play-together/v1/games/{gameId}/ranks ``  
+>   ***Description***: Create a rank in game   
+>   ***Use for***: Add rank to game  
 >   ***Role Access***: Admin  
->   ***Extension***: Paging, Search by Name 
 >
-> - ``GET /api/play-together/v1/hirers/profile ``  
->   ***Description***: Get Hirer Profile  
->   ***Use for***: Hirer get their own Profile   
->   ***Role Access***: Hirer  
+> - ``GET /api/play-together/v1/games/{id} ``  
+>   ***Description***: Get a Game By Id  
+>   ***Use for***: View a game in detail  
+>   ***Role Access***: Admin, Player  
+>
+> - ``POST /api/play-together/v1/games ``  
+>   ***Description***: Add New a Game  
+>   ***Use for***: Admin add new game   
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/games/{id} ``  
+>   ***Description***: Update a Game  
+>   ***Use for***: Admin update game    
+>   ***Role Access***: Admin  
 > 
-> - ``GET /api/play-together/v1/hirers/{id} ``  
->   ***Description***: Get a Hirer by Id   
->   ***Use for***: Hirer get their own information for update  
->   ***Role Access***: Hirer  
-> 
-> - ``PUT /api/play-together/v1/hirers/{id} ``  
->   ***Description***: Update Hirer Info    
->   ***Use for***: Update hirer own information    
->   ***Role Access***: Hirer 
->
-> - ``GET /api/play-together/v1/hirers/orders ``  
->   ***Description***: Get a Hirer all Orders   
->   ***Use for***: Hirer get their orders    
->   ***Role Access***: Hirer  
->   ***Extension***: Paging  
->
-> - ``POST /api/play-together/v1/hirers/orders/{playerId} ``  
->   ***Description***: Create an Order   
->   ***Use for***: Hirer create an Order to Player    
->   ***Role Access***: Hirer    
->
-> - ``PUT /api/play-together/v1/hirers/cancel/orders/{orderId} ``  
->   ***Description***: Cancel an order   
->   ***Use for***: Hirer cancel order    
->   ***Role Access***: Hirer    
+> - ``DELETE /api/play-together/v1/games/{id} ``  
+>   ***Description***: Delete a Game       
+>   ***Use for***: Admin delete a game  
+>   ***Role Access***: Admin  
 >
 
-## Music
+
+<h2 id="rank">Rank  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Get Rank by Id  
+>   ***Use for***: Get rank by Id  
+>   ***Role Access***: Admin, Player  
+>
+> - ``PUT /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Update rank  
+>   ***Use for***: Update rank info   
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/ranks/{id} ``  
+>   ***Description***: Delete rank    
+>   ***Use for***: Delete rank  
+>   ***Role Access***: Admin  
+>
+
+
+<h2 id="games-of-player">Games Of Player  <a href="#table-of-contents" target="_self">🔙</a></h2> 
+
+> - ``GET /api/play-together/v1/games-of-player/{id} ``  
+>   ***Description***: Get Game of Player by Id  
+>   ***Use for***: Get Game of Player  
+>   ***Role Access***: Player  
+>
+> - ``PUT /api/play-together/v1/games-of-player/{id} ``  
+>   ***Description***: Update Game of Player  
+>   ***Use for***: Update Game of Player   
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/games-of-player/{id} ``  
+>   ***Description***: Delete Game of Player    
+>   ***Use for***: Delete Game of Player  
+>   ***Role Access***: Player  
+>
+
+
+<h2 id="music">Music  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
 > - ``GET /api/play-together/v1/musics ``  
 >   ***Description***: Get all Musics   
 >   ***Use for***: Get all musics  
@@ -368,25 +379,42 @@
 >   ***Role Access***: Admin  
 >
 
-## Notification
-> - ``GET /api/play-together/v1/notification ``  
->   ***Description***: Get all Notifications   
->   ***Use for***: View all notifications  
->   ***Role Access***: Admin, Player, Hirer, Charity  
->   ***Extension***: Paging, Order by Created Date  
->
-> - ``GET /api/play-together/v1/notification/{id} ``  
->   ***Description***: Get Notification By Id  
->   ***Use for***: View Notification in detail  
->   ***Role Access***: Admin, Player, Hirer, Charity   
+
+<h2 id="musics-of-player">Musics Of Player  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/musics-of-player/{id} ``  
+>   ***Description***: Get Music of Player by Id  
+>   ***Use for***: Get Music of Player  
+>   ***Role Access***: Player  
 > 
-> - ``DELETE /api/play-together/v1/notification/{id} ``  
->   ***Description***: Delete Notification       
->   ***Use for***: Delete notification  
->   ***Role Access***: Admin, Player, Hirer, Charity  
+> - ``DELETE /api/play-together/v1/musics-of-player/{id} ``  
+>   ***Description***: Delete Music of Player    
+>   ***Use for***: Delete Music of Player  
+>   ***Role Access***: Player  
 >
 
-## Rating
+
+<h2 id="image">Image  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/images/{id} ``  
+>   ***Description***: Get Image by Id for Player and Hirer  
+>   ***Use for***: View image of Player   
+>   ***Role Access***: Player, Hirer  
+>
+> - ``POST /api/play-together/v1/images ``  
+>   ***Description***: Add New an Image of Player   
+>   ***Use for***: Player add a new image to their image collection   
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/images/{id} ``  
+>   ***Description***: Delete an Image of Player    
+>   ***Use for***: Player delete an image from their image collection  
+>   ***Role Access***: Player  
+>
+
+
+<h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
 > - ``GET /api/play-together/v1/rating/{playerId} ``  
 >   ***Description***: Get all Ratings of a Player   
 >   ***Use for***: View all ratings of one specific Player   
@@ -413,3 +441,26 @@
 >   ***Description***: Disable violate Feedback  
 >   ***Use for***: Admin disable the violate feedback  
 >   ***Role Access***: Admin 
+
+
+<h2 id="notification">Notification  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/notification ``  
+>   ***Description***: Get all Notifications   
+>   ***Use for***: View all notifications  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>   ***Extension***: Paging, Order by Created Date  
+>
+> - ``GET /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Get Notification By Id  
+>   ***Use for***: View Notification in detail  
+>   ***Role Access***: Admin, Player, Hirer, Charity   
+> 
+> - ``DELETE /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Delete Notification       
+>   ***Use for***: Delete notification  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>
+
+
+<h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
