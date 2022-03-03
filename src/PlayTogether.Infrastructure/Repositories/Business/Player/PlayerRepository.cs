@@ -86,7 +86,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
                 || String.IsNullOrWhiteSpace(hirerId)) {
                 return;
             }
-            var orders = _context.Orders.Where(x => x.HirerId == hirerId && x.Status == OrderStatusConstant.Complete)
+            var orders = _context.Orders.Where(x => x.HirerId == hirerId && x.Status == OrderStatusConstants.Complete)
                                         .OrderByDescending(x => x.CreatedDate)
                                         .ToList();
             List<Entities.Player> players = new();

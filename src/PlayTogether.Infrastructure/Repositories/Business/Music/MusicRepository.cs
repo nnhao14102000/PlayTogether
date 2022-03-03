@@ -35,6 +35,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Music
             if (music is null) {
                 return false;
             }
+
+            var musicOfPlayers = await _context.MusicOfPlayers.Where(x => x.MusicId == id).ToListAsync();
+            if(musicOfPlayers.Count >= 0){
+                _context.MusicOfPlayers.RemoveRange(musicOfPlayers);
+                if(await _context.SaveChangesAsync() < 0){
+                    return false;
+                }
+            }
+            
             _context.Musics.Remove(music);
             return (await _context.SaveChangesAsync() >= 0);
         }

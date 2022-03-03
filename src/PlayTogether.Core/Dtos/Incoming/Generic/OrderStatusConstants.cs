@@ -1,6 +1,6 @@
 namespace PlayTogether.Core.Dtos.Incoming.Generic
 {
-    public class OrderStatusConstant
+    public class OrderStatusConstants
     {
         public const string Start = "Starting";
         public const string Cancel = "Cancel";

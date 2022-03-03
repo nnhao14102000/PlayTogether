@@ -23,7 +23,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
         public async Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order is null || order.Status is not OrderStatusConstant.Finish) {
+            if (order is null || order.Status is not OrderStatusConstants.Finish) {
                 return false;
             }
 
@@ -40,7 +40,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             model.PlayerId = order.PlayerId;
             model.HirerId = order.HirerId;
             await _context.Ratings.AddAsync(model);
-            order.Status = OrderStatusConstant.Complete;
+            order.Status = OrderStatusConstants.Complete;
 
             await _context.Notifications.AddAsync(
                 new Entities.Notification {

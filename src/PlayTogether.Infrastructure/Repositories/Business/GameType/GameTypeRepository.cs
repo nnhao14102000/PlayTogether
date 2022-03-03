@@ -35,6 +35,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             if (type is null) {
                 return false;
             }
+
+            var typeOfGames = await _context.TypeOfGames.Where(x => x.GameTypeId == id).ToListAsync();
+            if (typeOfGames.Count > 0) {
+                _context.TypeOfGames.RemoveRange(typeOfGames);
+                if ((await _context.SaveChangesAsync() < 0)) {
+                    return false;
+                }
+            }
+            
             _context.GameTypes.Remove(type);
             return (await _context.SaveChangesAsync() >= 0);
         }
@@ -46,7 +55,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             if (types is not null) {
                 if (!String.IsNullOrEmpty(param.SearchString)) {
                     var query = types.AsQueryable();
-                    query = query.Where(x => (x.Name + " " + x.ShortName + " "  + x.OtherName + " " + x.Description).ToLower()
+                    query = query.Where(x => (x.Name + " " + x.ShortName + " " + x.OtherName + " " + x.Description).ToLower()
                                                        .Contains(param.SearchString.ToLower()));
                     types = query.ToList();
                 }

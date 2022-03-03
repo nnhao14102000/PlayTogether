@@ -63,7 +63,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             model.PlayerId = playerId;
             model.HirerId = hirer.Id;
             model.TotalPrices = request.TotalTimes * player.PricePerHour;
-            model.Status = OrderStatusConstant.Processing;
+            model.Status = OrderStatusConstants.Processing;
             model.ProcessExpired = DateTime.Now.AddMinutes(1);
 
             _context.Orders.Add(model);
@@ -224,11 +224,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             var order = await _context.Orders.FindAsync(id);
-            if (order is null || order.Status is not OrderStatusConstant.Processing) {
+            if (order is null || order.Status is not OrderStatusConstants.Processing) {
                 return false;
             }
 
-            order.Status = OrderStatusConstant.Cancel; // change status of Order
+            order.Status = OrderStatusConstants.Cancel; // change status of Order
 
             await _context.Entry(order)
                .Reference(x => x.Player)
@@ -288,7 +288,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             var order = await _context.Orders.FindAsync(id);
-            if (order is null || order.Status is not OrderStatusConstant.Processing) {
+            if (order is null || order.Status is not OrderStatusConstants.Processing) {
                 return false;
             }
 
@@ -300,7 +300,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 .LoadAsync();
 
             if (request.IsAccept == false) {
-                order.Status = OrderStatusConstant.Cancel;
+                order.Status = OrderStatusConstants.Cancel;
                 player.Status = PlayerStatusConstants.Online;
                 order.Hirer.Status = HirerStatusConstants.Online;
 
@@ -334,7 +334,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
                     order.Hirer.Balance = order.Hirer.Balance - order.TotalPrices;
                     charity.Balance = charity.Balance + order.TotalPrices;
-                    order.Status = OrderStatusConstant.Start;
+                    order.Status = OrderStatusConstants.Start;
 
                     // Create Notification
                     await _context.Notifications.AddRangeAsync(
@@ -370,7 +370,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 else {
                     order.Hirer.Balance = order.Hirer.Balance - order.TotalPrices;
                     player.Balance = player.Balance + order.TotalPrices;
-                    order.Status = OrderStatusConstant.Start;
+                    order.Status = OrderStatusConstants.Start;
                 }
 
                 player.Status = PlayerStatusConstants.Hiring;
@@ -391,13 +391,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (order.Status is not OrderStatusConstant.Start) {
+            if (order.Status is not OrderStatusConstants.Start) {
                 return false;
             }
 
             await _context.Entry(order).Reference(x => x.Player).LoadAsync();
             await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-            order.Status = OrderStatusConstant.Finish;
+            order.Status = OrderStatusConstants.Finish;
             order.Player.Status = PlayerStatusConstants.Online;
             order.Hirer.Status = HirerStatusConstants.Online;
 
@@ -414,7 +414,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (order.Status is not OrderStatusConstant.Start) {
+            if (order.Status is not OrderStatusConstants.Start) {
                 return false;
             }
 
@@ -426,7 +426,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             await _context.Entry(order).Reference(x => x.Player).LoadAsync();
             await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-            order.Status = OrderStatusConstant.Finish;
+            order.Status = OrderStatusConstants.Finish;
             order.Player.Status = PlayerStatusConstants.Online;
             order.Hirer.Status = HirerStatusConstants.Online;
             order.TimeFinish = DateTime.Now;

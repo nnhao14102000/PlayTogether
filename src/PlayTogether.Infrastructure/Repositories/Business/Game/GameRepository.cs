@@ -35,6 +35,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (game is null) {
                 return false;
             }
+
+            var ranks = await _context.Ranks.Where(x => x.GameId == id).ToListAsync();
+            if(ranks.Count >= 0){
+                _context.Ranks.RemoveRange(ranks);
+                if(await _context.SaveChangesAsync() < 0){
+                    return false;
+                }
+            }
+
+            var gameOfPlayer = await _context.GameOfPlayers.Where(x => x.GameId == id).ToListAsync();
+            if(gameOfPlayer.Count >= 0){
+                _context.GameOfPlayers.RemoveRange(gameOfPlayer);
+                if(await _context.SaveChangesAsync() < 0){
+                    return false;
+                }
+            }
+
             _context.Games.Remove(game);
             return (await _context.SaveChangesAsync() >= 0);
         }
