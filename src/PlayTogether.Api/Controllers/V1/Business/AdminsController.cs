@@ -61,7 +61,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin
         /// </remarks>
         [HttpPut, Route("hirer-status/{hirerId}")]
-        [Authorize(Roles = AuthConstant.RoleHirer)]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> UpdateHirerStatus(string hirerId, HirerStatusUpdateRequest request)
         {
             if (!ModelState.IsValid) {

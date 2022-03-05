@@ -77,7 +77,7 @@ Authorization: {{authToken}}
 
 ###
 # Get all hirer orders
-GET {{baseUrl}}/api/play-together/v1/hirers/orders
+GET {{baseUrl}}/api/play-together/v1/hirers/orders?IsNew=true
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -128,6 +128,13 @@ Authorization: {{authToken}}
 
 # Get all Hirer Notification
 GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get a Notification
+GET {{baseUrl}}/api/play-together/v1/notification/fa0a67b3-076b-41d8-ab56-56494b91f761
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 

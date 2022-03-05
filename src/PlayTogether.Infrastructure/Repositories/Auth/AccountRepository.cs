@@ -77,7 +77,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (hirer is not null) {
                 if (hirer.IsActive == false && hirer.UpdateDate > DateTime.Now.AddDays(-1)) {
                     return new AuthResult {
-                        Errors = new List<string>() { "Account is disable" }
+                        Errors = new List<string>() { $"Tài khoản đã bị khóa, bạn có thể đăng nhập lại sau {hirer.UpdateDate - DateTime.Now.AddDays(-1)}" }
                     };
                 }else if (hirer.IsActive == false && hirer.UpdateDate <= DateTime.Now.AddDays(-1)) {
                     hirer.Status = HirerStatusConstants.Online;

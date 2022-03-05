@@ -126,7 +126,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
                         UpdateDate = null,
                         ReceiverId = hirer.Id,
                         Title = $"Tài khoản của bạn đã bị khóa.😅",
-                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Bạn đã bị khóa tài khoản vì bạn đã đã hành vi không thích hợp. Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}" : $"Bạn đã bị khóa tài khoản vì {request.Message}. Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Bạn đã bị khóa tài khoản vì bạn đã đã hành vi không thích hợp. Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}" : $"Bạn đã bị khóa tài khoản vì: \"{request.Message}\". Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}",
                         Status = NotificationStatusConstants.NotRead
                     }
                 );
