@@ -14,6 +14,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Hirer
 
         public string Lastname { get; set; }
 
+        public bool Gender { get; set; }
+
         public string City { get; set; }
 
         public DateTime DateOfBirth { get; set; }
