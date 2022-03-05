@@ -60,7 +60,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
         {
             var games = await _context.Games.ToListAsync();
             var query = games.AsQueryable();
+
             SearchByName(ref query, param.Name);
+
             games = query.ToList();
             var response = _mapper.Map<List<GameGetAllResponse>>(games);
             return PagedResult<GameGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
@@ -70,6 +72,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
         private void SearchByName(ref IQueryable<Entities.Game> query, string name)
         {
             if(!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
             query = query.Where(x => (x.Name + " "  + x.DisplayName + " "  + x.OtherName).ToLower()
                                                    .Contains(name.ToLower()));
         }
