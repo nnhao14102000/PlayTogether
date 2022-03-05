@@ -114,13 +114,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
                 hirer.Status = HirerStatusConstants.Offline;
                 await _context.Entry(hirer).Collection(x => x.Orders).LoadAsync();
                 var orders = hirer.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
-                foreach (var order in orders) {
-                    await _context.Entry(order).Reference(x => x.Player).LoadAsync();
-                    order.Status = OrderStatusConstants.Interrupt;
-                    order.Player.Status = PlayerStatusConstants.Online;
+                if (orders.Count() > 0) {
+                    foreach (var order in orders) {
+                        await _context.Entry(order).Reference(x => x.Player).LoadAsync();
+                        order.Status = OrderStatusConstants.Interrupt;
+                        order.Player.Status = PlayerStatusConstants.Online;
+                    }
                 }
                 await _context.Notifications.AddAsync(
-                    new Entities.Notification{
+                    new Entities.Notification {
                         Id = Guid.NewGuid().ToString(),
                         CreatedDate = DateTime.Now,
                         UpdateDate = null,
