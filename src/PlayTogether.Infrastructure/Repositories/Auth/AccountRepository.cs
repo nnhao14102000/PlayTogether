@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PlayTogether.Core.Dtos.Incoming.Auth;
@@ -68,15 +69,23 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 }
             }
 
-            var hirer = _context.Hirers.FirstOrDefault(x => x.IdentityId == user.Id);
-            var player = _context.Players.FirstOrDefault(x => x.IdentityId == user.Id);
-            var charity = _context.Charities.FirstOrDefault(x => x.IdentityId == user.Id);
-            var admin = _context.Admins.FirstOrDefault(x => x.IdentityId == user.Id);
+            var hirer =  await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var player =  await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var charity =  await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var admin =  await _context.Admins.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            
             if (hirer is not null) {
-                if (hirer.IsActive == false) {
+                if (hirer.IsActive == false && hirer.UpdateDate > DateTime.Now.AddDays(-1)) {
                     return new AuthResult {
                         Errors = new List<string>() { "Account is disable" }
                     };
+                }else if (hirer.IsActive == false && hirer.UpdateDate <= DateTime.Now.AddDays(-1)) {
+                    hirer.Status = HirerStatusConstants.Online;
+                    hirer.IsActive = true;
+                    await _context.SaveChangesAsync();
+                }else{
+                    hirer.Status = HirerStatusConstants.Online;
+                    await _context.SaveChangesAsync();
                 }
             }
 
@@ -85,6 +94,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     return new AuthResult {
                         Errors = new List<string>() { "Account is disable" }
                     };
+                }else{
+                    player.Status = PlayerStatusConstants.Online;
+                    await _context.SaveChangesAsync();
                 }
             }
 

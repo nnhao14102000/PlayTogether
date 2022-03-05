@@ -56,7 +56,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (admin is not null) {
                 FilterByReceiverId(ref query, admin.Id);
-                OrderByCreatedDate(ref query, param.IsNew);
+                FilterByIsReadNotification(ref query, param.IsRead);
+                OrderByCreatedDate(ref query, param.IsNew);                
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
@@ -65,6 +66,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (player is not null) {
                 FilterByReceiverId(ref query, player.Id);
+                FilterByIsReadNotification(ref query, param.IsRead);
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
@@ -74,6 +76,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (hirer is not null) {
                 FilterByReceiverId(ref query, hirer.Id);
+                FilterByIsReadNotification(ref query, param.IsRead);
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
@@ -83,6 +86,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
 
             if (charity is not null) {
                 FilterByReceiverId(ref query, charity.Id);
+                FilterByIsReadNotification(ref query, param.IsRead);
                 OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
@@ -91,6 +95,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             }
 
             return null;
+        }
+
+        private void FilterByIsReadNotification(ref IQueryable<Entities.Notification> query, bool? isRead)
+        {
+            if (!query.Any() || isRead is null) {
+                return;
+            }
+            if(isRead is false){
+                query = query.Where(x => x.Status == NotificationStatusConstants.NotRead);
+            }else{
+                query = query.Where(x => x.Status == NotificationStatusConstants.Read);
+            }
         }
 
         private void FilterByReceiverId(ref IQueryable<Entities.Notification> query, string id)

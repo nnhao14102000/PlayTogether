@@ -100,7 +100,7 @@ Authorization: {{authToken}}
 
 ###
 # Cancel order request
-PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/b80b69d7-28d3-4b5e-892c-5282643930a7
+PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/0d5d061a-edf2-4906-8603-70d1997fc2f5
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 

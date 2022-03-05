@@ -26,6 +26,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get all Charities
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<PagedResult<CharityResponse>>> GetAllCharities(
@@ -51,6 +54,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<CharityResponse>> GetCharityById(string id){
@@ -58,7 +64,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
-
+        /// <summary>
+        /// Number of Donate today
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Charity
+        /// </remarks>
         [HttpGet("number-of-donate")]
         [Authorize(Roles = AuthConstant.RoleCharity)]
         public async Task<ActionResult> GetNumberOfDonateInDay([FromQuery] DonateParameters param){

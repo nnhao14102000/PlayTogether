@@ -26,10 +26,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Hirer for Admin
+        /// Get all Hirer
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<IEnumerable<HirerGetAllResponseForAdmin>>> GetAllHirers(
@@ -54,6 +57,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get Hirer Profile
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult<HirerGetProfileResponse>> GetHirerProfile()
@@ -67,11 +73,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player, Admin
+        /// </remarks>
         [HttpGet, Route("{id}")]
-        [Authorize(Roles = AuthConstant.RoleHirer + "," + AuthConstant.RolePlayer)]
+        [Authorize(Roles = AuthConstant.RoleHirer + "," + AuthConstant.RolePlayer + "," + AuthConstant.RoleAdmin)]
         public async Task<ActionResult<HirerGetByIdResponse>> GetHirerById(string id)
         {
-            var response = await _hirerService.GetHirerByIdForHirerAsync(id);
+            var response = await _hirerService.GetHirerByIdAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }
 
@@ -81,6 +90,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult> UpdateHirerInfomation(string id, HirerInfoUpdateRequest request)
@@ -98,6 +110,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="playerId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpPost("orders/{playerId}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult<OrderGetByIdResponse>> CreateOrder(string playerId, OrderCreateRequest request)
@@ -115,6 +130,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpGet("orders")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult<IEnumerable<OrderGetByIdResponse>>> GetAllOrderForHirer(
@@ -139,6 +157,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpPut("cancel/orders/{orderId}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult> CancelOrderRequest(string orderId)

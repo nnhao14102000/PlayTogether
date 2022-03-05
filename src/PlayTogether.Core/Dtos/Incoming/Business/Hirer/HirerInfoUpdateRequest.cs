@@ -22,6 +22,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Hirer
 
         public string Avatar { get; set; }
 
-        public DateTime UpdateDate = DateTime.UtcNow;
+        public DateTime UpdateDate = DateTime.Now;
     }
 }

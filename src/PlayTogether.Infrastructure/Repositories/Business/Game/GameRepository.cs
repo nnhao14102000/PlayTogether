@@ -37,17 +37,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             }
 
             var ranks = await _context.Ranks.Where(x => x.GameId == id).ToListAsync();
-            if(ranks.Count >= 0){
+            if (ranks.Count >= 0) {
                 _context.Ranks.RemoveRange(ranks);
-                if(await _context.SaveChangesAsync() < 0){
+                if (await _context.SaveChangesAsync() < 0) {
                     return false;
                 }
             }
 
             var gameOfPlayer = await _context.GameOfPlayers.Where(x => x.GameId == id).ToListAsync();
-            if(gameOfPlayer.Count >= 0){
+            if (gameOfPlayer.Count >= 0) {
                 _context.GameOfPlayers.RemoveRange(gameOfPlayer);
-                if(await _context.SaveChangesAsync() < 0){
+                if (await _context.SaveChangesAsync() < 0) {
                     return false;
                 }
             }
@@ -59,19 +59,19 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
         public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param)
         {
             var games = await _context.Games.ToListAsync();
+            var query = games.AsQueryable();
+            SearchByName(ref query, param.Name);
+            games = query.ToList();
+            var response = _mapper.Map<List<GameGetAllResponse>>(games);
+            return PagedResult<GameGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
 
-            if (games is not null) {
-                if (!String.IsNullOrEmpty(param.Name)) {
-                    var query = games.AsQueryable();
-                    query = query.Where(x => (x.Name + " "  + x.DisplayName + " "  + x.OtherName).ToLower()
-                                                   .Contains(param.Name.ToLower()));
-                    games = query.ToList();
-                }
-                var response = _mapper.Map<List<GameGetAllResponse>>(games);
-                return PagedResult<GameGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        }
 
-            return null;
+        private void SearchByName(ref IQueryable<Entities.Game> query, string name)
+        {
+            if(!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name))
+            query = query.Where(x => (x.Name + " "  + x.DisplayName + " "  + x.OtherName).ToLower()
+                                                   .Contains(name.ToLower()));
         }
 
         public async Task<GameGetByIdResponse> GetGameByIdAsync(string id)

@@ -21,10 +21,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Type of Game by Id for Admin
+        /// Get Type of Game by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpGet("{id}", Name = "GetTypeOfGameById")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<TypeOfGameGetByIdResponse>> GetTypeOfGameById(string id)
@@ -34,13 +37,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add Type of Game for Admin
+        /// Add Type of Game
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<TypeOfGameGetByIdResponse>> CreateGame(
+        public async Task<ActionResult<TypeOfGameGetByIdResponse>> CreateTypeOfGame(
             TypeOfGameCreateRequest request)
         {
             if (!ModelState.IsValid) {
@@ -51,10 +57,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete Type Of Game for Admin
+        /// Delete Type Of Game
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DeleteGame(string id)

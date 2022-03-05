@@ -22,9 +22,12 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Musics for Admin, Player
+        /// Get all Musics
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<PagedResult<MusicGetByIdResponse>>> GetAllMusics(
@@ -46,10 +49,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Music by Id for Admin, Player
+        /// Get Music by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet("{id}", Name = "GetMusicById")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<MusicGetByIdResponse>> GetMusicById(string id)
@@ -59,10 +65,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add Music for Admin
+        /// Add Music
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<MusicGetByIdResponse>> CreateMusic(MusicCreateRequest request)
@@ -75,11 +84,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Update Music for Admin
+        /// Update Music
         /// </summary>
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> UpdateMusic(string id, MusicUpdateRequest request)
@@ -92,10 +104,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete a Music for Admin
+        /// Delete a Music
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DeleteMusic(string id)

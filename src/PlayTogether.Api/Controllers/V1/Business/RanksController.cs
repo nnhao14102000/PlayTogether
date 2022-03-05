@@ -21,10 +21,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Rank by Id for Admin, Player
+        /// Get Rank by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet("{id}", Name = "GetRankById")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<RankGetByIdResponse>> GetRankById(string id)
@@ -34,11 +37,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Update Rank for Admin
+        /// Update Rank
         /// </summary>
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPut("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> UpdateRank(string id, RankUpdateRequest request)
@@ -55,6 +61,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DeleteRank(string id)

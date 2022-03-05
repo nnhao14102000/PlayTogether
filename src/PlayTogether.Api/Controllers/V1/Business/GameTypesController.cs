@@ -24,9 +24,12 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Game Type for Admin
+        /// Get all Game Type
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<PagedResult<GameTypeGetAllResponse>>> GetAllGameTypes(
@@ -48,10 +51,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Game Type by Id for Admin
+        /// Get Game Type by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpGet("{id}", Name = "GetGameTypeById")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<GameTypeGetByIdResponse>> GetGameTypeById(string id)
@@ -61,10 +67,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add New a Game Type for Admin
+        /// Add New a Game Type
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<GameTypeCreateResponse>> CreateGameType(GameTypeCreateRequest request)
@@ -77,11 +86,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Update Game Type for Admin
+        /// Update Game Type
         /// </summary>
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> UpdateGameType(string id, GameTypeUpdateRequest request)
@@ -94,10 +106,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete a Game Type for Admin
+        /// Delete a Game Type
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DeleteGameType(string id)

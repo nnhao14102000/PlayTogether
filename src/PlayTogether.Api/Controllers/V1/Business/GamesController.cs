@@ -27,11 +27,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Games for Admin, Player
+        /// Get all Games
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player, Hirer
+        /// </remarks>
         [HttpGet]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<PagedResult<GameGetAllResponse>>> GetAllGames(
             [FromQuery] GameParameter param)
         {
@@ -51,10 +54,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
         
         /// <summary>
-        /// Get all Ranks in Game for Admin, Player
+        /// Get all Ranks in Game
         /// </summary>
         /// <param name="gameId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player
+        /// </remarks>
         [HttpGet("{gameId}/ranks")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
         public async Task<ActionResult<IEnumerable<RankGetByIdResponse>>> GetAllRanksInGame(string gameId)
@@ -65,11 +71,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         
 
         /// <summary>
-        /// Create a Rank in Game for Admin
+        /// Create a Rank in Game
         /// </summary>
         /// <param name="gameId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost("{gameId}/ranks")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<RankCreateResponse>> CreateRank(string gameId, RankCreateRequest request)
@@ -83,12 +92,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Game by Id for Admin, Player
+        /// Get Game by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Player, Hirer
+        /// </remarks>
         [HttpGet("{id}", Name = "GetGameById")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<GameGetByIdResponse>> GetGameById(string id)
         {
             var response = await _gameService.GetGameByIdAsync(id);
@@ -96,10 +108,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add New a Game for Admin
+        /// Add New a Game
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<GameCreateResponse>> CreateGame(GameCreateRequest request)
@@ -112,11 +127,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Update Game for Admin
+        /// Update Game
         /// </summary>
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> UpdateGame(string id, GameUpdateRequest request)
@@ -129,10 +147,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete a Game for Admin
+        /// Delete a Game
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DeleteGame(string id)

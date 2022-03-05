@@ -19,10 +19,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Image by Id for Player  and Hirer
+        /// Get Image by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player, Hirer
+        /// </remarks>
         [HttpGet("{id}", Name = "GetImageById")]
         [Authorize(Roles = AuthConstant.RolePlayer + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<ImageGetByIdResponse>> GetImageById(string id)
@@ -32,10 +35,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add New an Image for Player
+        /// Add New an Image
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<ImageGetByIdResponse>> CreateImage(ImageCreateRequest request)
@@ -48,10 +54,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete an Image of Player
+        /// Delete an Image
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> DeleteImage(string id)

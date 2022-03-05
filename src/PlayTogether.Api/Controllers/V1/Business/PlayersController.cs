@@ -44,6 +44,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="playerId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPost("{playerId}/games")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<GameOfPlayerGetByIdResponse>> CreateGameOfPlayer(
@@ -64,8 +67,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="playerId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player, Hirer
+        /// </remarks>
         [HttpGet("{playerId}/games")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
+        [Authorize(Roles = AuthConstant.RolePlayer + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<IEnumerable<GamesInPlayerGetAllResponse>>> GetAllGameOfPlayer(string playerId)
         {
             var response = await _gameOfPlayerService.GetAllGameOfPlayerAsync(playerId);
@@ -78,6 +84,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="playerId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPost("{playerId}/musics")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<MusicOfPlayerGetByIdResponse>> CreateMusicOfPlayer(
@@ -98,8 +107,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="playerId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player
+        /// </remarks>
         [HttpGet("{playerId}/musics")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
+        [Authorize(Roles = AuthConstant.RolePlayer + "," + AuthConstant.RoleHirer)]
         public async Task<ActionResult<IEnumerable<MusicOfPlayerGetAllResponse>>> GetAllMusicOfPlayer(string playerId)
         {
             var response = await _musicOfPlayerService.GetALlMusicOfPlayerAsync(playerId);
@@ -110,6 +122,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get all Players for Hirer
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpGet]
         [ApiVersion("1.1")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
@@ -135,6 +150,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get Player Profile
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpGet, Route("profile")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<PlayerGetProfileResponse>> GetPlayerProfile()
@@ -144,10 +162,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Player by Id for Player
+        /// Get Player by Id view and update Player Profile
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpGet, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<PlayerGetByIdResponseForPlayer>> GetPlayerByIdForPlayer(string id)
@@ -161,6 +182,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpGet, Route("{id}/other-skills")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<PlayerOtherSkillResponse>> GetPlayerOtherSkillByIdForPlayer(string id)
@@ -173,7 +197,10 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get Player by Id for Hirer
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>        
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>        
         [HttpGet, Route("{id}")]
         [ApiVersion("1.1")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
@@ -189,6 +216,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut, Route("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> UpdatePlayerInfomation(string id, PlayerInfoUpdateRequest request)
@@ -206,6 +236,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut, Route("{id}/other-skills")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> UpdatePlayerOtherSkill(string id, OtherSkillUpdateRequest request)
@@ -221,7 +254,10 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Get Player Service Info by Id for Player
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>        
+        /// <returns></returns> 
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>       
         [HttpGet, Route("service-info/{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<PlayerServiceInfoResponseForPlayer>> GetPlayerServiceInfoById(string id)
@@ -236,6 +272,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut, Route("service-info/{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> UpdatePlayerInfoService(string id, PlayerServiceInfoUpdateRequest request)
@@ -248,10 +287,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get all Orders for Players
+        /// Get all Orders for Player
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpGet("orders")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<IEnumerable<OrderGetByIdResponse>>> GetAllOrderForPlayer(
@@ -278,6 +320,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="orderId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut("orders/{orderId}/process")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request)
@@ -291,6 +336,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut("accept-policy")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> AcceptPolicy(PlayerAcceptPolicyRequest request)

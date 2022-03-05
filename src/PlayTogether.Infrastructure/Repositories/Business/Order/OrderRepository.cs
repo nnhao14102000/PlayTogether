@@ -463,5 +463,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             return false;
         }
+
+        public Task<PagedResult<OrderGetByIdResponse>> GetAllOrderByUserIdForAdminAsync(string id, AdminOrderParameters param)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

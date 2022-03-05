@@ -25,6 +25,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Charity, Hirer, Player
+        /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," 
                         + AuthConstant.RoleCharity + "," 
@@ -52,6 +55,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Charity, Hirer, Player
+        /// </remarks>
         [HttpGet("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," 
                         + AuthConstant.RoleCharity + "," 
@@ -67,6 +73,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Charity, Hirer, Player
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," 
                         + AuthConstant.RoleCharity + "," 

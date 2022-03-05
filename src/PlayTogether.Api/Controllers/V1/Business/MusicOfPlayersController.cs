@@ -23,6 +23,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpGet("{id}", Name = "GetMusicOfPlayerById")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult<MusicOfPlayerGetByIdResponse>> GetMusicOfPlayerById(string id)
@@ -36,6 +39,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> DeleteMusicOfPlayer(string id)

@@ -63,6 +63,10 @@
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, Search by Name  
 >
+> - ``PUT /api/play-together/v1/admins/hirer-status/{hirerId} ``  
+>   ***Description***: Active or Disable (1 day) a hirer account   
+>   ***Role Access***: Admin    
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
@@ -80,10 +84,10 @@
 <h2 id="hirer">Hirer  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/hirers ``  
->   ***Description***: Get all Hirers  
+>   ***Description***: Get all Hirers for Admin  
 >   ***Use for***: Get all hirer account in Admin web   
 >   ***Role Access***: Admin  
->   ***Extension***: Paging, Search by Name 
+>   ***Extension***: Paging, Search by Name, filter by status, filter active account 
 >
 > - ``GET /api/play-together/v1/hirers/profile ``  
 >   ***Description***: Get Hirer Profile  
@@ -92,8 +96,8 @@
 > 
 > - ``GET /api/play-together/v1/hirers/{id} ``  
 >   ***Description***: Get a Hirer by Id   
->   ***Use for***: Hirer get their own information for update  
->   ***Role Access***: Hirer  
+>   ***Use for***: View a specific hirer information  
+>   ***Role Access***: Hirer, Player, Admin  
 > 
 > - ``PUT /api/play-together/v1/hirers/{id} ``  
 >   ***Description***: Update Hirer Info    
@@ -158,8 +162,8 @@
 >
 > - ``GET /api/play-together/v1/players/{playerId}/games ``  
 >   ***Description***: Get all Games of Player   
->   ***Use for***: Player get their games  
->   ***Role Access***: Player  
+>   ***Use for***: View all game of specific player  
+>   ***Role Access***: Player, Hirer  
 >
 > - ``POST /api/play-together/v1/players/{playerId}/games ``  
 >   ***Description***: Create a New Game for Player   
@@ -168,8 +172,8 @@
 >
 > - ``GET /api/play-together/v1/players/{playerId}/musics ``  
 >   ***Description***: Get all Musics of Player   
->   ***Use for***: Player get their musics  
->   ***Role Access***: Player  
+>   ***Use for***: View all musics of specific player  
+>   ***Role Access***: Player, Hirer  
 >
 > - ``POST /api/play-together/v1/players/{playerId}/musics ``  
 >   ***Description***: Create a New Music for Player   
@@ -277,7 +281,7 @@
 > - ``GET /api/play-together/v1/games ``  
 >   ***Description***: Get all Games   
 >   ***Use for***: Get to view all games  
->   ***Role Access***: Admin, Player  
+>   ***Role Access***: Admin, Player, Hirer  
 >   ***Extension***: Paging, Search by Name  
 >
 > - ``GET /api/play-together/v1/games/{gameId}/ranks ``  
@@ -293,7 +297,7 @@
 > - ``GET /api/play-together/v1/games/{id} ``  
 >   ***Description***: Get a Game By Id  
 >   ***Use for***: View a game in detail  
->   ***Role Access***: Admin, Player  
+>   ***Role Access***: Admin, Player, Hirer  
 >
 > - ``POST /api/play-together/v1/games ``  
 >   ***Description***: Add New a Game  
@@ -449,7 +453,7 @@
 >   ***Description***: Get all Notifications   
 >   ***Use for***: View all notifications  
 >   ***Role Access***: Admin, Player, Hirer, Charity  
->   ***Extension***: Paging, Order by Created Date  
+>   ***Extension***: Paging, Filter not read or read notification, Order by Created Date  
 >
 > - ``GET /api/play-together/v1/notification/{id} ``  
 >   ***Description***: Get Notification By Id  

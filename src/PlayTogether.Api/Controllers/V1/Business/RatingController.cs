@@ -27,6 +27,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="orderId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
         [HttpPost("{orderId}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
         public async Task<ActionResult> CreateRatingFeedback(string orderId, RatingCreateRequest request)
@@ -44,6 +47,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="playerId"></param>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, Hirer, Player
+        /// </remarks>
         [HttpGet("{playerId}")]
         [Authorize(Roles = AuthConstant.RoleHirer + ","
                         + AuthConstant.RolePlayer + ","
@@ -69,6 +75,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="rateId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
         [HttpPut("violate/{rateId}")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
         public async Task<ActionResult> ReportViolateFeedback(string rateId)
@@ -82,6 +91,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpGet("violates")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
@@ -105,6 +117,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <param name="rateId"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPut("disable/{rateId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult> DisableFeedback(string rateId)
