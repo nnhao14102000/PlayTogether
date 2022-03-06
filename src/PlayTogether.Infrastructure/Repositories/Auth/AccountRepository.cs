@@ -46,7 +46,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         public async Task<bool> CheckExistEmailAsync(string email)
         {
             if (email is null) {
-                throw new ArgumentNullException("Email is null");
+                throw new ArgumentNullException("Vui lòng nhập email!");
             }
             return await IsExistEmail(email);
         }
@@ -57,33 +57,35 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (user is null) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Email is not found" }
+                    Errors = new List<string>() { "Không tìm thấy email!" }
                 };
             }
 
             if (!await IsAdminOrCharity(user)) {
                 if (!user.EmailConfirmed) {
                     return new AuthResult {
-                        Errors = new List<string>() { "User is not comfirm email" }
+                        Errors = new List<string>() { "Vui lòng xác nhận email!" }
                     };
                 }
             }
 
-            var hirer =  await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
-            var player =  await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
-            var charity =  await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
-            var admin =  await _context.Admins.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
-            
+            var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+
             if (hirer is not null) {
                 if (hirer.IsActive == false && hirer.UpdateDate > DateTime.Now.AddDays(-1)) {
                     return new AuthResult {
                         Errors = new List<string>() { $"Tài khoản đã bị khóa, bạn có thể đăng nhập lại sau {hirer.UpdateDate - DateTime.Now.AddDays(-1)}" }
                     };
-                }else if (hirer.IsActive == false && hirer.UpdateDate <= DateTime.Now.AddDays(-1)) {
+                }
+                else if (hirer.IsActive == false && hirer.UpdateDate <= DateTime.Now.AddDays(-1)) {
                     hirer.Status = HirerStatusConstants.Online;
                     hirer.IsActive = true;
                     await _context.SaveChangesAsync();
-                }else{
+                }
+                else {
                     hirer.Status = HirerStatusConstants.Online;
                     await _context.SaveChangesAsync();
                 }
@@ -92,9 +94,10 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (player is not null) {
                 if (player.IsActive == false) {
                     return new AuthResult {
-                        Errors = new List<string>() { "Account is disable" }
+                        Errors = new List<string>() { "Tài khoản đã bị khóa." }
                     };
-                }else{
+                }
+                else {
                     player.Status = PlayerStatusConstants.Online;
                     await _context.SaveChangesAsync();
                 }
@@ -103,7 +106,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (charity is not null) {
                 if (charity.IsActive == false) {
                     return new AuthResult {
-                        Errors = new List<string>() { "Account is disable" }
+                        Errors = new List<string>() { "Tài khoản đã bị khóa." }
                     };
                 }
             }
@@ -111,7 +114,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (admin is not null) {
                 if (admin.IsActive == false) {
                     return new AuthResult {
-                        Errors = new List<string>() { "Account is disable" }
+                        Errors = new List<string>() { "Tài khoản đã bị khóa." }
                     };
                 }
             }
@@ -120,7 +123,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (!result) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Invalid password" }
+                    Errors = new List<string>() { "Sai Password. Vui lòng kiểm tra và thử lại!" }
                 };
             }
 
@@ -138,7 +141,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (payload is null) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Invalid google authentication" }
+                    Errors = new List<string>() { "Lỗi xác thực với Google!" }
                 };
             }
 
@@ -183,6 +186,11 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
             else {
                 await _userManager.AddLoginAsync(user, info);
+
+                var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+                hirer.Status = HirerStatusConstants.Online;
+                await _context.SaveChangesAsync();
+
                 var token = await GenerateToken(user);
                 return new AuthResult {
                     Message = token[0],
@@ -191,7 +199,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResult {
-                Errors = new List<string>() { "Invalid google authentication" }
+                Errors = new List<string>() { "Lỗi xác thực với Google!" }
             };
         }
 
@@ -201,7 +209,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (payload is null) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Invalid google authentication" }
+                    Errors = new List<string>() { "Lỗi xác thực với Google!" }
                 };
             }
 
@@ -246,6 +254,11 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
             else {
                 await _userManager.AddLoginAsync(user, info);
+
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
+                player.Status = PlayerStatusConstants.Online;
+                await _context.SaveChangesAsync();
+
                 var token = await GenerateToken(user);
                 return new AuthResult {
                     Message = token[0],
@@ -254,7 +267,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             return new AuthResult {
-                Errors = new List<string>() { "Invalid google authentication" }
+                Errors = new List<string>() { "Lỗi xác thực với Google!" }
             };
         }
 
@@ -262,7 +275,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "This user is exist" }
+                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
                 };
             }
 
@@ -287,7 +300,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
                     return new AuthResult {
-                        Message = "Admin create successfully!"
+                        Message = "Tạo tài khoản Administrator thành công!"
                     };
                 }
             }
@@ -301,7 +314,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "This user is exist" }
+                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
                 };
             }
 
@@ -325,7 +338,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
                     return new AuthResult {
-                        Message = "Charity create successfully!"
+                        Message = "Tạo tài khoản tổ chức từ thiện thành công!"
                     };
                 }
             }
@@ -339,7 +352,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "This user is exist" }
+                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
                 };
             }
 
@@ -371,7 +384,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
                     return new AuthResult {
-                        Message = "Player create successfully!"
+                        Message = "Tạo tài khoản Player thành công!"
                     };
                 }
             }
@@ -414,8 +427,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     await _context.Players.AddAsync(userEntityModel);
 
                     if (await _context.SaveChangesAsync() < 0) {
-                        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                        //var confirmLink = Url
                         return false;
                     }
                 }
@@ -427,7 +438,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "This user is exist" }
+                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
                 };
             }
 
@@ -451,6 +462,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.City = registerDto.City;
                 userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                 userEntityModel.Gender = registerDto.Gender;
+                userEntityModel.Status = HirerStatusConstants.Offline;
 
                 await _context.Hirers.AddAsync(userEntityModel);
 
@@ -458,7 +470,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                     //var confirmLink = Url
                     return new AuthResult {
-                        Message = "Hirer create successfully!"
+                        Message = "Tài khoản Hirer đã tạo thành công!"
                     };
                 }
             }
@@ -496,6 +508,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Balance = 1000000;
+                    userEntityModel.Status = HirerStatusConstants.Online;
 
                     await _context.Hirers.AddAsync(userEntityModel);
 
@@ -600,6 +613,39 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var handler = new JwtSecurityTokenHandler();
             var tokenData = handler.ReadJwtToken(token);
             return tokenData.Payload;
+        }
+
+        public async Task<AuthResult> LogoutAsync(ClaimsPrincipal principal)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return new AuthResult {
+                    Message = "Bạn chưa đăng nhập!"
+                };
+            }
+            var identityId = loggedInUser.Id;
+
+            var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+            if (hirer is not null) {
+                hirer.Status = HirerStatusConstants.Offline;
+                await _context.SaveChangesAsync();
+                return new AuthResult {
+                    Message = "Đăng xuất thành cồng!"
+                };
+            }
+
+            if (player is not null) {
+                player.Status = PlayerStatusConstants.Offline;
+                await _context.SaveChangesAsync();
+                return new AuthResult {
+                    Message = "Đăng xuất thành cồng!"
+                };
+            }
+            return new AuthResult {
+                Message = "Lỗi đăng xuất!"
+            };
         }
     }
 }

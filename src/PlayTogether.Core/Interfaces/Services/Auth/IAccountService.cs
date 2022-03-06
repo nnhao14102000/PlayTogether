@@ -1,6 +1,7 @@
 ﻿using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Interfaces.Services.Auth
@@ -15,6 +16,7 @@ namespace PlayTogether.Core.Interfaces.Services.Auth
         Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest registerDto);
         Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto);
         Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto);
+        Task<AuthResult> LogoutAsync(ClaimsPrincipal principal);
 
         // Extra
         Task<bool> RegisterMultiPlayerAsync(List<RegisterUserInfoRequest> registerDtos);

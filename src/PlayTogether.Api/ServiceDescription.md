@@ -49,6 +49,10 @@
 > - ``POST /api/play-together/v1/accounts/register-hirer ``  
 >   ***Description***: Register a Normal Hirer Account  
 >
+> - ``PUT /api/play-together/v1/accounts/logout ``  
+>   ***Description***: Logout Hirer or Player  
+>   ***Role Access***: Hirer, Player    
+>
 > - ``POST /api/play-together/v1/accounts/register-multi-player ``  
 >   ***Description***: Register multi Normal Player Account **for TEST**  
 >

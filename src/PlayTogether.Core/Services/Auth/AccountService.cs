@@ -5,6 +5,7 @@ using PlayTogether.Core.Interfaces.Repositories.Auth;
 using PlayTogether.Core.Interfaces.Services.Auth;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Auth
@@ -16,8 +17,8 @@ namespace PlayTogether.Core.Services.Auth
 
         public AccountService(IAccountRepository accountRepository, ILogger<AccountService> logger)
         {
-            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _accountRepository = accountRepository;
+            _logger = logger;
         }
         public async Task<bool> CheckExistEmailAsync(string email)
         {
@@ -71,6 +72,17 @@ namespace PlayTogether.Core.Services.Auth
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call LoginUserAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResult> LogoutAsync(ClaimsPrincipal principal)
+        {
+            try {
+                return await _accountRepository.LogoutAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call LogoutAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

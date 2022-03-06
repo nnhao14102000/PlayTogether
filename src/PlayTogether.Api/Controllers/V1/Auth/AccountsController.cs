@@ -95,6 +95,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// </summary>
         /// <param name="registerDto"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
         [HttpPost, Route("register-charity")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
         public async Task<ActionResult<AuthResult>> CharityRegister(RegisterCharityInfoRequest registerDto)
@@ -164,6 +167,21 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             }
             var response = await _accountService.RegisterMultiHirerAsync(registerDtos);
             return response is true ? Ok() : BadRequest();
+        }
+
+        /// <summary>
+        /// Logout
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player
+        /// </remarks>
+        [HttpPut, Route("logout")]
+        [Authorize(Roles = AuthConstant.RoleHirer + "," + AuthConstant.RolePlayer)]
+        public async Task<ActionResult<AuthResult>> LogoutUser()
+        {
+            var response = await _accountService.LogoutAsync(HttpContext.User);
+            return Ok(response);
         }
     }
 }
