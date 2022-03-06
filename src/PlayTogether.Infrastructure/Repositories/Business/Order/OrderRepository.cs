@@ -27,7 +27,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             _userManager = userManager;
         }
 
-        public async Task<OrderGetByIdResponse> CreateOrderRequestByHirerAsync(
+        public async Task<OrderGetResponse> CreateOrderRequestByHirerAsync(
             ClaimsPrincipal principal,
             string playerId,
             OrderCreateRequest request)
@@ -83,12 +83,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return null;
                 }
-                return _mapper.Map<OrderGetByIdResponse>(model);
+                return _mapper.Map<OrderGetResponse>(model);
             }
             return null;
         }
 
-        public async Task<PagedResult<OrderGetByIdResponse>> GetAllOrderRequestByHirerAsync(
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByHirerAsync(
             ClaimsPrincipal principal,
             HirerOrderParameter param)
         {
@@ -113,23 +113,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             foreach (var order in ordersOfHirer) {
                 await _context.Entry(order)
-               .Reference(x => x.Hirer)
-               .LoadAsync();
+                    .Reference(x => x.Hirer)
+                    .LoadAsync();
 
                 await _context.Entry(order)
                     .Reference(x => x.Player)
                     .LoadAsync();
             }
 
-            var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfHirer);
-            return PagedResult<OrderGetByIdResponse>
+            var response = _mapper.Map<List<OrderGetResponse>>(ordersOfHirer);
+            return PagedResult<OrderGetResponse>
                 .ToPagedList(
                     response,
                     param.PageNumber,
                     param.PageSize);
         }
 
-        public async Task<PagedResult<OrderGetByIdResponse>> GetAllOrderRequestByPlayerAsync(
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByPlayerAsync(
             ClaimsPrincipal principal,
             PlayerOrderParameter param)
         {
@@ -154,23 +154,25 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             foreach (var order in ordersOfPlayer) {
                 await _context.Entry(order)
-               .Reference(x => x.Hirer)
-               .LoadAsync();
+                    .Reference(x => x.Hirer)
+                    .LoadAsync();
 
                 await _context.Entry(order)
                     .Reference(x => x.Player)
                     .LoadAsync();
             }
 
-            var response = _mapper.Map<List<OrderGetByIdResponse>>(ordersOfPlayer);
-            return PagedResult<OrderGetByIdResponse>
+            var response = _mapper.Map<List<OrderGetResponse>>(ordersOfPlayer);
+            return PagedResult<OrderGetResponse>
                 .ToPagedList(
                     response,
                     param.PageNumber,
                     param.PageSize);
         }
 
-        private void FilterOrderRecent(ref IQueryable<Entities.Order> query, bool? isNew)
+        private void FilterOrderRecent(
+            ref IQueryable<Entities.Order> query,
+            bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -183,7 +185,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
         }
 
-        private void FilterOrderByStatus(ref IQueryable<Entities.Order> query, string status)
+        private void FilterOrderByStatus(
+            ref IQueryable<Entities.Order> query,
+            string status)
         {
             if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
                 return;
@@ -191,9 +195,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             query = query.Where(x => x.Status == status);
         }
 
-        public async Task<OrderGetByIdResponse> GetOrderByIdAsync(string id)
+        public async Task<OrderGetResponse> GetOrderByIdAsync(string orderId)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
 
             if (order is null) {
                 return null;
@@ -207,10 +211,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 .Reference(x => x.Player)
                 .LoadAsync();
 
-            return _mapper.Map<OrderGetByIdResponse>(order);
+            return _mapper.Map<OrderGetResponse>(order);
         }
 
-        public async Task<bool> CancelOrderRequestByHirerAsync(string id, ClaimsPrincipal principal)
+        public async Task<bool> CancelOrderRequestByHirerAsync(
+            string orderId,
+            ClaimsPrincipal principal)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -223,7 +229,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             if (order is null || order.Status is not OrderStatusConstants.Processing) {
                 return false;
             }
@@ -274,7 +280,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             return false;
         }
 
-        public async Task<bool> ProcessOrderRequestByPlayerAsync(string id, ClaimsPrincipal principal, OrderProcessByPlayerRequest request)
+        public async Task<bool> ProcessOrderRequestByPlayerAsync(
+            string orderId,
+            ClaimsPrincipal principal,
+            OrderProcessByPlayerRequest request)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -287,7 +296,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             if (order is null || order.Status is not OrderStatusConstants.Processing) {
                 return false;
             }
@@ -384,9 +393,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             return false;
         }
 
-        public async Task<bool> FinishOrderAsync(string id)
+        public async Task<bool> FinishOrderAsync(string orderId)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             if (order is null) {
                 return false;
             }
@@ -407,9 +416,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             return false;
         }
 
-        public async Task<bool> FinishOrderSoonAsync(string id, ClaimsPrincipal principal, FinishSoonRequest request)
+        public async Task<bool> FinishOrderSoonAsync(
+            string orderId,
+            ClaimsPrincipal principal,
+            FinishSoonRequest request)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             if (order is null) {
                 return false;
             }
@@ -464,9 +476,71 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             return false;
         }
 
-        public Task<PagedResult<OrderGetByIdResponse>> GetAllOrderByUserIdForAdminAsync(string id, AdminOrderParameters param)
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(
+            string id,
+            AdminOrderParameters param)
         {
-            throw new NotImplementedException();
+            var orders = await _context.Orders.Where(x => (x.HirerId + x.PlayerId).Contains(id)).ToListAsync();
+
+            var query = orders.AsQueryable();
+            FilterInDate(ref query, param.FromDate, param.ToDate);
+            FilterOrderByStatus(ref query, param.Status);
+            orders = query.ToList();
+            
+            foreach (var order in orders) {
+                await _context.Entry(order)
+                    .Reference(x => x.Hirer)
+                    .LoadAsync();
+
+                await _context.Entry(order)
+                    .Reference(x => x.Player)
+                    .LoadAsync();
+            }
+
+            var response = _mapper.Map<List<OrderGetResponse>>(orders);
+            return PagedResult<OrderGetResponse>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        private void FilterInDate(
+            ref IQueryable<Entities.Order> query,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            if (!query.Any() || fromDate is null || toDate is null) {
+                return;
+            }
+            query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
+        }
+
+        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order is null) {
+                return null;
+            }
+
+            await _context.Entry(order)
+               .Reference(x => x.Hirer)
+               .LoadAsync();
+
+            await _context.Entry(order)
+                .Reference(x => x.Player)
+                .LoadAsync();
+
+            await _context.Entry(order)
+                .Collection(x => x.Ratings)
+                .LoadAsync();
+
+            await _context.Entry(order)
+                .Collection(x => x.Reports)
+                .LoadAsync();
+
+            return _mapper.Map<OrderGetDetailResponse>(order);
         }
     }
 }

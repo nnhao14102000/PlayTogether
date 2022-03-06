@@ -79,3 +79,18 @@ Authorization: {{authToken}}
 }
 
 ###
+
+
+# Get all orders of a specific Hirer
+GET {{baseUrl}}/api/play-together/v1/admins/2181af98-904a-4df9-9b9a-96bc925956ff/orders
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get a order detail
+GET {{baseUrl}}/api/play-together/v1/admins/users/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###

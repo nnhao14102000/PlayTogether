@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
 {
-    public class OrderGetByIdResponse
+    public class OrderGetDetailResponse
     {
         public string Id { get; set; }
 
@@ -17,6 +18,9 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
         public int TotalTimes { get; set; }
 
         public float TotalPrices { get; set; }
+
+        public ICollection<RatingInOrderResponse> Ratings { get; set; }
+        public ICollection<ReportInOrderResponse> Reports { get; set; }
 
         public string Status { get; set; }
     }

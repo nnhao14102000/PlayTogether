@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
+using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -17,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Get Order by Id
+        /// Get Order by Order Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -26,7 +29,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{id}", Name = "GetOrderById")]
         [Authorize(Roles = AuthConstant.RoleHirer + "," + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<OrderGetByIdResponse>> GetOrderById(string id)
+        public async Task<ActionResult<OrderGetResponse>> GetOrderById(string id)
         {
             var response = await _orderService.GetOrderByIdAsync(id);
             return response is not null ? Ok(response) : NotFound();

@@ -39,7 +39,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetByIdResponse> CreateOrderRequestByHirerAsync(
+        public async Task<OrderGetResponse> CreateOrderRequestByHirerAsync(
             ClaimsPrincipal principal,
             string playerId,
             OrderCreateRequest request)
@@ -96,7 +96,21 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<PagedResult<OrderGetByIdResponse>> GetAllOrderRequestByHirerAsync(ClaimsPrincipal principal, HirerOrderParameter param)
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(string userId, AdminOrderParameters param)
+        {
+            try {
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrEmpty(userId)) {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _orderRepository.GetAllOrderByUserIdForAdminAsync(userId, param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllOrderByUserIdForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByHirerAsync(ClaimsPrincipal principal, HirerOrderParameter param)
         {
             try {
                 if (principal is null) {
@@ -110,7 +124,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<PagedResult<OrderGetByIdResponse>> GetAllOrderRequestByPlayerAsync(ClaimsPrincipal principal, PlayerOrderParameter param)
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByPlayerAsync(ClaimsPrincipal principal, PlayerOrderParameter param)
         {
             try {
                 if (principal is null) {
@@ -124,16 +138,30 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetByIdResponse> GetOrderByIdAsync(string id)
+        public async Task<OrderGetResponse> GetOrderByIdAsync(string id)
         { 
             try {
-                if (String.IsNullOrEmpty(id)) {
+                if (String.IsNullOrEmpty(id) || String.IsNullOrEmpty(id)) {
                     throw new ArgumentNullException(nameof(id));
                 }
                 return await _orderRepository.GetOrderByIdAsync(id);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetOrderByIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
+        {
+            try {
+                if (String.IsNullOrEmpty(orderId) || String.IsNullOrEmpty(orderId)) {
+                    throw new ArgumentNullException(nameof(orderId));
+                }
+                return await _orderRepository.GetOrderByIdInDetailForAdminAsync(orderId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetOrderByIdInDetailForAdminAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

@@ -296,7 +296,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("orders")]
         [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<IEnumerable<OrderGetByIdResponse>>> GetAllOrderForPlayer(
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForPlayer(
             [FromQuery] PlayerOrderParameter param)
         {
             var response = await _orderService.GetAllOrderRequestByPlayerAsync(HttpContext.User, param);

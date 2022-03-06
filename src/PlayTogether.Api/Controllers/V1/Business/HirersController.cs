@@ -115,7 +115,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost("orders/{playerId}")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<OrderGetByIdResponse>> CreateOrder(string playerId, OrderCreateRequest request)
+        public async Task<ActionResult<OrderGetResponse>> CreateOrder(string playerId, OrderCreateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -135,7 +135,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("orders")]
         [Authorize(Roles = AuthConstant.RoleHirer)]
-        public async Task<ActionResult<IEnumerable<OrderGetByIdResponse>>> GetAllOrderForHirer(
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForHirer(
             [FromQuery] HirerOrderParameter param)
         {
             var response = await _orderService.GetAllOrderRequestByHirerAsync(HttpContext.User, param);

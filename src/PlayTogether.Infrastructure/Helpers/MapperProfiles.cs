@@ -108,9 +108,12 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<MusicOfPlayer, MusicOfPlayerGetAllResponse>();
 
             CreateMap<OrderCreateRequest, Order>();
-            CreateMap<Order, OrderGetByIdResponse>();
+            CreateMap<Order, OrderGetResponse>();
             CreateMap<Player, PlayerOrderResponse>();
             CreateMap<Hirer, HirerOrderResponse>();
+            CreateMap<Order, OrderGetDetailResponse>();
+            CreateMap<Rating, RatingInOrderResponse>();
+            CreateMap<Report, ReportInOrderResponse>();
 
             CreateMap<Notification, NotificationGetDetailResponse>();
             CreateMap<Notification, NotificationGetAllResponse>();
