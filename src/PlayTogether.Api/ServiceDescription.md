@@ -67,6 +67,16 @@
 >   ***Description***: Active or Disable (1 day) a hirer account   
 >   ***Role Access***: Admin    
 >
+> - ``GET /api/play-together/v1/admins/{userId}/orders ``  
+>   ***Description***: Get all Orders of a specific user (Hirer and Player)   
+>   ***Role Access***: Admin  
+>   ***Extension***: Paging, Filter by Status, from day to day  
+>
+> - ``GET /api/play-together/v1/admins/users/orders/{orderId} ``  
+>   ***Description***: Get a order in detail   
+>   ***Role Access***: Admin  
+>   ***Use for***: View more detail information of the order   
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
