@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
+using PlayTogether.Core.Dtos.Outcoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
+using PlayTogether.Core.Dtos.Incoming.Business.Report;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -18,15 +21,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IAdminService _adminService;
         private readonly IHirerService _hirerService;
         private readonly IOrderService _orderService;
+        private readonly IReportService _reportService;
 
         public AdminsController(
             IAdminService adminService,
             IHirerService hirerService,
-            IOrderService orderService)
+            IOrderService orderService,
+            IReportService reportService)
         {
             _adminService = adminService;
             _hirerService = hirerService;
             _orderService = orderService;
+            _reportService  = reportService;
         }
 
         /// <summary>
@@ -122,5 +128,63 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response ? NoContent() : NotFound();
         }
 
+        /// <summary>
+        /// Get all reports from all players
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("reports")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param){
+            var response = await _reportService.GetAllReportsForAdminAsync(param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+        
+        /// <summary>
+        /// Get a report in detail by Id
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("reports/{reportId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId){
+            var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Make approve or not the report
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("reports/{reportId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> ProcessReport(string reportId, ReportCheckRequest request){
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _reportService.ProcessReportAsync(reportId, request);
+            return response ? NoContent() : NotFound();
+        }
     }
 }

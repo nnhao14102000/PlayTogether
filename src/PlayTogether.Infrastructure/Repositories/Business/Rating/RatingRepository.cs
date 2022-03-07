@@ -74,7 +74,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return null;
             }
 
-            var ratings = await _context.Ratings.ToListAsync();
+            var ratings = await _context.Ratings.Where(x => x.PlayerId == playerId).ToListAsync();
             var query = ratings.AsQueryable();
 
             FilterActiveFeedback(ref query, true);

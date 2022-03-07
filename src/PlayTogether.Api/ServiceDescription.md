@@ -17,8 +17,9 @@
 14. <a href="#musics-of-player" target="_self">Music Of Player</a> <br>
 15. <a href="#image" target="_self">Image</a> <br>
 16. <a href="#rating" target="_self">Rating</a> <br>
-17. <a href="#notification" target="_self">Notification</a> <br>
-18. <a href="#api" target="_self">PlayTogether API</a> <br>
+17. <a href="#report" target="_self">Report</a> <br>
+18. <a href="#notification" target="_self">Notification</a> <br>
+19. <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
 <h2 id="account">Account <a href="#table-of-contents" target="_self">🔙</a></h2>
@@ -80,6 +81,21 @@
 >   ***Description***: Get a order in detail   
 >   ***Role Access***: Admin  
 >   ***Use for***: View more detail information of the order   
+>
+> - ``GET /api/play-together/v1/admins/reports ``  
+>   ***Description***: Get all reports of all players   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin manage reports 
+>
+> - ``GET /api/play-together/v1/admins/reports/{reportId} ``  
+>   ***Description***: Get a report in detail by report Id   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin view more detail to know the reason why player make this report  
+>
+> - ``PUT /api/play-together/v1/admins/reports/{reportId} ``  
+>   ***Description***: Approve or not a report   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin make decision approve or not a report  
 >
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
@@ -460,6 +476,19 @@
 >   ***Use for***: Admin disable the violate feedback  
 >   ***Role Access***: Admin 
 
+
+<h2 id="report">Report  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/reports/{orderId} ``  
+>   ***Description***: Create a report base on an Order   
+>   ***Use for***: Player report Hirer violate in a specific order   
+>   ***Role Access***: Player   
+>
+> - ``GET /api/play-together/v1/reports/{hirerId} ``  
+>   ***Description***: Get all report of a specific Hirer   
+>   ***Use for***: View reports of a hirer, help player make decision for accept the order or not,...     
+>   ***Role Access***: Player, Hirer, Admin   
+>
 
 <h2 id="notification">Notification  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 

@@ -89,8 +89,35 @@ Authorization: {{authToken}}
 ###
 
 # Get a order detail
-GET {{baseUrl}}/api/play-together/v1/admins/users/orders/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+GET {{baseUrl}}/api/play-together/v1/admins/users/orders/e0a0905c-38ee-4c4b-948d-cafd0706fed9
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
+###
+
+# Get all reports
+GET {{baseUrl}}/api/play-together/v1/admins/reports
+?IsApprove=
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get a report in detail
+GET {{baseUrl}}/api/play-together/v1/admins/reports/b0897cb2-a2a9-4aba-abe2-83df9ebd7059
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Approve or Denied a report in detail
+PUT {{baseUrl}}/api/play-together/v1/admins/reports/b0897cb2-a2a9-4aba-abe2-83df9ebd7059
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isApprove": true
+}
 ###

@@ -21,6 +21,7 @@ using PlayTogether.Core.Services.Business.Order;
 using PlayTogether.Core.Services.Business.Player;
 using PlayTogether.Core.Services.Business.Rank;
 using PlayTogether.Core.Services.Business.Rating;
+using PlayTogether.Core.Services.Business.Report;
 using PlayTogether.Core.Services.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
@@ -39,6 +40,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Order;
 using PlayTogether.Infrastructure.Repositories.Business.Player;
 using PlayTogether.Infrastructure.Repositories.Business.Rank;
 using PlayTogether.Infrastructure.Repositories.Business.Rating;
+using PlayTogether.Infrastructure.Repositories.Business.Report;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
 using System;
 
@@ -144,6 +146,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Rating service DI
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IRatingRepository, RatingRepository>();
+
+            // Config for Report service DI
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IReportRepository, ReportRepository>();
 
             services.AddHttpClient();
 

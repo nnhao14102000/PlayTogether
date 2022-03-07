@@ -196,12 +196,18 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+
 # Get a charity by Id
 GET {{baseUrl}}/api/play-together/v1/charities/f7301ce1-25dc-49af-8aaf-25d89a99ca1b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+
 # Finish order
 PUT {{baseUrl}}/api/play-together/v1/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a
 Content-Type: {{contentType}}
@@ -225,3 +231,16 @@ Authorization: {{authToken}}
 PUT {{baseUrl}}/api/play-together/v1/rating/violate/5472b317-6902-4fa1-ab9b-99e6e77c1227
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+
+# Report Hirer
+POST {{baseUrl}}/api/play-together/v1/reports/e0a0905c-38ee-4c4b-948d-cafd0706fed9
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "reportMessage": "Bạn này No.01 xúc phạm mình, bạn ấy chửi mình chơi ngu..."
+}
+###

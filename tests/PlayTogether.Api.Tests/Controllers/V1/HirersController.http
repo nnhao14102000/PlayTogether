@@ -156,3 +156,12 @@ Authorization: {{authToken}}
   "comment": "Danh hay qua, tuyet vời",
   "rate": 5
 }
+
+###
+
+# Get all report of a hirer
+GET {{baseUrl}}/api/play-together/v1/reports/2181af98-904a-4df9-9b9a-96bc925956ff
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###

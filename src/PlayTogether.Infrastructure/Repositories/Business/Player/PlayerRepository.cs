@@ -29,7 +29,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             _userManager = userManager;
         }
 
-        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(ClaimsPrincipal principal, PlayerParameters param)
+        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
+            ClaimsPrincipal principal,
+            PlayerParameters param)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {

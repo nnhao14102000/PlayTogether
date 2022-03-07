@@ -12,6 +12,6 @@
         public string HirerId { get; set; }
 
         public string ReportMessage { get; set; }
-        public bool IsApprove { get; set; }
+        public bool? IsApprove { get; set; }
     }
 }
