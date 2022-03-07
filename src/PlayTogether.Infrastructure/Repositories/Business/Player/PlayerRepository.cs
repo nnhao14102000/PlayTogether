@@ -29,49 +29,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             _userManager = userManager;
         }
 
-        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
-            ClaimsPrincipal principal,
-            PlayerParameters param)
-        {
-            var loggedInUser = await _userManager.GetUserAsync(principal);
-            if (loggedInUser is null) {
-                return null;
-            }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
-            var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-
-            if (hirer is null || hirer.IsActive is false) {
-                return null;
-            }
-
-            var players = await _context.Players.ToListAsync();
-
-            var queryPlayer = players.AsQueryable();
-
-            FilterActivePlayer(ref queryPlayer);
-            FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
-
-            FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
-            FilterPlayerByGameId(ref queryPlayer, param.GameId);
-            FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
-            FilterPlayerByGender(ref queryPlayer, param.Gender);
-
-            SearchPlayerByName(ref queryPlayer, param.Name);
-
-            OrderPlayerByASCName(ref queryPlayer, param.IsOrderByFirstName);
-            OrderPlayerByHighestRating(ref queryPlayer, param.IsOrderByRating);
-            OrderPlayerByLowestPricing(ref queryPlayer, param.IsOrderByPricing);
-
-            players = queryPlayer.ToList();
-            var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
-            return PagedResult<PlayerGetAllResponseForHirer>
-                .ToPagedList(
-                    response,
-                    param.PageNumber,
-                    param.PageSize);
-
-        }
 
         /// <summary>
         /// Load lại cho Hirer những người mà họ đã thuê gần đây
@@ -183,14 +141,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             players = result.AsQueryable();
         }
 
-        private void SearchPlayerByName(
-            ref IQueryable<Entities.Player> players,
+        private void FilterPlayerByName(
+            ref IQueryable<Entities.Player> query,
             string name)
         {
-            if (!players.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
+            if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
             }
-            players = players.Where(x => (x.Lastname + x.Firstname).ToLower()
+            query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
                                                                    .Contains(name.ToLower()));
         }
 
@@ -309,7 +267,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            
+
             if (player is null || player.Status is not PlayerStatusConstants.NotAcceptPolicy || player.IsActive is false) {
                 return false;
             }
@@ -325,5 +283,175 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             return false;
         }
 
+        // public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
+        //     ClaimsPrincipal principal,
+        //     PlayerParameters param)
+        // {
+        //     var loggedInUser = await _userManager.GetUserAsync(principal);
+        //     if (loggedInUser is null) {
+        //         return null;
+        //     }
+        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+        //     if (hirer is null || hirer.IsActive is false) {
+        //         return null;
+        //     }
+
+        //     var players = await _context.Players.ToListAsync();
+
+        //     var queryPlayer = players.AsQueryable();
+
+        //     FilterActivePlayer(ref queryPlayer);
+        //     FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
+
+        //     FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
+        //     FilterPlayerByGameId(ref queryPlayer, param.GameId);
+        //     FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
+        //     FilterPlayerByGender(ref queryPlayer, param.Gender);
+
+        //     SearchPlayerByName(ref queryPlayer, param.SearchString);
+
+        //     OrderPlayerByASCName(ref queryPlayer, param.IsOrderByFirstName);
+        //     OrderPlayerByHighestRating(ref queryPlayer, param.IsOrderByRating);
+        //     OrderPlayerByLowestPricing(ref queryPlayer, param.IsOrderByPricing);
+
+        //     players = queryPlayer.ToList();
+        //     var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
+        //     return PagedResult<PlayerGetAllResponseForHirer>
+        //         .ToPagedList(
+        //             response,
+        //             param.PageNumber,
+        //             param.PageSize);
+
+        // }
+
+        public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
+            ClaimsPrincipal principal,
+            PlayerParameters param)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+            if (hirer is null || hirer.IsActive is false) {
+                return null;
+            }
+
+            var players = await _context.Players.ToListAsync();
+
+            var queryPlayer = players.AsQueryable();
+
+            FilterActivePlayer(ref queryPlayer);
+
+            Search(ref queryPlayer, param.SearchString);
+
+            FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
+            FilterPlayerByName(ref queryPlayer, param.Name);
+            FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
+            FilterPlayerByGameId(ref queryPlayer, param.GameId);
+            FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
+            FilterPlayerByGender(ref queryPlayer, param.Gender);
+
+            OrderPlayerByASCName(ref queryPlayer, param.IsOrderByFirstName);
+            OrderPlayerByHighestRating(ref queryPlayer, param.IsOrderByRating);
+            OrderPlayerByLowestPricing(ref queryPlayer, param.IsOrderByPricing);
+
+            players = queryPlayer.ToList();
+            var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
+            return PagedResult<PlayerGetAllResponseForHirer>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+
+        }
+
+        private void Search(ref IQueryable<Entities.Player> queryPlayer, string searchString)
+        {
+            if (String.IsNullOrEmpty(searchString) || String.IsNullOrWhiteSpace(searchString)) {
+                return;
+            }
+
+            var finalList = new List<Entities.Player>();
+
+            var seperateSearchStrings = searchString.Split(" ");
+            if (searchString.Contains(" ")) {
+
+            }
+            else if (searchString.Contains("_")) {
+                seperateSearchStrings = searchString.Split("_");
+            }
+            else if (searchString.Contains("-")) {
+                seperateSearchStrings = searchString.Split("-");
+            }
+
+            foreach (var item in seperateSearchStrings) {
+                finalList = finalList.Union(_context.Players.Where(x => (x.Firstname
+                                                                    + x.Lastname).ToLower()
+                                                                                   .Contains(item.ToLower()))
+                                                            .ToList()).ToList();
+
+                var listFromGame = _context.Games.Where(x => (x.DisplayName
+                                                                    + x.Name
+                                                                    + x.OtherName).ToLower()
+                                                                                  .Contains(item.ToLower()))
+                                                                .ToList();
+
+                var listGameOfPlayer = new List<Entities.GameOfPlayer>();
+                foreach (var game in listFromGame) {
+                    var list = _context.GameOfPlayers.Where(x => x.GameId == game.Id).ToList();
+                    listGameOfPlayer = listGameOfPlayer.Union(list).ToList();
+                }
+
+                foreach (var gameOfPlayer in listGameOfPlayer) {
+                    var list = _context.Players.Where(x => x.Id == gameOfPlayer.PlayerId).ToList();
+                    finalList = finalList.Union(list).ToList();
+                }
+
+                // gametype
+                var listFromGameType = _context.GameTypes.Where(x => (x.Name
+                                                                            + " "
+                                                                            + x.ShortName
+                                                                            + " "
+                                                                            + x.OtherName
+                                                                            + " "
+                                                                            + x.Description).ToLower()
+                                                                                            .Contains(item.ToLower()))
+                                                                .ToList();
+
+                // type of game
+                var listTypeOfGame = new List<Entities.TypeOfGame>();
+                foreach (var gameType in listFromGameType) {
+                    var list = _context.TypeOfGames.Where(x => x.GameTypeId == gameType.Id).ToList();
+                    listTypeOfGame = listTypeOfGame.Union(list).ToList();
+                }
+
+                // game from type of game
+                var listFromGame02 = new List<Entities.Game>();
+                foreach (var typeOfGame in listTypeOfGame) {
+                    var list = _context.Games.Where(x => x.Id == typeOfGame.GameId).ToList();
+                    listFromGame02 = listFromGame02.Union(list).ToList();
+                }
+
+                // game of player from game
+                var listGameOfPlayer02 = new List<Entities.GameOfPlayer>();
+                foreach (var game in listFromGame02) {
+                    var list = _context.GameOfPlayers.Where(x => x.GameId == game.Id).ToList();
+                    listGameOfPlayer02 = listGameOfPlayer02.Union(list).ToList();
+                }
+
+                foreach (var gameOfPlayer in listGameOfPlayer02) {
+                    var list = _context.Players.Where(x => x.Id == gameOfPlayer.PlayerId).ToList();
+                    finalList = finalList.Union(list).ToList();
+                }
+            }
+            queryPlayer = finalList.AsQueryable();
+        }
     }
 }

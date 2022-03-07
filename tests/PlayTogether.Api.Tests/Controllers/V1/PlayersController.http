@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login
 content-type: {{contentType}}
 
 {
-  "email": "Tham@example.com",
+  "email": "Dam@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -74,21 +74,41 @@ Authorization: {{authToken}}
 
 ###
 # Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8/games
+GET {{baseUrl}}/api/play-together/v1/players/8a602122-b3a2-4d96-836c-0fcd4ff8b8b5/games
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
+?Name=lol
+&pageSize=100
+&pageNumber=1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all Ranks in game
+GET {{baseUrl}}/api/play-together/v1/games/47fca7d8-7e35-4360-b779-fdda598fc5c6/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
-
 ###
+
+
 # Add Game of Player
-POST {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8/games
+POST {{baseUrl}}/api/play-together/v1/players/8a602122-b3a2-4d96-836c-0fcd4ff8b8b5/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "gameId": "67494aec-87b5-4743-b936-221debf4a897",
-  "rank": ""
+  "gameId": "47fca7d8-7e35-4360-b779-fdda598fc5c6",
+  "rank": "Cao Thủ"
 }
 
 

@@ -2,7 +2,8 @@
 {
     public class PlayerParameters : QueryStringParameters
     {
-        public string Name { get; set; }
+        public string SearchString { get; set; }
+        public string Name {get; set;}
         public bool? Gender { get; set; }
         public string GameId { get; set; }
         public string MusicId { get; set; }

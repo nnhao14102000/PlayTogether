@@ -54,7 +54,7 @@ Authorization: {{authToken}}
 ###
 # Get all players with paging, filter, search
 GET {{baseUrl}}/api/play-together/v1.1/players
-    ?Name=
+    ?SearchString=hung lol
     &Gender=
     &IsRecent=
     &GameId=
