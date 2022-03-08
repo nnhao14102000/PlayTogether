@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
 {
     public class PlayerWithdraw : BaseEntity
     {
+        [MaxLength(100)]
         public string PlayerId { get; set; }
         public Player Player { get; set; }
 

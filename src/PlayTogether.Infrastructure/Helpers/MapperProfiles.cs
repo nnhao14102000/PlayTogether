@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Chat;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
@@ -15,6 +16,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
+using PlayTogether.Core.Dtos.Outcoming.Business.Chat;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
@@ -128,6 +130,10 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Report, ReportGetResponse>();
             CreateMap<Report, ReportInDetailResponse>();
             CreateMap<ReportCheckRequest, Report>();
+
+
+            CreateMap<Chat, ChatGetResponse>();
+            CreateMap<ChatCreateRequest, Chat>();
 
             
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +6,7 @@ namespace PlayTogether.Infrastructure.Entities
 {
     public class Charity : BaseEntity
     {
+        [MaxLength(100)]
         public string IdentityId { get; set; }
 
         [MaxLength(50)]

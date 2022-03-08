@@ -8,6 +8,7 @@ using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Services.Auth;
 using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.Charity;
+using PlayTogether.Core.Services.Business.Chat;
 using PlayTogether.Core.Services.Business.Donate;
 using PlayTogether.Core.Services.Business.Game;
 using PlayTogether.Core.Services.Business.GameOfPlayer;
@@ -27,6 +28,7 @@ using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
 using PlayTogether.Infrastructure.Repositories.Business.Charity;
+using PlayTogether.Infrastructure.Repositories.Business.Chat;
 using PlayTogether.Infrastructure.Repositories.Business.Donate;
 using PlayTogether.Infrastructure.Repositories.Business.Game;
 using PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer;
@@ -150,6 +152,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Report service DI
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IReportRepository, ReportRepository>();
+
+            // Config for Chat service DI
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IChatRepository, ChatRepository>();
 
             services.AddHttpClient();
 

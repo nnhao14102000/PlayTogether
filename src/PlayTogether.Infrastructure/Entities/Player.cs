@@ -7,6 +7,7 @@ namespace PlayTogether.Infrastructure.Entities
 {
     public class Player : BaseEntity
     {
+        [MaxLength(100)]
         public string IdentityId { get; set; }
 
         [MaxLength(50)]

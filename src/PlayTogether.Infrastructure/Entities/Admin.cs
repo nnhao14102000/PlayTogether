@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Infrastructure.Entities
 {
     public class Admin : BaseEntity
     {
+        [MaxLength(100)]
         public string IdentityId { get; set; }
 
         [MaxLength(50)]
