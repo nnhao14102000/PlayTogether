@@ -19,7 +19,8 @@
 16. <a href="#rating" target="_self">Rating</a> <br>
 17. <a href="#report" target="_self">Report</a> <br>
 18. <a href="#notification" target="_self">Notification</a> <br>
-19. <a href="#api" target="_self">PlayTogether API</a> <br>
+19. <a href="#chat" target="_self">Chat</a> <br>
+20. <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
 <h2 id="account">Account <a href="#table-of-contents" target="_self">🔙</a></h2>
@@ -490,6 +491,7 @@
 >   ***Role Access***: Player, Hirer, Admin   
 >
 
+
 <h2 id="notification">Notification  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/notification ``  
@@ -509,5 +511,24 @@
 >   ***Role Access***: Admin, Player, Hirer, Charity  
 >
 
+
+<h2 id="chat">Chat  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/chats/{receiveId} ``  
+>   ***Description***: Get all chats of current user and specific receiver or partner   
+>   ***Use for***: View all chats  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>   ***Extension***: Paging, Order by Created Date  
+>
+> - ``POST /api/play-together/v1/chats/{receiveId} ``  
+>   ***Description***: Create a chat message to a specific receiver  
+>   ***Use for***: Chat with specific user or partner  
+>   ***Role Access***: Admin, Player, Hirer, Charity   
+> 
+> - ``DELETE /api/play-together/v1/chats/{chatId} ``  
+>   ***Description***: Remove chat       
+>   ***Use for***: Remover wrong chat  
+>   ***Role Access***: Admin, Player, Hirer, Charity  
+>
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   

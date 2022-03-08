@@ -165,3 +165,28 @@ Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# Create chat message
+POST {{baseUrl}}/api/play-together/v1/chats/49697e13-a64b-478b-8551-00f6571fdf47
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "Hi bạn gì đó ơi..."
+}
+
+###
+
+# Get alls chat message
+GET {{baseUrl}}/api/play-together/v1/chats/49697e13-a64b-478b-8551-00f6571fdf47
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Delete a chat message
+DELETE {{baseUrl}}/api/play-together/v1/chats/07518d39-5e72-44fa-b054-54ea0ce7c62c
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###

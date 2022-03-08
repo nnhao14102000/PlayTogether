@@ -264,3 +264,29 @@ Authorization: {{authToken}}
   "reportMessage": "Bạn này No.01 xúc phạm mình, bạn ấy chửi mình chơi ngu..."
 }
 ###
+
+
+# Create chat message
+POST {{baseUrl}}/api/play-together/v1/chats/cfeb51a6-6eef-4214-b53c-9707926fceca
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "Alo...mình tên..."
+}
+
+###
+
+# Get alls chat message
+GET {{baseUrl}}/api/play-together/v1/chats/cfeb51a6-6eef-4214-b53c-9707926fceca
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Delete a chat message
+DELETE {{baseUrl}}/api/play-together/v1/chats/f25cbeb8-b18b-4cb1-b7a6-9552cf36ee80
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###

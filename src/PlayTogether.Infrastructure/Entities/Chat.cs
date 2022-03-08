@@ -12,5 +12,7 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(500)]
         [Required]
         public string Message { get; set; }
+        
+        public bool IsActive { get; set; }
     }
 }

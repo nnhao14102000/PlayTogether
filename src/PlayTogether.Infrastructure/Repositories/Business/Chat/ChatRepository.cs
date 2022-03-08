@@ -79,8 +79,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
             if (hirer is not null) senderId = hirer.Id;
             if (charity is not null) senderId = charity.Id;
 
-            var chats = await _context.Chats.Where(x => x.SenderId == senderId && x.ReceiveId == receiveId).ToListAsync();
+            var chats = await _context.Chats.Where(x => (x.SenderId == senderId && x.ReceiveId == receiveId) 
+                                                        || (x.SenderId == receiveId && x.ReceiveId == senderId))
+                                            .OrderBy(x => x.CreatedDate)
+                                            .ToListAsync();
+            
             var response = _mapper.Map<List<ChatGetResponse>>(chats);
+            foreach (var item in response)
+            {
+                if(item.IsActive is false) item.Message = "Tin nhắn đã thu hồi";
+            }
             return PagedResult<ChatGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
@@ -108,7 +116,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
             if (chat is null || chat.SenderId != senderId) {
                 return false;
             }
-            _context.Chats.Remove(chat);
+            chat.IsActive = false;
             return (await _context.SaveChangesAsync() >= 0);
         }
     }
