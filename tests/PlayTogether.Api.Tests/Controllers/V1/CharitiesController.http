@@ -41,9 +41,8 @@ Authorization: {{authToken}}
 
 ###
 
-# Get number of donate in today
-GET {{baseUrl}}/api/play-together/v1/charities/number-of-donate
-?IsCalculateNumberOfDonateInDate=true
+# Get calculate of donate
+GET {{baseUrl}}/api/play-together/v1/charities/calculate-donate
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

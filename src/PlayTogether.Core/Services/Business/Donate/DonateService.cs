@@ -19,14 +19,14 @@ namespace PlayTogether.Core.Services.Business.Donate
             _logger = logger;
         }
 
-        public async Task<int> CalculateDonateAsync(ClaimsPrincipal principal, DonateParameters param)
+        public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
                 
-                return await _donateRepository.CalculateDonateAsync(principal, param);
+                return await _donateRepository.CalculateDonateAsync(principal);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call CalculateTurnDonateInDayAsync in service class, Error Message: {ex}.");

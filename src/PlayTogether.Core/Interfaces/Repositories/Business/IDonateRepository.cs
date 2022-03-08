@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IDonateRepository
     {
-        Task<int> CalculateDonateAsync(ClaimsPrincipal principal, DonateParameters param);
+        Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal);
     }
 }

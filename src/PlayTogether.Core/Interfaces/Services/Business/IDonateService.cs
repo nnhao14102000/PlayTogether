@@ -6,6 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IDonateService
     {
-        Task<int> CalculateDonateAsync(ClaimsPrincipal principal, DonateParameters param);
+        Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal);
     }
 }

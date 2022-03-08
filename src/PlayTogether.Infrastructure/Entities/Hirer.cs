@@ -42,5 +42,8 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Report> Reports { get; set; }
         public ICollection<Deposit> Deposits { get; set; }
+        public ICollection<FavoriteSearch> FavoriteSearches { get; set; }
+        public IList<Hobby> Hobbies { get; set; }
+        public IList<Recommend> Recommends { get; set; }
     }
 }

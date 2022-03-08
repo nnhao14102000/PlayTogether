@@ -15,7 +15,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
     {
         private readonly ICharityService _charityService;
         private readonly IDonateService _donateService;
-        
+
         public CharitiesController(ICharityService charityService, IDonateService donateService)
         {
             _charityService = charityService;
@@ -35,7 +35,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             [FromQuery] CharityParameters param)
         {
             var response = await _charityService.GetAllCharitiesAsync(param).ConfigureAwait(false);
-            
+
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -48,7 +48,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             return response is not null ? Ok(response) : NotFound();
         }
-        
+
         /// <summary>
         /// Get charity by Id
         /// </summary>
@@ -59,24 +59,29 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{id}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<CharityResponse>> GetCharityById(string id){
+        public async Task<ActionResult<CharityResponse>> GetCharityById(string id)
+        {
             var response = await _charityService.GetCharityByIdAsync(id);
             return response is not null ? Ok(response) : NotFound();
         }
 
         /// <summary>
-        /// Number of Donate today
+        /// Calculate Donate
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
         /// <remarks>
         /// Roles Access: Charity
         /// </remarks>
-        [HttpGet("number-of-donate")]
+        [HttpGet("calculate-donate")]
         [Authorize(Roles = AuthConstant.RoleCharity)]
-        public async Task<ActionResult> GetNumberOfDonateInDay([FromQuery] DonateParameters param){
-            var response = await _donateService.CalculateDonateAsync(HttpContext.User, param);
-            return response >= 0 ? Ok(response) : BadRequest();
+        public async Task<ActionResult<(int, float, int, float)>> GetNumberOfDonateInDay()
+        {
+            var response = await _donateService.CalculateDonateAsync(HttpContext.User);
+            return response.Item1 >= 0
+                   && response.Item2 >= 0
+                   && response.Item3 >= 0
+                   && response.Item4 >= 0 ? Ok(response) : BadRequest();
         }
     }
 }
