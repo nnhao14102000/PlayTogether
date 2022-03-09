@@ -275,7 +275,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
+                    Errors = new List<string>() { "Tài khoản đã tồn tại." }
                 };
             }
 
@@ -314,7 +314,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
+                    Errors = new List<string>() { "Tài khoản đã tồn tại." }
                 };
             }
 
@@ -352,7 +352,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
+                    Errors = new List<string>() { "Tài khoản đã tồn tại." }
                 };
             }
 
@@ -438,7 +438,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
         {
             if (await IsExistEmail(registerDto.Email)) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Email của bạn đã được đăng kí." }
+                    Errors = new List<string>() { "Tài khoản đã tồn tại." }
                 };
             }
 
@@ -620,7 +620,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
                 return new AuthResult {
-                    Message = "Bạn chưa đăng nhập!"
+                    Errors = new List<string>() { "Bạn chưa đăng nhập." }
                 };
             }
             var identityId = loggedInUser.Id;
@@ -644,7 +644,83 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 };
             }
             return new AuthResult {
-                Message = "Lỗi đăng xuất!"
+                Errors = new List<string>() { "Lỗi đăng xuất." }
+            };
+        }
+
+        public async Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Tài khoản không tồn tại." }
+                };
+            };
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (!result.Succeeded) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Có lỗi xảy ra, đổi mật khẩu không thành công!" }
+                };
+            }
+            return new AuthResult {
+                Message = "Đổi mật khẩu thành công!"
+            };
+        }
+
+        public async Task<AuthResult> ResetPasswordAdminAsync(ResetPasswordAdminRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Tài khoản không tồn tại." }
+                };
+            };
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+            if (!result.Succeeded) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Có lỗi xảy ra, reset mật khẩu không thành công!" }
+                };
+            }
+            return new AuthResult {
+                Message = "Reset mật khẩu thành công!"
+            };
+        }
+
+        public async Task<AuthResult> ResetPasswordTokenAsync(ResetPasswordTokenRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Tài khoản không tồn tại." }
+                };
+            };
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return new AuthResult {
+                Message = token
+            };
+        }
+
+        public async Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Tài khoản không tồn tại." }
+                };
+            };
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded) {
+                return new AuthResult {
+                    Errors = new List<string>() { "Có lỗi xảy ra, reset mật khẩu không thành công!" }
+                };
+            }
+            return new AuthResult {
+                Message = "Reset mật khẩu thành công!"
             };
         }
     }

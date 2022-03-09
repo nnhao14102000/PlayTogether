@@ -20,6 +20,21 @@ namespace PlayTogether.Core.Services.Auth
             _accountRepository = accountRepository;
             _logger = logger;
         }
+
+        public async Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _accountRepository.ChangePasswordAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ChangePasswordAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> CheckExistEmailAsync(string email)
         {
             try {
@@ -167,6 +182,48 @@ namespace PlayTogether.Core.Services.Auth
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call RegisterPlayerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResult> ResetPasswordAdminAsync(ResetPasswordAdminRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _accountRepository.ResetPasswordAdminAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ResetPasswordAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _accountRepository.ResetPasswordAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ResetPasswordAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<AuthResult> ResetPasswordTokenAsync(ResetPasswordTokenRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _accountRepository.ResetPasswordTokenAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ResetPasswordTokenAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

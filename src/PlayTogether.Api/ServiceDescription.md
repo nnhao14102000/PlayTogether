@@ -49,11 +49,7 @@
 >   ***Description***: Register a Normal Player Account  
 >
 > - ``POST /api/play-together/v1/accounts/register-hirer ``  
->   ***Description***: Register a Normal Hirer Account  
->
-> - ``PUT /api/play-together/v1/accounts/logout ``  
->   ***Description***: Logout Hirer or Player  
->   ***Role Access***: Hirer, Player    
+>   ***Description***: Register a Normal Hirer Account     
 >
 > - ``POST /api/play-together/v1/accounts/register-multi-player ``  
 >   ***Description***: Register multi Normal Player Account **for TEST**  
@@ -61,6 +57,30 @@
 > - ``POST /api/play-together/v1/accounts/register-multi-hirer ``  
 >   ***Description***: Register multi Normal Hirer Account **for TEST**  
 >
+> - ``PUT /api/play-together/v1/accounts/logout ``  
+>   ***Description***: Logout Hirer or Player  
+>   ***Role Access***: Hirer, Player  
+>   ***Use for***: Update status of Hirer or Player to Offline
+>
+> - ``PUT /api/play-together/v1/accounts/change-password ``  
+>   ***Description***: Change password of account  
+>   ***Role Access***: Hirer, Player, Charity, Admin  
+>
+> - ``PUT /api/play-together/v1/accounts/reset-password-admin ``  
+>   ***Description***: Reset password for admin  
+>   ***Role Access***: Admin  
+>   ***Use for***: Reset password of an Admin account
+>
+> - ``PUT /api/play-together/v1/accounts/reset-password-token ``  
+>   ***Description***: Get token for reset password  
+>   ***Role Access***: Hirer, Player, Charity  
+>   ***Use for***: Get token for reset password, go with verify email
+>
+> - ``PUT /api/play-together/v1/accounts/reset-password ``  
+>   ***Description***: Reset password  
+>   ***Role Access***: Hirer, Player, Charity  
+>
+
 
 <h2 id="admin">Admin <a href="#table-of-contents" target="_self">🔙</a></h2>  
 

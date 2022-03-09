@@ -17,6 +17,10 @@ namespace PlayTogether.Core.Interfaces.Services.Auth
         Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto);
         Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto);
         Task<AuthResult> LogoutAsync(ClaimsPrincipal principal);
+        Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request);
+        Task<AuthResult> ResetPasswordAdminAsync(ResetPasswordAdminRequest request);
+        Task<AuthResult> ResetPasswordTokenAsync(ResetPasswordTokenRequest request);
+        Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request);
 
         // Extra
         Task<bool> RegisterMultiPlayerAsync(List<RegisterUserInfoRequest> registerDtos);

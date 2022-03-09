@@ -183,5 +183,79 @@ namespace PlayTogether.Api.Controllers.V1.Auth
             var response = await _accountService.LogoutAsync(HttpContext.User);
             return Ok(response);
         }
+
+        /// <summary>
+        /// Change password
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player, Charity, Admin
+        /// </remarks>
+        [HttpPut, Route("change-password")]
+        [Authorize(Roles = AuthConstant.RoleHirer
+                           + ","
+                           + AuthConstant.RolePlayer
+                           + ","
+                           + AuthConstant.RoleCharity
+                           + ","
+                           + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<AuthResult>> ChangePassword (ChangePasswordRequest request) {
+            var response = await _accountService.ChangePasswordAsync(request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Reset password for admin
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("reset-password-admin")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<AuthResult>> ResetPasswordAdmin(ResetPasswordAdminRequest request){
+            var response = await _accountService.ResetPasswordAdminAsync(request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Reset password token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player, Charity
+        /// </remarks>
+        [HttpPut, Route("reset-password-token")]
+        [Authorize(Roles = AuthConstant.RoleHirer
+                           + ","
+                           + AuthConstant.RolePlayer
+                           + ","
+                           + AuthConstant.RoleCharity)]
+        public async Task<ActionResult<AuthResult>> ResetPasswordToken(ResetPasswordTokenRequest request){
+            var response = await _accountService.ResetPasswordTokenAsync(request);
+            return Ok(response);
+        }
+        
+        /// <summary>
+        /// Reset password
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer, Player, Charity
+        /// </remarks>
+        [HttpPut, Route("reset-password")]
+        [Authorize(Roles = AuthConstant.RoleHirer
+                           + ","
+                           + AuthConstant.RolePlayer
+                           + ","
+                           + AuthConstant.RoleCharity)]
+        public async Task<ActionResult<AuthResult>> ResetPassword(ResetPasswordRequest request){
+            var response = await _accountService.ResetPasswordAsync(request);
+            return Ok(response);
+        }
     }
 }
