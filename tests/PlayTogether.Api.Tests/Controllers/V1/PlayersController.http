@@ -272,7 +272,7 @@ Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "message": "Alo...mình tên..."
+  "message": "Tên Thắm..."
 }
 
 ###

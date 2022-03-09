@@ -8,7 +8,7 @@
 
     public class KeyVaultKeys
     {
-        public const string PlayTogetherDbConnectionString = "playtogether-db-connection";
+        public const string PlayTogetherDbConnectionString = "playtogether-db-connection-azure";
 
         public const string StorageAccount = "storage-account-secret";
     }

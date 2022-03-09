@@ -29,9 +29,9 @@ namespace PlayTogether.Api.Helpers
 
         public static void GetAzureKeyVaultSecrets(HostBuilderContext context, IConfigurationBuilder config)
         {
-            var ternantID = "04994528-d4e3-474f-a1e0-a4eb2ba9ef7e";
-            var appID = "6e6d7fbe-b23f-42f9-a68c-457f47cce37f";
-            var appSec = "GMP7Q~4C25Anfs8XXNYhK9z1-meuttPC~errY";
+            var ternantID = "b6f5d995-6c61-4f47-8dec-3aafed7ab139";
+            var appID = "e6396d12-c6ff-47f6-8858-ae3d3f24a133";
+            var appSec = "6PZ7Q~xxxgLg1h5S0QfHAJIeJjGdaPZNi3N8R";
 
             var builderConfig = config.Build();
             var keyVaultName = builderConfig[$"AppSettings:KeyVaultName"];

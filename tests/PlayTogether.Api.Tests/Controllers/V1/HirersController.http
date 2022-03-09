@@ -172,7 +172,7 @@ Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "message": "Hi bạn gì đó ơi..."
+  "message": "Bạn tên gì...."
 }
 
 ###
