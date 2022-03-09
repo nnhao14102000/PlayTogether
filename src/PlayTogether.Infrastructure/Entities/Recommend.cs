@@ -16,6 +16,5 @@ namespace PlayTogether.Infrastructure.Entities
         
         [Column(TypeName = "float")]
         public float Rating { get; set; }
-        public TimeSpan Timestamp { get; set; }
     }
 }
