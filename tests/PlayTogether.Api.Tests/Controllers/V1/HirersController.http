@@ -178,7 +178,7 @@ Authorization: {{authToken}}
 ###
 
 # Get alls chat message
-GET {{baseUrl}}/api/play-together/v1/chats/49697e13-a64b-478b-8551-00f6571fdf47
+GET {{baseUrl}}/api/play-together/v1/chats/3f5dfc9c-546f-4635-8c30-a3860ec98eda
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
