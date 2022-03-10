@@ -15,6 +15,6 @@ namespace PlayTogether.Infrastructure.Entities
         public Player Player { get; set; }
         
         [Column(TypeName = "float")]
-        public float Rating { get; set; }
+        public float Rate { get; set; }
     }
 }

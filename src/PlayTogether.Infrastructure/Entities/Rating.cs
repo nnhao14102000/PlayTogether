@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Infrastructure.Entities
 {
@@ -17,6 +18,8 @@ namespace PlayTogether.Infrastructure.Entities
         public string HirerId { get; set; }
 
         public string Comment { get; set; }
+        
+        [Column(TypeName = "float")]
         public float Rate { get; set; }
         public bool IsViolate { get; set; }
         public bool IsActive { get; set; }

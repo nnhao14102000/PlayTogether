@@ -58,7 +58,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.PlayerId == order.PlayerId).Average(x => x.Rate);
 
-                order.Player.Rating = rateOfPlayer;
+                order.Player.Rate = rateOfPlayer;
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return false;
                 }
@@ -164,7 +164,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.PlayerId == rating.PlayerId).Average(x => x.Rate);
-                rating.Player.Rating = rateOfPlayer;
+                rating.Player.Rate = rateOfPlayer;
                 
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return false;

@@ -41,7 +41,7 @@ namespace PlayTogether.Infrastructure.Entities
         public int MaxHourHire { get; set; } = 1;
 
         [Column(TypeName = "float")]
-        public float Rating { get; set; }
+        public float Rate { get; set; }
 
         public string Avatar { get; set; }
 

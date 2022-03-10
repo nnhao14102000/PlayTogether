@@ -85,7 +85,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             if (!queryPlayer.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
-            queryPlayer = queryPlayer.OrderByDescending(x => x.Rating);
+            queryPlayer = queryPlayer.OrderByDescending(x => x.Rate);
         }
 
         private void OrderPlayerByASCName(ref IQueryable<Entities.Player> queryPlayer, bool? isOrderByFirstName)
