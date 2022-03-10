@@ -20,5 +20,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 
         Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id);
         Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request);
+        Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param);
+        Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId);
     }
 }

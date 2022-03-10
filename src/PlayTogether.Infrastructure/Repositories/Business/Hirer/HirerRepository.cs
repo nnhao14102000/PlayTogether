@@ -33,7 +33,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             var hirers = await _context.Hirers.ToListAsync();
             var query = hirers.AsQueryable();
 
-            SearchByHirerName(ref query, param.Name);
+            FilterByHirerName(ref query, param.Name);
             FilterByStatus(ref query, param.Status);
             FilterActiveAccount(ref query, param.IsActive);
 
@@ -58,12 +58,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hirer
             query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
         }
 
-        private void SearchByHirerName(ref IQueryable<Entities.Hirer> query, string name)
+        private void FilterByHirerName(ref IQueryable<Entities.Hirer> query, string name)
         {
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
             }
-            query = query.Where(x => (x.Firstname + " " + x.Lastname).ToLower().Contains(name.ToLower()));
+            query = query.Where(x => (x.Lastname + " " + x.Firstname).ToLower().Contains(name.ToLower()));
         }
 
         public async Task<HirerGetByIdResponse> GetHirerByIdAsync(string hirerId)

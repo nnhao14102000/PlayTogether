@@ -64,12 +64,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             queryPlayer = queryPlayer.Where(x => x.Status.ToLower() == playerStatus.ToLower());
         }
 
-        private void FilterActivePlayer(ref IQueryable<Entities.Player> queryPlayer)
+        private void FilterActivePlayer(ref IQueryable<Entities.Player> queryPlayer, bool? isActive)
         {
-            if (!queryPlayer.Any()) {
+            if (!queryPlayer.Any() || isActive is null) {
                 return;
             }
-            queryPlayer = queryPlayer.Where(x => x.IsActive == true);
+            queryPlayer = queryPlayer.Where(x => x.IsActive == isActive);
         }
 
         private void OrderPlayerByLowestPricing(ref IQueryable<Entities.Player> queryPlayer, bool? isOrderByPricing)
@@ -148,7 +148,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
             }
-            query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
+            query = query.Where(x => (x.Lastname + " " + x.Firstname).ToLower()
                                                                    .Contains(name.ToLower()));
         }
 
@@ -283,50 +283,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             return false;
         }
 
-        // public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
-        //     ClaimsPrincipal principal,
-        //     PlayerParameters param)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return null;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-
-        //     if (hirer is null || hirer.IsActive is false) {
-        //         return null;
-        //     }
-
-        //     var players = await _context.Players.ToListAsync();
-
-        //     var queryPlayer = players.AsQueryable();
-
-        //     FilterActivePlayer(ref queryPlayer);
-        //     FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
-
-        //     FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
-        //     FilterPlayerByGameId(ref queryPlayer, param.GameId);
-        //     FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
-        //     FilterPlayerByGender(ref queryPlayer, param.Gender);
-
-        //     SearchPlayerByName(ref queryPlayer, param.SearchString);
-
-        //     OrderPlayerByASCName(ref queryPlayer, param.IsOrderByFirstName);
-        //     OrderPlayerByHighestRating(ref queryPlayer, param.IsOrderByRating);
-        //     OrderPlayerByLowestPricing(ref queryPlayer, param.IsOrderByPricing);
-
-        //     players = queryPlayer.ToList();
-        //     var response = _mapper.Map<List<PlayerGetAllResponseForHirer>>(players);
-        //     return PagedResult<PlayerGetAllResponseForHirer>
-        //         .ToPagedList(
-        //             response,
-        //             param.PageNumber,
-        //             param.PageSize);
-
-        // }
-
         public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
             ClaimsPrincipal principal,
             PlayerParameters param)
@@ -347,13 +303,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
 
             var queryPlayer = players.AsQueryable();
 
-            FilterActivePlayer(ref queryPlayer);
+            FilterActivePlayer(ref queryPlayer, true);
 
             Search(ref queryPlayer, param.SearchString);
 
-            FilterPlayerStatus(ref queryPlayer, param.PlayerStatus);
+            FilterPlayerStatus(ref queryPlayer, param.Status);
             FilterPlayerByName(ref queryPlayer, param.Name);
-            FilterPlayerRecentHired(ref queryPlayer, param.IsRecent, hirer.Id);
+            FilterPlayerRecentHired(ref queryPlayer, param.IsRecentOrder, hirer.Id);
             FilterPlayerByGameId(ref queryPlayer, param.GameId);
             FilterPlayerByMusicId(ref queryPlayer, param.MusicId);
             FilterPlayerByGender(ref queryPlayer, param.Gender);
@@ -452,6 +408,36 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
                 }
             }
             queryPlayer = finalList.AsQueryable();
+        }
+
+        public async Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param)
+        {
+            var players = await _context.Players.ToListAsync();
+
+            var queryPlayer = players.AsQueryable();
+
+            FilterActivePlayer(ref queryPlayer, param.IsActive);
+            FilterPlayerStatus(ref queryPlayer, param.Status);
+            FilterPlayerByName(ref queryPlayer, param.Name);
+
+            players = queryPlayer.ToList();
+            var response = _mapper.Map<List<PlayerGetAllResponseForAdmin>>(players);
+            return PagedResult<PlayerGetAllResponseForAdmin>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        public async Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId)
+        {
+            var player = await _context.Players.FindAsync(playerId);
+
+            if (player is null) {
+                return null;
+            }
+            
+            return _mapper.Map<PlayerGetByIdForAdminResponse>(player);
         }
     }
 }

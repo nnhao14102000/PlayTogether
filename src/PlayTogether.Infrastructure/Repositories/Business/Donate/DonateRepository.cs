@@ -65,7 +65,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
         }
 
         private int CountTotalNumberOfPeopleDonateInDay(List<Entities.Donate> donates){
-            return 0;
+            if(!donates.Any()) {
+                return 0;
+            }
+            int count = 0;
+
+            return count;
         }
 
         private float TotalMoneyDonateReceiveInDay(List<Entities.Donate> donates)

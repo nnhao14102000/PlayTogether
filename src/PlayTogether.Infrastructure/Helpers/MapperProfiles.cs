@@ -64,6 +64,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Player, PlayerGetByIdResponseForHirer>();
             CreateMap<Player, PlayerServiceInfoResponseForPlayer>();
             CreateMap<Player, PlayerOtherSkillResponse>();
+            CreateMap<Player, PlayerGetAllResponseForAdmin>();
             CreateMap<OtherSkillUpdateRequest, Player>();
             
             CreateMap<Image, ImagesOfPlayer>();
@@ -134,6 +135,8 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<Chat, ChatGetResponse>();
             CreateMap<ChatCreateRequest, Chat>();
+
+            CreateMap<Donate, DonateInOrderResponse>();
 
             
 

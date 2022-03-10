@@ -21,6 +21,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
 
         public ICollection<RatingInOrderResponse> Ratings { get; set; }
         public ICollection<ReportInOrderResponse> Reports { get; set; }
+        public DonateInOrderResponse Donate { get; set; }
 
         public string Status { get; set; }
     }

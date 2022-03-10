@@ -23,6 +23,8 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         // Main page of Hirer
         Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(ClaimsPrincipal principal, PlayerParameters param);
         // Task<PagedResult<PlayerGetAllResponseForHirer>> GetPlayersRecentHireAsync(string hireId);
+        Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param);
+        Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId);
 
     }
 }

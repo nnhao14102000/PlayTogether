@@ -40,6 +40,17 @@ namespace PlayTogether.Core.Services.Business.Player
             }
         }
 
+        public async Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param)
+        {
+            try {
+                return await _playerRepository.GetAllPlayersForAdminAsync(param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllPlayersForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<PlayerGetAllResponseForHirer>> GetAllPlayersForHirerAsync(
             ClaimsPrincipal principal,
             PlayerParameters param)
@@ -53,6 +64,20 @@ namespace PlayTogether.Core.Services.Business.Player
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllPlayersForHirerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId)
+        {
+            try {
+                if (String.IsNullOrEmpty(playerId)) {
+                    throw new ArgumentNullException(nameof(playerId));
+                }
+                return await _playerRepository.GetPlayerByIdForAdminAsync(playerId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetPlayerByIdForAdminAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

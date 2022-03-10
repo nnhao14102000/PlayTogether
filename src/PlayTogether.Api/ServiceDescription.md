@@ -118,6 +118,15 @@
 >   ***Role Access***: Admin  
 >   ***Use for***: Admin make decision approve or not a report  
 >
+> - ``GET /api/play-together/v1/admins/player ``  
+>   ***Description***: Get all players    
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin manage player 
+>
+> - ``GET /api/play-together/v1/admins/player/{playerId} ``  
+>   ***Description***: Get a player by player Id  
+>   ***Role Access***: Admin  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

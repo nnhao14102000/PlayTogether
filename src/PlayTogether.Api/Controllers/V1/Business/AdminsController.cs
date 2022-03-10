@@ -12,6 +12,7 @@ using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
+using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -22,17 +23,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IHirerService _hirerService;
         private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
+        private readonly IPlayerService _playerService;
 
         public AdminsController(
             IAdminService adminService,
             IHirerService hirerService,
             IOrderService orderService,
-            IReportService reportService)
+            IReportService reportService,
+            IPlayerService playerService)
         {
             _adminService = adminService;
             _hirerService = hirerService;
             _orderService = orderService;
-            _reportService  = reportService;
+            _reportService = reportService;
+            _playerService = playerService;
         }
 
         /// <summary>
@@ -138,7 +142,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("reports")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param){
+        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param)
+        {
             var response = await _reportService.GetAllReportsForAdminAsync(param);
             var metaData = new {
                 response.TotalCount,
@@ -152,7 +157,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             return response is not null ? Ok(response) : NotFound();
         }
-        
+
         /// <summary>
         /// Get a report in detail by Id
         /// </summary>
@@ -163,7 +168,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("reports/{reportId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId){
+        public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId)
+        {
             var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
             return response is not null ? Ok(response) : NotFound();
         }
@@ -179,12 +185,55 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPut, Route("reports/{reportId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> ProcessReport(string reportId, ReportCheckRequest request){
+        public async Task<ActionResult> ProcessReport(string reportId, ReportCheckRequest request)
+        {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _reportService.ProcessReportAsync(reportId, request);
             return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Get all players for admin
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("players")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<PlayerGetAllResponseForAdmin>>> GetAllPlayersForAdmin([FromQuery] PlayerForAdminParameters param)
+        {
+            var response = await _playerService.GetAllPlayersForAdminAsync(param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get player by Id for admin
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("players/{playerId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PlayerGetByIdForAdminResponse>> GetPlayerByIdForAdmin(string playerId)
+        {
+            var response = await _playerService.GetPlayerByIdForAdminAsync(playerId);
+            return response is not null ? Ok(response) : NotFound();
         }
     }
 }

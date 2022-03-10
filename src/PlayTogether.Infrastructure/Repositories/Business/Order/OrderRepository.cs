@@ -539,6 +539,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(order)
                 .Collection(x => x.Reports)
                 .LoadAsync();
+            
+            await _context.Entry(order)
+                .Reference(x => x.Donate)
+                .LoadAsync();
 
             return _mapper.Map<OrderGetDetailResponse>(order);
         }
