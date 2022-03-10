@@ -106,7 +106,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("users/orders/{orderId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<OrderGetResponse>> GetOrderByIdForAdmin(string orderId)
+        public async Task<ActionResult<OrderGetDetailResponse>> GetOrderByIdForAdmin(string orderId)
         {
             var response = await _orderService.GetOrderByIdInDetailForAdminAsync(orderId);
             return response is not null ? Ok(response) : NotFound();
