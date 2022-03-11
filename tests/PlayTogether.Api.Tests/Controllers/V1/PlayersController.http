@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 
 ###
 # Get Player by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+GET {{baseUrl}}/api/play-together/v1/players/250282e3-e053-4825-af00-e6bc2f908b51
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -61,14 +61,14 @@ Authorization: {{authToken}}
 ### 
 
 # Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+PUT {{baseUrl}}/api/play-together/v1/players/service-info/250282e3-e053-4825-af00-e6bc2f908b51
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "status": true,
   "maxHourHire": 3,
-  "pricePerHour": 100
+  "pricePerHour": 100000
 }
 
 
@@ -140,7 +140,7 @@ Authorization: {{authToken}}
 
 ###
 # Update Player other Skill
-PUT {{baseUrl}}/api/play-together/v1/players/35817416-edbc-4124-9b08-4c7e9cfb5295/other-skills
+PUT {{baseUrl}}/api/play-together/v1/players/250282e3-e053-4825-af00-e6bc2f908b51/other-skills
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -165,9 +165,16 @@ Authorization: {{authToken}}
 
 ###
 
+# Get a player Notification
+GET {{baseUrl}}/api/play-together/v1/notification/21b627a8-be0b-437f-9ec4-d8626775ad2a
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/6c1543f7-34be-434a-86ec-77acf82c2016
+GET {{baseUrl}}/api/play-together/v1/orders/8d607da0-0cfa-4b5d-b36a-901687b4411d
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -184,19 +191,19 @@ Authorization: {{authToken}}
 
 
 # Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/52ab0384-80a3-4dcc-abfd-149c285243eb/process
+PUT {{baseUrl}}/api/play-together/v1/players/orders/fe0ff712-e9be-44cd-9ff3-0049fafe8a26/process
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "isAccept": true,
-  "charityId": "e7f3c57a-11e5-45d8-bc1c-4ba861a9f281"
+  "charityId": ""
 }
 
 ###
 
 # Finish soon order
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/52298b5f-ce3b-421f-b2f2-1bd7d1c15da0
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/d4899754-0071-41b9-96e7-8c2b8a3ab5ce
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -238,7 +245,7 @@ Authorization: {{authToken}}
 
 
 # Get all player rating
-GET {{baseUrl}}/api/play-together/v1/rating/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+GET {{baseUrl}}/api/play-together/v1/rating/250282e3-e053-4825-af00-e6bc2f908b51
 ?IsNew=true
 Content-Type: {{contentType}}
 Authorization: {{authToken}}

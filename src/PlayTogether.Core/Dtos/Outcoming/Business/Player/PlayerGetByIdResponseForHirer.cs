@@ -18,7 +18,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 
         public string OtherSkill { get; set; }
 
-        public float Rating { get; set; }
+        public float Rate { get; set; }
 
         public string Status { get; set; }
 

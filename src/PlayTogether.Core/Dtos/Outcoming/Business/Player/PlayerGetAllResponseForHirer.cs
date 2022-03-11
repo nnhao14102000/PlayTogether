@@ -13,7 +13,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Player
 
         public string Lastname { get; set; }
         public float PricePerHour { get; set; }
-        public float Rating { get; set; }
+        public float Rate { get; set; }
         public string Status { get; set; }
     }
 }

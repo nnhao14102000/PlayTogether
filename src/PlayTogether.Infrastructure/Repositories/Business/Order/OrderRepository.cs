@@ -486,7 +486,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             FilterInDate(ref query, param.FromDate, param.ToDate);
             FilterOrderByStatus(ref query, param.Status);
             orders = query.ToList();
-            
+
             foreach (var order in orders) {
                 await _context.Entry(order)
                     .Reference(x => x.Hirer)
@@ -539,7 +539,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(order)
                 .Collection(x => x.Reports)
                 .LoadAsync();
-            
+
             await _context.Entry(order)
                 .Reference(x => x.Donate)
                 .LoadAsync();

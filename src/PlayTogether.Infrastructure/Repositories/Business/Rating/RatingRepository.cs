@@ -82,15 +82,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             OrderByCreatedDate(ref query, param.IsNew);
 
             ratings = query.ToList();
-            foreach (var item in ratings)
-            {
+            foreach (var item in ratings) {
                 await _context.Entry(item).Reference(x => x.Hirer).LoadAsync();
             }
             var response = _mapper.Map<List<RatingGetResponse>>(ratings);
             return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        public async Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param){
+        public async Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param)
+        {
             var ratings = await _context.Ratings.Where(x => x.IsViolate == true).ToListAsync();
             var query = ratings.AsQueryable();
 
@@ -98,8 +98,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             OrderByCreatedDate(ref query, param.IsNew);
 
             ratings = query.ToList();
-            foreach (var item in ratings)
-            {
+            foreach (var item in ratings) {
                 await _context.Entry(item).Reference(x => x.Hirer).LoadAsync();
             }
             var response = _mapper.Map<List<RatingGetResponse>>(ratings);
@@ -165,7 +164,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.PlayerId == rating.PlayerId).Average(x => x.Rate);
                 rating.Player.Rate = rateOfPlayer;
-                
+
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return false;
                 }

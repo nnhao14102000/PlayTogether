@@ -54,7 +54,7 @@ Authorization: {{authToken}}
 ###
 # Get all players with paging, filter, search
 GET {{baseUrl}}/api/play-together/v1.1/players
-    ?SearchString=hung lol
+    ?SearchString=tham
     &Gender=
     &IsRecent=
     &GameId=
@@ -71,7 +71,7 @@ Authorization: {{authToken}}
 
 ### 
 # Get Player by Id for hirer
-GET {{baseUrl}}/api/play-together/v1.1/players/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+GET {{baseUrl}}/api/play-together/v1.1/players/b2c7ff4f-d487-4920-b250-5ac5687d964b
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -83,7 +83,7 @@ Authorization: {{authToken}}
 
 ###
 # Create Order to player
-POST {{baseUrl}}/api/play-together/v1/hirers/orders/000ba2bd-6eb3-4b1c-9dd3-1db1a50e3df8
+POST {{baseUrl}}/api/play-together/v1/hirers/orders/250282e3-e053-4825-af00-e6bc2f908b51
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -100,13 +100,13 @@ Authorization: {{authToken}}
 
 ###
 # Cancel order request
-PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/6c1543f7-34be-434a-86ec-77acf82c2016
+PUT {{baseUrl}}/api/play-together/v1/hirers/cancel/orders/d133688b-d9cb-4014-878d-69d400216d57
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Finish order
-PUT {{baseUrl}}/api/play-together/v1/orders/finish/b80b69d7-28d3-4b5e-892c-5282643930a7
+PUT {{baseUrl}}/api/play-together/v1/orders/finish/8d607da0-0cfa-4b5d-b36a-901687b4411d
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -114,7 +114,7 @@ Authorization: {{authToken}}
 
 
 # Finish soon order
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/52ab0384-80a3-4dcc-abfd-149c285243eb
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/fe0ff712-e9be-44cd-9ff3-0049fafe8a26
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -148,12 +148,12 @@ Authorization: {{authToken}}
 ###
 
 # Rate 
-POST {{baseUrl}}/api/play-together/v1/rating/b80b69d7-28d3-4b5e-892c-5282643930a7
+POST {{baseUrl}}/api/play-together/v1/rating/fe0ff712-e9be-44cd-9ff3-0049fafe8a26
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "comment": "Danh hay qua, tuyet vời",
+  "comment": "Danh hay quá....",
   "rate": 5
 }
 
