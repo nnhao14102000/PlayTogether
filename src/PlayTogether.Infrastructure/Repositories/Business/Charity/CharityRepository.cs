@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -24,14 +25,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             var queryCharity = charities.AsQueryable();
             
             FilterActiveCharities(ref queryCharity);
-            SearchCharitiesByName(ref queryCharity, param.Name);
+            FilterCharitiesByName(ref queryCharity, param.Name);
             
             charities = queryCharity.ToList();
             var response = _mapper.Map<List<CharityResponse>>(charities);
             return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void SearchCharitiesByName(ref IQueryable<Entities.Charity> queryCharity, string name)
+        private void FilterCharitiesByName(ref IQueryable<Entities.Charity> queryCharity, string name)
         {
             if (!queryCharity.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
@@ -54,6 +55,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
                 return null;
             }
             return _mapper.Map<CharityResponse>(charity);
+        }
+
+        public async Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
+        {
+            var charity = await _context.Charities.FindAsync(charityId);
+            if (charity is null) {
+                return false;
+            }
+            var model = _mapper.Map(request, charity);
+            _context.Charities.Update(model);
+            return (await _context.SaveChangesAsync() >= 0);
         }
     }
 }

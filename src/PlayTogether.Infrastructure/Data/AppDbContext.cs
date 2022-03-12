@@ -32,7 +32,7 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<TypeOfGame> TypeOfGames { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Chat> Chats { get; set; }
-        public DbSet<FavoriteSearch> FavoriteSearches { get; set; }
+        public DbSet<SearchHistory> SearchHistories { get; set; }
         public DbSet<Hobby> Hobbies { get; set; }
         public DbSet<Recommend> Recommends { get; set; }
     }

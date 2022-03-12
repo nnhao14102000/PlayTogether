@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Infrastructure.Entities
 {
-    public class FavoriteSearch : BaseEntity
+    public class SearchHistory : BaseEntity
     {
         [MaxLength(100)]
         public string HirerId { get; set; }

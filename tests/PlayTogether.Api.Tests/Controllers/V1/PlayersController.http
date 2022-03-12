@@ -274,7 +274,7 @@ Authorization: {{authToken}}
 
 
 # Create chat message
-POST {{baseUrl}}/api/play-together/v1/chats/cfeb51a6-6eef-4214-b53c-9707926fceca
+POST {{baseUrl}}/api/play-together/v1/chats/0cd409d6-c952-4669-86fc-d9a7a2eef1db
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -285,7 +285,7 @@ Authorization: {{authToken}}
 ###
 
 # Get alls chat message
-GET {{baseUrl}}/api/play-together/v1/chats/cfeb51a6-6eef-4214-b53c-9707926fceca
+GET {{baseUrl}}/api/play-together/v1/chats/0cd409d6-c952-4669-86fc-d9a7a2eef1db
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 

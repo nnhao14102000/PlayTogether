@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.Chat;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
@@ -57,6 +58,8 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<HirerStatusUpdateRequest, Hirer>();
 
             CreateMap<Charity, CharityResponse>();
+            CreateMap<CharityStatusRequest, Charity>();
+
 
             CreateMap<Player, PlayerGetAllResponseForHirer>();
             CreateMap<Player, PlayerGetProfileResponse>();
@@ -137,7 +140,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<ChatCreateRequest, Chat>();
 
             CreateMap<Donate, DonateInOrderResponse>();
-
+            
             
 
             // src => target
