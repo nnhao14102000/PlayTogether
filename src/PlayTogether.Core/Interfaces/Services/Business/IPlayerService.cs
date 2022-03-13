@@ -17,10 +17,11 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<bool> UpdatePlayerInformationAsync(string id, PlayerInfoUpdateRequest request);
         Task<bool> UpdatePlayerServiceInfoAsync(string id, PlayerServiceInfoUpdateRequest request);
         Task<bool> AcceptPolicyAsync(ClaimsPrincipal principal, PlayerAcceptPolicyRequest request);
-
         Task<PlayerOtherSkillResponse> GetPlayerOtherSkillByIdAsync(string id);
         Task<bool> UpdatePlayerOtherSkillAsync(string id, OtherSkillUpdateRequest request);
+
         Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param);
         Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId);
+        Task<bool> UpdatePlayerStatusForAdminAsync (string playerId, PlayerStatusUpdateRequest request);
     }
 }

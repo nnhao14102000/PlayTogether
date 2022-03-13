@@ -25,6 +25,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         // Task<PagedResult<PlayerGetAllResponseForHirer>> GetPlayersRecentHireAsync(string hireId);
         Task<PagedResult<PlayerGetAllResponseForAdmin>> GetAllPlayersForAdminAsync(PlayerForAdminParameters param);
         Task<PlayerGetByIdForAdminResponse> GetPlayerByIdForAdminAsync(string playerId);
+        Task<bool> UpdatePlayerStatusForAdminAsync (string playerId, PlayerStatusUpdateRequest request);
 
     }
 }

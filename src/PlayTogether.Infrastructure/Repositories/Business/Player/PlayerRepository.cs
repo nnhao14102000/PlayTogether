@@ -439,5 +439,45 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
             
             return _mapper.Map<PlayerGetByIdForAdminResponse>(player);
         }
+
+        public async Task<bool> UpdatePlayerStatusForAdminAsync(string playerId, PlayerStatusUpdateRequest request)
+        {
+            var player = await _context.Players.FindAsync(playerId);
+            if (player is null) {
+                return false;
+            }
+            _mapper.Map(request, player);
+            _context.Players.Update(player);
+            if (await _context.SaveChangesAsync() < 0) {
+                return false;
+            }
+            if (request.IsActive is false) {
+                player.Status = PlayerStatusConstants.Offline;
+                await _context.Entry(player).Collection(x => x.Orders).LoadAsync();
+                var orders = player.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
+                if (orders.Count() > 0) {
+                    foreach (var order in orders) {
+                        await _context.Entry(order).Reference(x => x.Player).LoadAsync();
+                        order.Status = OrderStatusConstants.Interrupt;
+                        order.Player.Status = PlayerStatusConstants.Online;
+                    }
+                }
+                await _context.Notifications.AddAsync(
+                    new Entities.Notification {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedDate = DateTime.Now,
+                        UpdateDate = null,
+                        ReceiverId = player.Id,
+                        Title = $"Tài khoản của bạn đã bị khóa.😅",
+                        Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Bạn đã bị khóa tài khoản vì bạn đã đã hành vi không thích hợp. Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}" : $"Bạn đã bị khóa tài khoản vì: \"{request.Message}\". Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}",
+                        Status = NotificationStatusConstants.NotRead
+                    }
+                );
+                return (await _context.SaveChangesAsync() >= 0);
+            }
+            else {
+                return (await _context.SaveChangesAsync() >= 0);
+            }
+        }
     }
 }

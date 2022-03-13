@@ -5,9 +5,6 @@ namespace PlayTogether.Infrastructure.Entities
     public class Notification : BaseEntity
     {
         [MaxLength(100)]
-        public string SenderId { get; set; }
-
-        [MaxLength(100)]
         [Required]
         public string ReceiverId { get; set; }
 

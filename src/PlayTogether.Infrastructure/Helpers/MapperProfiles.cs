@@ -69,6 +69,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Player, PlayerOtherSkillResponse>();
             CreateMap<Player, PlayerGetAllResponseForAdmin>();
             CreateMap<OtherSkillUpdateRequest, Player>();
+            CreateMap<PlayerStatusUpdateRequest, Player>();
             
             CreateMap<Image, ImagesOfPlayer>();
             CreateMap<PlayerInfoUpdateRequest, Player>();

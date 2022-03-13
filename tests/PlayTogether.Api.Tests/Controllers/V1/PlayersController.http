@@ -191,7 +191,7 @@ Authorization: {{authToken}}
 
 
 # Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/fe0ff712-e9be-44cd-9ff3-0049fafe8a26/process
+PUT {{baseUrl}}/api/play-together/v1/players/orders/543cb67b-c264-4d53-ba5d-2c64c763e969/process
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -203,7 +203,7 @@ Authorization: {{authToken}}
 ###
 
 # Finish soon order
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/d4899754-0071-41b9-96e7-8c2b8a3ab5ce
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/543cb67b-c264-4d53-ba5d-2c64c763e969
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

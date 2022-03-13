@@ -83,13 +83,13 @@ Authorization: {{authToken}}
 
 ###
 # Create Order to player
-POST {{baseUrl}}/api/play-together/v1/hirers/orders/250282e3-e053-4825-af00-e6bc2f908b51
+POST {{baseUrl}}/api/play-together/v1/hirers/orders/b2c7ff4f-d487-4920-b250-5ac5687d964b
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
   "totalTimes": 1,
-  "message": "Bạn ơi chơi game lol vs mình không"
+  "message": "Bạn ơi chơi game lol vs mình không..."
 }
 
 ###

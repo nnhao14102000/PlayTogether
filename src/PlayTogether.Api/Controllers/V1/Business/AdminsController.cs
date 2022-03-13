@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
@@ -13,6 +12,7 @@ using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
+using PlayTogether.Core.Dtos.Incoming.Business.Player;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -234,6 +234,26 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _playerService.GetPlayerByIdForAdminAsync(playerId);
             return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Active or Disable (1 day) a player account
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("player-status/{playerId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> UpdatePlayerStatus(string playerId, PlayerStatusUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _playerService.UpdatePlayerStatusForAdminAsync(playerId, request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

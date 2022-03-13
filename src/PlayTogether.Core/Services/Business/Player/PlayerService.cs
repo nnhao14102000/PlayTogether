@@ -202,5 +202,22 @@ namespace PlayTogether.Core.Services.Business.Player
                 throw;
             }
         }
+
+        public async Task<bool> UpdatePlayerStatusForAdminAsync(string playerId, PlayerStatusUpdateRequest request)
+        {
+            try {
+                if (String.IsNullOrEmpty(playerId)) {
+                    throw new ArgumentNullException(nameof(playerId));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _playerRepository.UpdatePlayerStatusForAdminAsync(playerId, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdatePlayerStatusForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
     }
 }

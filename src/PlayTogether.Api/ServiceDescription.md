@@ -127,6 +127,10 @@
 >   ***Description***: Get a player by player Id  
 >   ***Role Access***: Admin  
 >
+> - ``PUT /api/play-together/v1/admins/player-status/{playerId} ``  
+>   ***Description***: Active or Disable (1 day) a player account   
+>   ***Role Access***: Admin    
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

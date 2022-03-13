@@ -92,10 +92,15 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             }
 
             if (player is not null) {
-                if (player.IsActive == false) {
+                if (player.IsActive == false && player.UpdateDate > DateTime.Now.AddDays(-1)) {
                     return new AuthResult {
-                        Errors = new List<string>() { "Tài khoản đã bị khóa." }
+                        Errors = new List<string>() { $"Tài khoản đã bị khóa, bạn có thể đăng nhập lại sau {player.UpdateDate - DateTime.Now.AddDays(-1)}" }
                     };
+                }
+                else if (player.IsActive == false && player.UpdateDate <= DateTime.Now.AddDays(-1)) {
+                    player.Status = PlayerStatusConstants.Online;
+                    player.IsActive = true;
+                    await _context.SaveChangesAsync();
                 }
                 else {
                     player.Status = PlayerStatusConstants.Online;
