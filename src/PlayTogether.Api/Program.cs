@@ -60,11 +60,11 @@ namespace PlayTogether.Api
         public static IHostBuilder CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) => {
-                    var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+                    // var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
 
-                    if (!(bool)(appSettings?.ByPassKeyVault)) {
-                        KeyVaultServices.GetAzureKeyVaultSecrets(context, config);
-                    }
+                    // if (!(bool)(appSettings?.ByPassKeyVault)) {
+                    //     KeyVaultServices.GetAzureKeyVaultSecrets(context, config);
+                    // }
                 })
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();

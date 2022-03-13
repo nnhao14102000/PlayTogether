@@ -7,10 +7,10 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IRankService
     {
-        Task<IEnumerable<RankGetByIdResponse>> GetAllRanksInGameAsync(string gameId);
-        Task<RankCreateResponse> CreateRankAsync(string gameId, RankCreateRequest request);
-        Task<RankGetByIdResponse> GetRankByIdAsync(string id);
-        Task<bool> UpdateRankAsync(string id, RankUpdateRequest request);
-        Task<bool> DeleteRankAsync(string id);
+        // Task<IEnumerable<RankGetByIdResponse>> GetAllRanksInGameAsync(string gameId);
+        // Task<RankCreateResponse> CreateRankAsync(string gameId, RankCreateRequest request);
+        // Task<RankGetByIdResponse> GetRankByIdAsync(string id);
+        // Task<bool> UpdateRankAsync(string id, RankUpdateRequest request);
+        // Task<bool> DeleteRankAsync(string id);
     }
 }

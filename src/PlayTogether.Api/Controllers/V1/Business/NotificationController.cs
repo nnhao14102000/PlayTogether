@@ -13,77 +13,77 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [ApiVersion("1.0")]
     public class NotificationController : BaseController
     {
-        private readonly INotificationService _notificationService;
+        // private readonly INotificationService _notificationService;
 
-        public NotificationController(INotificationService notificationService)
-        {
-            _notificationService = notificationService;
-        }
+        // public NotificationController(INotificationService notificationService)
+        // {
+        //     _notificationService = notificationService;
+        // }
 
-        /// <summary>
-        /// Get all notifications 
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin, Charity, Hirer, Player
-        /// </remarks>
-        [HttpGet]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
-                        + AuthConstant.RoleHirer + "," 
-                        + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<PagedResult<NotificationGetAllResponse>>> GetAllNotifications(
-            [FromQuery] NotificationParameters param)
-        {
-            var response = await _notificationService.GetAllNotificationsAsync(HttpContext.User, param);
-            var metaData = new {
-                response.TotalCount,
-                response.PageSize,
-                response.CurrentPage,
-                response.HasNext,
-                response.HasPrevious
-            };
+        // /// <summary>
+        // /// Get all notifications 
+        // /// </summary>
+        // /// <param name="param"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Admin, Charity, Hirer, Player
+        // /// </remarks>
+        // [HttpGet]
+        // [Authorize(Roles = AuthConstant.RoleAdmin + "," 
+        //                 + AuthConstant.RoleCharity + "," 
+        //                 + AuthConstant.RoleHirer + "," 
+        //                 + AuthConstant.RolePlayer)]
+        // public async Task<ActionResult<PagedResult<NotificationGetAllResponse>>> GetAllNotifications(
+        //     [FromQuery] NotificationParameters param)
+        // {
+        //     var response = await _notificationService.GetAllNotificationsAsync(HttpContext.User, param);
+        //     var metaData = new {
+        //         response.TotalCount,
+        //         response.PageSize,
+        //         response.CurrentPage,
+        //         response.HasNext,
+        //         response.HasPrevious
+        //     };
 
-            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
-        }
+        //     return response is not null ? Ok(response) : NotFound();
+        // }
 
-        /// <summary>
-        /// Get notification by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin, Charity, Hirer, Player
-        /// </remarks>
-        [HttpGet("{id}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
-                        + AuthConstant.RoleHirer + "," 
-                        + AuthConstant.RolePlayer)]
-        public async Task<ActionResult<NotificationGetDetailResponse>> GetNotificationById(string id){
-            var response = await _notificationService.GetNotificationByIdAsync(id);
-            return response is not null ? Ok(response) : NotFound();
-        }
+        // /// <summary>
+        // /// Get notification by Id
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Admin, Charity, Hirer, Player
+        // /// </remarks>
+        // [HttpGet("{id}")]
+        // [Authorize(Roles = AuthConstant.RoleAdmin + "," 
+        //                 + AuthConstant.RoleCharity + "," 
+        //                 + AuthConstant.RoleHirer + "," 
+        //                 + AuthConstant.RolePlayer)]
+        // public async Task<ActionResult<NotificationGetDetailResponse>> GetNotificationById(string id){
+        //     var response = await _notificationService.GetNotificationByIdAsync(id);
+        //     return response is not null ? Ok(response) : NotFound();
+        // }
 
-        /// <summary>
-        /// Delete notification
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin, Charity, Hirer, Player
-        /// </remarks>
-        [HttpDelete("{id}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
-                        + AuthConstant.RoleHirer + "," 
-                        + AuthConstant.RolePlayer)]
-        public async Task<ActionResult> DeleteNotification(string id){
-            var response = await _notificationService.DeleteNotificationAsync(id);
-            return response ? NoContent() : NotFound();
-        }
+        // /// <summary>
+        // /// Delete notification
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Admin, Charity, Hirer, Player
+        // /// </remarks>
+        // [HttpDelete("{id}")]
+        // [Authorize(Roles = AuthConstant.RoleAdmin + "," 
+        //                 + AuthConstant.RoleCharity + "," 
+        //                 + AuthConstant.RoleHirer + "," 
+        //                 + AuthConstant.RolePlayer)]
+        // public async Task<ActionResult> DeleteNotification(string id){
+        //     var response = await _notificationService.DeleteNotificationAsync(id);
+        //     return response ? NoContent() : NotFound();
+        // }
     }
 }

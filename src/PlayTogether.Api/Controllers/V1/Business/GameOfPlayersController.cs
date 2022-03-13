@@ -13,63 +13,63 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [Route("api/" + ApiConstants.ServiceName + "/v{api-version:apiVersion}/games-of-player")]
     public class GameOfPlayersController : BaseController
     {
-        private readonly IGameOfPlayerService _gameOfPlayerService;
+        // private readonly IGameOfPlayerService _gameOfPlayerService;
 
-        public GameOfPlayersController(IGameOfPlayerService gameOfPlayerService)
-        {
-            _gameOfPlayerService = gameOfPlayerService;
-        }
+        // public GameOfPlayersController(IGameOfPlayerService gameOfPlayerService)
+        // {
+        //     _gameOfPlayerService = gameOfPlayerService;
+        // }
 
-        /// <summary>
-        /// Get Game of Player
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Player
-        /// </remarks>
-        [HttpGet("{id}", Name = "GetGameOfPlayerById")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<GameOfPlayerGetByIdResponse>> GetGameOfPlayerById(string id)
-        {
-            var response = await _gameOfPlayerService.GetGameOfPlayerByIdAsync(id);
-            return response is not null ? Ok(response) : NotFound();
-        }
+        // /// <summary>
+        // /// Get Game of Player
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Player
+        // /// </remarks>
+        // [HttpGet("{id}", Name = "GetGameOfPlayerById")]
+        // [Authorize(Roles = AuthConstant.RolePlayer)]
+        // public async Task<ActionResult<GameOfPlayerGetByIdResponse>> GetGameOfPlayerById(string id)
+        // {
+        //     var response = await _gameOfPlayerService.GetGameOfPlayerByIdAsync(id);
+        //     return response is not null ? Ok(response) : NotFound();
+        // }
 
-        /// <summary>
-        /// Update Game of Player
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Player
-        /// </remarks>
-        [HttpPut, Route("{id}")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> UpdateGameOfPlayer(string id, GameOfPlayerUpdateRequest request)
-        {
-            if (!ModelState.IsValid) {
-                return BadRequest();
-            }
-            var response = await _gameOfPlayerService.UpdateGameOfPlayerAsync(id, request);
-            return response ? NoContent() : NotFound();
-        }
+        // /// <summary>
+        // /// Update Game of Player
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <param name="request"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Player
+        // /// </remarks>
+        // [HttpPut, Route("{id}")]
+        // [Authorize(Roles = AuthConstant.RolePlayer)]
+        // public async Task<ActionResult> UpdateGameOfPlayer(string id, GameOfPlayerUpdateRequest request)
+        // {
+        //     if (!ModelState.IsValid) {
+        //         return BadRequest();
+        //     }
+        //     var response = await _gameOfPlayerService.UpdateGameOfPlayerAsync(id, request);
+        //     return response ? NoContent() : NotFound();
+        // }
 
-        /// <summary>
-        /// Delete Game of Player
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Player
-        /// </remarks>
-        [HttpDelete("{id}")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> DeleteGameOfPlayer(string id)
-        {
-            var response = await _gameOfPlayerService.DeleteGameOfPlayerAsync(id);
-            return response ? NoContent() : NotFound();
-        }
+        // /// <summary>
+        // /// Delete Game of Player
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Player
+        // /// </remarks>
+        // [HttpDelete("{id}")]
+        // [Authorize(Roles = AuthConstant.RolePlayer)]
+        // public async Task<ActionResult> DeleteGameOfPlayer(string id)
+        // {
+        //     var response = await _gameOfPlayerService.DeleteGameOfPlayerAsync(id);
+        //     return response ? NoContent() : NotFound();
+        // }
     }
 }

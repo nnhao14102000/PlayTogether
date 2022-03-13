@@ -60,22 +60,23 @@ namespace PlayTogether.Api.Helpers
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+            // var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
 
-            string playTogetherDbConnectionString = string.Empty;
-            if ((bool)(appSettings?.ByPassKeyVault))// use for localhost
-            {
-                playTogetherDbConnectionString = configuration.GetConnectionString("PlayTogetherDbConnection");
-            }
-            else // use in environment
-            {
-                playTogetherDbConnectionString = GetSecret.PlayTogetherDbConnectionString().Result;
-            }
+            // string playTogetherDbConnectionString = string.Empty;
+            // if ((bool)(appSettings?.ByPassKeyVault))// use for localhost
+            // {
+            //     playTogetherDbConnectionString = configuration.GetConnectionString("PlayTogetherDbConnection");
+            // }
+            // else // use in environment
+            // {
+            //     playTogetherDbConnectionString = GetSecret.PlayTogetherDbConnectionString().Result;
+            // }
 
             // Play together Db config
             services.AddDbContext<AppDbContext>
             (
-                optionsAction: options => options.UseSqlServer(playTogetherDbConnectionString)
+                // optionsAction: options => options.UseSqlServer(playTogetherDbConnectionString)
+                options => options.UseSqlServer(configuration.GetConnectionString("PlayTogetherDbConnection"))
             );
 
             // Config for automapper

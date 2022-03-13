@@ -19,75 +19,75 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Music
         {
         }
 
-        public async Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request)
-        {
-            var model = _mapper.Map<Entities.Music>(request);
-            await _context.Musics.AddAsync(model);
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return _mapper.Map<MusicGetByIdResponse>(model);
-            }
-            return null;
-        }
+        // public async Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request)
+        // {
+        //     var model = _mapper.Map<Entities.Music>(request);
+        //     await _context.Musics.AddAsync(model);
+        //     if ((await _context.SaveChangesAsync() >= 0)) {
+        //         return _mapper.Map<MusicGetByIdResponse>(model);
+        //     }
+        //     return null;
+        // }
 
-        public async Task<bool> DeleteMusicAsync(string id)
-        {
-            var music = await _context.Musics.FindAsync(id);
-            if (music is null) {
-                return false;
-            }
+        // public async Task<bool> DeleteMusicAsync(string id)
+        // {
+        //     var music = await _context.Musics.FindAsync(id);
+        //     if (music is null) {
+        //         return false;
+        //     }
 
-            var musicOfPlayers = await _context.MusicOfPlayers.Where(x => x.MusicId == id).ToListAsync();
-            if(musicOfPlayers.Count >= 0){
-                _context.MusicOfPlayers.RemoveRange(musicOfPlayers);
-                if(await _context.SaveChangesAsync() < 0){
-                    return false;
-                }
-            }
+        //     var musicOfPlayers = await _context.MusicOfPlayers.Where(x => x.MusicId == id).ToListAsync();
+        //     if(musicOfPlayers.Count >= 0){
+        //         _context.MusicOfPlayers.RemoveRange(musicOfPlayers);
+        //         if(await _context.SaveChangesAsync() < 0){
+        //             return false;
+        //         }
+        //     }
             
-            _context.Musics.Remove(music);
-            return (await _context.SaveChangesAsync() >= 0);
-        }
+        //     _context.Musics.Remove(music);
+        //     return (await _context.SaveChangesAsync() >= 0);
+        // }
 
-        public async Task<PagedResult<MusicGetByIdResponse>> GetAllMusicsAsync(MusicParameter param)
-        {
-            var musics = await _context.Musics.OrderByDescending(x => x.CreatedDate).ToListAsync();
+        // public async Task<PagedResult<MusicGetByIdResponse>> GetAllMusicsAsync(MusicParameter param)
+        // {
+        //     var musics = await _context.Musics.OrderByDescending(x => x.CreatedDate).ToListAsync();
 
-            if (musics is not null) {
-                if (!String.IsNullOrEmpty(param.Name)) {
-                    var query = musics.AsQueryable();
-                    query = query.Where(x => (x.Name).ToLower()
-                                                   .Contains(param.Name.ToLower())).OrderByDescending(x => x.CreatedDate);
-                    musics = query.ToList();
-                }
-                var response = _mapper.Map<List<MusicGetByIdResponse>>(musics);
-                return PagedResult<MusicGetByIdResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //     if (musics is not null) {
+        //         if (!String.IsNullOrEmpty(param.Name)) {
+        //             var query = musics.AsQueryable();
+        //             query = query.Where(x => (x.Name).ToLower()
+        //                                            .Contains(param.Name.ToLower())).OrderByDescending(x => x.CreatedDate);
+        //             musics = query.ToList();
+        //         }
+        //         var response = _mapper.Map<List<MusicGetByIdResponse>>(musics);
+        //         return PagedResult<MusicGetByIdResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            return null;
-        }
+        //     return null;
+        // }
 
-        public async Task<MusicGetByIdResponse> GetMusicByIdAsync(string id)
-        {
-            var music = await _context.Musics.FindAsync(id);
+        // public async Task<MusicGetByIdResponse> GetMusicByIdAsync(string id)
+        // {
+        //     var music = await _context.Musics.FindAsync(id);
 
-            if (music is null) {
-                return null;
-            }
+        //     if (music is null) {
+        //         return null;
+        //     }
 
-            return _mapper.Map<MusicGetByIdResponse>(music);
-        }
+        //     return _mapper.Map<MusicGetByIdResponse>(music);
+        // }
 
-        public async Task<bool> UpdateMusicAsync(string id, MusicUpdateRequest request)
-        {
-            var music = await _context.Musics.FindAsync(id);
+        // public async Task<bool> UpdateMusicAsync(string id, MusicUpdateRequest request)
+        // {
+        //     var music = await _context.Musics.FindAsync(id);
 
-            if (music is null) {
-                return false;
-            }
+        //     if (music is null) {
+        //         return false;
+        //     }
 
-            var model = _mapper.Map(request, music);
-            _context.Musics.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
-        }
+        //     var model = _mapper.Map(request, music);
+        //     _context.Musics.Update(model);
+        //     return (await _context.SaveChangesAsync() >= 0);
+        // }
     }
 }

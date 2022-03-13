@@ -6,15 +6,15 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IGameOfPlayerRepository
     {
-        Task<IEnumerable<GamesInPlayerGetAllResponse>> GetAllGameOfPlayerAsync(string playerId);
+        // Task<IEnumerable<GamesInPlayerGetAllResponse>> GetAllGameOfPlayerAsync(string playerId);
 
-        Task<GameOfPlayerGetByIdResponse> CreateGameOfPlayerAsync(string playerId, GameOfPlayerCreateRequest request);
+        // Task<GameOfPlayerGetByIdResponse> CreateGameOfPlayerAsync(string playerId, GameOfPlayerCreateRequest request);
 
-        Task<GameOfPlayerGetByIdResponse> GetGameOfPlayerByIdAsync(string id);
+        // Task<GameOfPlayerGetByIdResponse> GetGameOfPlayerByIdAsync(string id);
 
-        Task<bool> UpdateGameOfPlayerAsync(string id, GameOfPlayerUpdateRequest request);
+        // Task<bool> UpdateGameOfPlayerAsync(string id, GameOfPlayerUpdateRequest request);
 
-        Task<bool> DeleteGameOfPlayerAsync(string id);
+        // Task<bool> DeleteGameOfPlayerAsync(string id);
 
     }
 }

@@ -8,10 +8,10 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IReportRepository
     {
-        Task<bool> CreateReportAsync(string orderId, ReportCreateRequest request);
-        Task<PagedResult<ReportGetResponse>> GetAllReportsForAdminAsync(ReportAdminParameters param);
-        Task<PagedResult<ReportGetResponse>> GetAllReportsAsync(string hirerId, ReportParamters param);
-        Task<ReportInDetailResponse> GetReportInDetailByIdForAdminAsync(string reportId);
-        Task<bool> ProcessReportAsync(string reportId, ReportCheckRequest request);
+        // Task<bool> CreateReportAsync(string orderId, ReportCreateRequest request);
+        // Task<PagedResult<ReportGetResponse>> GetAllReportsForAdminAsync(ReportAdminParameters param);
+        // Task<PagedResult<ReportGetResponse>> GetAllReportsAsync(string hirerId, ReportParamters param);
+        // Task<ReportInDetailResponse> GetReportInDetailByIdForAdminAsync(string reportId);
+        // Task<bool> ProcessReportAsync(string reportId, ReportCheckRequest request);
     }
 }

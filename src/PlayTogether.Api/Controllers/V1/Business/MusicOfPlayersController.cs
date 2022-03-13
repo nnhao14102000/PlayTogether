@@ -12,42 +12,42 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [Route("api/" + ApiConstants.ServiceName + "/v{api-version:apiVersion}/musics-of-player")]
     public class MusicOfPlayersController : BaseController
     {
-        private readonly IMusicOfPlayerService _musicOfPlayerService;
-        public MusicOfPlayersController(IMusicOfPlayerService musicOfPlayerService)
-        {
-            _musicOfPlayerService = musicOfPlayerService;
-        }
+        // private readonly IMusicOfPlayerService _musicOfPlayerService;
+        // public MusicOfPlayersController(IMusicOfPlayerService musicOfPlayerService)
+        // {
+        //     _musicOfPlayerService = musicOfPlayerService;
+        // }
 
-        /// <summary>
-        /// Get Music of Player by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Player
-        /// </remarks>
-        [HttpGet("{id}", Name = "GetMusicOfPlayerById")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult<MusicOfPlayerGetByIdResponse>> GetMusicOfPlayerById(string id)
-        {
-            var response = await _musicOfPlayerService.GetMusicOfPlayerByIdAsync(id);
-            return response is not null ? Ok(response) : NotFound();
-        }
+        // /// <summary>
+        // /// Get Music of Player by Id
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Player
+        // /// </remarks>
+        // [HttpGet("{id}", Name = "GetMusicOfPlayerById")]
+        // [Authorize(Roles = AuthConstant.RolePlayer)]
+        // public async Task<ActionResult<MusicOfPlayerGetByIdResponse>> GetMusicOfPlayerById(string id)
+        // {
+        //     var response = await _musicOfPlayerService.GetMusicOfPlayerByIdAsync(id);
+        //     return response is not null ? Ok(response) : NotFound();
+        // }
 
-        /// <summary>
-        /// Delete Music of Player
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Player
-        /// </remarks>
-        [HttpDelete("{id}")]
-        [Authorize(Roles = AuthConstant.RolePlayer)]
-        public async Task<ActionResult> DeleteMusicOfPlayer(string id)
-        {
-            var response = await _musicOfPlayerService.DeleteMusicOfPlayerAsync(id);
-            return response ? NoContent() : NotFound();
-        }
+        // /// <summary>
+        // /// Delete Music of Player
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Player
+        // /// </remarks>
+        // [HttpDelete("{id}")]
+        // [Authorize(Roles = AuthConstant.RolePlayer)]
+        // public async Task<ActionResult> DeleteMusicOfPlayer(string id)
+        // {
+        //     var response = await _musicOfPlayerService.DeleteMusicOfPlayerAsync(id);
+        //     return response ? NoContent() : NotFound();
+        // }
     }
 }

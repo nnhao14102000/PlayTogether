@@ -8,10 +8,10 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IMusicService
     {
-        Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request);
-        Task<PagedResult<MusicGetByIdResponse>> GetAllMusicsAsync(MusicParameter param);
-        Task<MusicGetByIdResponse> GetMusicByIdAsync(string id);
-        Task<bool> UpdateMusicAsync(string id, MusicUpdateRequest request);
-        Task<bool> DeleteMusicAsync(string id);
+        // Task<MusicGetByIdResponse> CreateMusicAsync(MusicCreateRequest request);
+        // Task<PagedResult<MusicGetByIdResponse>> GetAllMusicsAsync(MusicParameter param);
+        // Task<MusicGetByIdResponse> GetMusicByIdAsync(string id);
+        // Task<bool> UpdateMusicAsync(string id, MusicUpdateRequest request);
+        // Task<bool> DeleteMusicAsync(string id);
     }
 }

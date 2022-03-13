@@ -10,28 +10,28 @@ namespace PlayTogether.Core.Services.Business.Donate
 {
     public class DonateService : IDonateService
     {
-        private readonly IDonateRepository _donateRepository;
-        private readonly ILogger<DonateService> _logger;
+        // private readonly IDonateRepository _donateRepository;
+        // private readonly ILogger<DonateService> _logger;
 
-        public DonateService(IDonateRepository donateRepository, ILogger<DonateService> logger)
-        {
-            _donateRepository = donateRepository;
-            _logger = logger;
-        }
+        // public DonateService(IDonateRepository donateRepository, ILogger<DonateService> logger)
+        // {
+        //     _donateRepository = donateRepository;
+        //     _logger = logger;
+        // }
 
-        public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
-        {
-            try {
-                if (principal is null) {
-                    throw new ArgumentNullException(nameof(principal));
-                }
+        // public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
+        // {
+        //     try {
+        //         if (principal is null) {
+        //             throw new ArgumentNullException(nameof(principal));
+        //         }
                 
-                return await _donateRepository.CalculateDonateAsync(principal);
-            }
-            catch (Exception ex) {
-                _logger.LogError($"Error while trying to call CalculateTurnDonateInDayAsync in service class, Error Message: {ex}.");
-                throw;
-            }
-        }
+        //         return await _donateRepository.CalculateDonateAsync(principal);
+        //     }
+        //     catch (Exception ex) {
+        //         _logger.LogError($"Error while trying to call CalculateTurnDonateInDayAsync in service class, Error Message: {ex}.");
+        //         throw;
+        //     }
+        // }
     }
 }

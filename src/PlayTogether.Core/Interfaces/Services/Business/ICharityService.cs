@@ -7,7 +7,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface ICharityService
     {
-        Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
-        Task<CharityResponse> GetCharityByIdAsync(string id);
+        // Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
+        // Task<CharityResponse> GetCharityByIdAsync(string id);
     }
 }

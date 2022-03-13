@@ -8,8 +8,8 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface ICharityRepository
     {
-        Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
-        Task<CharityResponse> GetCharityByIdAsync(string id);
-        Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request);
+        // Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
+        // Task<CharityResponse> GetCharityByIdAsync(string id);
+        // Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request);
     }
 }

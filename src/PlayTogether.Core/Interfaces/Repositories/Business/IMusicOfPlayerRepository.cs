@@ -7,9 +7,9 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IMusicOfPlayerRepository
     {
-        Task<IEnumerable<MusicOfPlayerGetAllResponse>> GetALlMusicOfPlayerAsync(string playerId);
-        Task<MusicOfPlayerGetByIdResponse> CreateMusicOfPlayerAsync(string playerId, MusicOfPlayerCreateRequest request);
-        Task<MusicOfPlayerGetByIdResponse> GetMusicOfPlayerByIdAsync(string id);
-        Task<bool> DeleteMusicOfPlayerAsync(string id);
+        // Task<IEnumerable<MusicOfPlayerGetAllResponse>> GetALlMusicOfPlayerAsync(string playerId);
+        // Task<MusicOfPlayerGetByIdResponse> CreateMusicOfPlayerAsync(string playerId, MusicOfPlayerCreateRequest request);
+        // Task<MusicOfPlayerGetByIdResponse> GetMusicOfPlayerByIdAsync(string id);
+        // Task<bool> DeleteMusicOfPlayerAsync(string id);
     }
 }

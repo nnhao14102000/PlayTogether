@@ -18,26 +18,26 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
         {
         }
 
-        public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)
-        {
-            List<Entities.Admin> admins = null;
+        // public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)
+        // {
+        //     List<Entities.Admin> admins = null;
 
-            admins = await _context.Admins.ToListAsync();
+        //     admins = await _context.Admins.ToListAsync();
 
-            if (admins is not null) {
-                if (!String.IsNullOrEmpty(param.Name)) {
-                    var query = admins.AsQueryable();
-                    query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
-                                                                       .Contains(param.Name.ToLower()));
-                    admins = query.ToList();
-                }
+        //     if (admins is not null) {
+        //         if (!String.IsNullOrEmpty(param.Name)) {
+        //             var query = admins.AsQueryable();
+        //             query = query.Where(x => (x.Lastname + x.Firstname).ToLower()
+        //                                                                .Contains(param.Name.ToLower()));
+        //             admins = query.ToList();
+        //         }
 
-                var response = _mapper.Map<List<AdminResponse>>(admins);
-                return PagedResult<AdminResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //         var response = _mapper.Map<List<AdminResponse>>(admins);
+        //         return PagedResult<AdminResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            return null;
-        }
+        //     return null;
+        // }
 
 
     }

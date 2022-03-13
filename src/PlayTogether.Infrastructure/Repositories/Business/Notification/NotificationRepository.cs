@@ -26,124 +26,124 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             _userManager = userManager;
         }
 
-        public async Task<bool> DeleteNotificationAsync(string id)
-        {
-            var noti = await _context.Notifications.FindAsync(id);
-            if (noti is null || noti.Status is NotificationStatusConstants.NotRead) {
-                return false;
-            }
-            _context.Notifications.Remove(noti);
-            return (await _context.SaveChangesAsync() >= 0);
-        }
+        // public async Task<bool> DeleteNotificationAsync(string id)
+        // {
+        //     var noti = await _context.Notifications.FindAsync(id);
+        //     if (noti is null || noti.Status is NotificationStatusConstants.NotRead) {
+        //         return false;
+        //     }
+        //     _context.Notifications.Remove(noti);
+        //     return (await _context.SaveChangesAsync() >= 0);
+        // }
 
-        public async Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(
-            ClaimsPrincipal principal,
-            NotificationParameters param)
-        {
-            var notifications = await _context.Notifications.ToListAsync();
-            var query = notifications.AsQueryable();
+        // public async Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(
+        //     ClaimsPrincipal principal,
+        //     NotificationParameters param)
+        // {
+        //     var notifications = await _context.Notifications.ToListAsync();
+        //     var query = notifications.AsQueryable();
 
-            var loggedInUser = await _userManager.GetUserAsync(principal);
-            if (loggedInUser is null) {
-                return null;
-            }
-            var identityId = loggedInUser.Id;
+        //     var loggedInUser = await _userManager.GetUserAsync(principal);
+        //     if (loggedInUser is null) {
+        //         return null;
+        //     }
+        //     var identityId = loggedInUser.Id;
 
-            var admin = await _context.Admins.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+        //     var admin = await _context.Admins.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+        //     var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+        //     var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (admin is not null) {
-                FilterByReceiverId(ref query, admin.Id);
-                FilterByIsReadNotification(ref query, param.IsRead);
-                OrderByCreatedDate(ref query, param.IsNew);                
+        //     if (admin is not null) {
+        //         FilterByReceiverId(ref query, admin.Id);
+        //         FilterByIsReadNotification(ref query, param.IsRead);
+        //         OrderByCreatedDate(ref query, param.IsNew);                
 
-                notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
-                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //         notifications = query.ToList();
+        //         var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+        //         return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            if (player is not null) {
-                FilterByReceiverId(ref query, player.Id);
-                FilterByIsReadNotification(ref query, param.IsRead);
-                OrderByCreatedDate(ref query, param.IsNew);
+        //     if (player is not null) {
+        //         FilterByReceiverId(ref query, player.Id);
+        //         FilterByIsReadNotification(ref query, param.IsRead);
+        //         OrderByCreatedDate(ref query, param.IsNew);
 
-                notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
-                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //         notifications = query.ToList();
+        //         var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+        //         return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            if (hirer is not null) {
-                FilterByReceiverId(ref query, hirer.Id);
-                FilterByIsReadNotification(ref query, param.IsRead);
-                OrderByCreatedDate(ref query, param.IsNew);
+        //     if (hirer is not null) {
+        //         FilterByReceiverId(ref query, hirer.Id);
+        //         FilterByIsReadNotification(ref query, param.IsRead);
+        //         OrderByCreatedDate(ref query, param.IsNew);
 
-                notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
-                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //         notifications = query.ToList();
+        //         var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+        //         return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            if (charity is not null) {
-                FilterByReceiverId(ref query, charity.Id);
-                FilterByIsReadNotification(ref query, param.IsRead);
-                OrderByCreatedDate(ref query, param.IsNew);
+        //     if (charity is not null) {
+        //         FilterByReceiverId(ref query, charity.Id);
+        //         FilterByIsReadNotification(ref query, param.IsRead);
+        //         OrderByCreatedDate(ref query, param.IsNew);
 
-                notifications = query.ToList();
-                var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
-                return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
-            }
+        //         notifications = query.ToList();
+        //         var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
+        //         return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        //     }
 
-            return null;
-        }
+        //     return null;
+        // }
 
-        private void FilterByIsReadNotification(ref IQueryable<Entities.Notification> query, bool? isRead)
-        {
-            if (!query.Any() || isRead is null) {
-                return;
-            }
-            if(isRead is false){
-                query = query.Where(x => x.Status == NotificationStatusConstants.NotRead);
-            }else{
-                query = query.Where(x => x.Status == NotificationStatusConstants.Read);
-            }
-        }
+        // private void FilterByIsReadNotification(ref IQueryable<Entities.Notification> query, bool? isRead)
+        // {
+        //     if (!query.Any() || isRead is null) {
+        //         return;
+        //     }
+        //     if(isRead is false){
+        //         query = query.Where(x => x.Status == NotificationStatusConstants.NotRead);
+        //     }else{
+        //         query = query.Where(x => x.Status == NotificationStatusConstants.Read);
+        //     }
+        // }
 
-        private void FilterByReceiverId(ref IQueryable<Entities.Notification> query, string id)
-        {
-            if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
-                return;
-            }
-            query = query.Where(x => x.ReceiverId == id);
-        }
+        // private void FilterByReceiverId(ref IQueryable<Entities.Notification> query, string id)
+        // {
+        //     if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
+        //         return;
+        //     }
+        //     query = query.Where(x => x.ReceiverId == id);
+        // }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Notification> query, bool? orderByCreatedDate)
-        {
-            if (!query.Any() || orderByCreatedDate is null) {
-                return;
-            }
+        // private void OrderByCreatedDate(ref IQueryable<Entities.Notification> query, bool? orderByCreatedDate)
+        // {
+        //     if (!query.Any() || orderByCreatedDate is null) {
+        //         return;
+        //     }
 
-            if (orderByCreatedDate is true) {
-                query = query.OrderByDescending(x => x.CreatedDate);
-            }
-            else {
-                query = query.OrderBy(x => x.CreatedDate);
-            }
-        }
+        //     if (orderByCreatedDate is true) {
+        //         query = query.OrderByDescending(x => x.CreatedDate);
+        //     }
+        //     else {
+        //         query = query.OrderBy(x => x.CreatedDate);
+        //     }
+        // }
 
-        public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
-        {
-            var noti = await _context.Notifications.FindAsync(id);
-            if (noti is null) {
-                return null;
-            }
+        // public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
+        // {
+        //     var noti = await _context.Notifications.FindAsync(id);
+        //     if (noti is null) {
+        //         return null;
+        //     }
 
-            noti.Status = NotificationStatusConstants.Read;
-            if (await _context.SaveChangesAsync() < 0) {
-                return null;
-            }
+        //     noti.Status = NotificationStatusConstants.Read;
+        //     if (await _context.SaveChangesAsync() < 0) {
+        //         return null;
+        //     }
 
-            return _mapper.Map<NotificationGetDetailResponse>(noti);
-        }
+        //     return _mapper.Map<NotificationGetDetailResponse>(noti);
+        // }
     }
 }
