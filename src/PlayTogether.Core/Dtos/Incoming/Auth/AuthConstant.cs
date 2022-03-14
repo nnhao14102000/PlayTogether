@@ -3,8 +3,7 @@
     public class AuthConstant
     {
         public const string RoleAdmin = "admin";
-        public const string RoleHirer = "hirer";
-        public const string RolePlayer = "player";
+        public const string RoleUser = "user";
         public const string RoleCharity = "charity";
     }
 }

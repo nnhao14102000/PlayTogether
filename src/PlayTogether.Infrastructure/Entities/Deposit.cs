@@ -6,8 +6,8 @@ namespace PlayTogether.Infrastructure.Entities
     public class Deposit : BaseEntity
     {
         [MaxLength(100)]
-        public string HirerId { get; set; }
-        public Hirer Hirer { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         [Column(TypeName = "float")]
         public float MoneyDeposit { get; set; }

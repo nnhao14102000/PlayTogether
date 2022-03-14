@@ -2,7 +2,7 @@
 
 namespace PlayTogether.Infrastructure.Entities
 {
-    public class GameOfPlayer : BaseEntity
+    public class GameOfUser : BaseEntity
     {
         [MaxLength(100)]
         public string GameId { get; set; }
@@ -12,7 +12,7 @@ namespace PlayTogether.Infrastructure.Entities
         public string Rank { get; set; }
         
         [MaxLength(100)]
-        public string PlayerId { get; set; }
-        public Player Player { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
     }
 }

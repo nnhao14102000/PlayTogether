@@ -18,5 +18,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(50)]
         public string Status { get; set; }
+        public string ReferenceLink { get; set; }
     }
 }

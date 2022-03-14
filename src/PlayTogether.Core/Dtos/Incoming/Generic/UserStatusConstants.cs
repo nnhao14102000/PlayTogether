@@ -1,6 +1,6 @@
 namespace PlayTogether.Core.Dtos.Incoming.Generic
 {
-    public class PlayerStatusConstants
+    public class UserStatusConstants
     {
         public const string NotAcceptPolicy = "NotAcceptPolicy";
         public const string AcceptPolicy = "AcceptPolicy";

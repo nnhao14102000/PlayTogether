@@ -5,8 +5,8 @@ namespace PlayTogether.Infrastructure.Entities
     public class Hobby : BaseEntity
     {
         [MaxLength(100)]
-        public string HirerId { get; set; }
-        public Hirer Hirer { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         [MaxLength(100)]
         public string GameId { get; set; }

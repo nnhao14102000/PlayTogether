@@ -8,22 +8,22 @@ namespace PlayTogether.Core.Interfaces.Repositories.Auth
 {
     public interface IAccountRepository
     {
-        // Task<bool> CheckExistEmailAsync(string email);
-        // Task<AuthResult> LoginHirerByGoogleAsync(GoogleLoginRequest loginEmailDto);
-        // Task<AuthResult> LoginPlayerByGoogleAsync(GoogleLoginRequest loginEmailDto);
-        // Task<AuthResult> LoginUserAsync(LoginRequest loginDto);
-        // Task<AuthResult> RegisterAdminAsync(RegisterAdminInfoRequest registerDto);
-        // Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest registerDto);
-        // Task<AuthResult> RegisterHirerAsync(RegisterUserInfoRequest registerDto);
-        // Task<AuthResult> RegisterPlayerAsync(RegisterUserInfoRequest registerDto);
-        // Task<AuthResult> LogoutAsync(ClaimsPrincipal principal);
-        // Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request);
-        // Task<AuthResult> ResetPasswordAdminAsync(ResetPasswordAdminRequest request);
-        // Task<AuthResult> ResetPasswordTokenAsync(ResetPasswordTokenRequest request);
-        // Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request);
+        Task<bool> CheckExistEmailAsync(string email);
+        Task<AuthResult> LoginUserByGoogleAsync(GoogleLoginRequest request);
+        Task<AuthResult> LoginUserAsync(LoginRequest request);
+        Task<AuthResult> LoginCharityAsync(LoginRequest request);
+        Task<AuthResult> LoginAdminAsync(LoginRequest request);
+        Task<AuthResult> RegisterAdminAsync(RegisterAdminInfoRequest request);
+        Task<AuthResult> RegisterCharityAsync(RegisterCharityInfoRequest request);
+        Task<AuthResult> RegisterUserAsync(RegisterUserInfoRequest request);
+        Task<AuthResult> LogoutAsync(ClaimsPrincipal principal);
+        Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request);
+        Task<AuthResult> ResetPasswordAdminAsync(ResetPasswordAdminRequest request);
+        Task<AuthResult> ResetPasswordTokenAsync(ResetPasswordTokenRequest request);
+        Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request);
 
-        // // Extra
-        // Task<bool> RegisterMultiPlayerAsync(List<RegisterUserInfoRequest> registerDtos);
-        // Task<bool> RegisterMultiHirerAsync(List<RegisterUserInfoRequest> registerDtos);
+        // Extra
+        Task<bool> RegisterMultiUserAsync(List<RegisterUserInfoRequest> request);
+        Task<bool> RegisterMultiUserIsPlayerAsync(List<RegisterUserInfoRequest> request);
     }
 }

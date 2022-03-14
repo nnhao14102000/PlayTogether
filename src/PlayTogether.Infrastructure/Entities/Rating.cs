@@ -9,13 +9,13 @@ namespace PlayTogether.Infrastructure.Entities
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
-        public Player Player { get; set; }
+        //public User FromUser { get; set; }
         [MaxLength(100)]
-        public string PlayerId { get; set; }
+        public string FromUserId { get; set; }
 
-        public Hirer Hirer { get; set; }
+        //public User ToUser { get; set; }
         [MaxLength(100)]
-        public string HirerId { get; set; }
+        public string ToUserId { get; set; }
 
         public string Comment { get; set; }
         

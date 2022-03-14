@@ -239,6 +239,7 @@ namespace PlayTogether.Api.Helpers
 
                 }
                 dbContext.SaveChanges();
+
                 if (!dbContext.GameTypes.Any()) {
                     dbContext.GameTypes.AddRange(
                         new Infrastructure.Entities.GameType {
@@ -667,192 +668,7 @@ namespace PlayTogether.Api.Helpers
                     );
                 }
                 dbContext.SaveChanges();
-                if (!dbContext.Musics.Any()) {
-                    dbContext.Musics.AddRange(
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Opera"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Giao hưởng"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Dân ca"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Folk"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Tình ca"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Đồng Dao"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Thánh ca"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Hành khúc"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Quốc ca"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Trường ca"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc cách mạng"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc lính"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc chiến tranh"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc phản chiến"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc Khiêu vũ"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Acoustic"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nhạc điện tử"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Pop"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Underground"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "V-pop"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "K-pop"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "C-pop"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Rock"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Hip hop"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Rap"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Jazz"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Đồng quê"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "EDM"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Nightcore"
-                        },
-                        new Infrastructure.Entities.Music {
-                            Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
-                            UpdateDate = null,
-                            Name = "Bolero"
-                        }
-
-                    );
-                }
-                dbContext.SaveChanges();
+                
                 if (!dbContext.Ranks.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
@@ -996,6 +812,7 @@ namespace PlayTogether.Api.Helpers
                     );
                 }
                 dbContext.SaveChanges();
+                
                 if (!dbContext.TypeOfGames.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
