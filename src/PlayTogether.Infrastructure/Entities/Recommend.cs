@@ -7,7 +7,6 @@ namespace PlayTogether.Infrastructure.Entities
     {
         [MaxLength(100)]
         public string HirerId { get; set; }
-        //public User User { get; set; }
 
         [Range(1, 100)]
         public int HirerAge { get; set; }
@@ -16,12 +15,10 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(100)]
         public string GameOrderId { get; set; }
-        public Game GameOrder { get; set; }
 
 
         [MaxLength(100)]
         public string PlayerId { get; set; }
-        //public User OrderUser { get; set; }
 
         [Range(1, 100)]
         public int PlayerAge { get; set; }
@@ -30,7 +27,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(100)]
         public string GameOfPlayerId { get; set; }
-        public Game GameOfPlayer { get; set; }
 
 
         [Column(TypeName = "float")]

@@ -64,6 +64,5 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<SystemFeedback> SystemFeedbacks { get; set; }
         public ICollection<DisableUser> DisableUsers { get; set; }
         public IList<Hobby> Hobbies { get; set; }
-        public IList<Recommend> Recommends { get; set; }
     }
 }
