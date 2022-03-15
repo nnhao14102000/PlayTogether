@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 ###
 # Get all game type with search
 GET {{baseUrl}}/api/play-together/v1/game-types
-  ?name=mo
+  ?SearchString=hành động
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -41,27 +41,33 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "typeName": "FPS"
+  "name": "string",
+  "shortName": "string",
+  "otherName": "string",
+  "description": "string"
 }
 
 ###
 # Get by Id
-GET {{baseUrl}}/api/play-together/v1/game-types/1c880885-0409-4466-91f7-9ef908639548
+GET {{baseUrl}}/api/play-together/v1/game-types/ef540c0f-09f1-46dd-9933-c1931ecee061
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Update game type
-PUT {{baseUrl}}/api/play-together/v1/game-types/44e7bb53-0158-4e94-bb31-cdf617698b4a
+PUT {{baseUrl}}/api/play-together/v1/game-types/ef540c0f-09f1-46dd-9933-c1931ecee061
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "typeName": "Puzzle"
+  "name": "string",
+  "shortName": "asdfsda",
+  "otherName": "strvvvving",
+  "description": "string"
 }
 
 ###
 # Delete
-DELETE {{baseUrl}}/api/play-together/v1/game-types/01f5a4e8-cd3f-4a2e-ba85-7f082f3a744e
+DELETE {{baseUrl}}/api/play-together/v1/game-types/ef540c0f-09f1-46dd-9933-c1931ecee061
 content-type: {{contentType}}
 Authorization: {{authToken}}

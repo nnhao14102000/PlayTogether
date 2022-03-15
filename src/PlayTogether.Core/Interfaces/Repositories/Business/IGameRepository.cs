@@ -8,10 +8,10 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IGameRepository
     {
-        // Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request);
-        // Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param);
-        // Task<GameGetByIdResponse> GetGameByIdAsync(string id);
-        // Task<bool> UpdateGameAsync(string id, GameUpdateRequest request);
-        // Task<bool> DeleteGameAsync(string id);
+        Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request);
+        Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param);
+        Task<GameGetByIdResponse> GetGameByIdAsync(string gameId);
+        Task<bool> UpdateGameAsync(string gameId, GameUpdateRequest request);
+        Task<bool> DeleteGameAsync(string gameId);
     }
 }

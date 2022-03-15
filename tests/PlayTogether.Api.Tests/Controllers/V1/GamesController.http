@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 ###
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/74c8a626-ad87-4cd0-96aa-5355860a81a2/ranks
+GET {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -46,22 +46,31 @@ Authorization: {{authToken}}
   "name": "Thách Đấu"
 }
 
-
 ###
+
+
+
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-  ?name=
+  ?name= lien
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 
 ###
+
+
+
+
 # Get Game by Id
-GET {{baseUrl}}/api/play-together/v1/games/66ac3dfc-99a6-411b-8cd4-2e4b328a17b6
+GET {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+
 # Create a new game
 POST {{baseUrl}}/api/play-together/v1/games
 content-type: {{contentType}}
@@ -73,17 +82,26 @@ Authorization: {{authToken}}
 }
 
 ###
+
+
+
+
 # Update a game
-PUT {{baseUrl}}/api/play-together/v1/games/310c8cf1-053a-40f7-b5eb-bfaca7c96ac3
+PUT {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "CSGO",
-  "displayName": ""
+  "name": "League Of Legends",
+  "displayName": "Liên Minh Huyền Thoại",
+  "otherName": "Liên minh / lol / lien minh"
 }
 
 ###
+
+
+
+
 # Delete a game
 DELETE {{baseUrl}}/api/play-together/v1/games/310c8cf1-053a-40f7-b5eb-bfaca7c96ac3
 content-type: {{contentType}}

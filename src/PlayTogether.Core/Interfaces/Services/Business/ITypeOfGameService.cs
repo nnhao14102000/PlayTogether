@@ -6,8 +6,8 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface ITypeOfGameService
     {
-        // Task<TypeOfGameGetByIdResponse> CreateTypeOfGameAsync(TypeOfGameCreateRequest request);
-        // Task<TypeOfGameGetByIdResponse> GetTypeOfGameByIdAsync(string id);
-        // Task<bool> DeleteTypeOfGameAsync(string id);
+        Task<bool> CreateTypeOfGameAsync(TypeOfGameCreateRequest request);
+        Task<TypeOfGameGetByIdResponse> GetTypeOfGameByIdAsync(string typeOfGameId);
+        Task<bool> DeleteTypeOfGameAsync(string typeOfGameId);
     }
 }

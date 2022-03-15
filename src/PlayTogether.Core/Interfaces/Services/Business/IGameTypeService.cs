@@ -8,10 +8,10 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IGameTypeService
     {
-        // Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request);
-        // Task<PagedResult<GameTypeGetAllResponse>> GetAllGameTypesAsync(GameTypeParameter param);
-        // Task<GameTypeGetByIdResponse> GetGameTypeByIdAsync(string id);
-        // Task<bool> UpdateGameTypeAsync(string id, GameTypeUpdateRequest request);
-        // Task<bool> DeleteGameTypeAsync(string id);
+        Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request);
+        Task<PagedResult<GameTypeGetAllResponse>> GetAllGameTypesAsync(GameTypeParameter param);
+        Task<GameTypeGetByIdResponse> GetGameTypeByIdAsync(string gameTypeId);
+        Task<bool> UpdateGameTypeAsync(string gameTypeId, GameTypeUpdateRequest request);
+        Task<bool> DeleteGameTypeAsync(string gameTypeId);
     }
 }

@@ -17,6 +17,7 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Donate> Donates { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameOfUser> GameOfUsers { get; set; }
+        public DbSet<GameOfOrder> GameOfOrders { get; set; }
         public DbSet<GameType> GameTypes { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Order> Orders { get; set; }
