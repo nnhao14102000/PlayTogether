@@ -354,8 +354,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
-                    userEntityModel.Balance = 1000000;
-                    userEntityModel.ActiveBalance = 1000000;
+                    userEntityModel.UserBalance.Balance = 1000000;
+                    userEntityModel.UserBalance.ActiveBalance = 1000000;
 
                     await _context.AppUsers.AddAsync(userEntityModel);
 
@@ -394,9 +394,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
-                    userEntityModel.Balance = 1000000;
+                    userEntityModel.UserBalance.Balance = 1000000;
                     userEntityModel.IsPlayer = true;
-                    userEntityModel.ActiveBalance = 1000000;
+                    userEntityModel.UserBalance.ActiveBalance = 1000000;
                     userEntityModel.PricePerHour = 10000;
                     userEntityModel.MaxHourHire = 1;
                     userEntityModel.Description = "Default";
@@ -412,20 +412,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             return true;
         }
 
-
-        private async Task<bool> IsAdminOrCharity(IdentityUser user)
-        {
-            // return role
-            var roles = await _userManager.GetRolesAsync(user);
-
-            foreach (var item in roles) {
-                if (item == AuthConstant.RoleAdmin || item == AuthConstant.RoleCharity) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         private async Task<bool> IsAdmin(IdentityUser user)
         {

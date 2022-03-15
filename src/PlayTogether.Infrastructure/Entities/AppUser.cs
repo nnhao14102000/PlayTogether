@@ -24,13 +24,9 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Email { get; set; }
 
-        [Column(TypeName = "float")]
-        public float Balance { get; set; }
-
-        [Column(TypeName = "float")]
-        public float ActiveBalance { get; set; }
-
         public string Avatar { get; set; }
+
+        public UserBalance UserBalance { get; set; }
 
         public bool IsActive { get; set; } = true;
         public bool IsPlayer { get; set; } = false;
@@ -55,8 +51,6 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Report> Reports { get; set; }
         public ICollection<Donate> Donates { get; set; }
-        public ICollection<UserWithdraw> UserWithdraws { get; set; }
-        public ICollection<Deposit> Deposits { get; set; }
         public IList<GameOfUser> GamesOfUsers { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<SearchHistory> SearchHistories { get; set; }

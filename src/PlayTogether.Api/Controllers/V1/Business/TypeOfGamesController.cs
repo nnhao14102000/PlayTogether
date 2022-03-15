@@ -46,7 +46,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<TypeOfGameGetByIdResponse>> CreateTypeOfGame(
+        public async Task<ActionResult> CreateTypeOfGame(
             TypeOfGameCreateRequest request)
         {
             if (!ModelState.IsValid) {

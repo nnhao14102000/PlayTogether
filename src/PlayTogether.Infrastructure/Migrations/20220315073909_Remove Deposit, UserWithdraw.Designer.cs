@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayTogether.Infrastructure.Data;
 
 namespace PlayTogether.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220315073909_Remove Deposit, UserWithdraw")]
+    partial class RemoveDepositUserWithdraw
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,8 +223,14 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<double>("ActiveBalance")
+                        .HasColumnType("float");
+
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
@@ -531,10 +539,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Property<string>("Rank")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("RankId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime");
@@ -1019,75 +1023,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.ToTable("TypeOfGames");
                 });
 
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.UnActiveBalance", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime>("DateActive")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("Money")
-                        .HasColumnType("float");
-
-                    b.Property<string>("OrderId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UserBalanceId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("UserBalanceId");
-
-                    b.ToTable("UnActiveBalances");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.UserBalance", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<double>("ActiveBalance")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("UserBalances");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1310,30 +1245,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("GameType");
                 });
 
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.UnActiveBalance", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("PlayTogether.Infrastructure.Entities.UserBalance", "UserBalance")
-                        .WithMany("UnActiveBalances")
-                        .HasForeignKey("UserBalanceId");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("UserBalance");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.UserBalance", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
-                        .WithOne("UserBalance")
-                        .HasForeignKey("PlayTogether.Infrastructure.Entities.UserBalance", "UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.AppUser", b =>
                 {
                     b.Navigation("DisableUsers");
@@ -1357,8 +1268,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("SystemFeedbacks");
 
                     b.Navigation("TransactionHistories");
-
-                    b.Navigation("UserBalance");
                 });
 
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Charity", b =>
@@ -1391,11 +1300,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Reports");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.UserBalance", b =>
-                {
-                    b.Navigation("UnActiveBalances");
                 });
 #pragma warning restore 612, 618
         }

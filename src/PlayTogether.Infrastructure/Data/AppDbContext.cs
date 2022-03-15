@@ -13,7 +13,6 @@ namespace PlayTogether.Infrastructure.Data
 
         public DbSet<Charity> Charities { get; set; }
         public DbSet<CharityWithdraw> CharityWithdraws { get; set; }
-        public DbSet<Deposit> Deposits { get; set; }
         public DbSet<Donate> Donates { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameOfUser> GameOfUsers { get; set; }
@@ -22,7 +21,8 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<UserWithdraw> UserWithdraws { get; set; }
+        public DbSet<UserBalance> UserBalances { get; set; }
+        public DbSet<UnActiveBalance> UnActiveBalances { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Report> Reports { get; set; }
