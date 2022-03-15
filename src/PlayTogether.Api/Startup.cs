@@ -26,10 +26,10 @@ namespace PlayTogether.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureServiceInjection(Configuration);
+
             services.AddControllers()
                 .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-            services.ConfigureServiceInjection(Configuration);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options => {
                 options.Password.RequireDigit = true;

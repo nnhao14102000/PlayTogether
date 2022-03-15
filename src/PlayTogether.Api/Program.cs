@@ -31,7 +31,7 @@ namespace PlayTogether.Api
 
             try {
                 logger.Info($"{ApiConstants.FriendlyServiceName} starts running...");
-                var host = CreateWebHostBuilder(args, config).Build();
+                var host = CreateHostBuilder(args).Build();
 
                 using (var scope = host.Services.CreateScope()) {
                     var services = scope.ServiceProvider;
@@ -57,15 +57,8 @@ namespace PlayTogether.Api
 
         }
 
-        public static IHostBuilder CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, config) => {
-                    // var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
-
-                    // if (!(bool)(appSettings?.ByPassKeyVault)) {
-                    //     KeyVaultServices.GetAzureKeyVaultSecrets(context, config);
-                    // }
-                })
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();
                 })
