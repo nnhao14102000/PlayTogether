@@ -346,6 +346,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (result.Succeeded) {
                     // Create basic user
                     var userEntityModel = _mapper.Map<AppUser>(registerDto);
+                    await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
+
                     userEntityModel.IdentityId = identityUser.Id;
                     userEntityModel.CreatedDate = DateTime.Now;
 
@@ -386,6 +388,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (result.Succeeded) {
                     // Create basic user
                     var userEntityModel = _mapper.Map<AppUser>(registerDto);
+                    await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
+                    
                     userEntityModel.IdentityId = identityUser.Id;
                     userEntityModel.CreatedDate = DateTime.Now;
 
