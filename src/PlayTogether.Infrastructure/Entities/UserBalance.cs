@@ -16,5 +16,6 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float ActiveBalance { get; set; }
         public ICollection<UnActiveBalance> UnActiveBalances { get; set; }
+        public ICollection<TransactionHistory> TransactionHistories { get; set; }
     }
 }

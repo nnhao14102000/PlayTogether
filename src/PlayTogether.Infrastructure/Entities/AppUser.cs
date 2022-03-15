@@ -54,7 +54,6 @@ namespace PlayTogether.Infrastructure.Entities
         public IList<GameOfUser> GamesOfUsers { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<SearchHistory> SearchHistories { get; set; }
-        public ICollection<TransactionHistory> TransactionHistories { get; set; }
         public ICollection<SystemFeedback> SystemFeedbacks { get; set; }
         public ICollection<DisableUser> DisableUsers { get; set; }
         public IList<Hobby> Hobbies { get; set; }
