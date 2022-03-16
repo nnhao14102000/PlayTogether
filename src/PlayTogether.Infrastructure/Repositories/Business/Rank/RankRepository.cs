@@ -27,10 +27,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
 
             var existNO = await _context.Ranks.Where(x => x.GameId == gameId)
                                               .AnyAsync(x => x.NO == request.NO);
-            if (existNO) {
-                return null;
-            }
-            
+            if (existNO) return null;
+
+            var existName = await _context.Ranks.Where(x => x.GameId == gameId)
+                                                .AnyAsync(x => x.Name.ToLower().Contains(request.Name.ToLower()));
+            if (existName) return null;
+
             var model = _mapper.Map<Entities.Rank>(request);
             model.GameId = gameId;
             await _context.Ranks.AddAsync(model);

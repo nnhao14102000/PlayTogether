@@ -1,8 +1,10 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Infrastructure.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.TypeOfGame
@@ -27,9 +29,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TypeOfGame
                 return false;
             }
 
+            var typeOfGameExist = await _context.TypeOfGames.Where(x => x.GameId == request.GameId)
+                                                            .AnyAsync(x => x.GameTypeId == request.GameTypeId);
+            if(typeOfGameExist) return false;
+
             var model = _mapper.Map<Entities.TypeOfGame>(request);
             await _context.TypeOfGames.AddAsync(model);
-            
+
             return (await _context.SaveChangesAsync() >= 0);
         }
 
