@@ -1,0 +1,73 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{lchost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-user
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Test Hobbies 
+# Get all Game
+GET {{baseUrl}}/api/play-together/v1/games
+?Name=lol
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Add user hobbies
+POST {{baseUrl}}/api/play-together/v1/hobbies
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+[
+  {
+    "gameId": "a686bb05-1fb0-413d-958a-ab5b710e13a4"
+  },
+  {
+    "gameId": "7c35408c-7988-4f3b-8479-6822cb222d77"
+  }
+]
+
+###
+
+
+# Get all hobbies of user
+GET {{baseUrl}}/api/play-together/v1/users/1c8e5eac-625d-4a40-9f9c-0480c16997a1/hobbies
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Delete hobby
+DELETE {{baseUrl}}/api/play-together/v1/hobbies/f07cf7cf-0256-4cf4-b380-9763ccde10bf
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###

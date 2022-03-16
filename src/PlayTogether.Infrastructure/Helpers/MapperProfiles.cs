@@ -3,10 +3,13 @@ using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
+using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
+using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
+using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
@@ -52,6 +55,17 @@ namespace PlayTogether.Infrastructure.Helpers
             // TypeOfGame mapper profile
             CreateMap<TypeOfGameCreateRequest, TypeOfGame>();
             CreateMap<TypeOfGame, TypeOfGameGetByIdResponse>();
+
+            // Hobby mapper profile
+            CreateMap<HobbyCreateRequest, Hobby>();
+            CreateMap<Hobby, HobbiesGetAllResponse>();
+            CreateMap<AppUser, UserHobbyResponse>();
+            CreateMap<Game, GameHobbyResponse>();
+
+            // AppUser mapper profile
+            CreateMap<AppUser, PersonalInfoResponse>();
+            CreateMap<Image, ImageUserResponse>();
+            CreateMap<UserBalance, UserBalanceResponse>();
 
 
             // src => target

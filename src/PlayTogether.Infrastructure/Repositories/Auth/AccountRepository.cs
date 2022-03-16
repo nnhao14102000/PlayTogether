@@ -62,7 +62,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (appUser is not null) {
                 appUser.Status = UserStatusConstants.Online;
                 await _context.SaveChangesAsync();
-            }else{
+            }
+            else {
                 return new AuthResult {
                     Errors = new List<string>() { "Tài khoản không tồn tại." }
                 };
@@ -316,9 +317,20 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 await _context.AppUsers.AddAsync(userEntityModel);
 
                 if (await _context.SaveChangesAsync() >= 0) {
-                    return new AuthResult {
-                        Message = "Tạo tài khoản User thành công!"
-                    };
+
+                    var userBalance = new UserBalance();
+                    userBalance.UserId = userEntityModel.Id;
+                    userBalance.CreatedDate = DateTime.Now;
+                    userBalance.UpdateDate = null;
+                    userBalance.Balance = 0;
+                    userBalance.ActiveBalance = 0;
+                    await _context.UserBalances.AddAsync(userBalance);
+
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        return new AuthResult {
+                            Message = "Tạo tài khoản User thành công!"
+                        };
+                    }
                 }
             }
 
@@ -346,7 +358,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (result.Succeeded) {
                     // Create basic user
                     var userEntityModel = _mapper.Map<AppUser>(registerDto);
-                    await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
+                    // await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
 
                     userEntityModel.IdentityId = identityUser.Id;
                     userEntityModel.CreatedDate = DateTime.Now;
@@ -356,13 +368,23 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
-                    userEntityModel.UserBalance.Balance = 1000000;
-                    userEntityModel.UserBalance.ActiveBalance = 1000000;
+                    // userEntityModel.UserBalance.Balance = 1000000;
+                    // userEntityModel.UserBalance.ActiveBalance = 1000000;
 
                     await _context.AppUsers.AddAsync(userEntityModel);
 
-                    if (await _context.SaveChangesAsync() < 0) {
-                        return false;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        var userBalance = new UserBalance();
+                        userBalance.UserId = userEntityModel.Id;
+                        userBalance.CreatedDate = DateTime.Now;
+                        userBalance.UpdateDate = null;
+                        userBalance.Balance = 100000;
+                        userBalance.ActiveBalance = 100000;
+                        await _context.UserBalances.AddAsync(userBalance);
+
+                        if (await _context.SaveChangesAsync() < 0) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -388,8 +410,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 if (result.Succeeded) {
                     // Create basic user
                     var userEntityModel = _mapper.Map<AppUser>(registerDto);
-                    await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
-                    
+                    // await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
+
                     userEntityModel.IdentityId = identityUser.Id;
                     userEntityModel.CreatedDate = DateTime.Now;
 
@@ -398,9 +420,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
-                    userEntityModel.UserBalance.Balance = 1000000;
+                    // userEntityModel.UserBalance.Balance = 1000000;
                     userEntityModel.IsPlayer = true;
-                    userEntityModel.UserBalance.ActiveBalance = 1000000;
+                    // userEntityModel.UserBalance.ActiveBalance = 1000000;
                     userEntityModel.PricePerHour = 10000;
                     userEntityModel.MaxHourHire = 1;
                     userEntityModel.Description = "Default";
@@ -408,8 +430,18 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                     await _context.AppUsers.AddAsync(userEntityModel);
 
-                    if (await _context.SaveChangesAsync() < 0) {
-                        return false;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        var userBalance = new UserBalance();
+                        userBalance.UserId = userEntityModel.Id;
+                        userBalance.CreatedDate = DateTime.Now;
+                        userBalance.UpdateDate = null;
+                        userBalance.Balance = 100000;
+                        userBalance.ActiveBalance = 100000;
+
+                        await _context.UserBalances.AddAsync(userBalance);
+                        if (await _context.SaveChangesAsync() < 0) {
+                            return false;
+                        }
                     }
                 }
             }

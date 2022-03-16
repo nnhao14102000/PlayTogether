@@ -4,6 +4,8 @@
 - <a href="#services-description" target="_self">Title</a> <br>
 - <a href="#table-of-contents" target="_self">Table Of Contents</a> <br>
 - <a href="#account" target="_self">Account</a> <br>
+- <a href="#user" target="_self">User</a> <br>
+- <a href="#hobby" target="_self">Hobby</a> <br>
 - <a href="#game-type" target="_self">Game Type</a> <br>
 - <a href="#types-of-game" target="_self">Types Of Game</a> <br>
 - <a href="#game" target="_self">Game</a> <br>
@@ -69,6 +71,34 @@
 > - ``GET /api/play-together/v1/accounts/check-exist-email ``  
 >   ***Description***: Check Exist Email
 >
+
+
+<h2 id="user">User <a href="#table-of-contents" target="_self">🔙</a></h2>
+
+> - ``GET /api/play-together/v1/users/personal ``  
+>   ***Description***: Get user personal profile  
+>   ***Use for***: View personal profile, check status  
+>   ***Role Access***: User   
+>
+> - ``GET /api/play-together/v1/users/{userId}/hobbies ``  
+>   ***Description***: Get all hobbies of a specific user  
+>   ***Use for***: View hobbies of a specific user  
+>   ***Role Access***: User  
+>
+
+
+
+<h2 id="hobby">Hobby <a href="#table-of-contents" target="_self">🔙</a></h2>
+
+> - ``POST /api/play-together/v1/hobbies ``  
+>   ***Description***: Create hobbies   
+>   ***Role Access***: User   
+>
+> - ``DELETE /api/play-together/v1/hobbies/{hobbyId} ``  
+>   ***Description***: Delete a hobby  
+>   ***Role Access***: User  
+>
+
 
 
 
