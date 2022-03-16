@@ -53,7 +53,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _typeOfGameService.CreateTypeOfGameAsync(request);
-            return response ? Ok() : NotFound();
+            return response ? Ok() : BadRequest();
         }
 
         /// <summary>

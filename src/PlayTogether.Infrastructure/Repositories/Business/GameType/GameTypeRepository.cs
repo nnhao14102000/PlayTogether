@@ -21,6 +21,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
 
         public async Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request)
         {
+            var existGameType = await _context.GameTypes.AnyAsync(x => (x.Name + x.OtherName + x.ShortName).ToLower().Contains(request.Name));
+            if (existGameType) return null;
             var model = _mapper.Map<Entities.GameType>(request);
             await _context.GameTypes.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -43,7 +45,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
                     return false;
                 }
             }
-            
+
             _context.GameTypes.Remove(type);
             return (await _context.SaveChangesAsync() >= 0);
         }

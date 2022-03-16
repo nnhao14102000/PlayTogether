@@ -21,6 +21,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
 
         public async Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request)
         {
+            var exitGame = await _context.Games.AnyAsync(x => (x.Name + x.OtherName + x.DisplayName).ToLower().Contains(request.Name));
             var model = _mapper.Map<Entities.Game>(request);
             await _context.Games.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
