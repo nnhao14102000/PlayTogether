@@ -6,12 +6,13 @@ namespace PlayTogether.Infrastructure.Entities
     public class Recommend : BaseEntity
     {
         [MaxLength(100)]
-        public string HirerId { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         [Range(1, 100)]
-        public int HirerAge { get; set; }
+        public int UserAge { get; set; }
 
-        public bool HirerGender { get; set; }
+        public bool UserGender { get; set; }
 
         [MaxLength(100)]
         public string GameOrderId { get; set; }

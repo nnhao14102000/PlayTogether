@@ -9,9 +9,9 @@ namespace PlayTogether.Infrastructure.Entities
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
-        //public User FromUser { get; set; }
         [MaxLength(100)]
-        public string FromUserId { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         //public User ToUser { get; set; }
         [MaxLength(100)]

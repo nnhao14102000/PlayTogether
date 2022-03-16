@@ -5,7 +5,9 @@ namespace PlayTogether.Infrastructure.Entities
     public class Chat : BaseEntity
     {
         [MaxLength(100)]
-        public string SenderId { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
+
         [MaxLength(100)]
         public string ReceiveId { get; set; }
 

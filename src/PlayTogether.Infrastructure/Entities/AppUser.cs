@@ -47,7 +47,7 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float Rate { get; set; }
 
-        public IList<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Report> Reports { get; set; }
         public ICollection<Donate> Donates { get; set; }
@@ -56,6 +56,9 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<SearchHistory> SearchHistories { get; set; }
         public ICollection<SystemFeedback> SystemFeedbacks { get; set; }
         public ICollection<DisableUser> DisableUsers { get; set; }
+        public ICollection<Chat> Chats { get; set; }
+        public ICollection<Recommend> Recommends { get; set; }
+
         public IList<Hobby> Hobbies { get; set; }
     }
 }

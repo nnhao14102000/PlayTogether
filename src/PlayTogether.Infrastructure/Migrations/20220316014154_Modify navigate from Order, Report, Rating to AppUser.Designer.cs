@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayTogether.Infrastructure.Data;
 
 namespace PlayTogether.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220316014154_Modify navigate from Order, Report, Rating to AppUser")]
+    partial class ModifynavigatefromOrderReportRatingtoAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,16 +382,14 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("SenderId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Chats");
                 });
@@ -822,6 +822,16 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("HirerAge")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HirerGender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HirerId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("PlayerAge")
                         .HasColumnType("int");
 
@@ -838,19 +848,7 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("UserAge")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("UserGender")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Recommends");
                 });
@@ -1143,15 +1141,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("Charity");
                 });
 
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Chat", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.DisableUser", b =>
                 {
                     b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
@@ -1263,15 +1252,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Recommend", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
-                        .WithMany("Recommends")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Report", b =>
                 {
                     b.HasOne("PlayTogether.Infrastructure.Entities.Order", "Order")
@@ -1355,8 +1335,6 @@ namespace PlayTogether.Infrastructure.Migrations
 
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.AppUser", b =>
                 {
-                    b.Navigation("Chats");
-
                     b.Navigation("DisableUsers");
 
                     b.Navigation("Donates");
@@ -1370,8 +1348,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Ratings");
-
-                    b.Navigation("Recommends");
 
                     b.Navigation("Reports");
 

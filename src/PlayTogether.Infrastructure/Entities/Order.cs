@@ -8,8 +8,8 @@ namespace PlayTogether.Infrastructure.Entities
     public class Order : BaseEntity
     {
         [MaxLength(100)]
-        public string FromUserId { get; set; }
-        //public User FromUser { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         [MaxLength(100)]
         public string ToUserId { get; set; }
