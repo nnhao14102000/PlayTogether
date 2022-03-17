@@ -103,7 +103,7 @@
 >
 > - ``GET /api/play-together/v1/users/{userId} ``  
 >   ***Description***: Get a specific user general info    
->   ***Role Access***: User   
+>   ***Role Access***: User, Admin   
 >
 
 
