@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
@@ -51,7 +52,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult<PagedResult<HobbiesGetAllResponse>>> GetAllHobbies(
             string userId,
-            [FromQuery]HobbyParameters param)
+            [FromQuery] HobbyParameters param)
         {
             var response = await _hobbyService.GetAllHobbiesAsync(userId, param);
 
@@ -66,6 +67,95 @@ namespace PlayTogether.Api.Controllers.V1.Business
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
             return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Update personal info in profile
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("personal")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> UpdatePersonalInfo(UserPersonalInfoUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _appUserService.UpdatePersonalInfoAsync(HttpContext.User, request);
+            return response ? NoContent() : BadRequest();
+        }
+
+        /// <summary>
+        /// Update personal service info
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("service")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> UpdateUserServiceInfo(UserInfoForIsPlayerUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _appUserService.UpdateUserServiceInfoAsync(HttpContext.User, request);
+            return response ? NoContent() : BadRequest();
+        }
+
+        /// <summary>
+        /// Update to enable or disable IsPlayer State
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("player")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> ChangeIsPlayer(UserIsPlayerChangeRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _appUserService.ChangeIsPlayerAsync(HttpContext.User, request);
+            return response ? NoContent() : BadRequest();
+        }   
+
+        /// <summary>
+        /// Get a specific user service info
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("service/{userId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<UserGetServiceInfoResponse>> GetUserServiceInfoById(string userId)
+        {
+                var response = await _appUserService.GetUserServiceInfoByIdAsync(userId);
+                return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get a specific user info
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("{userId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<UserGetBasicInfoResponse>> GetUserBasicInfoById(string userId)
+        {
+                var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
+                return response is not null ? Ok(response) : NotFound();
         }
     }
 }

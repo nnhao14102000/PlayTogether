@@ -39,7 +39,7 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float PricePerHour { get; set; }
 
-        [Range(1, 3)]
+        [Range(1, 5)]
         public int MaxHourHire { get; set; } = 1;
 
         [Column(TypeName = "float")]

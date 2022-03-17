@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -21,6 +22,23 @@ namespace PlayTogether.Core.Services.Business.AppUser
             _logger = logger;
         }
 
+        public async Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null){
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _appUserRepository.ChangeIsPlayerAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ChangeIsPlayerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PersonalInfoResponse> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
@@ -31,6 +49,72 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetPersonalInfoByIdentityIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId)
+        {
+            try {
+                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _appUserRepository.GetUserBasicInfoByIdAsync(userId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetUserBasicInfoByIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)
+        {
+            try {
+                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _appUserRepository.GetUserServiceInfoByIdAsync(userId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetUserServiceInfoByIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdatePersonalInfoAsync(
+            ClaimsPrincipal principal,
+            UserPersonalInfoUpdateRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null){
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _appUserRepository.UpdatePersonalInfoAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdatePersonalInfoAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateUserServiceInfoAsync(
+            ClaimsPrincipal principal,
+            UserInfoForIsPlayerUpdateRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null){
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _appUserRepository.UpdateUserServiceInfoAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdateUserServiceInfoAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

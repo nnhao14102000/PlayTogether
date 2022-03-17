@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
@@ -66,6 +67,13 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<AppUser, PersonalInfoResponse>();
             CreateMap<Image, ImageUserResponse>();
             CreateMap<UserBalance, UserBalanceResponse>();
+
+            CreateMap<UserPersonalInfoUpdateRequest, AppUser>();
+            CreateMap<UserIsPlayerChangeRequest, AppUser>();
+            CreateMap<UserInfoForIsPlayerUpdateRequest, AppUser>();
+
+            CreateMap<AppUser, UserGetBasicInfoResponse>();
+            CreateMap<AppUser, UserGetServiceInfoResponse>();
 
 
             // src => target

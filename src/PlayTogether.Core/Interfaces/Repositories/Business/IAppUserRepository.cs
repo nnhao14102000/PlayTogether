@@ -1,3 +1,4 @@
+using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,5 +8,11 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     public interface IAppUserRepository
     {
         Task<PersonalInfoResponse> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal);
+        Task<bool> UpdatePersonalInfoAsync(ClaimsPrincipal principal, UserPersonalInfoUpdateRequest request);
+        Task<bool> UpdateUserServiceInfoAsync(ClaimsPrincipal principal, UserInfoForIsPlayerUpdateRequest request);
+        Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request);
+        Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId);
+        
+        Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId);
     }
 }

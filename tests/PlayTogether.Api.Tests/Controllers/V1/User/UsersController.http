@@ -29,6 +29,88 @@ Authorization: {{authToken}}
 ###
 
 
+# Test Update User Info
+
+# Update user personal information
+PUT {{baseUrl}}/api/play-together/v1/users/personal
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "name": "RichUser",
+  "dateOfBirth": "2002-03-17",
+  "city": "DuBai",
+  "gender": true,
+  "avatar": "string",
+  "description": "Super rich!!!"
+}
+
+###
+
+
+# Get user service information
+GET {{baseUrl}}/api/play-together/v1/users/service/1c8e5eac-625d-4a40-9f9c-0480c16997a1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Update user service information
+PUT {{baseUrl}}/api/play-together/v1/users/service
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "maxHourHire": 4,
+  "pricePerHour": 10000
+}
+
+###
+
+
+# Change IsPlayer
+PUT {{baseUrl}}/api/play-together/v1/users/player
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isPlayer": true
+}
+
+###
+
+
+# Get user information
+GET {{baseUrl}}/api/play-together/v1/users/1c8e5eac-625d-4a40-9f9c-0480c16997a1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Test Hobbies 
 # Get all Game
 GET {{baseUrl}}/api/play-together/v1/games
