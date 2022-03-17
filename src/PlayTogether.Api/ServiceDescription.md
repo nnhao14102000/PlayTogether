@@ -80,10 +80,30 @@
 >   ***Use for***: View personal profile, check status  
 >   ***Role Access***: User   
 >
+> - ``PUT /api/play-together/v1/users/personal ``  
+>   ***Description***: Update user personal profile    
+>   ***Role Access***: User   
+>
 > - ``GET /api/play-together/v1/users/{userId}/hobbies ``  
 >   ***Description***: Get all hobbies of a specific user  
 >   ***Use for***: View hobbies of a specific user  
 >   ***Role Access***: User  
+>
+> - ``PUT /api/play-together/v1/users/service/{userId} ``  
+>   ***Description***: Get a specific user service info    
+>   ***Role Access***: User   
+>
+> - ``PUT /api/play-together/v1/users/service ``  
+>   ***Description***: Update user service info    
+>   ***Role Access***: User   
+>
+> - ``PUT /api/play-together/v1/users/player ``  
+>   ***Description***: Update user IsPlayer State to Enable or Disable   
+>   ***Role Access***: User   
+>
+> - ``GET /api/play-together/v1/users/{userId} ``  
+>   ***Description***: Get a specific user general info    
+>   ***Role Access***: User   
 >
 
 
