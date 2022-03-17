@@ -148,7 +148,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: User
+        /// Roles Access: User, Admin
         /// </remarks>
         [HttpGet, Route("{userId}")]
         [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
