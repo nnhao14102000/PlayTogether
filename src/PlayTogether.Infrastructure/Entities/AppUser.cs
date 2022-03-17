@@ -36,8 +36,6 @@ namespace PlayTogether.Infrastructure.Entities
 
         public string Description { get; set; }
 
-        public string OtherSkill { get; set; }
-
         [Column(TypeName = "float")]
         public float PricePerHour { get; set; }
 

@@ -426,7 +426,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.PricePerHour = 10000;
                     userEntityModel.MaxHourHire = 1;
                     userEntityModel.Description = "Default";
-                    userEntityModel.OtherSkill = "Default";
 
                     await _context.AppUsers.AddAsync(userEntityModel);
 
