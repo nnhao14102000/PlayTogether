@@ -124,7 +124,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             var response = await _appUserService.ChangeIsPlayerAsync(HttpContext.User, request);
             return response ? NoContent() : BadRequest();
-        }   
+        }
 
         /// <summary>
         /// Get a specific user service info
@@ -138,8 +138,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult<UserGetServiceInfoResponse>> GetUserServiceInfoById(string userId)
         {
-                var response = await _appUserService.GetUserServiceInfoByIdAsync(userId);
-                return response is not null ? Ok(response) : NotFound();
+            var response = await _appUserService.GetUserServiceInfoByIdAsync(userId);
+            return response is not null ? Ok(response) : NotFound();
         }
 
         /// <summary>
@@ -151,11 +151,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: User
         /// </remarks>
         [HttpGet, Route("{userId}")]
-        [Authorize(Roles = AuthConstant.RoleUser)]
+        [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
         public async Task<ActionResult<UserGetBasicInfoResponse>> GetUserBasicInfoById(string userId)
         {
-                var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
-                return response is not null ? Ok(response) : NotFound();
+            var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
+            return response is not null ? Ok(response) : NotFound();
         }
     }
 }
