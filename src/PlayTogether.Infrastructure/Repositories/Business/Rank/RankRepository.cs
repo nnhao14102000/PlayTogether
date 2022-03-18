@@ -49,6 +49,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
                 return false;
             }
             _context.Ranks.Remove(rank);
+
+            if(await _context.SaveChangesAsync() >= 0){
+                var rankInGameOfUsers = await _context.GameOfUsers.Where(x => x.RankId == rank.Id).ToListAsync();
+                foreach (var gameOfUser in rankInGameOfUsers)
+                {
+                    gameOfUser.RankId = "";
+                }
+                if (await _context.SaveChangesAsync() < 0){
+                    return false;
+                }
+            }
             return (await _context.SaveChangesAsync() >= 0);
         }
 

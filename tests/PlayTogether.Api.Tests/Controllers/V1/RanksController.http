@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/account/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-admin
 content-type: {{contentType}}
 
 {
@@ -20,7 +20,7 @@ content-type: {{contentType}}
 
 ###
 # Get rank by Id
-GET {{baseUrl}}/api/play-together/v1/ranks/e0422e96-5e96-4799-8f40-2ca07d145887
+GET {{baseUrl}}/api/play-together/v1/ranks/400e56f9-a172-4012-9b86-74af5b6e2eed
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -36,7 +36,7 @@ Authorization: {{authToken}}
 
 ###
 # Delete rank by Id
-DELETE {{baseUrl}}/api/play-together/v1/ranks/8d1557f0-0cf1-44d1-bed5-3b3bc512e1d1
+DELETE {{baseUrl}}/api/play-together/v1/ranks/400e56f9-a172-4012-9b86-74af5b6e2eed
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
