@@ -7,9 +7,6 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(100)]
         public string GameId { get; set; }
         public Game Game { get; set; }
-        
-        [MaxLength(50)]
-        public string Rank { get; set; }
 
         [MaxLength(100)]
         public string RankId { get; set; }

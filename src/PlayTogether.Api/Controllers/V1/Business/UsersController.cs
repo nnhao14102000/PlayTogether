@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -17,11 +20,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
     {
         private readonly IAppUserService _appUserService;
         private readonly IHobbyService _hobbyService;
+        private readonly IGameOfUserService _gameOfUserService;
 
-        public UsersController(IAppUserService appUserService, IHobbyService hobbyService)
+        public UsersController(IAppUserService appUserService, IHobbyService hobbyService, IGameOfUserService gameOfUserService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
+            _gameOfUserService = gameOfUserService;
         }
 
         /// <summary>
@@ -157,5 +162,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
             return response is not null ? Ok(response) : NotFound();
         }
+
+        /// <summary>
+        /// Get all games of a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet("{userId}/games")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<IEnumerable<GamesOfUserResponse>>> GetAllGameOfUser(string userId)
+        {
+            var response = await _gameOfUserService.GetAllGameOfUserAsync(userId);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        
     }
 }

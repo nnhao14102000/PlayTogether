@@ -18,8 +18,9 @@ content-type: {{contentType}}
   "password": "Pa55w0rd!"
 }
 
-
 ###
+
+
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
 ?pageSize=100
@@ -27,15 +28,17 @@ GET {{baseUrl}}/api/play-together/v1/games
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
-
 ###
+
+
 # Get all Ranks in game
 GET {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
-
 ###
+
+
 # Create a new rank in game
 POST {{baseUrl}}/api/play-together/v1/games/7caacf43-a337-4df0-b4bf-f1e07a37fe7e/ranks
 content-type: {{contentType}}

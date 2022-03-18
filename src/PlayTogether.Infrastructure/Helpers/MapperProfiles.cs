@@ -3,12 +3,14 @@ using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
+using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
@@ -74,6 +76,14 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<AppUser, UserGetBasicInfoResponse>();
             CreateMap<AppUser, UserGetServiceInfoResponse>();
+
+            // Game Of User / Player mapper profile
+            CreateMap<GameOfUser, GamesOfUserResponse>();
+            CreateMap<GameOfUser, GameOfUserGetByIdResponse>();
+            CreateMap<Game, GameGetAllResponse>();
+
+            CreateMap<GameOfUserCreateRequest, GameOfUser>();
+            CreateMap<GameOfUserUpdateRequest, GameOfUser>();
 
 
             // src => target

@@ -6,6 +6,7 @@
 - <a href="#account" target="_self">Account</a> <br>
 - <a href="#user" target="_self">User</a> <br>
 - <a href="#hobby" target="_self">Hobby</a> <br>
+- <a href="#game-of-user" target="_self">Games of User</a> <br>
 - <a href="#game-type" target="_self">Game Type</a> <br>
 - <a href="#types-of-game" target="_self">Types Of Game</a> <br>
 - <a href="#game" target="_self">Game</a> <br>
@@ -105,6 +106,10 @@
 >   ***Description***: Get a specific user general info    
 >   ***Role Access***: User, Admin   
 >
+> - ``GET /api/play-together/v1/users/{userId}/games ``  
+>   ***Description***: Get a specific user skill (games of user)    
+>   ***Role Access***: User   
+>
 
 
 
@@ -119,6 +124,26 @@
 >   ***Role Access***: User  
 >
 
+
+<h2 id="game-of-user">Game of User <a href="#table-of-contents" target="_self">🔙</a></h2>
+
+> - ``POST /api/play-together/v1/games-of-user ``  
+>   ***Description***: Create a skill (Game of User)  
+>   ***Role Access***: User   
+>   ***Note***: The token user use to login will auto use for exact who is create this skill   
+>
+> - ``GET /api/play-together/v1/games-of-user/{gameOfUserId} ``  
+>   ***Description***: Get a specific skill (Game of User)  
+>   ***Role Access***: User    
+>
+> - ``PUT /api/play-together/v1/games-of-user/{gameOfUserId} ``  
+>   ***Description***: Update a specific skill (Game of User)  
+>   ***Role Access***: User    
+>
+> - ``DELETE /api/play-together/v1/games-of-user/{gameOfUserId} ``  
+>   ***Description***: Delete a specific skill (Game of User)  
+>   ***Role Access***: User    
+>
 
 
 

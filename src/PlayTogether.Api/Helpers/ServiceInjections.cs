@@ -12,7 +12,7 @@ using PlayTogether.Core.Services.Business.Charity;
 using PlayTogether.Core.Services.Business.Chat;
 using PlayTogether.Core.Services.Business.Donate;
 using PlayTogether.Core.Services.Business.Game;
-using PlayTogether.Core.Services.Business.GameOfPlayer;
+using PlayTogether.Core.Services.Business.GameOfUser;
 using PlayTogether.Core.Services.Business.GameType;
 using PlayTogether.Core.Services.Business.Hirer;
 using PlayTogether.Core.Services.Business.Hobby;
@@ -34,7 +34,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Charity;
 using PlayTogether.Infrastructure.Repositories.Business.Chat;
 using PlayTogether.Infrastructure.Repositories.Business.Donate;
 using PlayTogether.Infrastructure.Repositories.Business.Game;
-using PlayTogether.Infrastructure.Repositories.Business.GameOfPlayer;
+using PlayTogether.Infrastructure.Repositories.Business.GameOfUser;
 using PlayTogether.Infrastructure.Repositories.Business.GameType;
 using PlayTogether.Infrastructure.Repositories.Business.Hirer;
 using PlayTogether.Infrastructure.Repositories.Business.Hobby;
@@ -131,8 +131,8 @@ namespace PlayTogether.Api.Helpers
             services.AddScoped<IMusicRepository, MusicRepository>();
 
             // Config for GameOfPlayer service DI
-            services.AddScoped<IGameOfPlayerService, GameOfPlayerService>();
-            services.AddScoped<IGameOfPlayerRepository, GameOfPlayerRepository>();
+            services.AddScoped<IGameOfUserService, GameOfUserService>();
+            services.AddScoped<IGameOfUserRepository, GameOfUserRepository>();
 
             // Config for MusicOfPlayer service DI
             services.AddScoped<IMusicOfPlayerService, MusicOfPlayerService>();

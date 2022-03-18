@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
-using PlayTogether.Core.Dtos.Incoming.Business.GameOfPlayer;
+using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
-using PlayTogether.Core.Dtos.Outcoming.Business.GameOfPlayer;
+using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.MusicOfPlayer;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;

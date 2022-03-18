@@ -29,6 +29,97 @@ Authorization: {{authToken}}
 ###
 
 
+# Test Game Of User
+
+# Get all game which user have skills, game of user
+GET {{baseUrl}}/api/play-together/v1/users/1c8e5eac-625d-4a40-9f9c-0480c16997a1/games
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
+?name=Liên
+&pageSize=100
+&pageNumber=1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all Ranks in game
+GET {{baseUrl}}/api/play-together/v1/games/7c35408c-7988-4f3b-8479-6822cb222d77/ranks
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Create game of User
+POST {{baseUrl}}/api/play-together/v1/games-of-user
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "gameId": "7c35408c-7988-4f3b-8479-6822cb222d77",
+  "rankId": "65878e40-9e88-4996-902b-b81e80d8547d"
+}
+
+###
+
+
+# Get a game of User
+GET {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Update game of User
+PUT {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "rankId": "400e56f9-a172-4012-9b86-74af5b6e2eed"
+}
+
+###
+
+# Delete game of User
+DELETE {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Test Update User Info
 
 # Update user personal information
