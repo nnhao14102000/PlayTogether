@@ -139,10 +139,12 @@
 > - ``PUT /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Update a specific skill (Game of User)  
 >   ***Role Access***: User    
+>   ***Note***: The token user use to login will auto use for exact who is create this skill   
 >
 > - ``DELETE /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Delete a specific skill (Game of User)  
 >   ***Role Access***: User    
+>   ***Note***: The token user use to login will auto use for exact who is create this skill   
 >
 
 
