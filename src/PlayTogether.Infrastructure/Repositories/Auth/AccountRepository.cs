@@ -271,6 +271,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.IdentityId = identityUser.Id;
                 userEntityModel.CreatedDate = DateTime.Now;
                 userEntityModel.OrganizationName = request.OrganizationName;
+                userEntityModel.Avatar = ValueConstants.DefaultAvatar;
 
                 await _context.Charities.AddAsync(userEntityModel);
 
@@ -313,6 +314,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.DateOfBirth = request.DateOfBirth;
                 userEntityModel.Gender = request.Gender;
                 userEntityModel.Status = UserStatusConstants.Online;
+                userEntityModel.Avatar = ValueConstants.DefaultAvatar;
 
                 await _context.AppUsers.AddAsync(userEntityModel);
 
@@ -368,6 +370,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
+                    userEntityModel.Avatar = ValueConstants.DefaultAvatar;
                     // userEntityModel.UserBalance.Balance = 1000000;
                     // userEntityModel.UserBalance.ActiveBalance = 1000000;
 
@@ -420,6 +423,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
+                    userEntityModel.Avatar = ValueConstants.DefaultAvatar;
                     // userEntityModel.UserBalance.Balance = 1000000;
                     userEntityModel.IsPlayer = true;
                     // userEntityModel.UserBalance.ActiveBalance = 1000000;
