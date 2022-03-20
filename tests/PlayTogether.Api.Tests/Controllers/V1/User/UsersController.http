@@ -30,9 +30,11 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
+?searchString=th
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
+###
 
 
 
@@ -48,6 +50,45 @@ Authorization: {{authToken}}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Test search History
+# Get search histories
+GET {{baseUrl}}/api/play-together/v1/search-histories
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Delete search histories
+DELETE {{baseUrl}}/api/play-together/v1/search-histories/f634b104-a8fa-4b28-9c0e-f05831a74788
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
 
 
 
@@ -150,16 +191,6 @@ Authorization: {{authToken}}
 
 
 
-
-
-
-
-
-
-
-
-
-
 # Test Update User Info
 
 # Update user personal information
@@ -218,15 +249,6 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
-
-
-
-
-
-
-
-
-
 
 
 

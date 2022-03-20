@@ -6,6 +6,7 @@
 - <a href="#account" target="_self">Account</a> <br>
 - <a href="#user" target="_self">User</a> <br>
 - <a href="#hobby" target="_self">Hobby</a> <br>
+- <a href="#search-history" target="_self">Search History</a> <br>
 - <a href="#game-of-user" target="_self">Games of User</a> <br>
 - <a href="#game-type" target="_self">Game Type</a> <br>
 - <a href="#types-of-game" target="_self">Types Of Game</a> <br>
@@ -130,12 +131,27 @@
 >
 
 
+
+<h2 id="search-history">Search History <a href="#table-of-contents" target="_self">🔙</a></h2>
+
+> - ``GET /api/play-together/v1/search-histories ``  
+>   ***Description***: Get all search Histories   
+>   ***Role Access***: User   
+>   ***Use for***: Help user get their search histories   
+>   ***Extension***: Paging, Sort by created date, Filter by search content  
+>
+> - ``DELETE /api/play-together/v1/search-histories/{searchHistoryId} ``  
+>   ***Description***: Delete a search history  
+>   ***Role Access***: User  
+>
+
+
+
 <h2 id="game-of-user">Game of User <a href="#table-of-contents" target="_self">🔙</a></h2>
 
 > - ``POST /api/play-together/v1/games-of-user ``  
 >   ***Description***: Create a skill (Game of User)  
 >   ***Role Access***: User   
->   ***Note***: The token user use to login will auto use for exact who is create this skill   
 >
 > - ``GET /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Get a specific skill (Game of User)  
@@ -144,12 +160,10 @@
 > - ``PUT /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Update a specific skill (Game of User)  
 >   ***Role Access***: User    
->   ***Note***: The token user use to login will auto use for exact who is create this skill   
 >
 > - ``DELETE /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Delete a specific skill (Game of User)  
 >   ***Role Access***: User    
->   ***Note***: The token user use to login will auto use for exact who is create this skill   
 >
 
 

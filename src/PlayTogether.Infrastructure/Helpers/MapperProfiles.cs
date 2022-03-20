@@ -14,6 +14,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
+using PlayTogether.Core.Dtos.Outcoming.Business.SearchHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
 
@@ -85,6 +86,9 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<GameOfUserCreateRequest, GameOfUser>();
             CreateMap<GameOfUserUpdateRequest, GameOfUser>();
+
+            // SearchHistory mapper profile
+            CreateMap<SearchHistory, SearchHistoryResponse>();
 
 
             // src => target

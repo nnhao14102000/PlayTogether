@@ -6,8 +6,9 @@ namespace PlayTogether.Infrastructure.Entities
     {
         [MaxLength(100)]
         public string UserId { get; set; }
-        public AppUser Hirer { get; set; }
+        public AppUser User { get; set; }
         
         public string SearchString { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

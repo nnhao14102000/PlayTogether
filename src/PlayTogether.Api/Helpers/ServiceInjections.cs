@@ -25,6 +25,7 @@ using PlayTogether.Core.Services.Business.Player;
 using PlayTogether.Core.Services.Business.Rank;
 using PlayTogether.Core.Services.Business.Rating;
 using PlayTogether.Core.Services.Business.Report;
+using PlayTogether.Core.Services.Business.SearchHistory;
 using PlayTogether.Core.Services.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
@@ -47,6 +48,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Player;
 using PlayTogether.Infrastructure.Repositories.Business.Rank;
 using PlayTogether.Infrastructure.Repositories.Business.Rating;
 using PlayTogether.Infrastructure.Repositories.Business.Report;
+using PlayTogether.Infrastructure.Repositories.Business.SearchHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
 using System;
 
@@ -169,6 +171,10 @@ namespace PlayTogether.Api.Helpers
             // Config for AppUser service DI
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+
+            // Config for SearchHistory service DI
+            services.AddScoped<ISearchHistoryService, SearchHistoryService>();
+            services.AddScoped<ISearchHistoryRepository, SearchHistoryRepository>();
 
             services.AddHttpClient();
 

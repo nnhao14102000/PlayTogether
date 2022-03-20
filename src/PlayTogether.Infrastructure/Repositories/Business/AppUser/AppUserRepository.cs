@@ -155,7 +155,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterActiveUser(ref query, true);
             FilterIsPlayerUser(ref query, true);
 
-            Search(ref query, param.SearchString);
+            Search(ref query, user.Id, param.SearchString);
 
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, param.Name);
@@ -181,9 +181,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByPricing is null) {
                 return;
             }
-            if(isOrderByPricing is true){
+            if (isOrderByPricing is true) {
                 query = query.OrderByDescending(x => x.PricePerHour);
-            }else{
+            }
+            else {
                 query = query.OrderBy(x => x.PricePerHour);
             }
         }
@@ -287,11 +288,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.IsActive == isActive);
         }
 
-        private void Search(ref IQueryable<Entities.AppUser> query, string searchString)
+        private void Search(ref IQueryable<Entities.AppUser> query, string userId, string searchString)
         {
             if (String.IsNullOrEmpty(searchString) || String.IsNullOrWhiteSpace(searchString)) {
                 return;
             }
+
+            _context.SearchHistories.Add(Helpers.SearchHistoryHelpers.PopulateSearchHistory(userId, searchString));
+            if(_context.SaveChanges() < 0) return;
 
             var finalList = new List<Entities.AppUser>();
 
@@ -307,15 +311,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
 
             foreach (var item in seperateSearchStrings) {
-                finalList = finalList.Union(_context.AppUsers.Where(x => x.Name.ToLower()
-                                                                                   .Contains(item.ToLower()))
-                                                            .ToList()).ToList();
+                finalList = finalList.Union(_context.AppUsers.Where(x => x.Name.ToLower().Contains(item.ToLower()))
+                                                             .ToList()).ToList();
 
-                var listFromGame = _context.Games.Where(x => (x.DisplayName
-                                                                    + x.Name
-                                                                    + x.OtherName).ToLower()
-                                                                                  .Contains(item.ToLower()))
-                                                                .ToList();
+                var listFromGame = _context.Games.Where(x => (x.DisplayName + x.Name + x.OtherName).ToLower().Contains(item.ToLower()))
+                                                 .ToList();
 
                 var listGameOfUser = new List<Entities.GameOfUser>();
                 foreach (var game in listFromGame) {
@@ -337,7 +337,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                                                                             + " "
                                                                             + x.Description).ToLower()
                                                                                             .Contains(item.ToLower()))
-                                                                .ToList();
+                                                        .ToList();
 
                 // type of game
                 var listTypeOfGame = new List<Entities.TypeOfGame>();
