@@ -144,7 +144,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (user is null || user.IsActive is false) {
+            if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
                 return null;
             }
 
