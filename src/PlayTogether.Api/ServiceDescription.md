@@ -76,6 +76,11 @@
 
 <h2 id="user">User <a href="#table-of-contents" target="_self">🔙</a></h2>
 
+> - ``GET /api/play-together/v1/users/ ``  
+>   ***Description***: Get all users / Search users  
+>   ***Role Access***: User, Admin  
+>   ***Extension***: Paging, searching, filtering by name, gameId, gender, status, sort by Name, Price, Rate     
+>
 > - ``GET /api/play-together/v1/users/personal ``  
 >   ***Description***: Get user personal profile  
 >   ***Use for***: View personal profile, check status  

@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
+using PlayTogether.Core.Parameters;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -35,6 +37,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call ChangeIsPlayerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<PagedResult<UserSearchResponse>> GetAllUsersAsync(ClaimsPrincipal principal, UserParameters param)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _appUserRepository.GetAllUsersAsync(principal, param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllUsersAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

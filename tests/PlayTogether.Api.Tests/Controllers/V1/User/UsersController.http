@@ -12,7 +12,7 @@
 ###
 # @name login
 POST {{baseUrl}}/api/play-together/v1/accounts/login-user
-content-type: {{contentType}}
+Content-type: {{contentType}}
 
 {
   "email": "user@example.com",
@@ -23,10 +23,50 @@ content-type: {{contentType}}
 
 # Get user personal information
 GET {{baseUrl}}/api/play-together/v1/users/personal
-content-type: {{contentType}}
+Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# Get all users / Search users
+GET {{baseUrl}}/api/play-together/v1/users/
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Test Game Of User

@@ -1,5 +1,7 @@
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
+using PlayTogether.Core.Parameters;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -14,5 +16,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId);
         
         Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId);
+        Task<PagedResult<UserSearchResponse>> GetAllUsersAsync(ClaimsPrincipal principal, UserParameters param);
     }
 }

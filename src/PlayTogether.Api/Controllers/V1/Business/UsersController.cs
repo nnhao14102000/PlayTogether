@@ -171,7 +171,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <remarks>
         /// Roles Access: User
         /// </remarks>
-        [HttpGet("{userId}/games")]
+        [HttpGet, Route("{userId}/games")]
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult<IEnumerable<GamesOfUserResponse>>> GetAllGameOfUser(string userId)
         {
@@ -179,6 +179,30 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
-        
+        /// <summary>
+        /// Get all users / Search users
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User, Admin
+        /// </remarks>
+        [HttpGet]
+        [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<UserSearchResponse>>> GetAllUser([FromQuery] UserParameters param){
+            var response = await _appUserService.GetAllUsersAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
     }
 }

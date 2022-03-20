@@ -76,6 +76,7 @@ namespace PlayTogether.Infrastructure.Helpers
 
             CreateMap<AppUser, UserGetBasicInfoResponse>();
             CreateMap<AppUser, UserGetServiceInfoResponse>();
+            CreateMap<AppUser, UserSearchResponse>();
 
             // Game Of User / Player mapper profile
             CreateMap<GameOfUser, GamesOfUserResponse>();
