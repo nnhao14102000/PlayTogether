@@ -4,6 +4,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Rating
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Avartar { get; set; }
+        public string Avatar { get; set; }
     }
 }
