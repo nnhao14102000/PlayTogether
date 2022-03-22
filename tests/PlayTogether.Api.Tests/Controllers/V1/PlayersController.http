@@ -5,85 +5,40 @@
 @host = {{lchost}}
 @baseUrl = https://{{host}}
 @contentType = application/json
+
 @token = {{login.response.body.$.message}}
 @authToken = bearer {{token}}
 
-
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/accounts/login
-content-type: {{contentType}}
+POST {{baseUrl}}/api/play-together/v1/accounts/login-user
+Content-type: {{contentType}}
 
 {
-  "email": "Tham@example.com",
+  "email": "tham@example.com",
   "password": "Pa55w0rd!"
 }
 
-
-###
-# Get Player Profile
-GET {{baseUrl}}/api/play-together/v1/players/profile
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-
-###
-# Get Player by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/250282e3-e053-4825-af00-e6bc2f908b51
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-
-### Update Player Profile by Id
-PUT {{baseUrl}}/api/play-together/v1/players/70dcae12-59e9-4f0a-9ff3-9d2f847febcf
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "avatar": "",
-  "firstname": "Player",
-  "lastname": "Test account 01",
-  "city": "None",
-  "dateOfBirth": "2022-01-23",
-  "description": "Test account player update infomation",
-  "gender": true
-}
-
-
 ###
 
-
-# Get Player service info by Id for player
-GET {{baseUrl}}/api/play-together/v1/players/service-info/1673f5b5-63fd-4f1d-b9b1-ddee37611f7b
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-### 
-
-# Update Player service info by Id
-PUT {{baseUrl}}/api/play-together/v1/players/service-info/250282e3-e053-4825-af00-e6bc2f908b51
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "status": true,
-  "maxHourHire": 3,
-  "pricePerHour": 100000
-}
-
-
-###
-# Get all Game of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/8a602122-b3a2-4d96-836c-0fcd4ff8b8b5/games
-content-type: {{contentType}}
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
+# Get all users / Search users
+GET {{baseUrl}}/api/play-together/v1/users/
+?searchString=th
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-?Name=lol
+?name=Liên
 &pageSize=100
 &pageNumber=1
 content-type: {{contentType}}
@@ -93,207 +48,47 @@ Authorization: {{authToken}}
 
 
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/47fca7d8-7e35-4360-b779-fdda598fc5c6/ranks
+GET {{baseUrl}}/api/play-together/v1/games/a686bb05-1fb0-413d-958a-ab5b710e13a4/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
-
 ###
 
-
-# Add Game of Player
-POST {{baseUrl}}/api/play-together/v1/players/8a602122-b3a2-4d96-836c-0fcd4ff8b8b5/games
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "gameId": "47fca7d8-7e35-4360-b779-fdda598fc5c6",
-  "rank": "Cao Thủ"
-}
-
-
-###
-# Get all Music of Player by Player Id for player
-GET {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/musics
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-
-
-###
-# Add Music of Player
-POST {{baseUrl}}/api/play-together/v1/players/9125f0b7-4e20-4b2f-9e16-b40db802be81/musics
+# Create game of User
+POST {{baseUrl}}/api/play-together/v1/games-of-user
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "musicId": "7a0da60b-0bee-4d28-b770-5d662a5ff710"
-}
-
-
-###
-# Get Player other Skill
-GET {{baseUrl}}/api/play-together/v1/players/36b93d20-73dd-4430-b9ae-c338f7c6b928/other-skills
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-
-###
-# Update Player other Skill
-PUT {{baseUrl}}/api/play-together/v1/players/250282e3-e053-4825-af00-e6bc2f908b51/other-skills
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "otherSkill": "Múa quạt, nhảy điệu cha cha cha"
-}
-
-
-###
-# Get all Player orders
-GET {{baseUrl}}/api/play-together/v1/players/orders
-?IsNew=true
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-# Get all player Notification
-GET {{baseUrl}}/api/play-together/v1/notification?IsNew=true
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-# Get a player Notification
-GET {{baseUrl}}/api/play-together/v1/notification/21b627a8-be0b-437f-9ec4-d8626775ad2a
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-# Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/8d607da0-0cfa-4b5d-b36a-901687b4411d
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-
-# Get Hirer by Id
-GET {{baseUrl}}/api/play-together/v1/hirers/2181af98-904a-4df9-9b9a-96bc925956ff
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-# Process Order request
-PUT {{baseUrl}}/api/play-together/v1/players/orders/543cb67b-c264-4d53-ba5d-2c64c763e969/process
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "isAccept": true,
-  "charityId": ""
-}
-
-###
-
-# Finish soon order
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/543cb67b-c264-4d53-ba5d-2c64c763e969
-content-type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "message": "Minh bận đột xuất mong bạn thông cảm..."
+  "gameId": "a686bb05-1fb0-413d-958a-ab5b710e13a4",
+  "rankId": "889d4f81-bb1d-4b46-922d-dad713a32f99"
 }
 
 ###
 
 
-# Get all charities with paging, search
-GET {{baseUrl}}/api/play-together/v1/charities
-    ?Name=
-    &PageNumber=1
-    &PageSize=10
+# Get a game of User
+GET {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 
-
-# Get a charity by Id
-GET {{baseUrl}}/api/play-together/v1/charities/f7301ce1-25dc-49af-8aaf-25d89a99ca1b
+# Update game of User
+PUT {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
-###
-
-
-
-# Finish order
-PUT {{baseUrl}}/api/play-together/v1/orders/3cfc0e20-8b0d-4721-bf2b-d5b231f5374a
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-
-# Get all player rating
-GET {{baseUrl}}/api/play-together/v1/rating/250282e3-e053-4825-af00-e6bc2f908b51
-?IsNew=true
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-
-# Report violate Feedback
-PUT {{baseUrl}}/api/play-together/v1/rating/violate/5472b317-6902-4fa1-ab9b-99e6e77c1227
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-# Report Hirer
-POST {{baseUrl}}/api/play-together/v1/reports/e0a0905c-38ee-4c4b-948d-cafd0706fed9
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
 {
-  "reportMessage": "Bạn này No.01 xúc phạm mình, bạn ấy chửi mình chơi ngu..."
-}
-###
-
-
-# Create chat message
-POST {{baseUrl}}/api/play-together/v1/chats/0cd409d6-c952-4669-86fc-d9a7a2eef1db
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "message": "Tên Thắm..."
+  "rankId": "400e56f9-a172-4012-9b86-74af5b6e2eed"
 }
 
 ###
 
-# Get alls chat message
-GET {{baseUrl}}/api/play-together/v1/chats/0cd409d6-c952-4669-86fc-d9a7a2eef1db
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-# Delete a chat message
-DELETE {{baseUrl}}/api/play-together/v1/chats/f25cbeb8-b18b-4cb1-b7a6-9552cf36ee80
-Content-Type: {{contentType}}
+# Delete game of User
+DELETE {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
