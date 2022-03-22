@@ -15,63 +15,62 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [ApiVersion("1.0")]
     public class ReportsController : BaseController
     {
-        // private readonly IReportService _reportService;
+        private readonly IReportService _reportService;
 
-        // public ReportsController(IReportService reportService)
-        // {
-        //     _reportService = reportService;
-        // }
+        public ReportsController(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
 
-        // /// <summary>
-        // /// Create report
-        // /// </summary>
-        // /// <param name="orderId"></param>
-        // /// <param name="request"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Player
-        // /// </remarks>
-        // [HttpPost("{orderId}")]
-        // [Authorize(Roles = AuthConstant.RolePlayer)]
-        // public async Task<ActionResult> CreateReport(string orderId, ReportCreateRequest request)
-        // {
-        //     if (!ModelState.IsValid) {
-        //         return BadRequest();
-        //     }
-        //     var response = await _reportService.CreateReportAsync(orderId, request);
-        //     return response ? Ok() : NotFound();
-        // }
+        /// <summary>
+        /// Create report
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost("{orderId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CreateReport(string orderId, ReportCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _reportService.CreateReportAsync(HttpContext.User, orderId, request);
+            return response ? Ok() : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get all reports of a specific hirer
-        // /// </summary>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Player, Hirer, Admin
-        // /// </remarks>
-        // [HttpGet("{hirerId}")]
-        // [Authorize(Roles = AuthConstant.RoleHirer
-        //                    + ","
-        //                    + AuthConstant.RolePlayer
-        //                    + ","
-        //                    + AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports(
-        //     string hirerId,
-        //     [FromQuery] ReportParamters param)
-        // {
-        //     var response = await _reportService.GetAllReportsAsync(hirerId, param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all report of a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User, Admin
+        /// </remarks>
+        [HttpGet("{userId}")]
+        [Authorize(Roles = AuthConstant.RoleUser
+                           + ","
+                           + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports(
+            string userId,
+            [FromQuery] ReportParamters param)
+        {
+            var response = await _reportService.GetAllReportsAsync(userId, param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
     }
 }

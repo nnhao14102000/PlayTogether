@@ -14,118 +14,117 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [ApiVersion("1.0")]
     public class RatingController : BaseController
     {
-        // private readonly IRatingService _ratingService;
+        private readonly IRatingService _ratingService;
 
-        // public RatingController(IRatingService ratingService)
-        // {
-        //     _ratingService = ratingService;
-        // }
+        public RatingController(IRatingService ratingService)
+        {
+            _ratingService = ratingService;
+        }
 
-        // /// <summary>
-        // /// Make Rating Feedback 
-        // /// </summary>
-        // /// <param name="orderId"></param>
-        // /// <param name="request"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Hirer
-        // /// </remarks>
-        // [HttpPost("{orderId}")]
-        // [Authorize(Roles = AuthConstant.RoleHirer)]
-        // public async Task<ActionResult> CreateRatingFeedback(string orderId, RatingCreateRequest request)
-        // {
-        //     if (!ModelState.IsValid) {
-        //         return BadRequest();
-        //     }
-        //     var response = await _ratingService.CreateRatingFeedbackAsync(orderId, request);
-        //     return response ? Ok() : NotFound();
-        // }
+        /// <summary>
+        /// Make Rating Feedback 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost("{orderId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CreateRatingFeedback(string orderId, RatingCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _ratingService.CreateRatingFeedbackAsync(orderId, request);
+            return response ? Ok() : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get all rating of a Player
-        // /// </summary>
-        // /// <param name="playerId"></param>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin, Hirer, Player
-        // /// </remarks>
-        // [HttpGet("{playerId}")]
-        // [Authorize(Roles = AuthConstant.RoleHirer + ","
-        //                 + AuthConstant.RolePlayer + ","
-        //                 + AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllRatings(string playerId, [FromQuery] RatingParameters param)
-        // {
-        //     var response = await _ratingService.GetAllRatingsAsync(playerId, param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all rating of a Player
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet("{userId}")]
+        [Authorize(Roles = AuthConstant.RoleUser + ","
+                        + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllRatings(string userId, [FromQuery] RatingParameters param)
+        {
+            var response = await _ratingService.GetAllRatingsAsync(userId, param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Report violate feedback
-        // /// </summary>
-        // /// <param name="rateId"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Player
-        // /// </remarks>
-        // [HttpPut("violate/{rateId}")]
-        // [Authorize(Roles = AuthConstant.RolePlayer)]
-        // public async Task<ActionResult> ReportViolateFeedback(string rateId)
-        // {
-        //     var response = await _ratingService.ViolateFeedbackAsync(rateId);
-        //     return response ? Ok() : NotFound();
-        // }
+        /// <summary>
+        /// Report violate feedback
+        /// </summary>
+        /// <param name="rateId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut("violate/{rateId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> ReportViolateFeedback(string rateId)
+        {
+            var response = await _ratingService.ViolateFeedbackAsync(rateId);
+            return response ? Ok() : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get all violate ratings
-        // /// </summary>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet("violates")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
-        // {
-        //     var response = await _ratingService.GetAllViolateRatingsForAdminAsync(param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all violate ratings
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet("violates")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
+        {
+            var response = await _ratingService.GetAllViolateRatingsForAdminAsync(param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Disable violate feedback
-        // /// </summary>
-        // /// <param name="rateId"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpPut("disable/{rateId}")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult> DisableFeedback(string rateId)
-        // {
-        //     var response = await _ratingService.DisableFeedbackAsync(rateId);
-        //     return response ? Ok() : NotFound();
-        // }
+        /// <summary>
+        /// Disable violate feedback
+        /// </summary>
+        /// <param name="rateId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut("disable/{rateId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> DisableFeedback(string rateId)
+        {
+            var response = await _ratingService.DisableFeedbackAsync(rateId);
+            return response ? Ok() : NotFound();
+        }
     }
 }

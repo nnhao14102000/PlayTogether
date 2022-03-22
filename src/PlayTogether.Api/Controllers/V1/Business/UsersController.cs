@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
+using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
+using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
@@ -21,58 +23,28 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IAppUserService _appUserService;
         private readonly IHobbyService _hobbyService;
         private readonly IGameOfUserService _gameOfUserService;
+        private readonly IOrderService _orderService;
 
-        public UsersController(IAppUserService appUserService, IHobbyService hobbyService, IGameOfUserService gameOfUserService)
+        public UsersController(
+            IAppUserService appUserService,
+            IHobbyService hobbyService,
+            IGameOfUserService gameOfUserService,
+            IOrderService orderService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
             _gameOfUserService = gameOfUserService;
+            _orderService = orderService;
         }
 
-        /// <summary>
-        /// Get own personal information
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: User
-        /// </remarks>
-        [HttpGet, Route("personal")]
-        [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PersonalInfoResponse>> GetPersonalInfo()
-        {
-            var response = await _appUserService.GetPersonalInfoByIdentityIdAsync(HttpContext.User);
-            return response is not null ? Ok(response) : Unauthorized();
-        }
-
-        /// <summary>
-        /// Get specific user all hobbies
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: User
-        /// </remarks>
-        [HttpGet, Route("{userId}/hobbies")]
-        [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<HobbiesGetAllResponse>>> GetAllHobbies(
-            string userId,
-            [FromQuery] HobbyParameters param)
-        {
-            var response = await _hobbyService.GetAllHobbiesAsync(userId, param);
-
-            var metaData = new {
-                response.TotalCount,
-                response.PageSize,
-                response.CurrentPage,
-                response.HasNext,
-                response.HasPrevious
-            };
-
-            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-
-            return response is not null ? Ok(response) : NotFound();
-        }
+        /*
+        *================================================
+        *                                              ||
+        * UPDATE USER INFO APIs SECTION                ||
+        *                                              ||
+        *================================================
+        */
+        
 
         /// <summary>
         /// Update personal info in profile
@@ -130,6 +102,59 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _appUserService.ChangeIsPlayerAsync(HttpContext.User, request);
             return response ? NoContent() : BadRequest();
         }
+
+        /*
+        *================================================
+        *                                              ||
+        * GET USER INFO APIs SECTION                   ||
+        *                                              ||
+        *================================================
+        */
+        /// <summary>
+        /// Get own personal information
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("personal")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<PersonalInfoResponse>> GetPersonalInfo()
+        {
+            var response = await _appUserService.GetPersonalInfoByIdentityIdAsync(HttpContext.User);
+            return response is not null ? Ok(response) : Unauthorized();
+        }
+
+        /// <summary>
+        /// Get specific user all hobbies
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("{userId}/hobbies")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<PagedResult<HobbiesGetAllResponse>>> GetAllHobbies(
+            string userId,
+            [FromQuery] HobbyParameters param)
+        {
+            var response = await _hobbyService.GetAllHobbiesAsync(userId, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
 
         /// <summary>
         /// Get a specific user service info
@@ -203,6 +228,125 @@ namespace PlayTogether.Api.Controllers.V1.Business
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
             return response is not null ? Ok(response) : NotFound();
+        }
+
+        /*
+        *================================================
+        *                                              ||
+        * ORDER APIs SECTION                           ||
+        *                                              ||
+        *================================================
+        */
+
+        /// <summary>
+        /// Create a Order request
+        /// </summary>
+        /// <param name="toUserId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost("orders/{toUserId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<OrderGetResponse>> CreateOrder(string toUserId, OrderCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _orderService.CreateOrderAsync(HttpContext.User, toUserId, request);
+
+            return response is null 
+                ? BadRequest() 
+                : CreatedAtRoute(nameof(OrdersController.GetOrderById), new { id = response.Id }, response);
+        }
+
+        /// <summary>
+        /// Get all Orders (from create User)
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet("orders")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForHirer(
+            [FromQuery] UserOrderParameter param)
+        {
+            var response = await _orderService.GetAllOrdersAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Cancel order request
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Hirer
+        /// </remarks>
+        [HttpPut("orders/cancel/{orderId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CancelOrderRequest(string orderId)
+        {
+            var response = await _orderService.CancelOrderAsync(orderId, HttpContext.User);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Get all Orders (for User receive order)
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Player
+        /// </remarks>
+        [HttpGet("orders/requests")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForPlayer(
+            [FromQuery] UserOrderParameter param)
+        {
+            var response = await _orderService.GetAllOrderRequestsAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Process the Order Request
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut("orders/{orderId}/process")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request)
+        {
+            var response = await _orderService.ProcessOrderAsync(orderId, HttpContext.User, request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

@@ -22,22 +22,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
         // private readonly IAdminService _adminService;
         // private readonly IHirerService _hirerService;
         // private readonly IOrderService _orderService;
-        // private readonly IReportService _reportService;
+        private readonly IReportService _reportService;
         // private readonly IPlayerService _playerService;
 
-        // public AdminsController(
+        public AdminsController(
         //     IAdminService adminService,
         //     IHirerService hirerService,
         //     IOrderService orderService,
-        //     IReportService reportService,
-        //     IPlayerService playerService)
-        // {
-        //     _adminService = adminService;
-        //     _hirerService = hirerService;
-        //     _orderService = orderService;
-        //     _reportService = reportService;
-        //     _playerService = playerService;
-        // }
+            IReportService reportService
+        //     IPlayerService playerService
+        )
+        {
+            //     _adminService = adminService;
+            //     _hirerService = hirerService;
+            //     _orderService = orderService;
+            _reportService = reportService;
+            //     _playerService = playerService;
+        }
 
         // /// <summary>
         // /// Get all Admins
@@ -132,67 +133,67 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     return response ? NoContent() : NotFound();
         // }
 
-        // /// <summary>
-        // /// Get all reports from all players
-        // /// </summary>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet, Route("reports")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param)
-        // {
-        //     var response = await _reportService.GetAllReportsForAdminAsync(param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all reports from all users
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("reports")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param)
+        {
+            var response = await _reportService.GetAllReportsForAdminAsync(param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get a report in detail by Id
-        // /// </summary>
-        // /// <param name="reportId"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet, Route("reports/{reportId}")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId)
-        // {
-        //     var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+        /// <summary>
+        /// Get a report in detail by Id
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("reports/{reportId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId)
+        {
+            var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Make approve or not the report
-        // /// </summary>
-        // /// <param name="reportId"></param>
-        // /// <param name="request"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpPut, Route("reports/{reportId}")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult> ProcessReport(string reportId, ReportCheckRequest request)
-        // {
-        //     if (!ModelState.IsValid) {
-        //         return BadRequest();
-        //     }
-        //     var response = await _reportService.ProcessReportAsync(reportId, request);
-        //     return response ? NoContent() : NotFound();
-        // }
+        /// <summary>
+        /// Make approve or not the report
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("reports/{reportId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> ProcessReport(string reportId, ReportCheckRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _reportService.ProcessReportAsync(reportId, request);
+            return response ? NoContent() : NotFound();
+        }
 
         // /// <summary>
         // /// Get all players for admin

@@ -4,7 +4,11 @@
 - <a href="#services-description" target="_self">Title</a> <br>
 - <a href="#table-of-contents" target="_self">Table Of Contents</a> <br>
 - <a href="#account" target="_self">Account</a> <br>
+- <a href="#admin" target="_self">Admin</a> <br>
 - <a href="#user" target="_self">User</a> <br>
+- <a href="#order" target="_self">Order</a> <br>
+- <a href="#rating" target="_self">Rating</a> <br>
+- <a href="#report" target="_self">Report</a> <br>
 - <a href="#hobby" target="_self">Hobby</a> <br>
 - <a href="#search-history" target="_self">Search History</a> <br>
 - <a href="#game-of-user" target="_self">Games of User</a> <br>
@@ -12,6 +16,9 @@
 - <a href="#types-of-game" target="_self">Types Of Game</a> <br>
 - <a href="#game" target="_self">Game</a> <br>
 - <a href="#rank" target="_self">Rank</a> <br>
+- <a href="#chat" target="_self">Chat</a> <br>
+- <a href="#notification" target="_self">Notification</a> <br>
+- <a href="#image" target="_self">Image</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -75,6 +82,27 @@
 >
 
 
+
+<h2 id="admin">Admin <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``GET /api/play-together/v1/admins/reports ``  
+>   ***Description***: Get all reports of all players   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin manage reports 
+>
+> - ``GET /api/play-together/v1/admins/reports/{reportId} ``  
+>   ***Description***: Get a report in detail by report Id   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin view more detail to know the reason why player make this report  
+>
+> - ``PUT /api/play-together/v1/admins/reports/{reportId} ``  
+>   ***Description***: Approve or not a report   
+>   ***Role Access***: Admin  
+>   ***Use for***: Admin make decision approve or not a report  
+>
+
+
+
 <h2 id="user">User <a href="#table-of-contents" target="_self">🔙</a></h2>
 
 > - ``GET /api/play-together/v1/users/ ``  
@@ -116,7 +144,89 @@
 >   ***Description***: Get a specific user skill (games of user)    
 >   ***Role Access***: User   
 >
+> - ``POST /api/play-together/v1/users/orders/{toUserId} ``  
+>   ***Description***: Create a order request to a specific User    
+>   ***Role Access***: User   
+>
+> - ``GET /api/play-together/v1/users/orders ``  
+>   ***Description***: Get all user orders which are created by this User    
+>   ***Role Access***: User   
+>   ***Extension***: Paging, filtering by status, order by Created Date (is order new)  
+>
+> - ``PUT /api/play-together/v1/users/orders/cancel/{orderId} ``  
+>   ***Description***: Make to cancel an order request from created User  
+>   ***User for***: Cancel from created User or auto invoke to cancel if wait for process long more than 1 minute     
+>   ***Role Access***: User   
+>
+> - ``GET /api/play-together/v1/users/orders/requests ``  
+>   ***Description***: Get all user order requests which are receiver is this User  
+>   ***Role Access***: User     
+>
+> - ``GET /api/play-together/v1/users/orders/{orderId}/process ``  
+>   ***Description***: Process an order: accept or not      
+>   ***Role Access***: User   
+>
 
+
+<h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/orders/{id} ``  
+>   ***Description***: Get order by Order Id  
+>   ***Role Access***: User  
+>
+> - ``PUT /api/play-together/v1/orders/finish/{id} ``  
+>   ***Description***: Finish the order  
+>   ***Use for***: Finish the order when end of time   
+>   ***Role Access***: User   
+>
+> - ``PUT /api/play-together/v1/orders/finish-soon/{id} ``  
+>   ***Description***: Finish soon order  
+>   ***Use for***: Make finish soon order request   
+>   ***Role Access***: User   
+>
+
+<h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/rating/{playerId} ``  
+>   ***Description***: Get all Ratings of a Player   
+>   ***Use for***: View all ratings of one specific Player   
+>   ***Role Access***: User, Admin  
+>   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
+>
+> - ``GET /api/play-together/v1/rating/violates ``  
+>   ***Description***: Get all Violate Ratings of a Player   
+>   ***Use for***: Admin get all violate ratings   
+>   ***Role Access***: Admin  
+>   ***Extension***: Paging, Order by Created Date, Filter by active/ disable violate ratings  
+>
+> - ``POST /api/play-together/v1/rating/{orderId} ``  
+>   ***Description***: Create a Rating for Player base in current Order  
+>   ***Use for***: Make rate, feedback about player after order his/her  
+>   ***Role Access***: User    
+>
+> - ``PUT /api/play-together/v1/rating/violate/{rateId} ``  
+>   ***Description***: Report violate Feedback   
+>   ***Use for***: Player report the violate feedback   
+>   ***Role Access***: User    
+>
+> - ``PUT /api/play-together/v1/rating/disable/{rateId} ``  
+>   ***Description***: Disable violate Feedback  
+>   ***Use for***: Admin disable the violate feedback  
+>   ***Role Access***: Admin
+
+
+<h2 id="report">Report  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/reports/{orderId} ``  
+>   ***Description***: Create a report base on an Order   
+>   ***Use for***: Player report Hirer violate in a specific order   
+>   ***Role Access***: Player   
+>
+> - ``GET /api/play-together/v1/reports/{userId} ``  
+>   ***Description***: Get all report of a specific Hirer   
+>   ***Use for***: View reports of a user, help making decision for accept the order or not,...     
+>   ***Role Access***: User, Admin   
+>
 
 
 <h2 id="hobby">Hobby <a href="#table-of-contents" target="_self">🔙</a></h2>
@@ -266,6 +376,65 @@
 >   ***Description***: Delete rank    
 >   ***Use for***: Delete rank  
 >   ***Role Access***: Admin  
+>
+
+
+
+<h2 id="chat">Chat  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/chats/{receiveId} ``  
+>   ***Description***: Get all chats of current user and specific receiver or partner   
+>   ***Role Access***: User  
+>   ***Extension***: Paging, Order by Created Date  
+>
+> - ``POST /api/play-together/v1/chats/{receiveId} ``  
+>   ***Description***: Create a chat message to a specific receiver  
+>   ***Use for***: Chat with specific user or partner  
+>   ***Role Access***: User   
+> 
+> - ``DELETE /api/play-together/v1/chats/{chatId} ``  
+>   ***Description***: Remove chat       
+>   ***Use for***: Remover wrong chat  
+>   ***Role Access***: User  
+>
+
+
+<h2 id="notification">Notification  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/notification ``  
+>   ***Description***: Get all Notifications   
+>   ***Use for***: View all notifications  
+>   ***Role Access***: Admin, User, Charity  
+>   ***Extension***: Paging, Filter not read or read notification, Order by Created Date  
+>
+> - ``GET /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Get Notification By Id  
+>   ***Use for***: View Notification in detail  
+>   ***Role Access***: Admin, User, Charity   
+> 
+> - ``DELETE /api/play-together/v1/notification/{id} ``  
+>   ***Description***: Delete Notification       
+>   ***Use for***: Delete notification  
+>   ***Role Access***: Admin, User, Charity  
+>
+
+
+<h2 id="image">Image  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/images/{id} ``  
+>   ***Description***: Get Image by Id for Player and Hirer  
+>   ***Use for***: View image of Player   
+>   ***Role Access***: Player, Hirer  
+>
+> - ``POST /api/play-together/v1/images ``  
+>   ***Description***: Add New an Image of Player   
+>   ***Use for***: Player add a new image to their image collection   
+>   ***Role Access***: Player  
+> 
+> - ``DELETE /api/play-together/v1/images/{id} ``  
+>   ***Description***: Delete an Image of Player    
+>   ***Use for***: Player delete an image from their image collection  
+>   ***Role Access***: Player  
 >
 
 
