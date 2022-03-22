@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Business.Order
@@ -13,5 +14,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Order
 
         [MaxLength(100)]
         public string Message { get; set; }
+
+        public List<GamesOfOrderCreateRequest> Games { get; set; }
     }
 }

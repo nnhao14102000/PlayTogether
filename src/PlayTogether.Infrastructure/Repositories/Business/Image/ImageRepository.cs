@@ -14,33 +14,33 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
         {
         }
 
-        // public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
-        // {
-        //     var model = _mapper.Map<Entities.Image>(request);
-        //     _context.Images.Add(model);
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         return _mapper.Map<ImageGetByIdResponse>(model);
-        //     }
-        //     return null;
-        // }
+        public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
+        {
+            var model = _mapper.Map<Entities.Image>(request);
+            _context.Images.Add(model);
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                return _mapper.Map<ImageGetByIdResponse>(model);
+            }
+            return null;
+        }
 
-        // public async Task<bool> DeleteImageAsync(string id)
-        // {
-        //     var image = await _context.Images.FindAsync(id);
-        //     if (image is null) {
-        //         return false;
-        //     }
-        //     _context.Images.Remove(image);
-        //     return (await _context.SaveChangesAsync() >= 0);
-        // }
+        public async Task<bool> DeleteImageAsync(string imageId)
+        {
+            var image = await _context.Images.FindAsync(imageId);
+            if (image is null) {
+                return false;
+            }
+            _context.Images.Remove(image);
+            return (await _context.SaveChangesAsync() >= 0);
+        }
 
-        // public async Task<ImageGetByIdResponse> GetImageByIdAsync(string id)
-        // {
-        //     var image = await _context.Images.FindAsync(id);
-        //     if (image is not null) {
-        //         return _mapper.Map<ImageGetByIdResponse>(image);
-        //     }
-        //     return null;
-        // }
+        public async Task<ImageGetByIdResponse> GetImageByIdAsync(string imageId)
+        {
+            var image = await _context.Images.FindAsync(imageId);
+            if (image is not null) {
+                return _mapper.Map<ImageGetByIdResponse>(image);
+            }
+            return null;
+        }
     }
 }

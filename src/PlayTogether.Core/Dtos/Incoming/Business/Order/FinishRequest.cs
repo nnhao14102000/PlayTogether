@@ -4,7 +4,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Order
 {
     public class FinishSoonRequest
     {
-        [MaxLength(100)]
+        [MaxLength(200)]
         public string Message { get; set; }
     }
 }

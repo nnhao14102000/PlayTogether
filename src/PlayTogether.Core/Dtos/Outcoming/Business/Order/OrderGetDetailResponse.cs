@@ -7,22 +7,22 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
     {
         public string Id { get; set; }
 
-        public PlayerOrderResponse Player { get; set; }
+        public string UserId { get; set; }
+        public OrderUserResponse User { get; set; }
 
-        public HirerOrderResponse Hirer { get; set; }
+        public string ToUserId { get; set; }
+        public OrderUserResponse ToUser { get; set; }
 
-        public DateTime TimeStart { get; set; }
-
+        public IList<GameOfOrderResponse> GameOfOrders { get; set; }
         public string Message { get; set; }
-
         public int TotalTimes { get; set; }
-
         public float TotalPrices { get; set; }
 
         public ICollection<RatingInOrderResponse> Ratings { get; set; }
         public ICollection<ReportInOrderResponse> Reports { get; set; }
-        public DonateInOrderResponse Donate { get; set; }
-
+        
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeFinish { get; set; }
         public string Status { get; set; }
     }
 }

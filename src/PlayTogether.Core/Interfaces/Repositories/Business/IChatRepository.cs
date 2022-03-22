@@ -8,8 +8,8 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IChatRepository
     {
-        // Task<bool> CreateChatAsync(ClaimsPrincipal principal, string receiveId, ChatCreateRequest request);
-        // Task<PagedResult<ChatGetResponse>> GetAllChatsAsync(ClaimsPrincipal principal, string receiveId, ChatParameters param);
-        // Task<bool> RemoveChatAsync(ClaimsPrincipal principal, string chatId);
+        Task<bool> CreateChatAsync(ClaimsPrincipal principal, string receiveId, ChatCreateRequest request);
+        Task<PagedResult<ChatGetResponse>> GetAllChatsAsync(ClaimsPrincipal principal, string receiveId, ChatParameters param);
+        Task<bool> RemoveChatAsync(ClaimsPrincipal principal, string chatId);
     }
 }

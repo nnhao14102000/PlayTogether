@@ -6,8 +6,8 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IImageRepository
     {
-        // Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request);
-        // Task<ImageGetByIdResponse> GetImageByIdAsync(string id);
-        // Task<bool> DeleteImageAsync(string id);
+        Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request);
+        Task<ImageGetByIdResponse> GetImageByIdAsync(string imageId);
+        Task<bool> DeleteImageAsync(string imageId);
     }
 }

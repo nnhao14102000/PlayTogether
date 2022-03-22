@@ -27,524 +27,599 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             _userManager = userManager;
         }
 
-        // public async Task<OrderGetResponse> CreateOrderRequestByHirerAsync(
-        //     ClaimsPrincipal principal,
-        //     string playerId,
-        //     OrderCreateRequest request)
-        // {
-        //     // Check Hirer
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return null;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-        //     if (hirer is null
-        //         || hirer.IsActive is false
-        //         || hirer.Status is not HirerStatusConstants.Online) {
-        //         return null;
-        //     }
-
-        //     // Check player and status of player
-        //     var player = await _context.Players.FindAsync(playerId);
-        //     if (player is null
-        //         || player.Status is not PlayerStatusConstants.Online
-        //         || player.IsActive is false) {
-        //         return null;
-        //     }
-
-        //     // Check balance of hirer
-        //     if ((request.TotalTimes * player.PricePerHour) > hirer.Balance) {
-        //         return null;
-        //     }
-
-        //     var model = _mapper.Map<Entities.Order>(request);
-        //     model.PlayerId = playerId;
-        //     model.HirerId = hirer.Id;
-        //     model.TotalPrices = request.TotalTimes * player.PricePerHour;
-        //     model.Status = OrderStatusConstants.Processing;
-        //     model.ProcessExpired = DateTime.Now.AddMinutes(1);
-
-        //     _context.Orders.Add(model);
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         player.Status = PlayerStatusConstants.Processing;
-        //         hirer.Status = HirerStatusConstants.Processing;
-        //         await _context.Notifications.AddAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = playerId,
-        //                 Title = $"{hirer.Firstname} gửi lời mời đến bạn!",
-        //                 Message = $"{request.Message}",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             });
-        //         if ((await _context.SaveChangesAsync() < 0)) {
-        //             return null;
-        //         }
-        //         return _mapper.Map<OrderGetResponse>(model);
-        //     }
-        //     return null;
-        // }
-
-        // public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByHirerAsync(
-        //     ClaimsPrincipal principal,
-        //     HirerOrderParameter param)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return null;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-        //     if (hirer is null) {
-        //         return null;
-        //     }
-
-        //     var ordersOfHirer = await _context.Orders.Where(x => x.HirerId == hirer.Id).ToListAsync();
-        //     var query = ordersOfHirer.AsQueryable();
-
-        //     FilterOrderByStatus(ref query, param.Status);
-        //     FilterOrderRecent(ref query, param.IsNew);
-
-        //     ordersOfHirer = query.ToList();
-
-        //     foreach (var order in ordersOfHirer) {
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Hirer)
-        //             .LoadAsync();
-
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Player)
-        //             .LoadAsync();
-        //     }
-
-        //     var response = _mapper.Map<List<OrderGetResponse>>(ordersOfHirer);
-        //     return PagedResult<OrderGetResponse>
-        //         .ToPagedList(
-        //             response,
-        //             param.PageNumber,
-        //             param.PageSize);
-        // }
-
-        // public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestByPlayerAsync(
-        //     ClaimsPrincipal principal,
-        //     PlayerOrderParameter param)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return null;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-        //     if (player is null) {
-        //         return null;
-        //     }
-
-        //     var ordersOfPlayer = await _context.Orders.Where(x => x.PlayerId == player.Id).ToListAsync();
-        //     var query = ordersOfPlayer.AsQueryable();
-
-        //     FilterOrderByStatus(ref query, param.Status);
-        //     FilterOrderRecent(ref query, param.IsNew);
-
-        //     ordersOfPlayer = query.ToList();
-
-        //     foreach (var order in ordersOfPlayer) {
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Hirer)
-        //             .LoadAsync();
-
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Player)
-        //             .LoadAsync();
-        //     }
-
-        //     var response = _mapper.Map<List<OrderGetResponse>>(ordersOfPlayer);
-        //     return PagedResult<OrderGetResponse>
-        //         .ToPagedList(
-        //             response,
-        //             param.PageNumber,
-        //             param.PageSize);
-        // }
-
-        // private void FilterOrderRecent(
-        //     ref IQueryable<Entities.Order> query,
-        //     bool? isNew)
-        // {
-        //     if (!query.Any() || isNew is null) {
-        //         return;
-        //     }
-        //     if (isNew is true) {
-        //         query = query.OrderByDescending(x => x.CreatedDate);
-        //     }
-        //     else {
-        //         query = query.OrderBy(x => x.CreatedDate);
-        //     }
-        // }
-
-        // private void FilterOrderByStatus(
-        //     ref IQueryable<Entities.Order> query,
-        //     string status)
-        // {
-        //     if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
-        //         return;
-        //     }
-        //     query = query.Where(x => x.Status == status);
-        // }
-
-        // public async Task<OrderGetResponse> GetOrderByIdAsync(string orderId)
-        // {
-        //     var order = await _context.Orders.FindAsync(orderId);
-
-        //     if (order is null) {
-        //         return null;
-        //     }
-
-        //     await _context.Entry(order)
-        //        .Reference(x => x.Hirer)
-        //        .LoadAsync();
-
-        //     await _context.Entry(order)
-        //         .Reference(x => x.Player)
-        //         .LoadAsync();
-
-        //     return _mapper.Map<OrderGetResponse>(order);
-        // }
-
-        // public async Task<bool> CancelOrderRequestByHirerAsync(
-        //     string orderId,
-        //     ClaimsPrincipal principal)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return false;
-        //     }
-        //     var identityId = loggedInUser.Id;
-
-        //     var hirer = await _context.Hirers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-        //     if (hirer is null || hirer.Status is not HirerStatusConstants.Processing) {
-        //         return false;
-        //     }
-
-        //     var order = await _context.Orders.FindAsync(orderId);
-        //     if (order is null || order.Status is not OrderStatusConstants.Processing) {
-        //         return false;
-        //     }
-
-        //     order.Status = OrderStatusConstants.Cancel; // change status of Order
-
-        //     await _context.Entry(order)
-        //        .Reference(x => x.Player)
-        //        .LoadAsync();
-
-        //     await _context.Entry(order)
-        //        .Reference(x => x.Hirer)
-        //        .LoadAsync();
-
-        //     order.Player.Status = PlayerStatusConstants.Online;
-        //     order.Hirer.Status = HirerStatusConstants.Online;
-
-        //     if (DateTime.Now >= order.ProcessExpired) {
-        //         await _context.Notifications.AddAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = order.PlayerId,
-        //                 Title = $"Bạn đã bỏ lỡ 1 đề nghị từ {order.Hirer.Firstname}",
-        //                 Message = $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.Hirer.Firstname} lúc {order.CreatedDate}",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             }
-        //         );
-        //     }
-        //     else {
-        //         await _context.Notifications.AddAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = order.PlayerId,
-        //                 Title = $"Yêu cầu đã bị Hủy bời {order.Hirer.Firstname}",
-        //                 Message = $"Yêu cầu đã bị Hủy bời {order.Hirer.Firstname} lúc {DateTime.Now}",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             }
-        //         );
-        //     }
-
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
-        // public async Task<bool> ProcessOrderRequestByPlayerAsync(
-        //     string orderId,
-        //     ClaimsPrincipal principal,
-        //     OrderProcessByPlayerRequest request)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return false;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     var player = await _context.Players.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-        //     if (player is null || player.IsActive is false || player.Status is not PlayerStatusConstants.Processing) {
-        //         return false;
-        //     }
-
-        //     var order = await _context.Orders.FindAsync(orderId);
-        //     if (order is null || order.Status is not OrderStatusConstants.Processing) {
-        //         return false;
-        //     }
-
-        //     await _context.Entry(order)
-        //        .Reference(x => x.Hirer)
-        //        .LoadAsync();
-        //     await _context.Entry(order)
-        //         .Reference(x => x.Player)
-        //         .LoadAsync();
-
-        //     if (request.IsAccept == false) {
-        //         order.Status = OrderStatusConstants.Cancel;
-        //         player.Status = PlayerStatusConstants.Online;
-        //         order.Hirer.Status = HirerStatusConstants.Online;
-
-        //         await _context.Notifications.AddRangeAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = order.HirerId,
-        //                 Title = $"{player.Firstname} đã từ chối đề nghị!",
-        //                 Message = $"Xin lỗi vì không thể ghép được với bạn. Mong có thể ghép với bạn vào lần sau. Chúc bạn chơi game vui vẻ!",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             }
-        //         );
-        //     }
-        //     else {
-        //         if (!String.IsNullOrEmpty(request.CharityId) || !String.IsNullOrWhiteSpace(request.CharityId)) {
-        //             var charity = await _context.Charities.FindAsync(request.CharityId);
-        //             if (charity is null || charity.IsActive is false) {
-        //                 return false;
-        //             }
-
-        //             await _context.Donates.AddAsync(new Entities.Donate {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 CharityId = request.CharityId,
-        //                 PlayerId = player.Id,
-        //                 OrderId = order.Id
-        //             });
-
-        //             order.Hirer.Balance = order.Hirer.Balance - order.TotalPrices;
-        //             charity.Balance = charity.Balance + order.TotalPrices;
-        //             order.Status = OrderStatusConstants.Start;
-
-        //             // Create Notification
-        //             await _context.Notifications.AddRangeAsync(
-        //                 new Entities.Notification {
-        //                     Id = Guid.NewGuid().ToString(),
-        //                     CreatedDate = DateTime.Now,
-        //                     UpdateDate = null,
-        //                     ReceiverId = order.HirerId,
-        //                     Title = $"{player.Lastname + " " + player.Firstname} đã quyên góp {order.TotalPrices}!",
-        //                     Message = $"{player.Lastname + " " + player.Firstname} đã quyên góp số tiền bạn thuê tới tổ chức {charity.OrganizationName} lúc {DateTime.Now}.",
-        //                     Status = NotificationStatusConstants.NotRead
-        //                 },
-        //                 new Entities.Notification {
-        //                     Id = Guid.NewGuid().ToString(),
-        //                     CreatedDate = DateTime.Now,
-        //                     UpdateDate = null,
-        //                     ReceiverId = order.PlayerId,
-        //                     Title = $"{player.Firstname}, Cảm ơn bạn đã quyên góp!",
-        //                     Message = $"Bạn đã quyên góp cho tổ chức {charity.OrganizationName} lúc {DateTime.Now} với số tiền {order.TotalPrices}. Xin gửi lời cảm ơn chân thành tới bạn và chúc bạn chơi vui vẻ!",
-        //                     Status = NotificationStatusConstants.NotRead
-        //                 }
-        //                 , new Entities.Notification {
-        //                     Id = Guid.NewGuid().ToString(),
-        //                     CreatedDate = DateTime.Now,
-        //                     UpdateDate = null,
-        //                     ReceiverId = request.CharityId,
-        //                     Title = $"{player.Firstname} đã quyên góp cho tổ chức của bạn.",
-        //                     Message = $"{player.Lastname + " " + player.Firstname} đã quyên góp cho tổ chức của bạn lúc {DateTime.Now} với số tiền {order.TotalPrices}. Vui lòng kiểm tra tài khoản",
-        //                     Status = NotificationStatusConstants.NotRead
-        //                 }
-        //             );
-        //         }
-        //         else {
-        //             order.Hirer.Balance = order.Hirer.Balance - order.TotalPrices;
-        //             player.Balance = player.Balance + order.TotalPrices;
-        //             order.Status = OrderStatusConstants.Start;
-        //         }
-
-        //         player.Status = PlayerStatusConstants.Hiring;
-        //         order.TimeStart = DateTime.Now;
-        //         order.Hirer.Status = HirerStatusConstants.Hiring;
-        //     }
-
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
-        // public async Task<bool> FinishOrderAsync(string orderId)
-        // {
-        //     var order = await _context.Orders.FindAsync(orderId);
-        //     if (order is null) {
-        //         return false;
-        //     }
-
-        //     if (order.Status is not OrderStatusConstants.Start) {
-        //         return false;
-        //     }
-
-        //     await _context.Entry(order).Reference(x => x.Player).LoadAsync();
-        //     await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-        //     order.Status = OrderStatusConstants.Finish;
-        //     order.Player.Status = PlayerStatusConstants.Online;
-        //     order.Hirer.Status = HirerStatusConstants.Online;
-
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
-        // public async Task<bool> FinishOrderSoonAsync(
-        //     string orderId,
-        //     ClaimsPrincipal principal,
-        //     FinishSoonRequest request)
-        // {
-        //     var order = await _context.Orders.FindAsync(orderId);
-        //     if (order is null) {
-        //         return false;
-        //     }
-
-        //     if (order.Status is not OrderStatusConstants.Start) {
-        //         return false;
-        //     }
-
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return false;
-        //     }
-        //     var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
-        //     await _context.Entry(order).Reference(x => x.Player).LoadAsync();
-        //     await _context.Entry(order).Reference(x => x.Hirer).LoadAsync();
-        //     order.Status = OrderStatusConstants.Finish;
-        //     order.Player.Status = PlayerStatusConstants.Online;
-        //     order.Hirer.Status = HirerStatusConstants.Online;
-        //     order.TimeFinish = DateTime.Now;
-
-        //     if (order.Hirer.IdentityId == identityId) {
-        //         await _context.Notifications.AddRangeAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = order.PlayerId,
-        //                 Title = $"{order.Hirer.Firstname} đã yêu cầu kết thúc sớm",
-        //                 Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.Hirer.Firstname} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             }
-        //         );
-        //     }
-        //     else {
-        //         await _context.Notifications.AddRangeAsync(
-        //             new Entities.Notification {
-        //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
-        //                 UpdateDate = null,
-        //                 ReceiverId = order.HirerId,
-        //                 Title = $"{order.Player.Firstname} đã yêu cầu kết thúc sớm",
-        //                 Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.Player.Firstname} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
-        //                 Status = NotificationStatusConstants.NotRead
-        //             }
-        //         );
-        //     }
-
-        //     if ((await _context.SaveChangesAsync() >= 0)) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
-        // public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(
-        //     string id,
-        //     AdminOrderParameters param)
-        // {
-        //     var orders = await _context.Orders.Where(x => (x.HirerId + x.PlayerId).Contains(id)).ToListAsync();
-
-        //     var query = orders.AsQueryable();
-        //     FilterInDate(ref query, param.FromDate, param.ToDate);
-        //     FilterOrderByStatus(ref query, param.Status);
-        //     orders = query.ToList();
-
-        //     foreach (var order in orders) {
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Hirer)
-        //             .LoadAsync();
-
-        //         await _context.Entry(order)
-        //             .Reference(x => x.Player)
-        //             .LoadAsync();
-        //     }
-
-        //     var response = _mapper.Map<List<OrderGetResponse>>(orders);
-        //     return PagedResult<OrderGetResponse>
-        //         .ToPagedList(
-        //             response,
-        //             param.PageNumber,
-        //             param.PageSize);
-        // }
-
-        // private void FilterInDate(
-        //     ref IQueryable<Entities.Order> query,
-        //     DateTime? fromDate,
-        //     DateTime? toDate)
-        // {
-        //     if (!query.Any() || fromDate is null || toDate is null) {
-        //         return;
-        //     }
-        //     query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
-        // }
-
-        // public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
-        // {
-        //     var order = await _context.Orders.FindAsync(orderId);
-
-        //     if (order is null) {
-        //         return null;
-        //     }
-
-        //     await _context.Entry(order)
-        //        .Reference(x => x.Hirer)
-        //        .LoadAsync();
-
-        //     await _context.Entry(order)
-        //         .Reference(x => x.Player)
-        //         .LoadAsync();
-
-        //     await _context.Entry(order)
-        //         .Collection(x => x.Ratings)
-        //         .LoadAsync();
-
-        //     await _context.Entry(order)
-        //         .Collection(x => x.Reports)
-        //         .LoadAsync();
-
-        //     await _context.Entry(order)
-        //         .Reference(x => x.Donate)
-        //         .LoadAsync();
-
-        //     return _mapper.Map<OrderGetDetailResponse>(order);
-        // }
+        public async Task<OrderGetResponse> CreateOrderAsync(
+            ClaimsPrincipal principal,
+            string toUserId,
+            OrderCreateRequest request)
+        {
+            // Check Hirer
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null
+                || user.IsActive is false
+                || user.IsPlayer is true
+                || user.Status is not UserStatusConstants.Online) {
+                return null;
+            }
+
+            // Check player and status of player
+            var toUser = await _context.AppUsers.FindAsync(toUserId);
+            if (toUser is null
+                || toUser.Status is not UserStatusConstants.Online
+                || toUser.IsActive is false
+                || toUser.IsPlayer is false) {
+                return null;
+            }
+
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+
+            // Check balance of hirer
+            if ((request.TotalTimes * toUser.PricePerHour) > user.UserBalance.ActiveBalance) {
+                return null;
+            }
+
+            var model = _mapper.Map<Entities.Order>(request);
+            model.ToUserId = toUserId;
+            model.UserId = user.Id;
+            model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
+            model.Status = OrderStatusConstants.Processing;
+            model.ProcessExpired = DateTime.Now.AddMinutes(ValueConstants.OrderProcessExpireTime);
+
+            _context.Orders.Add(model);
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                foreach (var game in request.Games) {
+                    var isSkill = await _context.GameOfUsers.Where(x => x.UserId == toUserId)
+                                                            .AnyAsync(x => x.GameId == game.GameId);
+                    if (!isSkill) continue;
+                    var existGame = await _context.GameOfOrders.Where(x => x.OrderId == model.Id)
+                                                                .AnyAsync(x => x.GameId == game.GameId);
+                    if (existGame) continue;
+                    var g = _mapper.Map<Entities.GameOfOrder>(game);
+                    g.OrderId = model.Id;
+                    g.CreatedDate = DateTime.Now;
+                    _context.GameOfOrders.Add(g);
+                    if (await _context.SaveChangesAsync() < 0) {
+                        return null;
+                    }
+                }
+                toUser.Status = UserStatusConstants.Processing;
+                user.Status = UserStatusConstants.Processing;
+
+                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                    toUserId,
+                    $"{user.Name} đã gửi lời mời đến bạn! ",
+                    $"{request.Message} ",
+                    $"{ValueConstants.BaseUrl}/v1/users/{toUserId}/orders/{model.Id}"));
+
+                if ((await _context.SaveChangesAsync() < 0)) {
+                    return null;
+                }
+                await _context.Entry(model)
+                    .Reference(x => x.User)
+                    .LoadAsync();
+
+                await _context.Entry(model)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+
+
+                var response = _mapper.Map<OrderGetResponse>(model);
+                response.ToUser.Id = toUser.Id;
+                response.ToUser.Avatar = toUser.Avatar;
+                response.ToUser.Name = toUser.Name;
+                response.ToUser.IsActive = toUser.IsActive;
+                response.ToUser.IsPlayer = toUser.IsPlayer;
+                response.ToUser.Status = toUser.Status;
+                return response;
+            }
+            return null;
+        }
+
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestsAsync(
+            ClaimsPrincipal principal,
+            UserOrderParameter param)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (toUser is null) {
+                return null;
+            }
+
+            var orderRequests = await _context.Orders.Where(x => x.ToUserId == toUser.Id).ToListAsync();
+            var query = orderRequests.AsQueryable();
+
+            FilterOrderByStatus(ref query, param.Status);
+            FilterOrderRecent(ref query, param.IsNew);
+
+            orderRequests = query.ToList();
+
+            foreach (var order in orderRequests) {
+                await _context.Entry(order)
+                    .Reference(x => x.User)
+                    .LoadAsync();
+                await _context.Entry(order)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+            }
+
+            var responses = _mapper.Map<List<OrderGetResponse>>(orderRequests);
+            foreach (var response in responses) {
+                response.ToUser = _mapper.Map<OrderUserResponse>(toUser);
+            }
+            return PagedResult<OrderGetResponse>
+                .ToPagedList(
+                    responses,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrdersAsync(
+            ClaimsPrincipal principal,
+            UserOrderParameter param)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                return null;
+            }
+
+            var orders = await _context.Orders.Where(x => x.UserId == user.Id).ToListAsync();
+            var query = orders.AsQueryable();
+
+            FilterOrderByStatus(ref query, param.Status);
+            FilterOrderRecent(ref query, param.IsNew);
+
+            orders = query.ToList();
+
+            foreach (var order in orders) {
+                await _context.Entry(order)
+                    .Reference(x => x.User)
+                    .LoadAsync();
+                await _context.Entry(order)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+            }
+
+            var responses = _mapper.Map<List<OrderGetResponse>>(orders);
+            foreach (var response in responses) {
+                var toUser = await _context.Orders.FindAsync(response.ToUserId);
+                response.ToUser = _mapper.Map<OrderUserResponse>(toUser);
+            }
+            return PagedResult<OrderGetResponse>
+                .ToPagedList(
+                    responses,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        private void FilterOrderRecent(
+            ref IQueryable<Entities.Order> query,
+            bool? isNew)
+        {
+            if (!query.Any() || isNew is null) {
+                return;
+            }
+            if (isNew is true) {
+                query = query.OrderByDescending(x => x.CreatedDate);
+            }
+            else {
+                query = query.OrderBy(x => x.CreatedDate);
+            }
+        }
+
+        private void FilterOrderByStatus(
+            ref IQueryable<Entities.Order> query,
+            string status)
+        {
+            if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
+                return;
+            }
+            query = query.Where(x => x.Status == status);
+        }
+
+        public async Task<OrderGetResponse> GetOrderByIdAsync(ClaimsPrincipal principal, string orderId)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order is null) {
+                return null;
+            }
+
+            if (loggedInUser is not null && user is null) {
+                // User is admin
+            }
+            else {
+                if (user.Id != order.UserId && user.Id != order.ToUserId) {
+                    return null;
+                }
+            }
+
+            await _context.Entry(order)
+               .Reference(x => x.User)
+               .LoadAsync();
+
+            await _context.Entry(order)
+                .Collection(x => x.GameOfOrders)
+                .Query()
+                .Include(x => x.Game)
+                .LoadAsync();
+
+            var response = _mapper.Map<OrderGetResponse>(order);
+            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+
+            response.ToUser.Id = toUser.Id;
+            response.ToUser.Avatar = toUser.Avatar;
+            response.ToUser.Name = toUser.Name;
+            response.ToUser.IsActive = toUser.IsActive;
+            response.ToUser.IsPlayer = toUser.IsPlayer;
+            response.ToUser.Status = toUser.Status;
+
+            return response;
+        }
+
+        public async Task<bool> CancelOrderAsync(
+            string orderId,
+            ClaimsPrincipal principal)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id;
+
+            var hirer = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (hirer is null || hirer.Status is not UserStatusConstants.Processing) {
+                return false;
+            }
+
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order is null || order.Status is not OrderStatusConstants.Processing) {
+                return false;
+            }
+
+            order.Status = OrderStatusConstants.Cancel; // change status of Order
+
+            await _context.Entry(order)
+               .Reference(x => x.User)
+               .LoadAsync();
+
+            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+
+            toUser.Status = UserStatusConstants.Online;
+            order.User.Status = UserStatusConstants.Online;
+
+            if (DateTime.Now >= order.ProcessExpired) {
+                await _context.Notifications.AddAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}", "")
+                );
+            }
+            else {
+                await _context.Notifications.AddAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.Now}", "")                    
+                );
+            }
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> ProcessOrderAsync(
+            string orderId,
+            ClaimsPrincipal principal,
+            OrderProcessByPlayerRequest request)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (toUser is null
+                || toUser.IsActive is false
+                || toUser.Status is not UserStatusConstants.Processing) {
+                return false;
+            }
+
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order is null
+                || order.Status is not OrderStatusConstants.Processing
+                || order.ToUserId != toUser.Id) {
+                return false;
+            }
+
+            await _context.Entry(order)
+               .Reference(x => x.User)
+               .Query()
+               .Include(x => x.UserBalance)
+               .LoadAsync();
+
+            await _context.Entry(toUser)
+                .Reference(x => x.UserBalance)
+                .LoadAsync();
+
+            if (request.IsAccept == false) {
+                order.Status = OrderStatusConstants.Cancel;
+                toUser.Status = UserStatusConstants.Online;
+                order.User.Status = UserStatusConstants.Online;
+
+                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                    order.UserId,
+                    $"{toUser.Name} đã từ chối đề nghị!",
+                    $"Xin lỗi vì không thể ghép được với bạn. Mong có thể ghép với bạn vào lần sau!",
+                    ""));
+            }
+            else {
+                order.User.UserBalance.Balance = order.User.UserBalance.Balance - order.TotalPrices;
+                order.User.UserBalance.ActiveBalance = order.User.UserBalance.Balance - order.TotalPrices;
+
+                toUser.UserBalance.Balance += order.TotalPrices;
+
+
+                order.Status = OrderStatusConstants.Start;
+
+                toUser.Status = UserStatusConstants.Hiring;
+                order.TimeStart = DateTime.Now;
+                order.User.Status = UserStatusConstants.Hiring;
+            }
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                await _context.TransactionHistories.AddAsync(
+                    Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        order.User.UserBalance.Id,
+                        "-",
+                        order.TotalPrices,
+                        "Order",
+                        orderId)
+                );
+                return (await _context.SaveChangesAsync() >= 0);
+            }
+            return false;
+        }
+
+        public async Task<bool> FinishOrderAsync(string orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order is null) {
+                return false;
+            }
+
+            if (order.Status is not OrderStatusConstants.Start) {
+                return false;
+            }
+
+            await _context.Entry(order)
+                          .Reference(x => x.User)
+                          .Query()
+                          .Include(x => x.UserBalance)
+                          .LoadAsync();
+            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+            await _context.Entry(toUser)
+                          .Reference(x => x.UserBalance)
+                          .LoadAsync();
+
+            order.Status = OrderStatusConstants.Finish;
+            order.User.Status = UserStatusConstants.Online;
+            toUser.Status = UserStatusConstants.Online;
+            order.TimeFinish = DateTime.Now;
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                order.User.UserBalance.Balance += order.TotalPrices;
+                await _context.TransactionHistories.AddAsync(
+                    Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        toUser.UserBalance.Id,
+                        "+",
+                        order.TotalPrices,
+                        "Order",
+                        orderId)
+                );
+
+                await _context.UnActiveBalances.AddAsync(
+                    Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                        toUser.UserBalance.Id,
+                        orderId,
+                        order.TotalPrices,
+                        DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
+                );
+                return (await _context.SaveChangesAsync() >= 0);
+            }
+            return false;
+        }
+
+        public async Task<bool> FinishOrderSoonAsync(
+            string orderId,
+            ClaimsPrincipal principal,
+            FinishSoonRequest request)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order is null) {
+                return false;
+            }
+
+            if (order.Status is not OrderStatusConstants.Start) {
+                return false;
+            }
+
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            await _context.Entry(order)
+                          .Reference(x => x.User)
+                          .Query()
+                          .Include(x => x.UserBalance)
+                          .LoadAsync();
+            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+            await _context.Entry(toUser)
+                          .Reference(x => x.UserBalance)
+                          .LoadAsync();
+
+            order.Status = OrderStatusConstants.FinishSoon;
+            order.User.Status = UserStatusConstants.Online;
+            toUser.Status = UserStatusConstants.Online;
+            order.TimeFinish = DateTime.Now;
+
+            if (order.User.IdentityId == identityId) {
+                await _context.Notifications.AddAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(
+                        toUser.Id,
+                        $"{order.User.Name} đã yêu cầu kết thúc sớm",
+                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        "")
+                );
+            }
+            else {
+                await _context.Notifications.AddAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(
+                        order.UserId,
+                        $"{toUser.Name} đã yêu cầu kết thúc sớm",
+                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        "")
+                );
+            }
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                order.User.UserBalance.Balance += order.TotalPrices;
+                await _context.TransactionHistories.AddAsync(
+                    Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        toUser.UserBalance.Id,
+                        "+",
+                        order.TotalPrices,
+                        "Order",
+                        orderId)
+                );
+
+                await _context.UnActiveBalances.AddAsync(
+                    Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                        toUser.UserBalance.Id,
+                        orderId,
+                        order.TotalPrices,
+                        DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
+                );
+                return (await _context.SaveChangesAsync() >= 0);
+            }
+            return false;
+        }
+
+        public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(
+            string userId,
+            AdminOrderParameters param)
+        {
+            var orders = await _context.Orders.Where(x => (x.UserId + x.ToUserId).Contains(userId))
+                                              .ToListAsync();
+
+            var query = orders.AsQueryable();
+            FilterInDate(ref query, param.FromDate, param.ToDate);
+            FilterOrderByStatus(ref query, param.Status);
+            orders = query.ToList();
+
+            foreach (var order in orders) {
+                await _context.Entry(order)
+                    .Reference(x => x.User)
+                    .LoadAsync();
+                await _context.Entry(order)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+            }
+
+            var responses = _mapper.Map<List<OrderGetResponse>>(orders);
+            foreach (var response in responses) {
+                var toUser = await _context.Orders.FindAsync(response.ToUserId);
+                response.ToUser = _mapper.Map<OrderUserResponse>(toUser);
+            }
+            return PagedResult<OrderGetResponse>
+                .ToPagedList(
+                    responses,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        private void FilterInDate(
+            ref IQueryable<Entities.Order> query,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            if (!query.Any() || fromDate is null || toDate is null) {
+                return;
+            }
+            query = query.Where(x => x.CreatedDate >= fromDate
+            && x.CreatedDate <= toDate);
+        }
+
+        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order is null) {
+                return null;
+            }
+
+            await _context.Entry(order)
+               .Reference(x => x.User)
+               .LoadAsync();
+
+            await _context.Entry(order)
+                .Collection(x => x.Ratings)
+                .LoadAsync();
+
+            await _context.Entry(order)
+                .Collection(x => x.Reports)
+                .LoadAsync();
+
+            await _context.Entry(order)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+
+            var response = _mapper.Map<OrderGetDetailResponse>(order);
+
+            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+
+            response.ToUser.Id = toUser.Id;
+            response.ToUser.Avatar = toUser.Avatar;
+            response.ToUser.Name = toUser.Name;
+            response.ToUser.IsActive = toUser.IsActive;
+            response.ToUser.IsPlayer = toUser.IsPlayer;
+            response.ToUser.Status = toUser.Status;
+
+            return response;
+        }
     }
 }

@@ -1,16 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
 {
     public class OrderGetResponse
     {
         public string Id { get; set; }
+        
+        public string UserId { get; set; }
+        public OrderUserResponse User { get; set; }
 
-        public PlayerOrderResponse Player { get; set; }
+        public string ToUserId { get; set; }
+        public OrderUserResponse ToUser { get; set; }
 
-        public HirerOrderResponse Hirer { get; set; }
-
-        public DateTime TimeStart { get; set; }
+        public IList<GameOfOrderResponse> GameOfOrders { get; set; }
 
         public string Message { get; set; }
 
@@ -19,5 +22,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
         public float TotalPrices { get; set; }
 
         public string Status { get; set; }
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeFinish { get; set; }
+        public DateTime ProcessExpired {get; set; }
     }
 }

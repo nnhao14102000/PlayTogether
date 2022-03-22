@@ -144,8 +144,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
-                return null;
+            if (loggedInUser is not null && user is null) {
+                // User is admin
+            }
+            else {
+                if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
+                    return null;
+                }
             }
 
             var users = await _context.AppUsers.ToListAsync();
@@ -295,7 +300,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
 
             _context.SearchHistories.Add(Helpers.SearchHistoryHelpers.PopulateSearchHistory(userId, searchString));
-            if(_context.SaveChanges() < 0) return;
+            if (_context.SaveChanges() < 0) return;
 
             var finalList = new List<Entities.AppUser>();
 

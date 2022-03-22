@@ -6,7 +6,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Image
     public class ImageCreateRequest
     {
         [Required]
-        public string PlayerId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public string ImageLink { get; set; }

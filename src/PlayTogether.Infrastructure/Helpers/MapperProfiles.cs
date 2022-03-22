@@ -2,18 +2,29 @@
 using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Incoming.Business.Chat;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
+using PlayTogether.Core.Dtos.Incoming.Business.Image;
+using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
+using PlayTogether.Core.Dtos.Incoming.Business.Rating;
+using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Business.Chat;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
+using PlayTogether.Core.Dtos.Outcoming.Business.Image;
+using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
+using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
+using PlayTogether.Core.Dtos.Outcoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.SearchHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
@@ -90,6 +101,40 @@ namespace PlayTogether.Infrastructure.Helpers
             // SearchHistory mapper profile
             CreateMap<SearchHistory, SearchHistoryResponse>();
 
+            // Order mapper profile
+            CreateMap<Order, OrderGetResponse>();
+            CreateMap<AppUser, OrderUserResponse>();
+            CreateMap<OrderCreateRequest, Order>();
+            CreateMap<GameOfOrder, GameOfOrderResponse>();
+            CreateMap<Game, GameResponse>();
+            CreateMap<GamesOfOrderCreateRequest, GameOfOrder>();
+            CreateMap<Rating, RatingInOrderResponse>();
+            CreateMap<Report, ReportInOrderResponse>();
+            CreateMap<Order, OrderGetDetailResponse>();
+
+
+            // Chat mapper profile
+            CreateMap<ChatCreateRequest, Chat>();
+            CreateMap<Chat, ChatGetResponse>();
+
+            // Notification mapper profile
+            CreateMap<Notification, NotificationGetAllResponse>();
+            CreateMap<Notification, NotificationGetDetailResponse>();
+
+            // Rating mapper profile
+            CreateMap<Rating, RatingGetResponse>();
+            CreateMap<AppUser, UserRateResponse>();
+            CreateMap<RatingCreateRequest, Rating>();
+
+            // Report mapper profile
+            CreateMap<Report, ReportGetResponse>();
+            CreateMap<ReportCreateRequest, Report>();
+            CreateMap<ReportCheckRequest, Report>();
+            CreateMap<Report, ReportInDetailResponse>();
+
+            // Image mapper profile
+            CreateMap<Image, ImageGetByIdResponse>();
+            CreateMap<ImageCreateRequest, Image>();
 
             // src => target
         }
