@@ -195,11 +195,22 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         await _context.AppUsers.AddAsync(userEntityModel);
 
                         if (await _context.SaveChangesAsync() >= 0) {
-                            var token = await GenerateToken(user);
-                            return new AuthResult {
-                                Message = token[0],
-                                ExpireDate = DateTime.Parse(token[1])
-                            };
+
+                            var userBalance = new UserBalance();
+                            userBalance.UserId = userEntityModel.Id;
+                            userBalance.CreatedDate = DateTime.Now;
+                            userBalance.UpdateDate = null;
+                            userBalance.Balance = 0;
+                            userBalance.ActiveBalance = 0;
+                            await _context.UserBalances.AddAsync(userBalance);
+
+                            if (await _context.SaveChangesAsync() >= 0) {
+                                var token = await GenerateToken(user);
+                                return new AuthResult {
+                                    Message = token[0],
+                                    ExpireDate = DateTime.Parse(token[1])
+                                };
+                            }
                         }
                     }
                 }

@@ -392,8 +392,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
                 toUser.UserBalance.Balance += order.TotalPrices;
-
-
                 order.Status = OrderStatusConstants.Start;
 
                 toUser.Status = UserStatusConstants.Hiring;
