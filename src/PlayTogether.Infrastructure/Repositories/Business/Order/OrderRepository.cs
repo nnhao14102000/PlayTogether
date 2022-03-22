@@ -347,6 +347,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            
             if (toUser is null
                 || toUser.IsActive is false
                 || toUser.Status is not UserStatusConstants.Processing) {
@@ -359,6 +360,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 || order.ToUserId != toUser.Id) {
                 return false;
             }
+
+            var fromUser = await _context.AppUsers.FindAsync(order.UserId);
+            await _context.Entry(fromUser)
+                .Reference(x => x.UserBalance)
+                .LoadAsync();
 
             await _context.Entry(order)
                .Reference(x => x.User)
@@ -382,8 +388,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     ""));
             }
             else {
-                order.User.UserBalance.Balance = order.User.UserBalance.Balance - order.TotalPrices;
-                order.User.UserBalance.ActiveBalance = order.User.UserBalance.Balance - order.TotalPrices;
+                fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
+                fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
                 toUser.UserBalance.Balance += order.TotalPrices;
 
