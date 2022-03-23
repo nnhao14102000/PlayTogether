@@ -30,18 +30,27 @@ Authorization: {{authToken}}
 
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/8f698336-1ee2-43df-a7c0-3f112c62b078/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/498e4257-6039-4b6b-ad6b-113053dda210/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "isAccept": false
+  "isAccept": true
 }
 
 ###
 
 
+# Finish order soon
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/498e4257-6039-4b6b-ad6b-113053dda210
+Content-type: {{contentType}}
+Authorization: {{authToken}}
 
+{
+  "message": "Cho tui nghi som nha"
+}
+
+###
 
 
 

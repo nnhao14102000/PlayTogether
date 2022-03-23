@@ -399,7 +399,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
-                toUser.UserBalance.Balance += order.TotalPrices;
+                
                 toUser.Status = UserStatusConstants.Hiring;
 
                 order.Status = OrderStatusConstants.Start;
@@ -445,10 +445,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Status = OrderStatusConstants.Finish;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
+            
             order.TimeFinish = DateTime.Now;
 
             if ((await _context.SaveChangesAsync() >= 0)) {
-                order.User.UserBalance.Balance += order.TotalPrices;
+                toUser.UserBalance.Balance += order.TotalPrices;
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
@@ -525,7 +526,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             if ((await _context.SaveChangesAsync() >= 0)) {
-                order.User.UserBalance.Balance += order.TotalPrices;
+                toUser.UserBalance.Balance += order.TotalPrices;
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,

@@ -99,3 +99,20 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification/309d1238-81d1-45e6-a37f-9dc134b1311c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
