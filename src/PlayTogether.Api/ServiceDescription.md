@@ -166,6 +166,11 @@
 >   ***Description***: Process an order: accept or not      
 >   ***Role Access***: User   
 >
+> - ``GET /api/play-together/v1/users/transactions ``  
+>   ***Description***: Get all user transaction histories    
+>   ***Role Access***: User     
+>   ***Extension***: Paging, filtering by type transaction, filter in range of Date, order new transaction   
+>
 
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
