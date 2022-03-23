@@ -312,7 +312,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            order.Status = OrderStatusConstants.Cancel; // change status of Order
+            
 
             await _context.Entry(order)
                .Reference(x => x.User)
@@ -324,11 +324,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.User.Status = UserStatusConstants.Online;
 
             if (DateTime.Now >= order.ProcessExpired) {
+                order.Status = OrderStatusConstants.OverTime; // change status of Order
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}", "")
                 );
             }
             else {
+                order.Status = OrderStatusConstants.Cancel; // change status of Order
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.Now}", "")
                 );
@@ -382,7 +384,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 .LoadAsync();
 
             if (request.IsAccept == false) {
-                order.Status = OrderStatusConstants.Cancel;
+                order.Status = OrderStatusConstants.Reject;
                 order.User.Status = UserStatusConstants.Online;
 
                 toUser.Status = UserStatusConstants.Online;
