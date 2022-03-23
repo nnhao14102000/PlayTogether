@@ -9,6 +9,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
+using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
@@ -24,17 +25,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IHobbyService _hobbyService;
         private readonly IGameOfUserService _gameOfUserService;
         private readonly IOrderService _orderService;
+        private readonly ITransactionHistoryService _transactionHistoryService;
 
         public UsersController(
             IAppUserService appUserService,
             IHobbyService hobbyService,
             IGameOfUserService gameOfUserService,
-            IOrderService orderService)
+            IOrderService orderService,
+            ITransactionHistoryService transactionHistoryService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
             _gameOfUserService = gameOfUserService;
             _orderService = orderService;
+            _transactionHistoryService = transactionHistoryService;
         }
 
         /*
@@ -310,7 +314,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="param"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: Player
+        /// Roles Access: User
         /// </remarks>
         [HttpGet("orders/requests")]
         [Authorize(Roles = AuthConstant.RoleUser)]
@@ -347,6 +351,42 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _orderService.ProcessOrderAsync(orderId, HttpContext.User, request);
             return response ? NoContent() : NotFound();
+        }
+        
+        /*
+        *================================================
+        *                                              ||
+        * Transaction APIs SECTION                     ||
+        *                                              ||
+        *================================================
+        */
+
+        /// <summary>
+        /// Get all Transaction
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet("transactions")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<TransactionHistoryResponse>> GetAllTransaction(
+            [FromQuery] TransactionParameters param)
+        {
+            var response = await _transactionHistoryService.GetAllTransactionHistoriesAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
         }
     }
 }

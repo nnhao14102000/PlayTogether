@@ -26,6 +26,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.SearchHistory;
+using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Entities;
 
@@ -135,6 +136,9 @@ namespace PlayTogether.Infrastructure.Helpers
             // Image mapper profile
             CreateMap<Image, ImageGetByIdResponse>();
             CreateMap<ImageCreateRequest, Image>();
+
+            // TransactionHistory mapper Profile
+            CreateMap<TransactionHistory, TransactionHistoryResponse>();
 
             // src => target
         }
