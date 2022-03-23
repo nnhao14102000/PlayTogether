@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -112,12 +113,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
 
                 var response = _mapper.Map<OrderGetResponse>(model);
-                response.ToUser.Id = toUser.Id;
-                response.ToUser.Avatar = toUser.Avatar;
-                response.ToUser.Name = toUser.Name;
-                response.ToUser.IsActive = toUser.IsActive;
-                response.ToUser.IsPlayer = toUser.IsPlayer;
-                response.ToUser.Status = toUser.Status;
+                response.ToUser = new OrderUserResponse {
+                    Id = toUser.Id,
+                    Name = toUser.Name,
+                    Avatar = toUser.Avatar,
+                    IsActive = toUser.IsActive,
+                    IsPlayer = toUser.IsPlayer,
+                    Status = toUser.Status
+                };
                 return response;
             }
             return null;
@@ -277,12 +280,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var response = _mapper.Map<OrderGetResponse>(order);
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
 
-            response.ToUser.Id = toUser.Id;
-            response.ToUser.Avatar = toUser.Avatar;
-            response.ToUser.Name = toUser.Name;
-            response.ToUser.IsActive = toUser.IsActive;
-            response.ToUser.IsPlayer = toUser.IsPlayer;
-            response.ToUser.Status = toUser.Status;
+            response.ToUser = new OrderUserResponse {
+                Id = toUser.Id,
+                Name = toUser.Name,
+                Avatar = toUser.Avatar,
+                IsActive = toUser.IsActive,
+                IsPlayer = toUser.IsPlayer,
+                Status = toUser.Status
+            };
 
             return response;
         }
@@ -325,7 +330,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             else {
                 await _context.Notifications.AddAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.Now}", "")                    
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.Now}", "")
                 );
             }
 
@@ -347,7 +352,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            
+
             if (toUser is null
                 || toUser.IsActive is false
                 || toUser.Status is not UserStatusConstants.Processing) {
@@ -378,8 +383,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             if (request.IsAccept == false) {
                 order.Status = OrderStatusConstants.Cancel;
-                toUser.Status = UserStatusConstants.Online;
                 order.User.Status = UserStatusConstants.Online;
+
+                toUser.Status = UserStatusConstants.Online;
 
                 await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
                     order.UserId,
@@ -392,9 +398,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
                 toUser.UserBalance.Balance += order.TotalPrices;
-                order.Status = OrderStatusConstants.Start;
-
                 toUser.Status = UserStatusConstants.Hiring;
+
+                order.Status = OrderStatusConstants.Start;
                 order.TimeStart = DateTime.Now;
                 order.User.Status = UserStatusConstants.Hiring;
             }

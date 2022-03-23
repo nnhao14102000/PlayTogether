@@ -56,3 +56,46 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+# Create order
+POST {{baseUrl}}/api/play-together/v1/users/orders/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "totalTimes": 1,
+  "message": "Choi lol ko ban ơi",
+  "games": [
+    {
+      "gameId": "7c35408c-7988-4f3b-8479-6822cb222d77"
+    }
+  ]
+}
+
+###
+
+# Get all order (create User)
+GET {{baseUrl}}/api/play-together/v1/users/orders?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Get a order
+GET {{baseUrl}}/api/play-together/v1/orders/91d56f4a-ac43-46bc-be12-c867d50a3f83
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Cancel order
+PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/91d56f4a-ac43-46bc-be12-c867d50a3f83
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###

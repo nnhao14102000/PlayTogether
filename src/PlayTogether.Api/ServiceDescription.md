@@ -162,7 +162,7 @@
 >   ***Description***: Get all user order requests which are receiver is this User  
 >   ***Role Access***: User     
 >
-> - ``GET /api/play-together/v1/users/orders/{orderId}/process ``  
+> - ``PUT /api/play-together/v1/users/orders/{orderId}/process ``  
 >   ***Description***: Process an order: accept or not      
 >   ***Role Access***: User   
 >

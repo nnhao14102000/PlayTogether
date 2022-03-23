@@ -21,6 +21,34 @@ Content-type: {{contentType}}
 
 ###
 
+# Get order request (receiver order)
+GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Process order
+PUT {{baseUrl}}/api/play-together/v1/users/orders/8f698336-1ee2-43df-a7c0-3f112c62b078/process
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isAccept": false
+}
+
+###
+
+
+
+
+
+
+
+
+
+
 # Get user personal information
 GET {{baseUrl}}/api/play-together/v1/users/personal
 Content-type: {{contentType}}
