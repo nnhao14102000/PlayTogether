@@ -145,13 +145,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (loggedInUser is not null && user is null) {
-                // User is admin
-            }
-            else {
-                if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
-                    return null;
-                }
+            if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
+                return null;
             }
 
             var users = await _context.AppUsers.ToListAsync();
@@ -169,6 +164,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
 
+            FilterUserByItSelf(ref query, user.Id);
+
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
             OrderUserPricing(ref query, param.IsOrderByPricing);
@@ -180,6 +177,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterUserByItSelf(ref IQueryable<Entities.AppUser> query, string id)
+        {
+            if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
+                return;
+            }
+            query = query.Where(x => x.Id != id);
         }
 
         private void OrderUserPricing(ref IQueryable<Entities.AppUser> query, bool? isOrderByPricing)

@@ -218,10 +218,10 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="param"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: User, Admin
+        /// Roles Access: User
         /// </remarks>
         [HttpGet]
-        [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
+        [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult<PagedResult<UserSearchResponse>>> GetAllUser([FromQuery] UserParameters param){
             var response = await _appUserService.GetAllUsersAsync(HttpContext.User, param);
 
