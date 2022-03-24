@@ -171,6 +171,11 @@
 >   ***Role Access***: User     
 >   ***Extension***: Paging, filtering by type transaction, filter in range of Date, order new transaction   
 >
+> - ``GET /api/play-together/v1/users/un-active-balance ``  
+>   ***Description***: Get all user not active balance    
+>   ***Role Access***: User     
+>   ***Extension***: Paging, filter in range of Date, order new transaction    
+>
 
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   

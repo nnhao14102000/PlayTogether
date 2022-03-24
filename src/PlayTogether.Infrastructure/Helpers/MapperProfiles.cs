@@ -28,6 +28,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.SearchHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
+using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
 using PlayTogether.Infrastructure.Entities;
 
 namespace PlayTogether.Infrastructure.Helpers
@@ -139,6 +140,9 @@ namespace PlayTogether.Infrastructure.Helpers
 
             // TransactionHistory mapper Profile
             CreateMap<TransactionHistory, TransactionHistoryResponse>();
+
+            // UnActiveBalance mapper Profile
+            CreateMap<UnActiveBalance, UnActiveBalanceResponse>();
 
             // src => target
         }

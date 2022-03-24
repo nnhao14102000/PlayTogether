@@ -28,6 +28,7 @@ using PlayTogether.Core.Services.Business.Report;
 using PlayTogether.Core.Services.Business.SearchHistory;
 using PlayTogether.Core.Services.Business.TransactionHistory;
 using PlayTogether.Core.Services.Business.TypeOfGame;
+using PlayTogether.Core.Services.Business.UnActiveBalance;
 using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
@@ -52,6 +53,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Report;
 using PlayTogether.Infrastructure.Repositories.Business.SearchHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TransactionHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
+using PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance;
 using System;
 
 namespace PlayTogether.Api.Helpers
@@ -181,6 +183,10 @@ namespace PlayTogether.Api.Helpers
             // Config for TransactionHistory service DI
             services.AddScoped<ITransactionHistoryService, TransactionHistoryService>();
             services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepository>();
+
+            // Config for UnActiveBalance service DI
+            services.AddScoped<IUnActiveBalanceService, UnActiveBalanceService>();
+            services.AddScoped<IUnActiveBalanceRepository, UnActiveBalanceRepository>();
 
             services.AddHttpClient();
 

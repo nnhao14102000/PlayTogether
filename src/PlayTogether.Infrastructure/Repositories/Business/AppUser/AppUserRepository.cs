@@ -120,6 +120,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (user is null) {
                 return null;
             }
+            await _context.Entry(user).Collection(x => x.Images).LoadAsync();
             return _mapper.Map<UserGetBasicInfoResponse>(user);
         }
 

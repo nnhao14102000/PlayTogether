@@ -57,6 +57,13 @@ GET {{baseUrl}}/api/play-together/v1/users/transactions
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
+###
+
+
+# Get all un active money
+GET {{baseUrl}}/api/play-together/v1/users/un-active-balance
+Content-type: {{contentType}}
+Authorization: {{authToken}}
 
 ###
 

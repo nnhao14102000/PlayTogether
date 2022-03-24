@@ -10,6 +10,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
+using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
@@ -26,19 +27,22 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IGameOfUserService _gameOfUserService;
         private readonly IOrderService _orderService;
         private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly IUnActiveBalanceService _unActiveBalanceService;
 
         public UsersController(
             IAppUserService appUserService,
             IHobbyService hobbyService,
             IGameOfUserService gameOfUserService,
             IOrderService orderService,
-            ITransactionHistoryService transactionHistoryService)
+            ITransactionHistoryService transactionHistoryService,
+            IUnActiveBalanceService unActiveBalanceService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
             _gameOfUserService = gameOfUserService;
             _orderService = orderService;
             _transactionHistoryService = transactionHistoryService;
+            _unActiveBalanceService = unActiveBalanceService;
         }
 
         /*
@@ -356,7 +360,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /*
         *================================================
         *                                              ||
-        * Transaction APIs SECTION                     ||
+        * Balance APIs SECTION                         ||
         *                                              ||
         *================================================
         */
@@ -375,6 +379,34 @@ namespace PlayTogether.Api.Controllers.V1.Business
             [FromQuery] TransactionParameters param)
         {
             var response = await _transactionHistoryService.GetAllTransactionHistoriesAsync(HttpContext.User, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Get all un active money
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet("un-active-balance")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<UnActiveBalanceResponse>> GetAllUnActiveBalance(
+            [FromQuery] UnActiveBalanceParameters param)
+        {
+            var response = await _unActiveBalanceService.GetAllUnActiveBalancesAsync(HttpContext.User, param);
 
             var metaData = new {
                 response.TotalCount,
