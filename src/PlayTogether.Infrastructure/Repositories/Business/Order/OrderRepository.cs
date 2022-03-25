@@ -60,6 +60,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
 
+            if(request.TotalTimes > toUser.MaxHourHire || request.TotalTimes < 1){
+                return null;
+            }
+
             // Check balance of hirer
             if ((request.TotalTimes * toUser.PricePerHour) > user.UserBalance.ActiveBalance) {
                 return null;
