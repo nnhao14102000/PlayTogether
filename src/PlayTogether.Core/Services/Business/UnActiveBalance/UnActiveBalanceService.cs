@@ -20,6 +20,21 @@ namespace PlayTogether.Core.Services.Business.UnActiveBalance
             _unActiveBalanceRepository = unActiveBalanceRepository;
             _logger = logger;
         }
+
+        public async Task<bool> ActiveMoneyAsync(ClaimsPrincipal principal)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _unActiveBalanceRepository.ActiveMoneyAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ActiveMoneyAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<UnActiveBalanceResponse>> GetAllUnActiveBalancesAsync(ClaimsPrincipal principal, UnActiveBalanceParameters param)
         {
             try {

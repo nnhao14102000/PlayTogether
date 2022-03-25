@@ -176,6 +176,10 @@
 >   ***Role Access***: User     
 >   ***Extension***: Paging, filter in range of Date, order new transaction    
 >
+> - ``PUT /api/play-together/v1/users/un-active-balance ``  
+>   ***Description***: Check to active the un active money    
+>   ***Role Access***: User         
+>
 
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   

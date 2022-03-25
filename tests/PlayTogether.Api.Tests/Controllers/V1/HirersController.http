@@ -124,3 +124,15 @@ Authorization: {{authToken}}
 
 
 ###
+
+# Create rating
+POST {{baseUrl}}/api/play-together/v1/rating/74ebc5b9-d026-4191-927e-8c4788a1b47d
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "comment": "Đánh đc,...",
+  "rate": 4
+}
+
+###

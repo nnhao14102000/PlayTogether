@@ -9,5 +9,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface IUnActiveBalanceService
     {
         Task<PagedResult<UnActiveBalanceResponse>> GetAllUnActiveBalancesAsync(ClaimsPrincipal principal, UnActiveBalanceParameters param);
+        Task<bool> ActiveMoneyAsync(ClaimsPrincipal principal);
     }
 }

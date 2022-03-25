@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
@@ -28,7 +29,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 || order.Status is OrderStatusConstants.Start
                 || order.Status is OrderStatusConstants.Cancel
                 || order.Status is OrderStatusConstants.Processing
-                || order.Status is OrderStatusConstants.Interrupt) {
+                || order.Status is OrderStatusConstants.Interrupt
+                || DateTime.Now.AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish) {
                 return false;
             }
 
@@ -38,13 +40,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return false;
             }
 
-            if(order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)){
+            if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
                 return false;
             }
-            
+
 
             await _context.Entry(order).Reference(x => x.User).LoadAsync();
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+
 
             var model = _mapper.Map<Entities.Rating>(request);
             model.OrderId = orderId;
@@ -58,6 +61,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             );
 
 
+            await _context.Entry(order).Collection(x => x.GameOfOrders).LoadAsync();
+            await _context.Entry(toUser).Collection(x => x.GamesOfUsers).LoadAsync();
+
+
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == order.ToUserId).Average(x => x.Rate);
 
@@ -65,9 +72,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 if ((await _context.SaveChangesAsync() < 0)) {
                     return false;
                 }
+
+                foreach (var skill in toUser.GamesOfUsers) {
+                    foreach (var game in order.GameOfOrders) {
+                        await _context.Recommends.AddAsync(
+                            Helpers.RecommendHelpers.PopulateRecommend(order.UserId, GetAge(order.User.DateOfBirth), order.User.Gender, game.Id, toUser.Id, GetAge(toUser.DateOfBirth), toUser.Gender, skill.GameId, request.Rate));
+                        if(await _context.SaveChangesAsync() < 0){
+                            continue;
+                        }
+                    }
+                }
+
                 return true;
             }
             return false;
+        }
+
+        public int GetAge(DateTime dob)
+        {
+            int age = 0;
+            age = DateTime.Now.AddYears(-dob.Year).Year;
+            return age;
         }
 
         public async Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string userId, RatingParameters param)

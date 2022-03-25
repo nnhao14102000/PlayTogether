@@ -420,5 +420,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             return response is not null ? Ok(response) : NotFound();
         }
+        
+        /// <summary>
+        /// Check to active money in un active balance
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("un-active-balance")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CheckToActiveBalance()
+        {
+            var response = await _unActiveBalanceService.ActiveMoneyAsync(HttpContext.User);
+            return response ? NoContent() : NotFound();
+        }
     }
 }

@@ -59,20 +59,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
 
         private void SortNew(ref IQueryable<Entities.UnActiveBalance> query, bool? isNew)
         {
-            if(!query.Any() || isNew is null){
-                return ;
+            if (!query.Any() || isNew is null) {
+                return;
             }
-            if(isNew is true){
+            if (isNew is true) {
                 query = query.OrderByDescending(x => x.CreatedDate);
-            }else{
+            }
+            else {
                 query = query.OrderBy(x => x.CreatedDate);
             }
         }
 
         private void FilterByDateRange(ref IQueryable<Entities.UnActiveBalance> query, DateTime? fromDate, DateTime? toDate)
         {
-            if(!query.Any() || fromDate is null || toDate is null){
-                return ;
+            if (!query.Any() || fromDate is null || toDate is null) {
+                return;
             }
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
@@ -92,15 +93,79 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
-            var unActive = await _context.UnActiveBalances.Where(x => x.UserBalanceId == user.UserBalance.Id).ToListAsync();
+            var unActive = await _context.UnActiveBalances.Where(x => x.UserBalanceId == user.UserBalance.Id
+                                                                && x.IsActive == false).ToListAsync();
 
-            foreach (var item in unActive)
-            {
-                await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
-                
+            if(unActive.Count == 0){
+                return false;
             }
 
-            return false;
+            foreach (var item in unActive) {
+                await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
+                if (item.Order.Reports.Count >= 1) {
+                    foreach (var report in item.Order.Reports) {
+                        if (report.IsApprove == true && report.UserId == item.Order.UserId) {
+                            // + tiền lại cho user
+                            var fromUser = await _context.AppUsers.FindAsync(item.Order.UserId);
+                            await _context.Entry(fromUser).Reference(x => x.UserBalance).LoadAsync();
+                            fromUser.UserBalance.Balance += item.Order.TotalPrices;
+                            fromUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+
+                            var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                            toUser.UserBalance.Balance -= item.Order.TotalPrices;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+
+                            item.IsActive = true;
+                            item.UpdateDate = DateTime.Now;
+                            await _context.TransactionHistories.AddRangeAsync(
+                                Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, "+", item.Money, "Order", item.OrderId),
+                                Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, "-", item.Money, "Order", item.OrderId)
+                            );
+                            if (await _context.SaveChangesAsync() < 0) return false;
+                        }
+                        else if (report.IsApprove == false && report.UserId == item.Order.UserId) {
+                            // tăng tiền cho thằng toUser như thường
+                            var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                            toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+
+                            item.IsActive = true;
+                            item.UpdateDate = DateTime.Now;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+                        }
+                        else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.Now >= item.DateActive) {
+                            // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
+                            var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                            toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+
+                            item.IsActive = true;
+                            item.UpdateDate = DateTime.Now;
+                            if (await _context.SaveChangesAsync() < 0) return false;
+                        }
+                    }
+                }
+                else {
+                    //ko có report nào thì chỉ canh tới giờ thì cộng vào thôi
+                    if (DateTime.Now >= item.DateActive) {
+                        // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
+                        var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                        await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                        toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                        if (await _context.SaveChangesAsync() < 0) return false;
+
+                        item.IsActive = true;
+                        item.UpdateDate = DateTime.Now;
+                        if (await _context.SaveChangesAsync() < 0) return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -28,9 +28,14 @@ Authorization: {{authToken}}
 
 ###
 
+# Get order by Id
+GET {{baseUrl}}/api/play-together/v1/orders/74ebc5b9-d026-4191-927e-8c4788a1b47d
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/498e4257-6039-4b6b-ad6b-113053dda210/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/74ebc5b9-d026-4191-927e-8c4788a1b47d/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -42,7 +47,7 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/498e4257-6039-4b6b-ad6b-113053dda210
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/74ebc5b9-d026-4191-927e-8c4788a1b47d
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -62,6 +67,14 @@ Authorization: {{authToken}}
 
 # Get all un active money
 GET {{baseUrl}}/api/play-together/v1/users/un-active-balance
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Check to active money
+PUT {{baseUrl}}/api/play-together/v1/users/un-active-balance
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -11,5 +11,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
 
         public const int OrderProcessExpireTime = 1; // minute
         public const int HourActiveMoney = 6;
+        public const int HourActiveFeedbackReport = 3;
     }
 }
