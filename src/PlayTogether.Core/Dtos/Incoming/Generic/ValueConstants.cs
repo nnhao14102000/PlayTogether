@@ -9,7 +9,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
 
         public const string BaseUrl = "play-together.azurewebsites.net/api/play-together";
 
-        public const int OrderProcessExpireTime = 1; // minute
+        public const int OrderProcessExpireTime = 5; // minute
         public const int HourActiveMoney = 6;
         public const int HourActiveFeedbackReport = 3;
     }
