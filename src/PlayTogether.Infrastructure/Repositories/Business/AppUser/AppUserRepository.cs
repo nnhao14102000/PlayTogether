@@ -378,5 +378,32 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             query = finalList.AsQueryable();
         }
+
+        public async Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param)
+        {
+            var users = await _context.AppUsers.ToListAsync();
+
+            var query = users.AsQueryable();
+
+            FilterActiveUser(ref query, param.IsActive);
+            FilterByStatus(ref query, param.Status);
+            
+
+            users = query.ToList();
+            var response = _mapper.Map<List<UserGetByAdminResponse>>(users);
+            return PagedResult<UserGetByAdminResponse>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        private void FilterByStatus(ref IQueryable<Entities.AppUser> query, string status)
+        {
+            if(!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)){
+                return ;
+            }
+            query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
+        }
     }
 }

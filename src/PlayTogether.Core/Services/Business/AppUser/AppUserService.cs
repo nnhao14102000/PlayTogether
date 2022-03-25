@@ -55,6 +55,17 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param)
+        {
+            try {
+                return await _appUserRepository.GetAllUsersForAdminAsync(param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllUsersForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PersonalInfoResponse> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {

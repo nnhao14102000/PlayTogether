@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
+using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -23,13 +24,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         // private readonly IHirerService _hirerService;
         // private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
+        private readonly IAppUserService _appUserService;
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
         //     IAdminService adminService,
         //     IHirerService hirerService,
         //     IOrderService orderService,
-            IReportService reportService
+            IReportService reportService,
+            IAppUserService appUserService
         //     IPlayerService playerService
         )
         {
@@ -37,6 +40,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             //     _hirerService = hirerService;
             //     _orderService = orderService;
             _reportService = reportService;
+            _appUserService = appUserService;
             //     _playerService = playerService;
         }
 
@@ -195,31 +199,32 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response ? NoContent() : NotFound();
         }
 
-        // /// <summary>
-        // /// Get all players for admin
-        // /// </summary>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet, Route("players")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<PlayerGetAllResponseForAdmin>>> GetAllPlayersForAdmin([FromQuery] PlayerForAdminParameters param)
-        // {
-        //     var response = await _playerService.GetAllPlayersForAdminAsync(param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("users")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<UserGetByAdminResponse>>> GetAllUser([FromQuery] AdminUserParameters param)
+        {
+            var response = await _appUserService.GetAllUsersForAdminAsync(param);
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
 
         // /// <summary>
         // /// Get player by Id for admin
