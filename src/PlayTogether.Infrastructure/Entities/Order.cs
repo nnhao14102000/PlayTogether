@@ -24,6 +24,9 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float TotalPrices { get; set; }
 
+        [Column(TypeName = "float")]
+        public float FinalPrices { get; set; }
+
         [MaxLength(100)]
         public string Message { get; set; }
 

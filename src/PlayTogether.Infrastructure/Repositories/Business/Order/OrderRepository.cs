@@ -316,8 +316,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            
-
             await _context.Entry(order)
                .Reference(x => x.User)
                .LoadAsync();
@@ -402,7 +400,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             else {
                 fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
-
                 
                 toUser.Status = UserStatusConstants.Hiring;
 
@@ -528,9 +525,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         "")
                 );
             }
+            var priceDone = (order.TotalPrices * GetHourDone(order.TimeStart)) / (order.TotalTimes * 60);
+            order.FinalPrices = ((float)priceDone);
 
             if ((await _context.SaveChangesAsync() >= 0)) {
-                toUser.UserBalance.Balance += order.TotalPrices;
+                toUser.UserBalance.Balance += order.FinalPrices;
+                order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
+                order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+
+                await _context.TransactionHistories.AddAsync(
+                    Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        order.User.UserBalance.Id,
+                        "+",
+                        (order.TotalPrices - order.FinalPrices),
+                        "Order",
+                        orderId)
+                );
+
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
@@ -550,6 +561,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return (await _context.SaveChangesAsync() >= 0);
             }
             return false;
+        }
+
+        public double GetHourDone(DateTime date)
+        {
+            TimeSpan ts = DateTime.Now - date;
+            var timeDone = ts.Minutes;
+            return timeDone;
         }
 
         public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(

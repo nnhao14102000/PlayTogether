@@ -64,7 +64,7 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "totalTimes": 1,
+  "totalTimes": 4,
   "message": "Choi lol ko ban ơi",
   "games": [
     {
@@ -94,7 +94,7 @@ Authorization: {{authToken}}
 
 
 # Cancel order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/91d56f4a-ac43-46bc-be12-c867d50a3f83
+PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/cb621e06-9cad-45b1-a634-761ea61275ea
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

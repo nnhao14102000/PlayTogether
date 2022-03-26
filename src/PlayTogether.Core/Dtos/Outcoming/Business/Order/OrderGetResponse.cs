@@ -20,6 +20,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
         public int TotalTimes { get; set; }
 
         public float TotalPrices { get; set; }
+        public float FinalPrices { get; set; }
 
         public string Status { get; set; }
         public DateTime TimeStart { get; set; }

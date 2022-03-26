@@ -29,13 +29,15 @@ Authorization: {{authToken}}
 ###
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/74ebc5b9-d026-4191-927e-8c4788a1b47d
+GET {{baseUrl}}/api/play-together/v1/orders/9e247fe7-6551-4cbe-9321-ae101b016355
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
+###
+
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/74ebc5b9-d026-4191-927e-8c4788a1b47d/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/9e247fe7-6551-4cbe-9321-ae101b016355/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -47,7 +49,7 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/74ebc5b9-d026-4191-927e-8c4788a1b47d
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/9e247fe7-6551-4cbe-9321-ae101b016355
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -155,5 +157,18 @@ Authorization: {{authToken}}
 DELETE {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+
+# Update user service
+PUT {{baseUrl}}/api/play-together/v1/users/service
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "maxHourHire": 5,
+  "pricePerHour": 10000.0
+}
 
 ###
