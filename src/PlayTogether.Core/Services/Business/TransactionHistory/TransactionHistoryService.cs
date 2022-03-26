@@ -33,5 +33,19 @@ namespace PlayTogether.Core.Services.Business.TransactionHistory
                 throw;
             }
         }
+
+        public async Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesForAdminAsync(string userId, TransactionParameters param)
+        {
+            try {
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _transactionHistoryRepository.GetAllTransactionHistoriesForAdminAsync(userId, param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllTransactionHistoriesForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -25,6 +26,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         // private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
         private readonly IAppUserService _appUserService;
+        private readonly ITransactionHistoryService _transactionHistoryService;
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
@@ -32,7 +34,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     IHirerService hirerService,
         //     IOrderService orderService,
             IReportService reportService,
-            IAppUserService appUserService
+            IAppUserService appUserService,
+            ITransactionHistoryService transactionHistoryService
         //     IPlayerService playerService
         )
         {
@@ -41,8 +44,39 @@ namespace PlayTogether.Api.Controllers.V1.Business
             //     _orderService = orderService;
             _reportService = reportService;
             _appUserService = appUserService;
+            _transactionHistoryService = transactionHistoryService;
             //     _playerService = playerService;
         }
+
+        /// <summary>
+        /// Get all transaction of a User
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet("transactions/{userId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<TransactionHistoryResponse>> GetAllTransactionOfUser(string userId,
+            [FromQuery] TransactionParameters param)
+        {
+            var response = await _transactionHistoryService.GetAllTransactionHistoriesForAdminAsync(userId, param);
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return response is not null ? Ok(response) : NotFound();
+        }
+
 
         // /// <summary>
         // /// Get all Admins

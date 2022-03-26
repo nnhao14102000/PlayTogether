@@ -83,5 +83,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             }
             query = query.Where(x => x.TypeOfTransaction.ToLower().Contains(type.ToLower()));
         }
+
+        public async Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesForAdminAsync(string userId, TransactionParameters param)
+        {
+            var user = await _context.AppUsers.FindAsync(userId);
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+
+            var trans = await _context.TransactionHistories.Where(x => x.UserBalanceId == user.UserBalance.Id).ToListAsync();
+
+            var query = trans.AsQueryable();
+            FilterByTransactionType(ref query, param.Type);
+            FilterByDateRange(ref query, param.FromDate, param.ToDate);
+            SortNewTransaction(ref query, param.IsNew);
+
+
+            trans = query.ToList();
+            var response = _mapper.Map<List<TransactionHistoryResponse>>(trans);
+            return PagedResult<TransactionHistoryResponse>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+        }
     }
 }

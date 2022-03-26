@@ -9,5 +9,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface ITransactionHistoryService
     {
          Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesAsync(ClaimsPrincipal principal, TransactionParameters param);
+
+         Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesForAdminAsync(string userId, TransactionParameters param);
     }
 }

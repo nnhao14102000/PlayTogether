@@ -105,6 +105,11 @@
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, filtering by name, status  
 >
+> - ``GET /api/play-together/v1/admins/transactions/{userId} ``  
+>   ***Description***: Get a specific user transaction histories    
+>   ***Role Access***: Admin        
+>   ***Extension***: Paging, filtering by type transaction, filter in range of Date, order new transaction   
+>
 
 
 
