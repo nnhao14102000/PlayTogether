@@ -433,6 +433,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
+            if ( DateTime.Now < order.TimeStart.AddHours(order.TotalTimes)){
+                return false;
+            }
+
             await _context.Entry(order)
                           .Reference(x => x.User)
                           .Query()
@@ -448,6 +452,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             toUser.Status = UserStatusConstants.Online;
             
             order.TimeFinish = DateTime.Now;
+            order.FinalPrices = order.TotalPrices;
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 toUser.UserBalance.Balance += order.TotalPrices;
@@ -486,7 +491,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (order.TimeStart.AddHours(order.TotalTimes) < DateTime.Now){
+            if (DateTime.Now > order.TimeStart.AddHours(order.TotalTimes) ){
                 return false;
             }
 
