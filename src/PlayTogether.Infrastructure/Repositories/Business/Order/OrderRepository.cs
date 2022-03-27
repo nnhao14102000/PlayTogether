@@ -486,6 +486,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
+            if (order.TimeStart.AddHours(order.TotalTimes) < DateTime.Now){
+                return false;
+            }
+
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
                 return false;
@@ -525,7 +529,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         "")
                 );
             }
-            var priceDone = (order.TotalPrices * GetHourDone(order.TimeStart)) / (order.TotalTimes * 60);
+            var priceDone = (order.TotalPrices * GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             order.FinalPrices = ((float)priceDone);
 
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -563,10 +567,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             return false;
         }
 
-        public double GetHourDone(DateTime date)
+        public double GetTimeDone(DateTime date)
         {
             TimeSpan ts = DateTime.Now - date;
-            var timeDone = ts.Minutes;
+            var timeDone = ts.TotalSeconds;
             return timeDone;
         }
 
