@@ -69,6 +69,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return null;
             }
 
+            if(request.Games.Count == 0){
+                return null;
+            }
+
             var model = _mapper.Map<Entities.Order>(request);
             model.ToUserId = toUserId;
             model.UserId = user.Id;
