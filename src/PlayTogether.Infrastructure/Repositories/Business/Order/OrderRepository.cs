@@ -60,7 +60,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
 
-            if(request.TotalTimes > toUser.MaxHourHire || request.TotalTimes < 1){
+            if (request.TotalTimes > toUser.MaxHourHire || request.TotalTimes < 1) {
                 return null;
             }
 
@@ -69,8 +69,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return null;
             }
 
-            if(request.Games.Count == 0){
+            if (request.Games.Count == 0) {
                 return null;
+            }
+
+            IEnumerable<GamesOfOrderCreateRequest> duplicates = request.Games.GroupBy(x => x)
+                                        .SelectMany(g => g.Skip(1));
+            if (duplicates.Count() > 0) {
+                return null;
+            }
+
+            foreach (var game in request.Games) {
+                var isSkill = await _context.GameOfUsers.Where(x => x.UserId == toUserId)
+                                                            .AnyAsync(x => x.GameId == game.GameId);
+                if (!isSkill) return null;
             }
 
             var model = _mapper.Map<Entities.Order>(request);
@@ -83,9 +95,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             _context.Orders.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 foreach (var game in request.Games) {
-                    var isSkill = await _context.GameOfUsers.Where(x => x.UserId == toUserId)
-                                                            .AnyAsync(x => x.GameId == game.GameId);
-                    if (!isSkill) continue;
                     var existGame = await _context.GameOfOrders.Where(x => x.OrderId == model.Id)
                                                                 .AnyAsync(x => x.GameId == game.GameId);
                     if (existGame) continue;
@@ -404,7 +413,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             else {
                 fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
-                
+
                 toUser.Status = UserStatusConstants.Hiring;
 
                 order.Status = OrderStatusConstants.Start;
@@ -437,7 +446,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if ( DateTime.Now < order.TimeStart.AddHours(order.TotalTimes)){
+            if (DateTime.Now < order.TimeStart.AddHours(order.TotalTimes)) {
                 return false;
             }
 
@@ -454,7 +463,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Status = OrderStatusConstants.Finish;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
-            
+
             order.TimeFinish = DateTime.Now;
             order.FinalPrices = order.TotalPrices;
 
@@ -495,7 +504,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (DateTime.Now > order.TimeStart.AddHours(order.TotalTimes) ){
+            if (DateTime.Now > order.TimeStart.AddHours(order.TotalTimes)) {
                 return false;
             }
 
