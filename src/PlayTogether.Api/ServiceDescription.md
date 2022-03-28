@@ -38,7 +38,7 @@
 >   ***Description***: Sign in with Google
 >
 > - ``PUT /api/play-together/v1/accounts/logout ``  
->   ***Description***: Logout Hirer or User  
+>   ***Description***: Logout User  
 >   ***Role Access***: User    
 >   ***Use for***: Update status of User to Offline
 >
@@ -247,7 +247,7 @@
 >   ***Role Access***: User   
 >
 > - ``GET /api/play-together/v1/reports/{userId} ``  
->   ***Description***: Get all report of a specific Hirer   
+>   ***Description***: Get all report of a specific User   
 >   ***Use for***: View reports of a user, help making decision for accept the order or not,...     
 >   ***Role Access***: User, Admin   
 >
@@ -446,9 +446,9 @@
 <h2 id="image">Image  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/images/{id} ``  
->   ***Description***: Get Image by Id for User and Hirer  
+>   ***Description***: Get Image by Id for User  
 >   ***Use for***: View image of User   
->   ***Role Access***: User, Hirer  
+>   ***Role Access***: User  
 >
 > - ``POST /api/play-together/v1/images ``  
 >   ***Description***: Add New an Image of User   
