@@ -4,6 +4,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Business.Image
@@ -35,6 +36,20 @@ namespace PlayTogether.Core.Services.Business.Image
             }
         }
 
+        public async Task<bool> CreateMultiImageAsync(IList<ImageCreateRequest> request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _imageRepository.CreateMultiImageAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CreateMultiImageAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> DeleteImageAsync(string imageId)
         {
             try {
@@ -45,6 +60,20 @@ namespace PlayTogether.Core.Services.Business.Image
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call DeleteImageAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteMultiImageAsync(IList<string> listImageId)
+        {
+            try {
+                if (listImageId is null) {
+                    throw new ArgumentNullException(nameof(listImageId));
+                }
+                return await _imageRepository.DeleteMultiImageAsync(listImageId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call DeleteMultiImageAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

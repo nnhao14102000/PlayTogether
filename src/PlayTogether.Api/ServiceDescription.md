@@ -38,7 +38,7 @@
 >   ***Description***: Sign in with Google
 >
 > - ``PUT /api/play-together/v1/accounts/logout ``  
->   ***Description***: Logout Hirer or Player  
+>   ***Description***: Logout Hirer or User  
 >   ***Role Access***: User    
 >   ***Use for***: Update status of User to Offline
 >
@@ -71,8 +71,8 @@
 >   ***Description***: Reset password  
 >   ***Role Access***: User, Charity  
 >
-> - ``POST /api/play-together/v1/accounts/register-multi-player ``  
->   ***Description***: Register multi Player Account **for TEST**  
+> - ``POST /api/play-together/v1/accounts/register-multi-User ``  
+>   ***Description***: Register multi User Account **for TEST**  
 >
 > - ``POST /api/play-together/v1/accounts/register-multi-user ``  
 >   ***Description***: Register multi Normal User Account **for TEST**  
@@ -93,7 +93,7 @@
 > - ``GET /api/play-together/v1/admins/reports/{reportId} ``  
 >   ***Description***: Get a report in detail by report Id   
 >   ***Role Access***: Admin  
->   ***Use for***: Admin view more detail to know the reason why player make this report  
+>   ***Use for***: Admin view more detail to know the reason why User make this report  
 >
 > - ``PUT /api/play-together/v1/admins/reports/{reportId} ``  
 >   ***Description***: Approve or not a report   
@@ -142,7 +142,7 @@
 >   ***Description***: Update user service info    
 >   ***Role Access***: User   
 >
-> - ``PUT /api/play-together/v1/users/player ``  
+> - ``PUT /api/play-together/v1/users/User ``  
 >   ***Description***: Update user IsPlayer State to Enable or Disable   
 >   ***Role Access***: User   
 >
@@ -212,25 +212,25 @@
 <h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/rating/{playerId} ``  
->   ***Description***: Get all Ratings of a Player   
->   ***Use for***: View all ratings of one specific Player   
+>   ***Description***: Get all Ratings of a User   
+>   ***Use for***: View all ratings of one specific User   
 >   ***Role Access***: User, Admin  
 >   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
 >
 > - ``GET /api/play-together/v1/rating/violates ``  
->   ***Description***: Get all Violate Ratings of a Player   
+>   ***Description***: Get all Violate Ratings of a User   
 >   ***Use for***: Admin get all violate ratings   
 >   ***Role Access***: Admin  
 >   ***Extension***: Paging, Order by Created Date, Filter by active/ disable violate ratings  
 >
 > - ``POST /api/play-together/v1/rating/{orderId} ``  
->   ***Description***: Create a Rating for Player base in current Order  
->   ***Use for***: Make rate, feedback about player after order his/her  
+>   ***Description***: Create a Rating for User base in current Order  
+>   ***Use for***: Make rate, feedback about User after order his/her  
 >   ***Role Access***: User    
 >
 > - ``PUT /api/play-together/v1/rating/violate/{rateId} ``  
 >   ***Description***: Report violate Feedback   
->   ***Use for***: Player report the violate feedback   
+>   ***Use for***: User report the violate feedback   
 >   ***Role Access***: User    
 >
 > - ``PUT /api/play-together/v1/rating/disable/{rateId} ``  
@@ -243,8 +243,8 @@
 
 > - ``POST /api/play-together/v1/reports/{orderId} ``  
 >   ***Description***: Create a report base on an Order   
->   ***Use for***: Player report Hirer violate in a specific order   
->   ***Role Access***: Player   
+>   ***Use for***: User report Hirer violate in a specific order   
+>   ***Role Access***: User   
 >
 > - ``GET /api/play-together/v1/reports/{userId} ``  
 >   ***Description***: Get all report of a specific Hirer   
@@ -446,19 +446,27 @@
 <h2 id="image">Image  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/images/{id} ``  
->   ***Description***: Get Image by Id for Player and Hirer  
->   ***Use for***: View image of Player   
->   ***Role Access***: Player, Hirer  
+>   ***Description***: Get Image by Id for User and Hirer  
+>   ***Use for***: View image of User   
+>   ***Role Access***: User, Hirer  
 >
 > - ``POST /api/play-together/v1/images ``  
->   ***Description***: Add New an Image of Player   
->   ***Use for***: Player add a new image to their image collection   
->   ***Role Access***: Player  
+>   ***Description***: Add New an Image of User   
+>   ***Use for***: User add a new image to their image collection   
+>   ***Role Access***: User  
 > 
 > - ``DELETE /api/play-together/v1/images/{id} ``  
->   ***Description***: Delete an Image of Player    
->   ***Use for***: Player delete an image from their image collection  
->   ***Role Access***: Player  
+>   ***Description***: Delete an Image of User    
+>   ***Use for***: User delete an image from their image collection  
+>   ***Role Access***: User  
+>
+> - ``POST /api/play-together/v1/images/multi-images ``  
+>   ***Description***: Add New multi Images of User   
+>   ***Role Access***: User  
+> 
+> - ``DELETE /api/play-together/v1/images ``  
+>   ***Description***: Delete multi Images of User    
+>   ***Role Access***: User  
 >
 
 

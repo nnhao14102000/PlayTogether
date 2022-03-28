@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Core.Dtos.Incoming.Auth;
@@ -5,6 +7,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
 using PlayTogether.Core.Interfaces.Services.Business;
 using System.Threading.Tasks;
+using PlayTogether.Api.Helpers;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -54,6 +57,25 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
+        /// Add multi Images
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost("multi-images")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CreateMultiImage(IList<ImageCreateRequest> request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _imageService.CreateMultiImageAsync(request);
+            return response ? Ok() : BadRequest();
+        }
+
+        /// <summary>
         /// Delete an Image
         /// </summary>
         /// <param name="imageId"></param>
@@ -66,6 +88,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteImage(string imageId)
         {
             var response = await _imageService.DeleteImageAsync(imageId);
+            return response ? NoContent() : NotFound();
+        }
+        /// <summary>
+        /// Delete multi Images
+        /// </summary>
+        /// <param name="listImageId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpDelete]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> DeleteMultiImage(IList<string> listImageId)
+        {
+            var response = await _imageService.DeleteMultiImageAsync(listImageId);
             return response ? NoContent() : NotFound();
         }
     }
