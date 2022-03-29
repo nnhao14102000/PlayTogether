@@ -64,7 +64,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
 
             var chats = await _context.Chats.Where(x => (x.UserId == user.Id && x.ReceiveId == receiveId) 
                                                         || (x.UserId == receiveId && x.ReceiveId == user.Id))
-                                            .OrderBy(x => x.CreatedDate)
+                                            .OrderByDescending(x => x.CreatedDate)
                                             .ToListAsync();
             
             var response = _mapper.Map<List<ChatGetResponse>>(chats);

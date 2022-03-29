@@ -172,3 +172,48 @@ Authorization: {{authToken}}
 }
 
 ###
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Chat
+GET {{baseUrl}}/api/play-together/v1/chats/d04a4aa1-0f83-4acd-a645-f6aaae367154
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Create chat
+POST {{baseUrl}}/api/play-together/v1/chats/d04a4aa1-0f83-4acd-a645-f6aaae367154
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "tên Hiền"
+}
+
+###
+
+# Delete chat
+DELETE {{baseUrl}}/api/play-together/v1/chats/{chatId}
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###

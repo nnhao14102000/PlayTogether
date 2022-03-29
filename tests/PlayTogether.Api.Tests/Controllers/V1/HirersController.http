@@ -136,3 +136,38 @@ Authorization: {{authToken}}
 }
 
 ###
+
+
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Chat
+GET {{baseUrl}}/api/play-together/v1/chats/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Create chat
+POST {{baseUrl}}/api/play-together/v1/chats/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "Thật ko v..."
+}
+
+###
+
+# Delete chat
+DELETE {{baseUrl}}/api/play-together/v1/chats/{chatId}
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
