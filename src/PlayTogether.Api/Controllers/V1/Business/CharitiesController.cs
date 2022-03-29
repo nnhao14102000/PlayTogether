@@ -13,57 +13,57 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [ApiVersion("1.0")]
     public class CharitiesController : BaseController
     {
-        // private readonly ICharityService _charityService;
-        // private readonly IDonateService _donateService;
+        private readonly ICharityService _charityService;
+        private readonly IDonateService _donateService;
 
-        // public CharitiesController(ICharityService charityService, IDonateService donateService)
-        // {
-        //     _charityService = charityService;
-        //     _donateService = donateService;
-        // }
+        public CharitiesController(ICharityService charityService, IDonateService donateService)
+        {
+            _charityService = charityService;
+            _donateService = donateService;
+        }
 
-        // /// <summary>
-        // /// Get all Charities
-        // /// </summary>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin, Player
-        // /// </remarks>
-        // [HttpGet]
-        // [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
-        // public async Task<ActionResult<PagedResult<CharityResponse>>> GetAllCharities(
-        //     [FromQuery] CharityParameters param)
-        // {
-        //     var response = await _charityService.GetAllCharitiesAsync(param).ConfigureAwait(false);
+        /// <summary>
+        /// Get all Charities
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult<PagedResult<CharityResponse>>> GetAllCharities(
+            [FromQuery] CharityParameters param)
+        {
+            var response = await _charityService.GetAllCharitiesAsync(param).ConfigureAwait(false);
 
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get charity by Id
-        // /// </summary>
-        // /// <param name="id"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin, Player
-        // /// </remarks>
-        // [HttpGet("{id}")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RolePlayer)]
-        // public async Task<ActionResult<CharityResponse>> GetCharityById(string id)
-        // {
-        //     var response = await _charityService.GetCharityByIdAsync(id);
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+        /// <summary>
+        /// Get charity by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet("{id}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult<CharityResponse>> GetCharityById(string id)
+        {
+            var response = await _charityService.GetCharityByIdAsync(id);
+            return response is not null ? Ok(response) : NotFound();
+        }
 
         // /// <summary>
         // /// Calculate Donate

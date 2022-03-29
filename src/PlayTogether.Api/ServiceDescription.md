@@ -6,6 +6,7 @@
 - <a href="#account" target="_self">Account</a> <br>
 - <a href="#admin" target="_self">Admin</a> <br>
 - <a href="#user" target="_self">User</a> <br>
+- <a href="#charity" target="_self">Charity</a> <br>
 - <a href="#order" target="_self">Order</a> <br>
 - <a href="#rating" target="_self">Rating</a> <br>
 - <a href="#report" target="_self">Report</a> <br>
@@ -110,6 +111,20 @@
 >   ***Role Access***: Admin        
 >   ***Extension***: Paging, filtering by type transaction, filter in range of Date, order new transaction   
 >
+> - ``GET /api/play-together/v1/admins/{userId}/orders ``  
+>   ***Description***: Get all Orders of a specific user (Hirer and Player)   
+>   ***Role Access***: Admin  
+>   ***Extension***: Paging, Filter by Status, from day to day  
+>
+> - ``GET /api/play-together/v1/admins/users/orders/{orderId} ``  
+>   ***Description***: Get a order in detail   
+>   ***Role Access***: Admin  
+>   ***Use for***: View more detail information of the order   
+>
+> - ``PUT /api/play-together/v1/admins/charities/{charityId} ``  
+>   ***Description***: Disable or Active charity account   
+>   ***Role Access***: Admin  
+>
 
 
 
@@ -191,6 +206,17 @@
 >   ***Role Access***: User         
 >
 
+<h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
+
+> - ``GET /api/play-together/v1/charities ``  
+>   ***Description***: Get all Charities   
+>   ***Role Access***: Admin, Player  
+>   ***Extension***: Paging, Filter by Name  
+>
+> - ``GET /api/play-together/v1/charities/{id} ``  
+>   ***Description***: Get a Charity by Id   
+>   ***Role Access***: Admin, Player   
+>
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 

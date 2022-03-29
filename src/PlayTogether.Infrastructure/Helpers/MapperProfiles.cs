@@ -2,6 +2,7 @@
 using AutoMapper;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.Chat;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
@@ -14,6 +15,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Chat;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
@@ -91,6 +93,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<AppUser, UserGetBasicInfoResponse>();
             CreateMap<AppUser, UserGetServiceInfoResponse>();
             CreateMap<AppUser, UserSearchResponse>();
+            CreateMap<AppUser, UserGetByAdminResponse>();
 
             // Game Of User / Player mapper profile
             CreateMap<GameOfUser, GamesOfUserResponse>();
@@ -143,6 +146,10 @@ namespace PlayTogether.Infrastructure.Helpers
 
             // UnActiveBalance mapper Profile
             CreateMap<UnActiveBalance, UnActiveBalanceResponse>();
+
+            // Charity mapper Profile
+            CreateMap<Charity, CharityResponse>();
+            CreateMap<CharityStatusRequest, Charity>();
 
             // src => target
         }

@@ -15,6 +15,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Player;
 using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
+using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -23,28 +24,31 @@ namespace PlayTogether.Api.Controllers.V1.Business
     {
         // private readonly IAdminService _adminService;
         // private readonly IHirerService _hirerService;
-        // private readonly IOrderService _orderService;
+        private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
         private readonly IAppUserService _appUserService;
         private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly ICharityService _charityService;
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
         //     IAdminService adminService,
         //     IHirerService hirerService,
-        //     IOrderService orderService,
+            IOrderService orderService,
             IReportService reportService,
             IAppUserService appUserService,
-            ITransactionHistoryService transactionHistoryService
+            ITransactionHistoryService transactionHistoryService,
+            ICharityService charityService
         //     IPlayerService playerService
         )
         {
             //     _adminService = adminService;
             //     _hirerService = hirerService;
-            //     _orderService = orderService;
+                _orderService = orderService;
             _reportService = reportService;
             _appUserService = appUserService;
             _transactionHistoryService = transactionHistoryService;
+            _charityService = charityService;
             //     _playerService = playerService;
         }
 
@@ -106,50 +110,50 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     return response is not null ? Ok(response) : NotFound();
         // }
 
-        // /// <summary>
-        // /// Get all orders of specific user (Hirer Or Player)
-        // /// </summary>
-        // /// <param name="userId"></param>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet("{userId}/orders")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<PagedResult<OrderGetResponse>>> GetAllOrderOfUserByAdmin(
-        //     string userId,
-        //     [FromQuery] AdminOrderParameters param)
-        // {
-        //     var response = await _orderService.GetAllOrderByUserIdForAdminAsync(userId, param);
-        //     var metaData = new {
-        //         response.TotalCount,
-        //         response.PageSize,
-        //         response.CurrentPage,
-        //         response.HasNext,
-        //         response.HasPrevious
-        //     };
+        /// <summary>
+        /// Get all orders of specific user 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet("{userId}/orders")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<PagedResult<OrderGetResponse>>> GetAllOrderOfUserByAdmin(
+            string userId,
+            [FromQuery] AdminOrderParameters param)
+        {
+            var response = await _orderService.GetAllOrderByUserIdForAdminAsync(userId, param);
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
 
-        //     Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+            return response is not null ? Ok(response) : NotFound();
+        }
 
-        // /// <summary>
-        // /// Get Order in details by Order Id by Admin
-        // /// </summary>
-        // /// <param name="orderId"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Admin
-        // /// </remarks>
-        // [HttpGet("users/orders/{orderId}")]
-        // [Authorize(Roles = AuthConstant.RoleAdmin)]
-        // public async Task<ActionResult<OrderGetDetailResponse>> GetOrderByIdForAdmin(string orderId)
-        // {
-        //     var response = await _orderService.GetOrderByIdInDetailForAdminAsync(orderId);
-        //     return response is not null ? Ok(response) : NotFound();
-        // }
+        /// <summary>
+        /// Get Order in details by Order Id by Admin
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet("users/orders/{orderId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<OrderGetDetailResponse>> GetOrderByIdForAdmin(string orderId)
+        {
+            var response = await _orderService.GetOrderByIdInDetailForAdminAsync(orderId);
+            return response is not null ? Ok(response) : NotFound();
+        }
 
         // /// <summary>
         // /// Active or Disable (1 day) a hirer account
@@ -295,5 +299,26 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     var response = await _playerService.UpdatePlayerStatusForAdminAsync(playerId, request);
         //     return response ? NoContent() : NotFound();
         // }
+        
+
+        /// <summary>
+        /// Active or disable charity
+        /// </summary>
+        /// <param name="charityId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("charities/{charityId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> UpdateCharityStatus(string charityId, CharityStatusRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _charityService.ChangeStatusCharityByAdminAsync(charityId, request);
+            return response ? NoContent() : NotFound();
+        }
     }
 }
