@@ -8,7 +8,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Chat
         [Required]
         [MaxLength(500)]
         public string Message { get; set; }
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
         public bool IsActive = true;
     }
 }

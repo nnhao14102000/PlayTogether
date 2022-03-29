@@ -118,7 +118,7 @@ Authorization: {{authToken}}
 ###
 
 # Get all Transaction
-GET {{baseUrl}}/api/play-together/v1/users/transactions
+GET {{baseUrl}}/api/play-together/v1/users/transactions?isNew=true
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -126,12 +126,12 @@ Authorization: {{authToken}}
 ###
 
 # Create rating
-POST {{baseUrl}}/api/play-together/v1/rating/74ebc5b9-d026-4191-927e-8c4788a1b47d
+POST {{baseUrl}}/api/play-together/v1/rating/907c2cc0-c963-4e09-aaa8-cd4839107894
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "comment": "Đánh đc,...",
+  "comment": "Đánh đc,...tiếc là đi sớm qá...",
   "rate": 4
 }
 

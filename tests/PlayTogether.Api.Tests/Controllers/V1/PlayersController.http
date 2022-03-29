@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 ###
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/9878e986-85c7-4b85-88cc-7b7db3ebade9
+GET {{baseUrl}}/api/play-together/v1/orders/907c2cc0-c963-4e09-aaa8-cd4839107894
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -37,7 +37,7 @@ Authorization: {{authToken}}
 
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/9878e986-85c7-4b85-88cc-7b7db3ebade9/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/907c2cc0-c963-4e09-aaa8-cd4839107894/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -49,7 +49,7 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/9878e986-85c7-4b85-88cc-7b7db3ebade9
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/907c2cc0-c963-4e09-aaa8-cd4839107894
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -60,7 +60,7 @@ Authorization: {{authToken}}
 ###
 
 # Get all Transaction
-GET {{baseUrl}}/api/play-together/v1/users/transactions
+GET {{baseUrl}}/api/play-together/v1/users/transactions?isNew=true
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -68,7 +68,7 @@ Authorization: {{authToken}}
 
 
 # Get all un active money
-GET {{baseUrl}}/api/play-together/v1/users/un-active-balance
+GET {{baseUrl}}/api/play-together/v1/users/un-active-balance?isNew=true
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -21,7 +21,7 @@ namespace PlayTogether.Api.Helpers
                     dbContext.Games.AddRange(
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Arena of Valor",
                             DisplayName = "Liên Quân Mobile",
@@ -29,7 +29,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "League Of Legends",
                             DisplayName = "Liên Minh Huyền Thoại",
@@ -37,7 +37,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Among Us",
                             DisplayName = "Among Us",
@@ -45,7 +45,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Age Of Empire",
                             DisplayName = "Đế Chế",
@@ -53,7 +53,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "DotA 2",
                             DisplayName = "DotA 2",
@@ -61,7 +61,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Grand Theft Auto V",
                             DisplayName = "GTA 5",
@@ -69,7 +69,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Minecraft",
                             DisplayName = "Minecraft",
@@ -77,7 +77,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "World of Warcraft",
                             DisplayName = "Warcraft",
@@ -85,7 +85,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Supper Mario 64",
                             DisplayName = "Mario",
@@ -93,7 +93,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Angry Bird",
                             DisplayName = "Angry Bird",
@@ -101,7 +101,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Warface Mobile",
                             DisplayName = "Warface",
@@ -109,7 +109,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Call of Duty: Mobile",
                             DisplayName = "Call of Duty Mobile",
@@ -118,7 +118,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Battle Prime Online",
                             DisplayName = "Battle Prime",
@@ -127,7 +127,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Genshin Impact",
                             DisplayName = "Genshin Impact",
@@ -136,7 +136,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "PUBG Mobile",
                             DisplayName = "PUBG Mobile",
@@ -145,7 +145,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Free Fire",
                             DisplayName = "Free Fire",
@@ -155,7 +155,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Rules of Survival",
                             DisplayName = "Rules of Survival",
@@ -164,7 +164,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "FIFA Online 4",
                             DisplayName = "FIFA 4",
@@ -173,7 +173,7 @@ namespace PlayTogether.Api.Helpers
                         ,
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "World of Tank",
                             DisplayName = "World of Tank",
@@ -181,7 +181,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Blade and Soul",
                             DisplayName = "Blade and Soul",
@@ -189,7 +189,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "MU Online",
                             DisplayName = "MU",
@@ -197,7 +197,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Haft Life",
                             DisplayName = "Haft Life",
@@ -205,7 +205,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Sea of Theives",
                             DisplayName = "Sea of Theives",
@@ -213,7 +213,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "NARAKA: BLADEPOINT",
                             DisplayName = "NARAKA",
@@ -221,7 +221,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Valorant",
                             DisplayName = "Valorant",
@@ -229,7 +229,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Game {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "PUBG PC",
                             DisplayName = "PUBG PC",
@@ -244,7 +244,7 @@ namespace PlayTogether.Api.Helpers
                     dbContext.GameTypes.AddRange(
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Shooter",
                             ShortName = "Shooter",
@@ -253,7 +253,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Platformer",
                             ShortName = "Platformer",
@@ -262,7 +262,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Action",
                             ShortName = "Action",
@@ -271,7 +271,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Fighting",
                             ShortName = "Fighting",
@@ -280,7 +280,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Beat-em up",
                             ShortName = "Beat-em up",
@@ -289,7 +289,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Steath",
                             ShortName = "Steath",
@@ -298,7 +298,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Survival",
                             ShortName = "Survival",
@@ -307,7 +307,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Rhythm",
                             ShortName = "Rhythm",
@@ -316,7 +316,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Action-Adventure",
                             ShortName = "Action-Adventure",
@@ -325,7 +325,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Survival horror",
                             ShortName = "Survival horror",
@@ -334,7 +334,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Metroidvania",
                             ShortName = "Metroidvania",
@@ -343,7 +343,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Adventure",
                             ShortName = "Adventure",
@@ -352,7 +352,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Text game",
                             ShortName = "Text game",
@@ -361,7 +361,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Graphic adventures",
                             ShortName = "Graphic adventures",
@@ -370,7 +370,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Visual Novel",
                             ShortName = "Visual Novel",
@@ -379,7 +379,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Role-playing game",
                             ShortName = "RPG",
@@ -388,7 +388,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Massively Multiplayer Online Role-Playing Game",
                             ShortName = "MMORPG",
@@ -397,7 +397,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Tactical RPG",
                             ShortName = "Tactical RPG",
@@ -406,7 +406,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Sandbox RPG",
                             ShortName = "Sandbox RPG",
@@ -415,7 +415,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "First person party based RPG",
                             ShortName = "First person party based RPG",
@@ -424,7 +424,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Simulation",
                             ShortName = "Simulation",
@@ -433,7 +433,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Construction and management simulation",
                             ShortName = "Construction and management simulation",
@@ -442,7 +442,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Life simulation",
                             ShortName = "Life simulation",
@@ -451,7 +451,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Vehicle simulation",
                             ShortName = "Vehicle simulation",
@@ -460,7 +460,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Strategy",
                             ShortName = "Strategy",
@@ -469,7 +469,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Explore, expand, exploit, exterminate",
                             ShortName = "Explore",
@@ -478,7 +478,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Artillery",
                             ShortName = "Artillery",
@@ -487,7 +487,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Real-time strategy",
                             ShortName = "RTS",
@@ -496,7 +496,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Real-time tactics",
                             ShortName = "RTT",
@@ -505,7 +505,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Multiplayer online battle arena",
                             ShortName = "MOBA",
@@ -514,7 +514,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Turn base strategy",
                             ShortName = "TBS",
@@ -523,7 +523,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Turn base tactics",
                             ShortName = "TBT",
@@ -532,7 +532,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Tower defense",
                             ShortName = "Tower defense",
@@ -541,7 +541,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Wargame",
                             ShortName = "Wargame",
@@ -550,7 +550,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Grand strategy wargame",
                             ShortName = "Grand strategy wargame",
@@ -559,7 +559,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Sport Game",
                             ShortName = "Sport",
@@ -568,7 +568,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Racing",
                             ShortName = "Racing",
@@ -577,7 +577,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Team sports",
                             ShortName = "Team sports",
@@ -586,7 +586,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Competitive",
                             ShortName = "Competitive",
@@ -595,7 +595,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Sports-based fighting",
                             ShortName = "Sports-based fighting",
@@ -604,7 +604,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Puzzle",
                             ShortName = "Puzzle",
@@ -613,7 +613,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Logic",
                             ShortName = "Logic",
@@ -622,7 +622,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Trivia",
                             ShortName = "Trivia",
@@ -631,7 +631,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Casual",
                             ShortName = "Casual",
@@ -640,7 +640,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Card game/ Board game",
                             ShortName = "Card game/ Board game",
@@ -649,7 +649,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Game based learing",
                             ShortName = "Game based learing",
@@ -658,7 +658,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.GameType {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Name = "Excergame",
                             ShortName = "Excergame",
@@ -675,7 +675,7 @@ namespace PlayTogether.Api.Helpers
                     dbContext.AddRange(
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 1,
                             Name = "Đồng",
@@ -683,7 +683,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 2,
                             Name = "Bạc",
@@ -691,7 +691,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 3,
                             Name = "Vàng",
@@ -699,7 +699,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 4,
                             Name = "Bạch Kim",
@@ -707,7 +707,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 5,
                             Name = "Kim Cương",
@@ -715,7 +715,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 6,
                             Name = "Tinh Anh",
@@ -723,7 +723,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 7,
                             Name = "Cao Thủ",
@@ -731,7 +731,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 8,
                             Name = "Chiến Tướng",
@@ -739,7 +739,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 9,
                             Name = "Thách Đấu",
@@ -747,7 +747,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 1,
                             Name = "Sắt",
@@ -755,7 +755,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 2,
                             Name = "Đồng",
@@ -763,7 +763,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 3,
                             Name = "Bạc",
@@ -771,7 +771,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 4,
                             Name = "Vàng",
@@ -779,7 +779,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 5,
                             Name = "Bạch Kim",
@@ -787,7 +787,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 6,
                             Name = "Kim Cương",
@@ -795,7 +795,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 7,
                             Name = "Cao Thủ",
@@ -803,7 +803,7 @@ namespace PlayTogether.Api.Helpers
                         },
                         new Infrastructure.Entities.Rank {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             NO = 8,
                             Name = "Thách Đấu",
@@ -824,21 +824,21 @@ namespace PlayTogether.Api.Helpers
                     dbContext.TypeOfGames.AddRange(
                         new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             GameTypeId = moba.Id,
                             GameId = lol.Id
                         },
                         new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             GameTypeId = moba.Id,
                             GameId = aov.Id
                         },
                         new Infrastructure.Entities.TypeOfGame {
                             Id = Guid.NewGuid().ToString(),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             GameTypeId = survival.Id,
                             GameId = among.Id

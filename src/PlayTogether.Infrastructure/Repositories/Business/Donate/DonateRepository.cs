@@ -52,7 +52,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
         //     if(!donates.Any()) {
         //         return 0;
         //     }
-        //     string strDate = DateTime.Now.ToString("dd/MM/yyyy");
+        //     string strDate = DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy");
         //     int count = 0;
         //     foreach (var item in donates)
         //     {
@@ -79,7 +79,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
         //         return 0;
         //     }
         //     float total = 0;
-        //     string strDate = DateTime.Now.ToString("dd/MM/yyyy");
+        //     string strDate = DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy");
         //     foreach (var item in donates)
         //     {
         //         _context.Entry(item).Reference(x => x.Order).Load();

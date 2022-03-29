@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.AppUser
 
         public string Description { get; set; }
 
-        public DateTime UpdateDate = DateTime.Now;
+        public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);
     }
 
 }

@@ -11,6 +11,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.GameOfUser
         
         public string RankId { get; set; }
 
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }

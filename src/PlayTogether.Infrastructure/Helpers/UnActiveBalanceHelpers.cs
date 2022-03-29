@@ -8,7 +8,7 @@ namespace PlayTogether.Infrastructure.Helpers
         public static UnActiveBalance PopulateUnActiveBalance (string userBalanceId, string OrderId, float money, DateTime dateActive){
             return new UnActiveBalance{
                 Id = Guid.NewGuid().ToString(),
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow.AddHours(7),
                 UserBalanceId = userBalanceId,
                 OrderId = OrderId,
                 Money = money,

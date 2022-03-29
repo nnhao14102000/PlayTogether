@@ -9,6 +9,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Rank
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public DateTime UpdateDate = DateTime.Now;
+        public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);
     }
 }

@@ -90,7 +90,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             model.UserId = user.Id;
             model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
             model.Status = OrderStatusConstants.Processing;
-            model.ProcessExpired = DateTime.Now.AddMinutes(ValueConstants.OrderProcessExpireTime);
+            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
 
             _context.Orders.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -100,7 +100,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     if (existGame) continue;
                     var g = _mapper.Map<Entities.GameOfOrder>(game);
                     g.OrderId = model.Id;
-                    g.CreatedDate = DateTime.Now;
+                    g.CreatedDate = DateTime.UtcNow.AddHours(7);
                     _context.GameOfOrders.Add(g);
                     if (await _context.SaveChangesAsync() < 0) {
                         return null;
@@ -338,7 +338,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             toUser.Status = UserStatusConstants.Online;
             order.User.Status = UserStatusConstants.Online;
 
-            if (DateTime.Now >= order.ProcessExpired) {
+            if (DateTime.UtcNow.AddHours(7) >= order.ProcessExpired) {
                 order.Status = OrderStatusConstants.OverTime; // change status of Order
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}", "")
@@ -347,7 +347,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             else {
                 order.Status = OrderStatusConstants.Cancel; // change status of Order
                 await _context.Notifications.AddAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.Now}", "")
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.UtcNow.AddHours(7)}", "")
                 );
             }
 
@@ -417,7 +417,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 toUser.Status = UserStatusConstants.Hiring;
 
                 order.Status = OrderStatusConstants.Start;
-                order.TimeStart = DateTime.Now;
+                order.TimeStart = DateTime.UtcNow.AddHours(7);
                 order.User.Status = UserStatusConstants.Hiring;
             }
 
@@ -446,7 +446,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (DateTime.Now < order.TimeStart.AddHours(order.TotalTimes)) {
+            if (DateTime.UtcNow.AddHours(7) < order.TimeStart.AddHours(order.TotalTimes)) {
                 return false;
             }
 
@@ -464,7 +464,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
 
-            order.TimeFinish = DateTime.Now;
+            order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.FinalPrices = order.TotalPrices;
 
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -483,7 +483,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
+                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney))
                 );
                 return (await _context.SaveChangesAsync() >= 0);
             }
@@ -504,7 +504,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return false;
             }
 
-            if (DateTime.Now > order.TimeStart.AddHours(order.TotalTimes)) {
+            if (DateTime.UtcNow.AddHours(7) > order.TimeStart.AddHours(order.TotalTimes)) {
                 return false;
             }
 
@@ -527,14 +527,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Status = OrderStatusConstants.FinishSoon;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
-            order.TimeFinish = DateTime.Now;
+            order.TimeFinish = DateTime.UtcNow.AddHours(7);
 
             if (order.User.IdentityId == identityId) {
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         toUser.Id,
                         $"{order.User.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
                         "")
                 );
             }
@@ -543,7 +543,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.NotificationHelpers.PopulateNotification(
                         order.UserId,
                         $"{toUser.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.Now}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.Now}",
+                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
                         "")
                 );
             }
@@ -576,7 +576,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
+                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney))
                 );
                 return (await _context.SaveChangesAsync() >= 0);
             }
@@ -584,7 +584,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
         public double GetTimeDone(DateTime date)
         {
-            TimeSpan ts = DateTime.Now - date;
+            TimeSpan ts = DateTime.UtcNow.AddHours(7) - date;
             var timeDone = ts.TotalSeconds;
             return timeDone;
         }

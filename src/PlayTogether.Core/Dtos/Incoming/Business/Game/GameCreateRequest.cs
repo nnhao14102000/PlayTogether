@@ -15,6 +15,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Game
         [MaxLength(200)]
         public string OtherName { get; set; }
 
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }

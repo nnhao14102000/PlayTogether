@@ -8,6 +8,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Report
         [Required]
         [MaxLength(500)]
         public string ReportMessage { get; set; }
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }

@@ -465,11 +465,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Player
         //         await _context.Notifications.AddAsync(
         //             new Entities.Notification {
         //                 Id = Guid.NewGuid().ToString(),
-        //                 CreatedDate = DateTime.Now,
+        //                 CreatedDate = DateTime.UtcNow.AddHours(7),
         //                 UpdateDate = null,
         //                 ReceiverId = player.Id,
         //                 Title = $"Tài khoản của bạn đã bị khóa.😅",
-        //                 Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Bạn đã bị khóa tài khoản vì bạn đã đã hành vi không thích hợp. Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}" : $"Bạn đã bị khóa tài khoản vì: \"{request.Message}\". Hạn khóa tài khoản là đến ngày {DateTime.Now.AddDays(1)}",
+        //                 Message = (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Bạn đã bị khóa tài khoản vì bạn đã đã hành vi không thích hợp. Hạn khóa tài khoản là đến ngày {DateTime.UtcNow.AddHours(7).AddDays(1)}" : $"Bạn đã bị khóa tài khoản vì: \"{request.Message}\". Hạn khóa tài khoản là đến ngày {DateTime.UtcNow.AddHours(7).AddDays(1)}",
         //                 Status = NotificationStatusConstants.NotRead
         //             }
         //         );

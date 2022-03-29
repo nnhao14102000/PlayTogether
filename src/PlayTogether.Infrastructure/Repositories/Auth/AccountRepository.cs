@@ -189,7 +189,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userEntityModel.Name = payload["family_name"].ToString() + " " + payload["given_name"].ToString();
                         userEntityModel.Email = payload["email"].ToString();
                         userEntityModel.Avatar = payload["picture"].ToString();
-                        userEntityModel.CreatedDate = DateTime.Now;
+                        userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
                         userEntityModel.Status = UserStatusConstants.Online;
 
                         await _context.AppUsers.AddAsync(userEntityModel);
@@ -198,7 +198,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                             var userBalance = new UserBalance();
                             userBalance.UserId = userEntityModel.Id;
-                            userBalance.CreatedDate = DateTime.Now;
+                            userBalance.CreatedDate = DateTime.UtcNow.AddHours(7);
                             userBalance.UpdateDate = null;
                             userBalance.Balance = 0;
                             userBalance.ActiveBalance = 0;
@@ -280,7 +280,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (result.Succeeded) {
                 var userEntityModel = _mapper.Map<Charity>(request);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.CreatedDate = DateTime.Now;
+                userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
                 userEntityModel.OrganizationName = request.OrganizationName;
                 userEntityModel.Avatar = ValueConstants.DefaultAvatar;
 
@@ -318,7 +318,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             if (result.Succeeded) {
                 var userEntityModel = _mapper.Map<AppUser>(request);
                 userEntityModel.IdentityId = identityUser.Id;
-                userEntityModel.CreatedDate = DateTime.Now;
+                userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                 userEntityModel.Name = request.Name;
                 userEntityModel.City = request.City;
@@ -333,7 +333,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                     var userBalance = new UserBalance();
                     userBalance.UserId = userEntityModel.Id;
-                    userBalance.CreatedDate = DateTime.Now;
+                    userBalance.CreatedDate = DateTime.UtcNow.AddHours(7);
                     userBalance.UpdateDate = null;
                     userBalance.Balance = 0;
                     userBalance.ActiveBalance = 0;
@@ -374,7 +374,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     // await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
 
                     userEntityModel.IdentityId = identityUser.Id;
-                    userEntityModel.CreatedDate = DateTime.Now;
+                    userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                     userEntityModel.Name = registerDto.Name;
                     userEntityModel.City = registerDto.City;
@@ -388,7 +388,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     if (await _context.SaveChangesAsync() >= 0) {
                         var userBalance = new UserBalance();
                         userBalance.UserId = userEntityModel.Id;
-                        userBalance.CreatedDate = DateTime.Now;
+                        userBalance.CreatedDate = DateTime.UtcNow.AddHours(7);
                         userBalance.UpdateDate = null;
                         userBalance.Balance = 1000000;
                         userBalance.ActiveBalance = 1000000;
@@ -425,7 +425,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     // await _context.Entry(userEntityModel).Reference(x => x.UserBalance).LoadAsync();
 
                     userEntityModel.IdentityId = identityUser.Id;
-                    userEntityModel.CreatedDate = DateTime.Now;
+                    userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                     userEntityModel.Name = registerDto.Name;
                     userEntityModel.City = registerDto.City;
@@ -443,7 +443,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     if (await _context.SaveChangesAsync() >= 0) {
                         var userBalance = new UserBalance();
                         userBalance.UserId = userEntityModel.Id;
-                        userBalance.CreatedDate = DateTime.Now;
+                        userBalance.CreatedDate = DateTime.UtcNow.AddHours(7);
                         userBalance.UpdateDate = null;
                         userBalance.Balance = 1000000;
                         userBalance.ActiveBalance = 1000000;
@@ -526,7 +526,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(timeExpire),
+                expires: DateTime.UtcNow.AddHours(7).AddDays(timeExpire),
                 signingCredentials: signingCredentials);
 
             return tokenOptions;

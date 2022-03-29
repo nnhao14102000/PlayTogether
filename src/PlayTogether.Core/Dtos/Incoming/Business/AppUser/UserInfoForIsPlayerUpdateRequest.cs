@@ -13,6 +13,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.AppUser
         [Range(10000, 1000000000000)]
         public float PricePerHour { get; set; }
 
-        public DateTime UpdateDate = DateTime.Now;
+        public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);
     }
 }

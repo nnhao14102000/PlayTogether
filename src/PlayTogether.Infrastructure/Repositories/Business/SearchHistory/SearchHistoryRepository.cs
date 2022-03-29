@@ -42,7 +42,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             if (searchHistory is null) return false;
             if (searchHistory.UserId != user.Id) return false;
 
-            searchHistory.UpdateDate = DateTime.Now;
+            searchHistory.UpdateDate = DateTime.UtcNow.AddHours(7);
             searchHistory.IsActive = false;
             return (await _context.SaveChangesAsync() >= 0);
         }

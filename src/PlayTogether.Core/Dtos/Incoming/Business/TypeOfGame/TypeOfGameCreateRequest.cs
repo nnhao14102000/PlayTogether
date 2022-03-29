@@ -13,6 +13,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame
         [MaxLength(100)]
         public string GameId { get; set; }
         
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }

@@ -30,7 +30,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 || order.Status is OrderStatusConstants.Cancel
                 || order.Status is OrderStatusConstants.Processing
                 || order.Status is OrderStatusConstants.Interrupt
-                || DateTime.Now.AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish) {
+                || DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish) {
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
         public int GetAge(DateTime dob)
         {
             int age = 0;
-            age = DateTime.Now.AddYears(-dob.Year).Year;
+            age = DateTime.UtcNow.AddHours(7).AddYears(-dob.Year).Year;
             return age;
         }
 

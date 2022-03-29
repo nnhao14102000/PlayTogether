@@ -10,7 +10,7 @@ namespace PlayTogether.Infrastructure.Helpers
         {
             return new Notification {
                 Id = Guid.NewGuid().ToString(),
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow.AddHours(7),
                 UpdateDate = null,
                 ReceiverId = receiveId,
                 Title = title,

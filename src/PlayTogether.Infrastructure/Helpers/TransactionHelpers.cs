@@ -8,7 +8,7 @@ namespace PlayTogether.Infrastructure.Helpers
         public static TransactionHistory PopulateTransactionHistory(string userBalanceId, string operation, float money, string typeOfTransaction, string refId){
             return new TransactionHistory{
                 Id = Guid.NewGuid().ToString(),
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow.AddHours(7),
                 UserBalanceId = userBalanceId,
                 Operation = operation,
                 Money = money,

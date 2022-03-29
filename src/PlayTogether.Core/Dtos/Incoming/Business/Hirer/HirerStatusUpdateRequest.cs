@@ -10,6 +10,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Hirer
 
         [MaxLength(300)]
         public string Message { get; set; }
-        public DateTime UpdateDate = DateTime.Now;
+        public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);
     }
 }

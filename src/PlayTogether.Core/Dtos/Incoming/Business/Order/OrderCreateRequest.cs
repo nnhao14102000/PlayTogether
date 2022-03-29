@@ -6,7 +6,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Order
 {
     public class OrderCreateRequest
     {
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
 
         [Required]
         public int TotalTimes { get; set; }

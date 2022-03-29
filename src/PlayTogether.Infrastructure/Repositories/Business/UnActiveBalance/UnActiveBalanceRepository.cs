@@ -118,7 +118,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             if (await _context.SaveChangesAsync() < 0) return false;
 
                             item.IsActive = true;
-                            item.UpdateDate = DateTime.Now;
+                            item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             await _context.TransactionHistories.AddRangeAsync(
                                 Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, "+", item.Money, "Order", item.OrderId),
                                 Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, "-", item.Money, "Order", item.OrderId)
@@ -133,10 +133,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             if (await _context.SaveChangesAsync() < 0) return false;
 
                             item.IsActive = true;
-                            item.UpdateDate = DateTime.Now;
+                            item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             if (await _context.SaveChangesAsync() < 0) return false;
                         }
-                        else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.Now >= item.DateActive) {
+                        else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.UtcNow.AddHours(7) >= item.DateActive) {
                             // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
                             var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
@@ -144,14 +144,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             if (await _context.SaveChangesAsync() < 0) return false;
 
                             item.IsActive = true;
-                            item.UpdateDate = DateTime.Now;
+                            item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             if (await _context.SaveChangesAsync() < 0) return false;
                         }
                     }
                 }
                 else {
                     //ko có report nào thì chỉ canh tới giờ thì cộng vào thôi
-                    if (DateTime.Now >= item.DateActive) {
+                    if (DateTime.UtcNow.AddHours(7) >= item.DateActive) {
                         // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
                         var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                         await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
@@ -159,7 +159,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                         if (await _context.SaveChangesAsync() < 0) return false;
 
                         item.IsActive = true;
-                        item.UpdateDate = DateTime.Now;
+                        item.UpdateDate = DateTime.UtcNow.AddHours(7);
                         if (await _context.SaveChangesAsync() < 0) return false;
                     }
                 }

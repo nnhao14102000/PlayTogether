@@ -7,6 +7,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.MusicOfPlayer
     {
         [Required]
         public string MusicId { get; set; }
-        public DateTime CreatedDate = DateTime.Now;
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }
