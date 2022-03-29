@@ -382,8 +382,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
                     userEntityModel.Avatar = ValueConstants.DefaultAvatar;
-                    // userEntityModel.UserBalance.Balance = 1000000;
-                    // userEntityModel.UserBalance.ActiveBalance = 1000000;
 
                     await _context.AppUsers.AddAsync(userEntityModel);
 
@@ -392,8 +390,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userBalance.UserId = userEntityModel.Id;
                         userBalance.CreatedDate = DateTime.Now;
                         userBalance.UpdateDate = null;
-                        userBalance.Balance = 100000;
-                        userBalance.ActiveBalance = 100000;
+                        userBalance.Balance = 1000000;
+                        userBalance.ActiveBalance = 1000000;
                         await _context.UserBalances.AddAsync(userBalance);
 
                         if (await _context.SaveChangesAsync() < 0) {
@@ -435,11 +433,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.Gender = registerDto.Gender;
                     userEntityModel.Status = UserStatusConstants.Online;
                     userEntityModel.Avatar = ValueConstants.DefaultAvatar;
-                    // userEntityModel.UserBalance.Balance = 1000000;
                     userEntityModel.IsPlayer = true;
-                    // userEntityModel.UserBalance.ActiveBalance = 1000000;
                     userEntityModel.PricePerHour = 10000;
-                    userEntityModel.MaxHourHire = 1;
+                    userEntityModel.MaxHourHire = 5;
                     userEntityModel.Description = "Default";
 
                     await _context.AppUsers.AddAsync(userEntityModel);
@@ -449,8 +445,8 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userBalance.UserId = userEntityModel.Id;
                         userBalance.CreatedDate = DateTime.Now;
                         userBalance.UpdateDate = null;
-                        userBalance.Balance = 100000;
-                        userBalance.ActiveBalance = 100000;
+                        userBalance.Balance = 1000000;
+                        userBalance.ActiveBalance = 1000000;
 
                         await _context.UserBalances.AddAsync(userBalance);
                         if (await _context.SaveChangesAsync() < 0) {

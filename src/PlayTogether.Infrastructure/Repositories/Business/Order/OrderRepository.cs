@@ -555,16 +555,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
                 order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
 
-                await _context.TransactionHistories.AddAsync(
+                await _context.TransactionHistories.AddRangeAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         order.User.UserBalance.Id,
                         "+",
                         (order.TotalPrices - order.FinalPrices),
                         "Order",
                         orderId)
-                );
-
-                await _context.TransactionHistories.AddAsync(
+                    ,
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
                         "+",
@@ -584,7 +582,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             return false;
         }
-
         public double GetTimeDone(DateTime date)
         {
             TimeSpan ts = DateTime.Now - date;

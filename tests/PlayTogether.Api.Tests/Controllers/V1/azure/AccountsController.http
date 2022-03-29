@@ -1,0 +1,229 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-user
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+###
+# @name loginAdmin
+POST {{baseUrl}}/api/play-together/v1/accounts/login-admin
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+###
+# @name loginCharity
+POST {{baseUrl}}/api/play-together/v1/accounts/login-charity
+content-type: {{contentType}}
+
+{
+  "email": "tienphong123@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+# @name logout
+PUT {{baseUrl}}/api/play-together/v1/accounts/logout
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+
+# Check exist email
+GET {{baseUrl}}/api/play-together/v1/accounts/check-exist-email
+    ?email=admin01@example.com
+content-type: {{contentType}}
+
+###
+# Login with Google for player
+POST {{baseUrl}}/api/play-together/v1/accounts/login-google-player
+content-type: {{contentType}}
+
+{
+  "providerName": "string",
+  "idToken": "string"
+}
+
+###
+# Login with Google for hirer
+POST {{baseUrl}}/api/play-together/v1/accounts/login-google-hirer
+content-type: {{contentType}}
+
+{
+  "providerName": "string",
+  "idToken": "string"
+}
+
+###
+# Register admin
+POST {{baseUrl}}/api/play-together/v1/accounts/register-admin
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "name": "Admin"
+}
+
+###
+# Register charity
+POST {{baseUrl}}/api/play-together/v1/accounts/register-charity
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "email": "tienphong123@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "organizationName": "Hoi Cuu tro Tien Phong"
+}
+
+###
+# Register user
+POST {{baseUrl}}/api/play-together/v1/accounts/register-user
+content-type: {{contentType}}
+
+{
+  "email": "user@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "name": "user",
+  "city": "Ho Chi Minh City",
+  "dateOfBirth": "2002-01-22",
+  "gender": true,
+  "confirmEmail": true
+}
+###
+
+
+
+# Register multi player
+POST {{baseUrl}}/api/play-together/v1/accounts/register-multi-player
+content-type: {{contentType}}
+
+[
+  {
+  "email": "player@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "name": "ProPlayer",
+  "city": "None",
+  "dateOfBirth": "2001-01-11",
+  "gender": true,
+  "confirmEmail": true
+  },
+  {
+    "email": "Tham@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "ThamXinhTuoi",
+    "city": "HCM",
+    "dateOfBirth": "2001-01-11",
+    "gender": false,
+    "confirmEmail": true
+  },
+  {
+    "email": "Hung@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "HungConTre",
+    "city": "HaNoi",
+    "dateOfBirth": "2001-01-11",
+    "gender": true,
+    "confirmEmail": true
+  },
+  {
+    "email": "Vu@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "Vuxmen",
+    "city": "LongAn",
+    "dateOfBirth": "2001-01-11",
+    "gender": true,
+    "confirmEmail": true
+  },
+  {
+    "email": "Dam@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "DamTong",
+    "city": "Dak Lak",
+    "dateOfBirth": "2001-01-11",
+    "gender": false,
+    "confirmEmail": true
+  }
+]
+###
+
+
+# Register multi user
+POST {{baseUrl}}/api/play-together/v1/accounts/register-multi-user
+content-type: {{contentType}}
+
+[
+  {
+  "email": "hien@example.com",
+  "password": "Pa55w0rd!",
+  "confirmPassword": "Pa55w0rd!",
+  "name": "HienVuiVe",
+  "city": "None",
+  "dateOfBirth": "2001-01-11",
+  "gender": false,
+  "confirmEmail": true
+  },
+  {
+    "email": "Quan@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "ThienQuan",
+    "city": "HCM",
+    "dateOfBirth": "2001-01-11",
+    "gender": true,
+    "confirmEmail": true
+  },
+  {
+    "email": "Phuong@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "DongPhuongBatBai",
+    "city": "Long An",
+    "dateOfBirth": "2001-01-11",
+    "gender": true,
+    "confirmEmail": true
+  },
+  {
+    "email": "An@example.com",
+    "password": "Pa55w0rd!",
+    "confirmPassword": "Pa55w0rd!",
+    "name": "NgocAn",
+    "city": "Vinh",
+    "dateOfBirth": "2001-01-11",
+    "gender": false,
+    "confirmEmail": true
+  }
+]

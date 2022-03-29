@@ -1,0 +1,138 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-user
+Content-type: {{contentType}}
+
+{
+  "email": "manhnguyen@gmail.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all users / Search users
+GET {{baseUrl}}/api/play-together/v1/users/
+?searchString=na
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user basic information
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user skill information
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/games
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user service information
+GET {{baseUrl}}/api/play-together/v1/users/service/14085799-aec5-41b5-9fd9-46aa9a773443
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Create order
+POST {{baseUrl}}/api/play-together/v1/users/orders/14085799-aec5-41b5-9fd9-46aa9a773443
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "totalTimes": 1,
+  "message": "Choi lol ko ban ơi",
+  "games": [
+    {
+      "gameId": "6c211880-ecd9-4975-806e-237fe1bc4294"
+    }
+  ]
+}
+
+###
+
+# Get all order (create User)
+GET {{baseUrl}}/api/play-together/v1/users/orders?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Get a order
+GET {{baseUrl}}/api/play-together/v1/orders/91d56f4a-ac43-46bc-be12-c867d50a3f83
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Cancel order
+PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/cb621e06-9cad-45b1-a634-761ea61275ea
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification/309d1238-81d1-45e6-a37f-9dc134b1311c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get all Transaction
+GET {{baseUrl}}/api/play-together/v1/users/transactions
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Create rating
+POST {{baseUrl}}/api/play-together/v1/rating/35c776ec-7717-4d11-8310-bfc11fb9e6c2
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "comment": "Đánh đc,...",
+  "rate": 4
+}
+
+###

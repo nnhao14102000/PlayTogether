@@ -1,0 +1,174 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+# @name login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-user
+Content-type: {{contentType}}
+
+{
+  "email": "nacao@gmail.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+# Get order request (receiver order)
+GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get order by Id
+GET {{baseUrl}}/api/play-together/v1/orders/35c776ec-7717-4d11-8310-bfc11fb9e6c2
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Process order
+PUT {{baseUrl}}/api/play-together/v1/users/orders/35c776ec-7717-4d11-8310-bfc11fb9e6c2/process
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isAccept": true
+}
+
+###
+
+
+# Finish order soon
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/35c776ec-7717-4d11-8310-bfc11fb9e6c2
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "message": "Cho tui nghi som nha"
+}
+
+###
+
+# Get all Transaction
+GET {{baseUrl}}/api/play-together/v1/users/transactions
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all un active money
+GET {{baseUrl}}/api/play-together/v1/users/un-active-balance?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Check to active money
+PUT {{baseUrl}}/api/play-together/v1/users/un-active-balance
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+
+
+
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all users / Search users
+GET {{baseUrl}}/api/play-together/v1/users/
+?searchString=th
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
+?name=Liên
+&pageSize=100
+&pageNumber=1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all Ranks in game
+GET {{baseUrl}}/api/play-together/v1/games/a686bb05-1fb0-413d-958a-ab5b710e13a4/ranks
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Create game of User
+POST {{baseUrl}}/api/play-together/v1/games-of-user
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "gameId": "a686bb05-1fb0-413d-958a-ab5b710e13a4",
+  "rankId": "889d4f81-bb1d-4b46-922d-dad713a32f99"
+}
+
+###
+
+
+# Get a game of User
+GET {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Update game of User
+PUT {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "rankId": "400e56f9-a172-4012-9b86-74af5b6e2eed"
+}
+
+###
+
+# Delete game of User
+DELETE {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Update user service
+PUT {{baseUrl}}/api/play-together/v1/users/service
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "maxHourHire": 5,
+  "pricePerHour": 10000.0
+}
+
+###
