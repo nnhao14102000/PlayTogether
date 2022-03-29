@@ -473,7 +473,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
                         "+",
-                        order.TotalPrices,
+                        order.FinalPrices,
                         "Order",
                         orderId)
                 );
@@ -482,7 +482,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                         toUser.UserBalance.Id,
                         orderId,
-                        order.TotalPrices,
+                        order.FinalPrices,
                         DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
                 );
                 return (await _context.SaveChangesAsync() >= 0);
@@ -566,7 +566,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
                         "+",
-                        order.TotalPrices,
+                        order.FinalPrices,
                         "Order",
                         orderId)
                 );
@@ -575,7 +575,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                         toUser.UserBalance.Id,
                         orderId,
-                        order.TotalPrices,
+                        order.FinalPrices,
                         DateTime.Now.AddHours(ValueConstants.HourActiveMoney))
                 );
                 return (await _context.SaveChangesAsync() >= 0);

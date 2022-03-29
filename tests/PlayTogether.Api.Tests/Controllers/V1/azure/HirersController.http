@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login-user
 Content-type: {{contentType}}
 
 {
-  "email": "manhnguyen@gmail.com",
+  "email": "hien@example.com",
   "password": "Pa55w0rd!"
 }
 
@@ -30,28 +30,28 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?searchString=na
+?searchString=
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Get user basic information
-GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443
+GET {{baseUrl}}/api/play-together/v1/users/0e317a69-2098-4a34-8115-439c30038faa
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Get user skill information
-GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/games
+GET {{baseUrl}}/api/play-together/v1/users/0e317a69-2098-4a34-8115-439c30038faa/games
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Get user service information
-GET {{baseUrl}}/api/play-together/v1/users/service/14085799-aec5-41b5-9fd9-46aa9a773443
+GET {{baseUrl}}/api/play-together/v1/users/service/0e317a69-2098-4a34-8115-439c30038faa
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -59,7 +59,7 @@ Authorization: {{authToken}}
 
 
 # Create order
-POST {{baseUrl}}/api/play-together/v1/users/orders/14085799-aec5-41b5-9fd9-46aa9a773443
+POST {{baseUrl}}/api/play-together/v1/users/orders/0e317a69-2098-4a34-8115-439c30038faa
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -68,7 +68,7 @@ Authorization: {{authToken}}
   "message": "Choi lol ko ban ơi",
   "games": [
     {
-      "gameId": "6c211880-ecd9-4975-806e-237fe1bc4294"
+      "gameId": "ffde55a0-7672-44c6-b538-b2913ce65b33"
     }
   ]
 }
