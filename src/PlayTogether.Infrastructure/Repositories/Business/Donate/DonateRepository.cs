@@ -40,6 +40,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                 return false;
             }
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+
             if (user.UserBalance.ActiveBalance < request.Money) {
                 return false;
             }
@@ -56,6 +57,19 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
 
             _context.Donates.Add(model);
             if (await _context.SaveChangesAsync() >= 0) {
+                user.UserBalance.ActiveBalance -= request.Money;
+                user.UserBalance.Balance -= request.Money;
+
+                await _context.TransactionHistories.AddAsync(
+                    Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        user.UserBalance.Id,
+                        "-",
+                        request.Money,
+                        "Donate",
+                        model.Id
+                    )
+                );
+
                 await _context.Notifications.AddRangeAsync(
                     Helpers.NotificationHelpers.PopulateNotification(model.UserId,
                     $"{user.Name}, cảm ơn bạn đã donate!",
