@@ -4,6 +4,7 @@ using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.Chat;
+using PlayTogether.Core.Dtos.Incoming.Business.Donate;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
@@ -17,6 +18,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Chat;
+using PlayTogether.Core.Dtos.Outcoming.Business.Donate;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameType;
@@ -150,6 +152,10 @@ namespace PlayTogether.Infrastructure.Helpers
             // Charity mapper Profile
             CreateMap<Charity, CharityResponse>();
             CreateMap<CharityStatusRequest, Charity>();
+
+            // Donate mapper Profile
+            CreateMap<DonateCreateRequest, Donate>();
+            CreateMap<Donate, DonateResponse>();
 
             // src => target
         }

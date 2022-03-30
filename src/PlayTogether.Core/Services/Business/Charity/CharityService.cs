@@ -7,6 +7,7 @@ using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PlayTogether.Core.Services.Business.Charity
@@ -57,6 +58,20 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetCharityByIdAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<CharityResponse> GetProfileAsync(ClaimsPrincipal principal)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _charityRepository.GetProfileAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetProfileAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

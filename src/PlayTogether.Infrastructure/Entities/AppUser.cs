@@ -56,7 +56,6 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<DisableUser> DisableUsers { get; set; }
         public ICollection<Chat> Chats { get; set; }
         public ICollection<Recommend> Recommends { get; set; }
-
         public IList<Hobby> Hobbies { get; set; }
     }
 }

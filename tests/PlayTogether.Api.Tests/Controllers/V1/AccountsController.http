@@ -5,7 +5,7 @@
 @host = {{azurehost}}
 @baseUrl = https://{{lchost}}
 @contentType = application/json
-@token = {{login.response.body.$.message}}
+@token = {{loginAdmin.response.body.$.message}}
 @authToken = bearer {{token}}
 
 ###

@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/accounts/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-charity
 content-type: {{contentType}}
 
 {
@@ -19,6 +19,30 @@ content-type: {{contentType}}
 }
 
 ###
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get all donates
+GET {{baseUrl}}/api/play-together/v1/donates
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+
+
+
+
+
+
+
 # Get all charities
 GET {{baseUrl}}/api/play-together/v1/charities
 content-type: {{contentType}}

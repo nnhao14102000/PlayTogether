@@ -65,6 +65,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
+        /// <summary>
+        /// Get charity profile 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Charity
+        /// </remarks>
+        [HttpGet("personal")]
+        [Authorize(Roles = AuthConstant.RoleCharity)]
+        public async Task<ActionResult<CharityResponse>> GetCharityProfile()
+        {
+            var response = await _charityService.GetProfileAsync(HttpContext.User);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        
+
         // /// <summary>
         // /// Calculate Donate
         // /// </summary>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Incoming.Business.Donate;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
@@ -28,6 +29,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IOrderService _orderService;
         private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly IUnActiveBalanceService _unActiveBalanceService;
+        private readonly IDonateService _donateService;
 
         public UsersController(
             IAppUserService appUserService,
@@ -35,7 +37,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IGameOfUserService gameOfUserService,
             IOrderService orderService,
             ITransactionHistoryService transactionHistoryService,
-            IUnActiveBalanceService unActiveBalanceService)
+            IUnActiveBalanceService unActiveBalanceService,
+            IDonateService donateService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
@@ -43,6 +46,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _orderService = orderService;
             _transactionHistoryService = transactionHistoryService;
             _unActiveBalanceService = unActiveBalanceService;
+            _donateService = donateService;
         }
 
         /*
@@ -52,7 +56,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         *                                              ||
         *================================================
         */
-        
+
 
         /// <summary>
         /// Update personal info in profile
@@ -222,7 +226,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<UserSearchResponse>>> GetAllUser([FromQuery] UserParameters param){
+        public async Task<ActionResult<PagedResult<UserSearchResponse>>> GetAllUser([FromQuery] UserParameters param)
+        {
             var response = await _appUserService.GetAllUsersAsync(HttpContext.User, param);
 
             var metaData = new {
@@ -264,8 +269,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             var response = await _orderService.CreateOrderAsync(HttpContext.User, toUserId, request);
 
-            return response is null 
-                ? BadRequest() 
+            return response is null
+                ? BadRequest()
                 : CreatedAtRoute(nameof(OrdersController.GetOrderById), new { id = response.Id }, response);
         }
 
@@ -356,7 +361,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _orderService.ProcessOrderAsync(orderId, HttpContext.User, request);
             return response ? NoContent() : NotFound();
         }
-        
+
         /*
         *================================================
         *                                              ||
@@ -420,7 +425,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             return response is not null ? Ok(response) : NotFound();
         }
-        
+
         /// <summary>
         /// Check to active money in un active balance
         /// </summary>
@@ -435,5 +440,31 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _unActiveBalanceService.ActiveMoneyAsync(HttpContext.User);
             return response ? NoContent() : NotFound();
         }
+
+        /*
+        *================================================
+        *                                              ||
+        * Donate APIs SECTION                          ||
+        *                                              ||
+        *================================================
+        */
+
+        /// <summary>
+        /// Make donate
+        /// </summary>
+        /// <param name="charityId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost, Route("donates/{charityId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> Donate(string charityId, DonateCreateRequest request)
+        {
+            var response = await _donateService.CreateDonateAsync(HttpContext.User, charityId, request);
+            return response ? Ok() : NotFound();
+        }
+
     }
 }

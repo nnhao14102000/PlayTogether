@@ -20,6 +20,7 @@
 - <a href="#chat" target="_self">Chat</a> <br>
 - <a href="#notification" target="_self">Notification</a> <br>
 - <a href="#image" target="_self">Image</a> <br>
+- <a href="#donate" target="_self">Donate</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -205,6 +206,10 @@
 >   ***Description***: Check to active the un active money    
 >   ***Role Access***: User         
 >
+> - ``POST /api/play-together/v1/users/donates/{charityId} ``  
+>   ***Description***: Make donate to a specific charity     
+>   ***Role Access***: User         
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
@@ -216,6 +221,10 @@
 > - ``GET /api/play-together/v1/charities/{id} ``  
 >   ***Description***: Get a Charity by Id   
 >   ***Role Access***: Admin, Player   
+>
+> - ``GET /api/play-together/v1/charities/personal ``  
+>   ***Description***: Get a Charity profile   
+>   ***Role Access***: Charity   
 >
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
@@ -495,6 +504,17 @@
 >   ***Role Access***: User  
 >
 
+
+<h2 id="donate">Donate  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/donates ``  
+>   ***Description***: Get all donates    
+>   ***Role Access***: User, Charity  
+>
+> - ``GET /api/play-together/v1/donates/{id} ``  
+>   ***Description***: Get donate by Id  
+>   ***Role Access***: User, Charity   
+>
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 

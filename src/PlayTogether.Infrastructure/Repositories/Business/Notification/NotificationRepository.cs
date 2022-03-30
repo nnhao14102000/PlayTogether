@@ -52,7 +52,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if(loggedInUser is not null && user is null){
+            if(loggedInUser is not null && user is null && charity is null){
                 FilterByReceiverId(ref query, "");
                 FilterByIsReadNotification(ref query, param.IsRead);
                 OrderByCreatedDate(ref query, param.IsNew);                
