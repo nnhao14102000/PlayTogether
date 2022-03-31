@@ -196,7 +196,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             FilterActiveUser(ref query, param.IsActive);
             FilterByStatus(ref query, param.Status);
-            FilterUserByName(ref query, param.Name);
+            FilterUserByNameVsEmail(ref query, param.Name);
 
             users = query.ToList();
             var response = _mapper.Map<List<UserGetByAdminResponse>>(users);
@@ -346,6 +346,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterUserByName(
+            ref IQueryable<Entities.AppUser> query,
+            string name)
+        {
+            if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
+                return;
+            }
+            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        private void FilterUserByNameVsEmail(
             ref IQueryable<Entities.AppUser> query,
             string name)
         {

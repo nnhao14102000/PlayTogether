@@ -133,6 +133,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 response.ToUser = new OrderUserResponse {
                     Id = toUser.Id,
                     Name = toUser.Name,
+                    Email = toUser.Email,
                     Avatar = toUser.Avatar,
                     IsActive = toUser.IsActive,
                     IsPlayer = toUser.IsPlayer,
@@ -300,6 +301,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             response.ToUser = new OrderUserResponse {
                 Id = toUser.Id,
                 Name = toUser.Name,
+                Email = toUser.Email,
                 Avatar = toUser.Avatar,
                 IsActive = toUser.IsActive,
                 IsPlayer = toUser.IsPlayer,
@@ -670,6 +672,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             response.ToUser = new OrderUserResponse {
                 Id = toUser.Id,
                 Name = toUser.Name,
+                Email = toUser.Email,
                 Avatar = toUser.Avatar,
                 IsActive = toUser.IsActive,
                 IsPlayer = toUser.IsPlayer,
