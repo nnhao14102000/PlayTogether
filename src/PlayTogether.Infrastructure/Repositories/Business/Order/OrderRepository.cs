@@ -224,7 +224,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             var responses = _mapper.Map<List<OrderGetResponse>>(orders);
             foreach (var response in responses) {
-                var toUser = await _context.Orders.FindAsync(response.ToUserId);
+                var toUser = await _context.AppUsers.FindAsync(response.ToUserId);
                 response.ToUser = _mapper.Map<OrderUserResponse>(toUser);
             }
             return PagedResult<OrderGetResponse>
@@ -615,7 +615,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             var responses = _mapper.Map<List<OrderGetResponse>>(orders);
             foreach (var response in responses) {
-                var toUser = await _context.Orders.FindAsync(response.ToUserId);
+                var toUser = await _context.AppUsers.FindAsync(response.ToUserId);
                 response.ToUser = _mapper.Map<OrderUserResponse>(toUser);
             }
             return PagedResult<OrderGetResponse>
