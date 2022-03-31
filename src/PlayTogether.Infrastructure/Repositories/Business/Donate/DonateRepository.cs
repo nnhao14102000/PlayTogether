@@ -78,7 +78,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
 
                     Helpers.NotificationHelpers.PopulateNotification(model.CharityId,
                     $"{user.Name}, đã donate!",
-                    $"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn. Xin kiểm tra lại tài khoản!.",
+                    (String.IsNullOrEmpty(request.Message) || (String.IsNullOrWhiteSpace(request.Message)))
+                    ?$"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn. Xin kiểm tra lại tài khoản!."
+                    :$"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn với lời nhắn: {request.Message}. Xin kiểm tra lại tài khoản!.",
                     $"{ValueConstants.BaseUrl}/v1/donates/{model.Id}")
 
                 );
