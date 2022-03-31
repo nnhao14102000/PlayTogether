@@ -33,7 +33,7 @@ Authorization: {{authToken}}
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
 ?name=
-&IsRecentOrder=true
+&IsOrderByRating=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
@@ -48,6 +48,13 @@ Authorization: {{authToken}}
 
 # Get user skill information
 GET {{baseUrl}}/api/play-together/v1/users/a17bd7c6-0fcc-48ea-89de-43823a1ec09c/games
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user by Id
+GET {{baseUrl}}/api/play-together/v1/users/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

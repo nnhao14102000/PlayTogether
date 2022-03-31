@@ -121,7 +121,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return null;
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
-            return _mapper.Map<UserGetBasicInfoResponse>(user);
+            var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
+            var response = _mapper.Map<UserGetBasicInfoResponse>(user);
+            response.NumOfRate = rates.Count();
+            return response;
         }
 
         public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)
@@ -174,6 +177,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             users = query.ToList();
             var response = _mapper.Map<List<UserSearchResponse>>(users);
+            foreach (var item in response)
+            {
+                var rates = await _context.Ratings.Where(x => x.ToUserId == item.Id).ToListAsync();
+                item.NumOfRate = rates.Count();
+            }
             return PagedResult<UserSearchResponse>
                 .ToPagedList(
                     response,

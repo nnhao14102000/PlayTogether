@@ -16,6 +16,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public ICollection<ImageUserResponse> Images { get; set; }
         public string Description { get; set; }
         public float Rate { get; set; }
+        public int NumOfRate { get; set; }
         public string Status { get; set; }
         public bool IsActive { get; set; } = true;
         public float PricePerHour { get; set; }
