@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -52,16 +53,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <summary>
         /// Get charity by Id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="charityId"></param>
         /// <returns></returns>
         /// <remarks>
         /// Roles Access: Admin, User
         /// </remarks>
-        [HttpGet("{id}")]
+        [HttpGet("{charityId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<CharityResponse>> GetCharityById(string id)
+        public async Task<ActionResult<CharityResponse>> GetCharityById(string charityId)
         {
-            var response = await _charityService.GetCharityByIdAsync(id);
+            var response = await _charityService.GetCharityByIdAsync(charityId);
             return response is not null ? Ok(response) : NotFound();
         }
 
@@ -80,7 +81,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
-        
+        /// <summary>
+        /// Update charity profile 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Charity, Admin
+        /// </remarks>
+        [HttpPut("{charityId}")]
+        [Authorize(Roles = AuthConstant.RoleCharity)]
+        public async Task<ActionResult> UpdateCharityProfile(string charityId, CharityUpdateRequest request)
+        {
+            if(!ModelState.IsValid){
+                return BadRequest();
+            }
+            var response = await _charityService.UpdateProfileAsync(charityId, request);
+            return response ? NoContent() : NotFound();
+        }
 
         // /// <summary>
         // /// Calculate Donate

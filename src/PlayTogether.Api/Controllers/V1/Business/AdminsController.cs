@@ -139,21 +139,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
-        /// <summary>
-        /// Get Order in details by Order Id by Admin
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin
-        /// </remarks>
-        [HttpGet("users/orders/{orderId}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<OrderGetDetailResponse>> GetOrderByIdForAdmin(string orderId)
-        {
-            var response = await _orderService.GetOrderByIdInDetailForAdminAsync(orderId);
-            return response is not null ? Ok(response) : NotFound();
-        }
+        
 
         // /// <summary>
         // /// Active or Disable (1 day) a hirer account

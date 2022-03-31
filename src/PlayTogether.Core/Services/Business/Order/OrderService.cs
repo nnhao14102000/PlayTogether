@@ -155,16 +155,16 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
+        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailAsync(string orderId)
         {
             try {
                 if (String.IsNullOrEmpty(orderId) || String.IsNullOrEmpty(orderId)) {
                     throw new ArgumentNullException(nameof(orderId));
                 }
-                return await _orderRepository.GetOrderByIdInDetailForAdminAsync(orderId);
+                return await _orderRepository.GetOrderByIdInDetailAsync(orderId);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call GetOrderByIdInDetailForAdminAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call GetOrderByIdInDetailAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

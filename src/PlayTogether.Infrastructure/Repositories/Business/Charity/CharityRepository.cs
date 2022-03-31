@@ -27,10 +27,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
         {
             var charities = await _context.Charities.ToListAsync();
             var queryCharity = charities.AsQueryable();
-            
+
             FilterActiveCharities(ref queryCharity);
             FilterCharitiesByName(ref queryCharity, param.Name);
-            
+
             charities = queryCharity.ToList();
             var response = _mapper.Map<List<CharityResponse>>(charities);
             return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
@@ -81,10 +81,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             var identityId = loggedInUser.Id;
 
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if(charity is null){
+            if (charity is null) {
                 return null;
             }
             return _mapper.Map<CharityResponse>(charity);
+        }
+
+        public async Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request)
+        {
+            var charity = await _context.Charities.FindAsync(charityId);
+            if (charity is null) return false;
+            var model = _mapper.Map(request, charity);
+            _context.Charities.Update(model);
+            return (await _context.SaveChangesAsync() >= 0);
+
         }
     }
 }

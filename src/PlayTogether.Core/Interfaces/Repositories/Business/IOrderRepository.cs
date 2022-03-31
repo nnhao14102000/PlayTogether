@@ -13,7 +13,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PagedResult<OrderGetResponse>> GetAllOrdersAsync(ClaimsPrincipal principal , UserOrderParameter param);
         Task<PagedResult<OrderGetResponse>> GetAllOrderRequestsAsync(ClaimsPrincipal principal, UserOrderParameter param);
         Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(string userId, AdminOrderParameters param);
-        Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId);
+        Task<OrderGetDetailResponse> GetOrderByIdInDetailAsync(string orderId);
         Task<bool> ProcessOrderAsync(string orderId, ClaimsPrincipal principal, OrderProcessByPlayerRequest request);
         Task<bool> CancelOrderAsync(string orderId, ClaimsPrincipal principal);
         Task<bool> FinishOrderAsync(string orderId);

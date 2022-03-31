@@ -10,8 +10,9 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface ICharityService
     {
         Task<PagedResult<CharityResponse>> GetAllCharitiesAsync(CharityParameters param);
-        Task<CharityResponse> GetCharityByIdAsync(string id);
+        Task<CharityResponse> GetCharityByIdAsync(string charityId);
         Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request);
         Task<CharityResponse> GetProfileAsync(ClaimsPrincipal principal);
+        Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request);
     }
 }

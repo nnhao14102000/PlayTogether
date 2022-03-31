@@ -637,7 +637,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             && x.CreatedDate <= toDate);
         }
 
-        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailForAdminAsync(string orderId)
+        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailAsync(string orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
 

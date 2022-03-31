@@ -152,6 +152,7 @@ namespace PlayTogether.Infrastructure.Helpers
             // Charity mapper Profile
             CreateMap<Charity, CharityResponse>();
             CreateMap<CharityStatusRequest, Charity>();
+            CreateMap<CharityUpdateRequest, Charity>();
 
             // Donate mapper Profile
             CreateMap<DonateCreateRequest, Donate>();

@@ -115,12 +115,7 @@
 > - ``GET /api/play-together/v1/admins/{userId}/orders ``  
 >   ***Description***: Get all Orders of a specific user (Hirer and Player)   
 >   ***Role Access***: Admin  
->   ***Extension***: Paging, Filter by Status, from day to day  
->
-> - ``GET /api/play-together/v1/admins/users/orders/{orderId} ``  
->   ***Description***: Get a order in detail   
->   ***Role Access***: Admin  
->   ***Use for***: View more detail information of the order   
+>   ***Extension***: Paging, Filter by Status, from day to day, Sort new order  
 >
 > - ``PUT /api/play-together/v1/admins/charities/{charityId} ``  
 >   ***Description***: Disable or Active charity account   
@@ -133,8 +128,8 @@
 
 > - ``GET /api/play-together/v1/users/ ``  
 >   ***Description***: Get all users / Search users  
->   ***Role Access***: User, Admin  
->   ***Extension***: Paging, searching, filtering by name, gameId, gender, status, sort by Name, Price, Rate     
+>   ***Role Access***: User  
+>   ***Extension***: Paging, searching, filtering by name, gameId, gender, status, recent ordered, sort by Name, Price, Rate, New account     
 >
 > - ``GET /api/play-together/v1/users/personal ``  
 >   ***Description***: Get user personal profile  
@@ -218,9 +213,13 @@
 >   ***Role Access***: Admin, Player  
 >   ***Extension***: Paging, Filter by Name  
 >
-> - ``GET /api/play-together/v1/charities/{id} ``  
+> - ``GET /api/play-together/v1/charities/{charityId} ``  
 >   ***Description***: Get a Charity by Id   
 >   ***Role Access***: Admin, Player   
+>
+> - ``PUT /api/play-together/v1/charities/{charityId} ``  
+>   ***Description***: Update a Charity profile   
+>   ***Role Access***: Charity, Admin     
 >
 > - ``GET /api/play-together/v1/charities/personal ``  
 >   ***Description***: Get a Charity profile   
@@ -232,6 +231,11 @@
 > - ``GET /api/play-together/v1/orders/{id} ``  
 >   ***Description***: Get order by Order Id  
 >   ***Role Access***: User  
+>
+> - ``GET /api/play-together/v1/orders/detail/{orderId} ``  
+>   ***Description***: Get a order in detail   
+>   ***Role Access***: Admin, User  
+>   ***Use for***: View more detail information of the order   
 >
 > - ``PUT /api/play-together/v1/orders/finish/{id} ``  
 >   ***Description***: Finish the order  
@@ -246,7 +250,7 @@
 
 <h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
-> - ``GET /api/play-together/v1/rating/{playerId} ``  
+> - ``GET /api/play-together/v1/rating/{userId} ``  
 >   ***Description***: Get all Ratings of a User   
 >   ***Use for***: View all ratings of one specific User   
 >   ***Role Access***: User, Admin  

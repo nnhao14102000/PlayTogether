@@ -66,7 +66,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _orderService.FinishOrderSoonAsync(id, HttpContext.User, request);
             return response ? NoContent() : NotFound();
         }
+        
 
+        /// <summary>
+        /// Get Order in details by Order Id
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet("detail/{orderId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + AuthConstant.RoleUser)]
+        public async Task<ActionResult<OrderGetDetailResponse>> GetOrderInDetailById(string orderId)
+        {
+            var response = await _orderService.GetOrderByIdInDetailAsync(orderId);
+            return response is not null ? Ok(response) : NotFound();
+        }
         
     }
 }

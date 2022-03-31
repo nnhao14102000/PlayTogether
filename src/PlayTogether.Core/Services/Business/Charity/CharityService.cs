@@ -26,7 +26,7 @@ namespace PlayTogether.Core.Services.Business.Charity
         public async Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
         {
             try {
-                if(request is null){
+                if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 return await _charityRepository.ChangeStatusCharityByAdminAsync(charityId, request);
@@ -48,13 +48,13 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
         }
 
-        public async Task<CharityResponse> GetCharityByIdAsync(string id)
+        public async Task<CharityResponse> GetCharityByIdAsync(string charityId)
         {
             try {
-                if (String.IsNullOrEmpty(id)) {
-                    throw new ArgumentNullException(nameof(id));
+                if (String.IsNullOrEmpty(charityId)) {
+                    throw new ArgumentNullException(nameof(charityId));
                 }
-                return await _charityRepository.GetCharityByIdAsync(id);
+                return await _charityRepository.GetCharityByIdAsync(charityId);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetCharityByIdAsync in service class, Error Message: {ex}.");
@@ -68,10 +68,28 @@ namespace PlayTogether.Core.Services.Business.Charity
                 if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
+
                 return await _charityRepository.GetProfileAsync(principal);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetProfileAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                if (String.IsNullOrEmpty(charityId)) {
+                    throw new ArgumentNullException(nameof(charityId));
+                }
+                return await _charityRepository.UpdateProfileAsync(charityId, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdateProfileAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
