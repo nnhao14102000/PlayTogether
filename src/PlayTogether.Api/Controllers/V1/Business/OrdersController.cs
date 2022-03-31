@@ -77,7 +77,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, User
         /// </remarks>
         [HttpGet("detail/{orderId}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + AuthConstant.RoleUser)]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
         public async Task<ActionResult<OrderGetDetailResponse>> GetOrderInDetailById(string orderId)
         {
             var response = await _orderService.GetOrderByIdInDetailAsync(orderId);
