@@ -32,7 +32,8 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?IsRecentOrder=true
+?name=
+&IsRecentOrder=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

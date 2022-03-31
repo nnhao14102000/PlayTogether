@@ -265,6 +265,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
+            var list = query.ToList();
+            foreach (var item in list)
+            {
+                _context.Entry(item).Collection(x => x.Ratings).Load();
+            }
+            query = list.AsQueryable();
             query = query.OrderByDescending(x => x.Rate);
             query = query.OrderByDescending(x => x.Ratings.Count());
         }
@@ -316,12 +322,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 || String.IsNullOrWhiteSpace(userId)) {
                 return;
             }
-            var orders = _context.Orders.Where(x => x.UserId == userId && x.Status == OrderStatusConstants.Complete)
+            var orders = _context.Orders.Where(x => x.UserId == userId
+                                                    && (x.Status == OrderStatusConstants.Finish
+                                                        || x.Status == OrderStatusConstants.FinishSoon)
+                                                        )
                                         .OrderByDescending(x => x.CreatedDate)
                                         .ToList();
             List<Entities.AppUser> players = new();
             foreach (var item in orders) {
-                players.Add(item.User);
+                // _context.Entry(item).Reference(x => x.User).Load();
+                var player = _context.AppUsers.Find(item.ToUserId);
+                players.Add(player);
             }
             query = players.AsQueryable().Distinct();
         }
@@ -333,7 +344,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
             }
-            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+            query = query.Where(x => (x.Name.ToLower() + " " + x.Email.ToLower()).Contains(name.ToLower()));
         }
 
         private void FilterUserStatus(ref IQueryable<Entities.AppUser> query, string userStatus)

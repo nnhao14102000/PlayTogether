@@ -599,6 +599,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var query = orders.AsQueryable();
             FilterInDate(ref query, param.FromDate, param.ToDate);
             FilterOrderByStatus(ref query, param.Status);
+            FilterOrderRecent(ref query, param.IsNew);
             orders = query.ToList();
 
             foreach (var order in orders) {
@@ -666,12 +667,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
 
-            response.ToUser.Id = toUser.Id;
-            response.ToUser.Avatar = toUser.Avatar;
-            response.ToUser.Name = toUser.Name;
-            response.ToUser.IsActive = toUser.IsActive;
-            response.ToUser.IsPlayer = toUser.IsPlayer;
-            response.ToUser.Status = toUser.Status;
+            response.ToUser = new OrderUserResponse {
+                Id = toUser.Id,
+                Name = toUser.Name,
+                Avatar = toUser.Avatar,
+                IsActive = toUser.IsActive,
+                IsPlayer = toUser.IsPlayer,
+                Status = toUser.Status
+            };
 
             return response;
         }
