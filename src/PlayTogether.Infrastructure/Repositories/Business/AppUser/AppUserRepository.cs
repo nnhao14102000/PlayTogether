@@ -160,7 +160,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, param.Name);
-            // FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
+            FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
+            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies,  user);
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
 
@@ -169,6 +170,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
             OrderUserPricing(ref query, param.IsOrderByPricing);
+            OrderUserByCreatedDate(ref query, param.IsNewAccount);
 
             users = query.ToList();
             var response = _mapper.Map<List<UserSearchResponse>>(users);
@@ -177,6 +179,64 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        public async Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param)
+        {
+            var users = await _context.AppUsers.ToListAsync();
+            var query = users.AsQueryable();
+
+            FilterActiveUser(ref query, param.IsActive);
+            FilterByStatus(ref query, param.Status);
+            FilterUserByName(ref query, param.Name);
+
+            users = query.ToList();
+            var response = _mapper.Map<List<UserGetByAdminResponse>>(users);
+            return PagedResult<UserGetByAdminResponse>
+                .ToPagedList(
+                    response,
+                    param.PageNumber,
+                    param.PageSize);
+        }
+
+        private void OrderUserByCreatedDate(ref IQueryable<Entities.AppUser> query, bool? isNewAccount)
+        {
+            if(!query.Any() || isNewAccount is null){
+                return ;
+            }
+            if(isNewAccount is true){
+                query = query.OrderByDescending(x => x.CreatedDate);
+            }else{
+                query = query.OrderBy(x => x.CreatedDate);
+            }
+        }
+
+        private void FilterHaveSkillSameHobby(
+            ref IQueryable<Entities.AppUser> query,
+            bool? isSameHobbies,
+            Entities.AppUser user)
+        {
+            if(!query.Any() || isSameHobbies is false || isSameHobbies is null){
+                return;
+            }
+
+            var final = new List<Entities.AppUser>();
+            var listGameOfUser = new List<Entities.GameOfUser>();
+
+            _context.Entry(user).Collection(x => x.Hobbies).Load();
+            
+            foreach (var hobby in user.Hobbies)
+            {
+                listGameOfUser = listGameOfUser.Union(_context.GameOfUsers.Where(x => x.GameId == hobby.GameId).ToList()).ToList();
+            }
+
+            foreach (var gameOfUser in listGameOfUser)
+            {
+                _context.Entry(gameOfUser).Reference(x =>x.User).Load();
+                final.Add(gameOfUser.User);
+            }
+            query = final.AsQueryable().Distinct();
+
         }
 
         private void FilterUserByItSelf(ref IQueryable<Entities.AppUser> query, string id)
@@ -206,6 +266,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
             query = query.OrderByDescending(x => x.Rate);
+            query = query.OrderByDescending(x => x.Ratings.Count());
         }
 
         private void OrderUserByASCName(ref IQueryable<Entities.AppUser> query, bool? isOrderByName)
@@ -246,24 +307,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = result.AsQueryable();
         }
 
-        // private void FilterUserRecentHired(ref IQueryable<Entities.AppUser> query, bool? isRecent, string userId)
-        // {
-        //     if ((!query.Any())
-        //         || isRecent is null
-        //         || isRecent is false
-        //         || String.IsNullOrEmpty(userId)
-        //         || String.IsNullOrWhiteSpace(userId)) {
-        //         return;
-        //     }
-        //     var orders = _context.Orders.Where(x => x.UserId == userId && x.Status == OrderStatusConstants.Complete)
-        //                                 .OrderByDescending(x => x.CreatedDate)
-        //                                 .ToList();
-        //     List<Entities.AppUser> players = new();
-        //     foreach (var item in orders) {
-        //         players.Add(item.User);
-        //     }
-        //     query = players.AsQueryable().Distinct();
-        // }
+        private void FilterUserRecentHired(ref IQueryable<Entities.AppUser> query, bool? isRecent, string userId)
+        {
+            if ((!query.Any())
+                || isRecent is null
+                || isRecent is false
+                || String.IsNullOrEmpty(userId)
+                || String.IsNullOrWhiteSpace(userId)) {
+                return;
+            }
+            var orders = _context.Orders.Where(x => x.UserId == userId && x.Status == OrderStatusConstants.Complete)
+                                        .OrderByDescending(x => x.CreatedDate)
+                                        .ToList();
+            List<Entities.AppUser> players = new();
+            foreach (var item in orders) {
+                players.Add(item.User);
+            }
+            query = players.AsQueryable().Distinct();
+        }
 
         private void FilterUserByName(
             ref IQueryable<Entities.AppUser> query,
@@ -379,24 +440,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = finalList.AsQueryable();
         }
 
-        public async Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param)
-        {
-            var users = await _context.AppUsers.ToListAsync();
-
-            var query = users.AsQueryable();
-
-            FilterActiveUser(ref query, param.IsActive);
-            FilterByStatus(ref query, param.Status);
-            
-
-            users = query.ToList();
-            var response = _mapper.Map<List<UserGetByAdminResponse>>(users);
-            return PagedResult<UserGetByAdminResponse>
-                .ToPagedList(
-                    response,
-                    param.PageNumber,
-                    param.PageSize);
-        }
+        
 
         private void FilterByStatus(ref IQueryable<Entities.AppUser> query, string status)
         {

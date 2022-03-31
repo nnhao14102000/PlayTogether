@@ -10,6 +10,8 @@ namespace PlayTogether.Core.Parameters
         public bool? IsOrderByName { get; set; }
         public bool? IsOrderByRating { get; set; }
         public bool? IsOrderByPricing { get; set; }
-        // public bool? IsRecentOrder { get; set; }
+        public bool? IsRecentOrder { get; set; }
+        public bool? IsSameHobbies { get; set; }
+        public bool? IsNewAccount { get; set; }
     }
 }

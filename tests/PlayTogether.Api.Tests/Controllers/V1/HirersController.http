@@ -9,7 +9,8 @@
 @token = {{login.response.body.$.message}}
 @authToken = bearer {{token}}
 
-###
+
+
 # @name login
 POST {{baseUrl}}/api/play-together/v1/accounts/login-user
 Content-type: {{contentType}}
@@ -21,6 +22,7 @@ Content-type: {{contentType}}
 
 ###
 
+
 # Get user personal information
 GET {{baseUrl}}/api/play-together/v1/users/personal
 Content-type: {{contentType}}
@@ -30,7 +32,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?searchString=th
+?IsRecentOrder=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
@@ -102,7 +104,7 @@ Authorization: {{authToken}}
 
 
 # Get Notification
-GET {{baseUrl}}/api/play-together/v1/notification
+GET {{baseUrl}}/api/play-together/v1/notification?isNew=true
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

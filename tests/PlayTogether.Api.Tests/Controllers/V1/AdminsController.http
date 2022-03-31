@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/accounts/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-admin
 content-type: {{contentType}}
 
 {
@@ -19,8 +19,8 @@ content-type: {{contentType}}
 }
 
 ###
-# Get all admins
-GET {{baseUrl}}/api/play-together/v1/admins
+# Get all users
+GET {{baseUrl}}/api/play-together/v1/admins/users
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

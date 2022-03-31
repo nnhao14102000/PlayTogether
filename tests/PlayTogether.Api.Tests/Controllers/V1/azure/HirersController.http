@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login-user
 Content-type: {{contentType}}
 
 {
-  "email": "hien@example.com",
+  "email": "manhnguyen@gmail.com",
   "password": "Pa55w0rd!"
 }
 
@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?searchString=
+?name=cáo
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
