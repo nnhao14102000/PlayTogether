@@ -13,7 +13,7 @@ namespace PlayTogether.Infrastructure.Helpers
                 OrderId = OrderId,
                 Money = money,
                 DateActive = dateActive,
-                IsActive = false                
+                IsRelease = false                
             };
         }
     }

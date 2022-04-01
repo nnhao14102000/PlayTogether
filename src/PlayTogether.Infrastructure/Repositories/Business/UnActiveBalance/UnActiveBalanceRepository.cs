@@ -45,6 +45,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
 
             var query = unActive.AsQueryable();
             FilterByDateRange(ref query, param.FromDate, param.ToDate);
+            FilterByIsRelease(ref query, param.IsRelease);
             SortNew(ref query, param.IsNew);
 
 
@@ -55,6 +56,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterByIsRelease(ref IQueryable<Entities.UnActiveBalance> query, bool? isRelease)
+        {
+            if (!query.Any() || isRelease is null) {
+                return;
+            }
+
+            query = query.Where(x => x.IsRelease == isRelease);
+
         }
 
         private void SortNew(ref IQueryable<Entities.UnActiveBalance> query, bool? isNew)
@@ -94,15 +105,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
             var unActive = await _context.UnActiveBalances.Where(x => x.UserBalanceId == user.UserBalance.Id
-                                                                && x.IsActive == false).ToListAsync();
+                                                                && x.IsRelease == false).ToListAsync();
 
-            if(unActive.Count == 0){
+            if (unActive.Count == 0) {
                 return false;
             }
 
             foreach (var item in unActive) {
                 await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
-                if (item.Order.Reports.Count >= 1) {
+                if (item.Order.Reports.Count > 0) {
                     foreach (var report in item.Order.Reports) {
                         if (report.IsApprove == true && report.UserId == item.Order.UserId) {
                             // + tiền lại cho user
@@ -117,7 +128,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             toUser.UserBalance.Balance -= item.Order.TotalPrices;
                             if (await _context.SaveChangesAsync() < 0) return false;
 
-                            item.IsActive = true;
+                            item.IsRelease = true;
                             item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             await _context.TransactionHistories.AddRangeAsync(
                                 Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, "+", item.Money, "Order", item.OrderId),
@@ -132,7 +143,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
                             if (await _context.SaveChangesAsync() < 0) return false;
 
-                            item.IsActive = true;
+                            item.IsRelease = true;
                             item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             if (await _context.SaveChangesAsync() < 0) return false;
                         }
@@ -143,7 +154,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
                             if (await _context.SaveChangesAsync() < 0) return false;
 
-                            item.IsActive = true;
+                            item.IsRelease = true;
                             item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             if (await _context.SaveChangesAsync() < 0) return false;
                         }
@@ -158,7 +169,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                         toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
                         if (await _context.SaveChangesAsync() < 0) return false;
 
-                        item.IsActive = true;
+                        item.IsRelease = true;
                         item.UpdateDate = DateTime.UtcNow.AddHours(7);
                         if (await _context.SaveChangesAsync() < 0) return false;
                     }

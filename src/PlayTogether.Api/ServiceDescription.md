@@ -195,7 +195,7 @@
 > - ``GET /api/play-together/v1/users/un-active-balance ``  
 >   ***Description***: Get all user not active balance    
 >   ***Role Access***: User     
->   ***Extension***: Paging, filter in range of Date, order new transaction    
+>   ***Extension***: Paging, filter in range of Date, order new, filter by status release    
 >
 > - ``PUT /api/play-together/v1/users/un-active-balance ``  
 >   ***Description***: Check to active the un active money    

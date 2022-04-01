@@ -17,6 +17,6 @@ namespace PlayTogether.Infrastructure.Entities
         [Column(TypeName = "float")]
         public float Money { get; set; }
         public DateTime DateActive { get; set; }
-        public bool IsActive { get; set; } = false;
+        public bool IsRelease { get; set; } = false;
     }
 }
