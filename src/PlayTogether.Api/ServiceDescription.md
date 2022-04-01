@@ -392,7 +392,7 @@
 >   ***Description***: Get all Games   
 >   ***Use for***: View all games  
 >   ***Role Access***: Admin, User  
->   ***Extension***: Paging, Filter by Name  
+>   ***Extension***: Paging, Filter by Name, Filter most favorite game, sort new game  
 >
 > - ``GET /api/play-together/v1/games/{gameId}/ranks ``  
 >   ***Description***: Get all Ranks in Game   
