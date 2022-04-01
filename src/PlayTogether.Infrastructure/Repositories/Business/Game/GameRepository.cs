@@ -86,12 +86,41 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             var games = await _context.Games.ToListAsync();
             var query = games.AsQueryable();
 
+            OrderByMostFavorite(ref query, param.IsMostFavorite);
             FilterByName(ref query, param.Name);
+            OrderByCreatedDate(ref query, param.IsNew);
 
             games = query.ToList();
             var response = _mapper.Map<List<GameGetAllResponse>>(games);
             return PagedResult<GameGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
 
+        }
+
+        private void OrderByMostFavorite(ref IQueryable<Entities.Game> query, bool? isMostFavorite)
+        {
+            var listGameOfUser = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()}).OrderByDescending(x => x.count);
+
+            var listGame = new List<Entities.Game>();
+            foreach (var gameOfUser in listGameOfUser)
+            {
+                var game = _context.Games.Find(gameOfUser.gameId);
+                if (game is null) continue;
+                listGame.Add(game);
+            }
+            query = listGame.AsQueryable();
+        }
+
+        private void OrderByCreatedDate(ref IQueryable<Entities.Game> query, bool? isNew)
+        {
+            if (!query.Any() || isNew is null) {
+                return;
+            }
+            if (isNew is true) {
+                query = query.OrderByDescending(x => x.CreatedDate);
+            }
+            else {
+                query = query.OrderBy(x => x.CreatedDate);
+            }
         }
 
         private void FilterByName(ref IQueryable<Entities.Game> query, string name)
