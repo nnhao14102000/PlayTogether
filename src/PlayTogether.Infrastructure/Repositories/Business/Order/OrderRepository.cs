@@ -530,13 +530,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
+            order.Reason = request.Reason;
 
             if (order.User.IdentityId == identityId) {
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         toUser.Id,
                         $"{order.User.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
+                        (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
                         "")
                 );
             }
@@ -545,7 +546,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.NotificationHelpers.PopulateNotification(
                         order.UserId,
                         $"{toUser.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Message) || String.IsNullOrWhiteSpace(request.Message)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Message}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
+                        (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
                         "")
                 );
             }

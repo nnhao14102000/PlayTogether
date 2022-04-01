@@ -30,6 +30,9 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(100)]
         public string Message { get; set; }
 
+        [MaxLength(100)]
+        public string Reason { get; set; }
+
         // reason order finish soon
 
         public string Status { get; set; }
