@@ -15,6 +15,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
 
         public IList<GameOfOrderResponse> GameOfOrders { get; set; }
         public string Message { get; set; }
+        public string Reason { get; set; }
         public int TotalTimes { get; set; }
         public float TotalPrices { get; set; }
         public float FinalPrices { get; set; }

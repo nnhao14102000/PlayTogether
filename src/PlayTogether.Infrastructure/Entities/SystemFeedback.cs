@@ -13,5 +13,6 @@ namespace PlayTogether.Infrastructure.Entities
         public string Message { get; set; }
         [MaxLength(100)]
         public string TypeOfFeedback { get; set; }
+        public bool? IsApprove { get; set; }
     }
 }
