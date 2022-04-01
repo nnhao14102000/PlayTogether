@@ -19,12 +19,47 @@ content-type: {{contentType}}
 }
 
 ###
+
+
 # Get all users
 GET {{baseUrl}}/api/play-together/v1/admins/users
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+
+
+# Get all reports
+GET {{baseUrl}}/api/play-together/v1/admins/reports
+?IsApprove=
+&IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get a report in detail
+GET {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Approve or Denied a report in detail
+PUT {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isApprove": true
+}
+###
+
+
+
 # Get all admins with paging, search
 GET {{baseUrl}}/api/play-together/v1/admins
     ?Name=a
@@ -95,29 +130,3 @@ Authorization: {{authToken}}
 
 ###
 
-# Get all reports
-GET {{baseUrl}}/api/play-together/v1/admins/reports
-?IsApprove=
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-# Get a report in detail
-GET {{baseUrl}}/api/play-together/v1/admins/reports/b0897cb2-a2a9-4aba-abe2-83df9ebd7059
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-###
-
-
-# Approve or Denied a report in detail
-PUT {{baseUrl}}/api/play-together/v1/admins/reports/b0897cb2-a2a9-4aba-abe2-83df9ebd7059
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
-
-{
-  "isApprove": true
-}
-###

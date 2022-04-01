@@ -136,7 +136,7 @@ Authorization: {{authToken}}
 ###
 
 # Create rating
-POST {{baseUrl}}/api/play-together/v1/rating/907c2cc0-c963-4e09-aaa8-cd4839107894
+POST {{baseUrl}}/api/play-together/v1/rating/215ce761-b9a8-41e9-a87b-fc9cfb9027ae
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -147,6 +147,17 @@ Authorization: {{authToken}}
 
 ###
 
+
+# Create report
+POST {{baseUrl}}/api/play-together/v1/reports/d7503c35-fa0c-4727-98ff-84ad64da81c5
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "reportMessage": "Bỏ giữa chừng..."
+}
+
+###
 
 
 # Get user personal information

@@ -8,5 +8,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance
         public float Money { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime DateActive { get; set; }
     }
 }

@@ -75,7 +75,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             }
 
             await _context.Entry(order).Collection(x => x.Ratings).LoadAsync();
-            if(order.Ratings.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)){
+            if (order.Ratings.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
                 return false;
             }
 
@@ -176,13 +176,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             await _context.Entry(report).Reference(x => x.User).LoadAsync();
             var response = _mapper.Map<ReportInDetailResponse>(report);
             var toUser = await _context.AppUsers.FindAsync(report.ToUserId);
+            response.ToUser = new Core.Dtos.Outcoming.Business.Order.OrderUserResponse {
+                Id = toUser.Id,
+                Avatar = toUser.Avatar,
+                Name = toUser.Name,
+                IsActive = toUser.IsActive,
+                IsPlayer = toUser.IsPlayer,
+                Status = toUser.Status
+            };
 
-            response.ToUser.Id = toUser.Id;
-            response.ToUser.Avatar = toUser.Avatar;
-            response.ToUser.Name = toUser.Name;
-            response.ToUser.IsActive = toUser.IsActive;
-            response.ToUser.IsPlayer = toUser.IsPlayer;
-            response.ToUser.Status = toUser.Status;
+
             return response;
         }
     }

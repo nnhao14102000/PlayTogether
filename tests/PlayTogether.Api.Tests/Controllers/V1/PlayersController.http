@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 ###
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/1c7a7c61-831d-478b-8bc0-4868160fda75
+GET {{baseUrl}}/api/play-together/v1/orders/d7503c35-fa0c-4727-98ff-84ad64da81c5
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -37,7 +37,7 @@ Authorization: {{authToken}}
 
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/1c7a7c61-831d-478b-8bc0-4868160fda75/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/d7503c35-fa0c-4727-98ff-84ad64da81c5/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -49,12 +49,12 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/1c7a7c61-831d-478b-8bc0-4868160fda75
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/d7503c35-fa0c-4727-98ff-84ad64da81c5
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "message": "Cho tui nghi som nha"
+  "reason": "Cho tui nghi som nha"
 }
 
 ###
