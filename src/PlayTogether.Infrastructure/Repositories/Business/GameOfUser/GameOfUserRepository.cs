@@ -43,9 +43,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                               .LoadAsync();
             }
             var response = _mapper.Map<IEnumerable<GamesOfUserResponse>>(gamesOfPlayer);
-            foreach (var item in response)
-            {
-                if(String.IsNullOrEmpty(item.RankId) || String.IsNullOrWhiteSpace(item.RankId)){
+            foreach (var item in response) {
+                if (String.IsNullOrEmpty(item.RankId) || String.IsNullOrWhiteSpace(item.RankId)) {
                     continue;
                 }
                 var rank = await _context.Ranks.FindAsync(item.RankId);
@@ -84,15 +83,25 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             model.UserId = user.Id;
             if (String.IsNullOrEmpty(request.RankId) || String.IsNullOrWhiteSpace(request.RankId)) {
                 model.RankId = "None";
-            }else{
+            }
+            else {
                 var existRank = await _context.Ranks.Where(x => x.GameId == request.GameId).AnyAsync(x => x.Id == request.RankId);
-                if(!existRank){
+                if (!existRank) {
                     return null;
                 }
             }
             await _context.GameOfUsers.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
-                return _mapper.Map<GameOfUserGetByIdResponse>(model);
+                var response = _mapper.Map<GameOfUserGetByIdResponse>(model);
+                if (!String.IsNullOrEmpty(response.RankId) || !String.IsNullOrWhiteSpace(response.RankId)) {
+                    var rank = await _context.Ranks.FindAsync(response.RankId);
+                    response.Rank = new RankGetByIdResponse {
+                        Id = rank.Id,
+                        NO = rank.NO,
+                        Name = rank.Name
+                    };
+                }
+                return response;
             }
             return null;
         }
@@ -131,8 +140,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                               .Reference(x => x.Game)
                               .Query()
                               .LoadAsync();
+            var response = _mapper.Map<GameOfUserGetByIdResponse>(gameOfUser);
 
-            return _mapper.Map<GameOfUserGetByIdResponse>(gameOfUser);
+            if (!String.IsNullOrEmpty(response.RankId) || !String.IsNullOrWhiteSpace(response.RankId)) {
+                var rank = await _context.Ranks.FindAsync(response.RankId);
+                response.Rank = new RankGetByIdResponse {
+                    Id = rank.Id,
+                    NO = rank.NO,
+                    Name = rank.Name
+                };
+            }
+            return response;
         }
 
         public async Task<bool> UpdateGameOfUserAsync(
@@ -159,9 +177,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             var model = _mapper.Map(request, gameOfUser);
             if (String.IsNullOrEmpty(request.RankId) || String.IsNullOrWhiteSpace(request.RankId)) {
                 model.RankId = "None";
-            }else{
+            }
+            else {
                 var existRank = await _context.Ranks.Where(x => x.GameId == gameOfUser.GameId).AnyAsync(x => x.Id == request.RankId);
-                if(!existRank){
+                if (!existRank) {
                     return false;
                 }
             }

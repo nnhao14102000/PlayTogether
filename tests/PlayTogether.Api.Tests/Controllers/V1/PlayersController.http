@@ -141,7 +141,7 @@ Authorization: {{authToken}}
 
 
 # Get a game of User
-GET {{baseUrl}}/api/play-together/v1/games-of-user/2e2636c5-d20a-4989-a515-bb1be026b0f4
+GET {{baseUrl}}/api/play-together/v1/games-of-user/81ce7ea8-b49e-47cd-b670-0be6eed28b11
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
