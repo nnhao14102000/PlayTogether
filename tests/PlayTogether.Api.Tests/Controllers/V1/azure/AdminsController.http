@@ -1,0 +1,133 @@
+@hostname = localhost
+@port = 5001
+@azurehost = play-together.azurewebsites.net
+@lchost = {{hostname}}:{{port}}
+@host = {{azurehost}}
+@baseUrl = https://{{host}}
+@contentType = application/json
+@token = {{login.response.body.$.message}}
+@authToken = bearer {{token}}
+
+###
+
+# @name login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-admin
+content-type: {{contentType}}
+
+{
+  "email": "admin01@example.com",
+  "password": "Pa55w0rd!"
+}
+
+###
+
+
+# Get all users
+GET {{baseUrl}}/api/play-together/v1/admins/users
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Get all reports
+GET {{baseUrl}}/api/play-together/v1/admins/reports
+?IsApprove=
+&IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get a report in detail
+GET {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Approve or Denied a report in detail
+PUT {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isApprove": true
+}
+###
+
+
+
+# Get all admins with paging, search
+GET {{baseUrl}}/api/play-together/v1/admins
+    ?Name=a
+    &PageNumber=1
+    &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+# Get all hirers
+GET {{baseUrl}}/api/play-together/v1/hirers
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+# Get all hirers with paging, search
+GET {{baseUrl}}/api/play-together/v1/hirers
+    ?Name=a
+    &PageNumber=1
+    &PageSize=10
+content-type: {{contentType}}
+Authorization: {{authToken}}
+###
+
+
+# Get all player rating violate
+GET {{baseUrl}}/api/play-together/v1/rating/violates
+?IsNew=true
+&IsActive=
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Disable violate rating
+PUT {{baseUrl}}/api/play-together/v1/rating/disable/5472b317-6902-4fa1-ab9b-99e6e77c1227
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Disable account
+PUT {{baseUrl}}/api/play-together/v1/admins/hirer-status/2181af98-904a-4df9-9b9a-96bc925956ff
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isActive" : false,
+  "message" : "Sao bạn chửi player chơi ngu...."
+}
+
+###
+
+
+# Get all orders of a specific Hirer
+GET {{baseUrl}}/api/play-together/v1/admins/d04a4aa1-0f83-4acd-a645-f6aaae367154/orders?isNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get a order detail
+GET {{baseUrl}}/api/play-together/v1/admins/users/orders/1c7a7c61-831d-478b-8bc0-4868160fda75
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
