@@ -164,7 +164,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, param.Name);
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
-            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies,  user);
+            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
 
@@ -177,8 +177,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             users = query.ToList();
             var response = _mapper.Map<List<UserSearchResponse>>(users);
-            foreach (var item in response)
-            {
+            foreach (var item in response) {
                 var rates = await _context.Ratings.Where(x => x.ToUserId == item.Id).ToListAsync();
                 item.NumOfRate = rates.Count();
             }
@@ -209,12 +208,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
         private void OrderUserByCreatedDate(ref IQueryable<Entities.AppUser> query, bool? isNewAccount)
         {
-            if(!query.Any() || isNewAccount is null){
-                return ;
+            if (!query.Any() || isNewAccount is null) {
+                return;
             }
-            if(isNewAccount is true){
+            if (isNewAccount is true) {
                 query = query.OrderByDescending(x => x.CreatedDate);
-            }else{
+            }
+            else {
                 query = query.OrderBy(x => x.CreatedDate);
             }
         }
@@ -224,7 +224,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             bool? isSameHobbies,
             Entities.AppUser user)
         {
-            if(!query.Any() || isSameHobbies is false || isSameHobbies is null){
+            if (!query.Any() || isSameHobbies is false || isSameHobbies is null) {
                 return;
             }
 
@@ -232,15 +232,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var listGameOfUser = new List<Entities.GameOfUser>();
 
             _context.Entry(user).Collection(x => x.Hobbies).Load();
-            
-            foreach (var hobby in user.Hobbies)
-            {
+
+            foreach (var hobby in user.Hobbies) {
                 listGameOfUser = listGameOfUser.Union(_context.GameOfUsers.Where(x => x.GameId == hobby.GameId).ToList()).ToList();
             }
 
-            foreach (var gameOfUser in listGameOfUser)
-            {
-                _context.Entry(gameOfUser).Reference(x =>x.User).Load();
+            foreach (var gameOfUser in listGameOfUser) {
+                _context.Entry(gameOfUser).Reference(x => x.User).Load();
                 final.Add(gameOfUser.User);
             }
             query = final.AsQueryable().Distinct();
@@ -274,13 +272,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
             var list = query.ToList();
-            foreach (var item in list)
-            {
+            foreach (var item in list) {
                 _context.Entry(item).Collection(x => x.Ratings).Load();
             }
             query = list.AsQueryable();
-            query = query.OrderByDescending(x => x.Rate);
-            query = query.OrderByDescending(x => x.Ratings.Count());
+            query = query.OrderByDescending(x => x.Rate).ThenByDescending(x => x.Ratings.Count()).ThenBy(x => x.CreatedDate);
         }
 
         private void OrderUserByASCName(ref IQueryable<Entities.AppUser> query, bool? isOrderByName)
@@ -395,7 +391,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
 
-            _context.SearchHistories.Add(Helpers.SearchHistoryHelpers.PopulateSearchHistory(userId, searchString));
+            var existSearch = _context.SearchHistories.Where(x => x.UserId == userId).Any(x => x.SearchString.ToLower() == searchString.ToLower());
+            if (existSearch is true) {
+                var search = _context.SearchHistories.FirstOrDefault(x => x.UserId == userId && x.SearchString.ToLower() == searchString.ToLower());
+                if(search is not null){
+                    search.UpdateDate = DateTime.UtcNow.AddHours(7);
+                }
+            }
+            else {
+                _context.SearchHistories.Add(Helpers.SearchHistoryHelpers.PopulateSearchHistory(userId, searchString));
+            }
+
             if (_context.SaveChanges() < 0) return;
 
             var finalList = new List<Entities.AppUser>();
@@ -469,12 +475,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = finalList.AsQueryable();
         }
 
-        
+
 
         private void FilterByStatus(ref IQueryable<Entities.AppUser> query, string status)
         {
-            if(!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)){
-                return ;
+            if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
+                return;
             }
             query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
         }

@@ -66,22 +66,22 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             var query = searchHistories.AsQueryable();
             FilterActiveHistory(ref query, true);
             FilterByContent(ref query, param.Content);
-            SortDscByCreateDate(ref query, param.SortDsc);
+            SortDscByCreateDate(ref query, param.IsNew);
             searchHistories = query.ToList();
             var response = _mapper.Map<List<SearchHistoryResponse>>(searchHistories);
             return PagedResult<SearchHistoryResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void SortDscByCreateDate(ref IQueryable<Entities.SearchHistory> query, bool? sortDsc)
+        private void SortDscByCreateDate(ref IQueryable<Entities.SearchHistory> query, bool? isNew)
         {
-            if (!query.Any() || sortDsc is null) {
+            if (!query.Any() || isNew is null) {
                 return;
             }
-            if (sortDsc is true) {
-                query = query.OrderByDescending(x => x.CreatedDate);
+            if (isNew is true) {
+                query = query.OrderByDescending(x => x.UpdateDate).ThenByDescending(x => x.CreatedDate);
             }
             else {
-                query = query.OrderBy(x => x.CreatedDate);
+                query = query.OrderBy(x => x.UpdateDate).ThenBy(x => x.CreatedDate);
             }
         }
 
