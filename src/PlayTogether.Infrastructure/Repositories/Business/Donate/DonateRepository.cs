@@ -65,7 +65,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                         user.UserBalance.Id,
                         "-",
                         request.Money,
-                        "Donate",
+                        TransactionTypeConstants.Donate,
                         model.Id
                     )
                 );

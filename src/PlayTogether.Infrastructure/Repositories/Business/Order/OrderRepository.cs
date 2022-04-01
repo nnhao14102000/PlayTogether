@@ -90,7 +90,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             model.UserId = user.Id;
             model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
             model.Status = OrderStatusConstants.Processing;
-            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
+            // model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
+            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTimeForTest);
 
             _context.Orders.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -429,7 +430,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         order.User.UserBalance.Id,
                         "-",
                         order.TotalPrices,
-                        "Order",
+                        TransactionTypeConstants.Order,
                         orderId)
                 );
                 return (await _context.SaveChangesAsync() >= 0);
@@ -476,7 +477,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         "+",
                         order.FinalPrices,
-                        "Order",
+                        TransactionTypeConstants.Order,
                         orderId)
                 );
 
@@ -485,7 +486,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney))
+                        // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                        DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                        )
                 );
                 return (await _context.SaveChangesAsync() >= 0);
             }
@@ -563,14 +566,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         order.User.UserBalance.Id,
                         "+",
                         (order.TotalPrices - order.FinalPrices),
-                        "Order",
+                        TransactionTypeConstants.OrderRefund,
                         orderId)
                     ,
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
                         "+",
                         order.FinalPrices,
-                        "Order",
+                        TransactionTypeConstants.Order,
                         orderId)
                 );
 
@@ -579,7 +582,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney))
+                        // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                        DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                        )
                 );
                 return (await _context.SaveChangesAsync() >= 0);
             }

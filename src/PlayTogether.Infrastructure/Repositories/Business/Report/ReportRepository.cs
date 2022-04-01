@@ -48,7 +48,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 || order.Status is OrderStatusConstants.Cancel
                 || order.Status is OrderStatusConstants.Processing
                 || order.Status is OrderStatusConstants.Interrupt
-                || DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish) {
+                // || DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
+                || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
+                ) {
                 return false;
             }
 
