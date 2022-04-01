@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
 {
@@ -41,8 +42,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                               .Query()
                               .LoadAsync();
             }
-
-            return _mapper.Map<IEnumerable<GamesOfUserResponse>>(gamesOfPlayer);
+            var response = _mapper.Map<IEnumerable<GamesOfUserResponse>>(gamesOfPlayer);
+            foreach (var item in response)
+            {
+                if(String.IsNullOrEmpty(item.RankId) || String.IsNullOrWhiteSpace(item.RankId)){
+                    continue;
+                }
+                var rank = await _context.Ranks.FindAsync(item.RankId);
+                item.Rank = _mapper.Map<RankGetByIdResponse>(rank);
+            }
+            return response;
 
         }
 

@@ -1,4 +1,5 @@
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
+using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser
 {
@@ -10,5 +11,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser
         public GameGetAllResponse Game { get; set; }
 
         public string RankId { get; set; }
+        public RankGetByIdResponse Rank { get; set; }
     }
 }
