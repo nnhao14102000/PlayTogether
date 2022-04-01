@@ -28,7 +28,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             var charities = await _context.Charities.ToListAsync();
             var queryCharity = charities.AsQueryable();
 
-            FilterActiveCharities(ref queryCharity);
+            FilterActiveCharities(ref queryCharity, param.IsActive);
             FilterCharitiesByName(ref queryCharity, param.Name);
 
             charities = queryCharity.ToList();
@@ -44,12 +44,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             queryCharity = queryCharity.Where(x => x.OrganizationName.ToLower().Contains(name.ToLower()));
         }
 
-        private void FilterActiveCharities(ref IQueryable<Entities.Charity> queryCharity)
+        private void FilterActiveCharities(ref IQueryable<Entities.Charity> queryCharity, bool? isActive)
         {
-            if (!queryCharity.Any()) {
+            if (!queryCharity.Any() || isActive is null) {
                 return;
             }
-            queryCharity = queryCharity.Where(x => x.IsActive == true);
+            queryCharity = queryCharity.Where(x => x.IsActive == isActive);
         }
 
         public async Task<CharityResponse> GetCharityByIdAsync(string id)
