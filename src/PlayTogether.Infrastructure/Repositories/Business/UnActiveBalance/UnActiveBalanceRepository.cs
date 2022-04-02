@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -131,8 +132,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                             item.IsRelease = true;
                             item.UpdateDate = DateTime.UtcNow.AddHours(7);
                             await _context.TransactionHistories.AddRangeAsync(
-                                Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, "+", item.Money, "Order", item.OrderId),
-                                Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, "-", item.Money, "Order", item.OrderId)
+                                Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Money, "Order", item.OrderId),
+                                Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Money, "Order", item.OrderId)
                             );
                             if (await _context.SaveChangesAsync() < 0) return false;
                         }

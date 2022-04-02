@@ -428,7 +428,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         order.User.UserBalance.Id,
-                        "-",
+                        TransactionTypeConstants.Sub,
                         order.TotalPrices,
                         TransactionTypeConstants.Order,
                         orderId)
@@ -475,7 +475,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
-                        "+",
+                        TransactionTypeConstants.Add,
                         order.FinalPrices,
                         TransactionTypeConstants.Order,
                         orderId)
@@ -564,14 +564,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 await _context.TransactionHistories.AddRangeAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         order.User.UserBalance.Id,
-                        "+",
+                        TransactionTypeConstants.Add,
                         (order.TotalPrices - order.FinalPrices),
                         TransactionTypeConstants.OrderRefund,
                         orderId)
                     ,
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
-                        "+",
+                        TransactionTypeConstants.Add,
                         order.FinalPrices,
                         TransactionTypeConstants.Order,
                         orderId)

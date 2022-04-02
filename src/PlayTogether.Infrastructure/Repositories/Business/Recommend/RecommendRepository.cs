@@ -22,7 +22,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
             // Environment.CurrentDirectory
             // AppContext.BaseDirectory
             // AppDomain.CurrentDomain.BaseDirectory
-            var path = Path.Combine(AppContext.BaseDirectory, "DataFile", "Recommend_Data.txt");
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataFile", "Recommend_Data.txt");
 
             var path_directory = Path.Combine(AppDomain.CurrentDomain
             .BaseDirectory, "DataFile");
@@ -49,11 +49,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                     listAppend.Add(objRecommend);
                 }
 
-                using (FileStream fs = File.Create(path))
-                    foreach (var item in listAppend) {
-                        var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
-                        listFinal.Add(str);
-                    }
+                using (FileStream fs = File.Create(path_directory))
+
+                foreach (var item in listAppend) {
+                    var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                    listFinal.Add(str);
+                }
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
                         tw.WriteLine(item);
@@ -93,7 +94,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 }
                 else {
                     if (listRecommend.Count() > logList.Count()) {
-                       
+
                         for (int i = listRecommend.Count() - (listRecommend.Count() - logList.Count()); i < listRecommend.Count(); i++) {
                             var objRecommend = new RecommendSerialize {
                                 UserId = listRecommend[i].UserId,

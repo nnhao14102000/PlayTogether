@@ -62,7 +62,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             if(!query.Any() || String.IsNullOrEmpty(operation) || String.IsNullOrWhiteSpace(operation)){
                 return ;
             }
-            query = query.Where(x => x.Operation.Contains(operation));
+            query = query.Where(x => x.Operation.ToLower().Contains(operation.ToLower()));
         }
 
         private void SortNewTransaction(ref IQueryable<Entities.TransactionHistory> query, bool? isNew)

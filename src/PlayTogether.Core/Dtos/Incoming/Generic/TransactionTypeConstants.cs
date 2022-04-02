@@ -8,5 +8,8 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
         public const string Deposit = "Deposit";
         public const string Donate = "Donate";
 
+        public const string Sub = "Sub";
+        public const string Add = "Add";
+
     }
 }

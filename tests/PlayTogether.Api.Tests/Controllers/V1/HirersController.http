@@ -138,6 +138,7 @@ Authorization: {{authToken}}
 # Get all Transaction
 GET {{baseUrl}}/api/play-together/v1/users/transactions?isNew=true
 &Type=order
+&Operation="+"
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

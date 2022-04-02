@@ -63,7 +63,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         user.UserBalance.Id,
-                        "-",
+                        TransactionTypeConstants.Sub,
                         request.Money,
                         TransactionTypeConstants.Donate,
                         model.Id
