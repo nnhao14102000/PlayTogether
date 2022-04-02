@@ -396,6 +396,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 var search = _context.SearchHistories.FirstOrDefault(x => x.UserId == userId && x.SearchString.ToLower() == searchString.ToLower());
                 if(search is not null){
                     search.UpdateDate = DateTime.UtcNow.AddHours(7);
+                    search.IsActive = true;
                 }
             }
             else {

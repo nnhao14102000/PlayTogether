@@ -65,11 +65,28 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             var searchHistories = await _context.SearchHistories.Where(x => x.UserId == user.Id).ToListAsync();
             var query = searchHistories.AsQueryable();
             FilterActiveHistory(ref query, true);
+            GetHotSearch(ref query, param.IsHotSearch);
             FilterByContent(ref query, param.Content);
             SortNewSearch(ref query, param.IsNew);
             searchHistories = query.ToList();
             var response = _mapper.Map<List<SearchHistoryResponse>>(searchHistories);
             return PagedResult<SearchHistoryResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void GetHotSearch(ref IQueryable<Entities.SearchHistory> query, bool? isHotSearch)
+        {
+            if (!query.Any() || isHotSearch is null || isHotSearch is false) {
+                return;
+            }
+            var listSearch = _context.SearchHistories.GroupBy(x => x.SearchString).Select(g => new {searchId = g.Key, count = g.Count()}).OrderByDescending(x => x.count);
+            var list = new List<Entities.SearchHistory>();
+            foreach (var item in listSearch)
+            {
+                var s = _context.SearchHistories.Find(item.searchId);
+                if(s is null) continue;
+                list.Add(s);
+            }
+            query = list.AsQueryable();
         }
 
         private void SortNewSearch(ref IQueryable<Entities.SearchHistory> query, bool? isNew)

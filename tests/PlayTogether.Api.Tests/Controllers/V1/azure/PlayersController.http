@@ -119,8 +119,9 @@ Authorization: {{authToken}}
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-?name=c
-&pageSize=100
+?name=
+&isMostFavorite=true
+&pageSize=50
 &pageNumber=1
 content-type: {{contentType}}
 Authorization: {{authToken}}
