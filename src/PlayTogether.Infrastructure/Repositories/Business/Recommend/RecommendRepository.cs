@@ -19,19 +19,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
 
         public async Task<bool> WriteToFile()
         {
-            // Environment.CurrentDirectory
-            // AppContext.BaseDirectory
-            // AppDomain.CurrentDomain.BaseDirectory
             var path = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
             var pathDirectory = Path.Combine(Environment.CurrentDirectory, "DataFile");
-
-
             var listRecommend = await _context.Recommends.OrderBy(x => x.CreatedDate).ToListAsync();
             var listAppend = new List<RecommendSerialize>();
             var listFinal = new List<String>();
 
             if (!File.Exists(path)) {
-
                 for (int i = 0; i < listRecommend.Count(); i++) {
                     var objRecommend = new RecommendSerialize {
                         UserId = listRecommend[i].UserId,
@@ -46,9 +40,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                     };
                     listAppend.Add(objRecommend);
                 }
-
                 // using (FileStream fs = File.Create(path))
-
                 foreach (var item in listAppend) {
                     var str = item.UserId.ToString()
                               + " "
@@ -73,7 +65,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 if(!Directory.Exists(pathDirectory)){
                     Directory.CreateDirectory(pathDirectory);
                 }
-                
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
                         tw.WriteLine(item);
