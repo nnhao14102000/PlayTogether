@@ -28,6 +28,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
 
             var listRecommend = await _context.Recommends.OrderBy(x => x.CreatedDate).ToListAsync();
             var listAppend = new List<RecommendSerialize>();
+            var listFinal = new List<String>();
 
             if (!File.Exists(path)) {
 
@@ -45,10 +46,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                     };
                     listAppend.Add(objRecommend);
                 }
-                using (FileStream fs = File.Create(path))
 
-                using (var tw = new StreamWriter(path)) {
+                using (FileStream fs = File.Create(path))
                     foreach (var item in listAppend) {
+                        var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                        listFinal.Add(str);
+                    }
+                using (var tw = new StreamWriter(path)) {
+                    foreach (var item in listFinal) {
                         tw.WriteLine(item);
                     }
                 }
@@ -60,19 +65,19 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
 
                 if (logList.Count() == 0) {
                     for (int i = 0; i < listRecommend.Count() - 1; i++) {
-                    var objRecommend = new RecommendSerialize {
-                        UserId = listRecommend[i].UserId,
-                        UserAge = listRecommend[i].UserAge,
-                        UserGender = listRecommend[i].UserGender,
-                        GameOrderId = listRecommend[i].GameOrderId,
-                        PlayerId = listRecommend[i].PlayerId,
-                        PlayerAge = listRecommend[i].PlayerAge,
-                        PlayerGender = listRecommend[i].PlayerGender,
-                        GameOfPlayerId = listRecommend[i].GameOfPlayerId,
-                        Rate = listRecommend[i].Rate
-                    };
-                    listAppend.Add(objRecommend);
-                }
+                        var objRecommend = new RecommendSerialize {
+                            UserId = listRecommend[i].UserId,
+                            UserAge = listRecommend[i].UserAge,
+                            UserGender = listRecommend[i].UserGender,
+                            GameOrderId = listRecommend[i].GameOrderId,
+                            PlayerId = listRecommend[i].PlayerId,
+                            PlayerAge = listRecommend[i].PlayerAge,
+                            PlayerGender = listRecommend[i].PlayerGender,
+                            GameOfPlayerId = listRecommend[i].GameOfPlayerId,
+                            Rate = listRecommend[i].Rate
+                        };
+                        listAppend.Add(objRecommend);
+                    }
                 }
                 else {
                     if (logList.Count() <= listRecommend.Count()) {
@@ -94,8 +99,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                     }
                 }
 
+                foreach (var item in listAppend) {
+                    var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                    listFinal.Add(str);
+                }
                 using (var tw = new StreamWriter(path, true)) {
-                    foreach (var item in listAppend) {
+                    foreach (var item in listFinal) {
                         tw.WriteLine(item);
                     }
                 }

@@ -2,7 +2,6 @@ using System;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Business.Recommend
 {
-    [Serializable]
     public class RecommendSerialize
     {
         public string UserId { get; set; }
