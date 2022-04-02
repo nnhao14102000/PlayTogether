@@ -17,15 +17,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
         {
         }
 
-        public async Task<bool> TrainModel()
+        public async Task<bool> WriteToFile()
         {
             // Environment.CurrentDirectory
             // AppContext.BaseDirectory
             // AppDomain.CurrentDomain.BaseDirectory
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataFile", "Recommend_Data.txt");
+            var path = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
 
-            var path_directory = Path.Combine(AppDomain.CurrentDomain
-            .BaseDirectory, "DataFile");
 
 
             var listRecommend = await _context.Recommends.OrderBy(x => x.CreatedDate).ToListAsync();
@@ -49,10 +47,26 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                     listAppend.Add(objRecommend);
                 }
 
-                using (FileStream fs = File.Create(path_directory))
+                // using (FileStream fs = File.Create(path))
 
                 foreach (var item in listAppend) {
-                    var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                    var str = item.UserId.ToString()
+                              + " "
+                              + item.UserAge.ToString()
+                              + " "
+                              + item.UserGender.ToString()
+                              + " "
+                              + item.GameOrderId.ToString()
+                              + " "
+                              + item.PlayerId.ToString()
+                              + " "
+                              + item.PlayerAge.ToString()
+                              + " "
+                              + item.PlayerGender.ToString()
+                              + " "
+                              + item.GameOfPlayerId.ToString()
+                              + " "
+                              + item.Rate.ToString();
                     listFinal.Add(str);
                 }
                 using (var tw = new StreamWriter(path)) {
@@ -110,7 +124,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                             listAppend.Add(objRecommend);
                         }
                         foreach (var item in listAppend) {
-                            var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                            var str = item.UserId.ToString()
+                                      + " "
+                                      + item.UserAge.ToString()
+                                      + " "
+                                      + item.UserGender.ToString()
+                                      + " "
+                                      + item.GameOrderId.ToString()
+                                      + " "
+                                      + item.PlayerId.ToString()
+                                      + " "
+                                      + item.PlayerAge.ToString()
+                                      + " "
+                                      + item.PlayerGender.ToString()
+                                      + " "
+                                      + item.GameOfPlayerId.ToString()
+                                      + " "
+                                      + item.Rate.ToString();
                             listFinal.Add(str);
                         }
                         using (var tw = new StreamWriter(path, true)) {
@@ -121,9 +151,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                         return true;
                     }
                 }
-
-
-
             }
             return false;
         }

@@ -103,7 +103,7 @@ Authorization: {{authToken}}
 
 
 # Get a order
-GET {{baseUrl}}/api/play-together/v1/orders/91d56f4a-ac43-46bc-be12-c867d50a3f83
+GET {{baseUrl}}/api/play-together/v1/orders/b5dc273e-87f3-4d79-a745-56326a16f5df
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -112,7 +112,7 @@ Authorization: {{authToken}}
 
 
 # Cancel order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/cb621e06-9cad-45b1-a634-761ea61275ea
+PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/b5dc273e-87f3-4d79-a745-56326a16f5df
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

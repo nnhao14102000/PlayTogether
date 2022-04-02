@@ -486,7 +486,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [HttpGet, Route("train-model")]
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult> TrainModel(){
-            var response = await _recommendService.TrainModel();
+            var response = await _recommendService.WriteToFile();
             return response ? Ok() : NoContent();
         }
 
