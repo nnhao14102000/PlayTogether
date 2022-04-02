@@ -23,7 +23,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
             // AppContext.BaseDirectory
             // AppDomain.CurrentDomain.BaseDirectory
             var path = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
-
+            var pathDirectory = Path.Combine(Environment.CurrentDirectory, "DataFile");
 
 
             var listRecommend = await _context.Recommends.OrderBy(x => x.CreatedDate).ToListAsync();
@@ -68,6 +68,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                               + " "
                               + item.Rate.ToString();
                     listFinal.Add(str);
+                }
+
+                if(!Directory.Exists(pathDirectory)){
+                    Directory.CreateDirectory(pathDirectory);
                 }
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
