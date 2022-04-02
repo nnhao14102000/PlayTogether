@@ -43,28 +43,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 // using (FileStream fs = File.Create(path))
                 foreach (var item in listAppend) {
                     var str = item.UserId.ToString()
-                              + " "
+                              + ","
                               + item.UserAge.ToString()
-                              + " "
+                              + ","
                               + item.UserGender.ToString()
-                              + " "
+                              + ","
                               + item.GameOrderId.ToString()
-                              + " "
+                              + ","
                               + item.PlayerId.ToString()
-                              + " "
+                              + ","
                               + item.PlayerAge.ToString()
-                              + " "
+                              + ","
                               + item.PlayerGender.ToString()
-                              + " "
+                              + ","
                               + item.GameOfPlayerId.ToString()
-                              + " "
+                              + ","
                               + item.Rate.ToString();
                     listFinal.Add(str);
                 }
 
-                if(!Directory.Exists(pathDirectory)){
-                    Directory.CreateDirectory(pathDirectory);
-                }
+                Directory.CreateDirectory(pathDirectory);
+                
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
                         tw.WriteLine(item);
@@ -92,7 +91,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                         listAppend.Add(objRecommend);
                     }
                     foreach (var item in listAppend) {
-                        var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                        var str = item.UserId.ToString()
+                                  + ","
+                                  + item.UserAge.ToString()
+                                  + ","
+                                  + item.UserGender.ToString()
+                                  + ","
+                                  + item.GameOrderId.ToString()
+                                  + ","
+                                  + item.PlayerId.ToString()
+                                  + ","
+                                  + item.PlayerAge.ToString()
+                                  + ","
+                                  + item.PlayerGender.ToString()
+                                  + ","
+                                  + item.GameOfPlayerId.ToString()
+                                  + ","
+                                  + item.Rate.ToString();
                         listFinal.Add(str);
                     }
                     using (var tw = new StreamWriter(path, true)) {
@@ -121,21 +136,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                         }
                         foreach (var item in listAppend) {
                             var str = item.UserId.ToString()
-                                      + " "
+                                      + ","
                                       + item.UserAge.ToString()
-                                      + " "
+                                      + ","
                                       + item.UserGender.ToString()
-                                      + " "
+                                      + ","
                                       + item.GameOrderId.ToString()
-                                      + " "
+                                      + ","
                                       + item.PlayerId.ToString()
-                                      + " "
+                                      + ","
                                       + item.PlayerAge.ToString()
-                                      + " "
+                                      + ","
                                       + item.PlayerGender.ToString()
-                                      + " "
+                                      + ","
                                       + item.GameOfPlayerId.ToString()
-                                      + " "
+                                      + ","
                                       + item.Rate.ToString();
                             listFinal.Add(str);
                         }
