@@ -137,6 +137,7 @@ Authorization: {{authToken}}
 
 # Get all Transaction
 GET {{baseUrl}}/api/play-together/v1/users/transactions?isNew=true
+&Type=order
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -204,3 +205,17 @@ Authorization: {{authToken}}
 
 # Create donate
 POST {{baseUrl}}/api/play-together/v1/donates/
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+
+# Train model
+GET {{baseUrl}}/api/play-together/v1/users/train-model
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###

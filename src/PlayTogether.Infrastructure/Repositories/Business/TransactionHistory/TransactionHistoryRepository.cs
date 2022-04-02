@@ -43,6 +43,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
 
             var query = trans.AsQueryable();
             FilterByTransactionType(ref query, param.Type);
+            FilterByOperation(ref query, param.Operation);
             FilterByDateRange(ref query, param.FromDate, param.ToDate);
             SortNewTransaction(ref query, param.IsNew);
 
@@ -54,6 +55,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterByOperation(ref IQueryable<Entities.TransactionHistory> query, string operation)
+        {
+            if(!query.Any() || String.IsNullOrEmpty(operation) || String.IsNullOrWhiteSpace(operation)){
+                return ;
+            }
+            query = query.Where(x => x.Operation.Contains(operation));
         }
 
         private void SortNewTransaction(ref IQueryable<Entities.TransactionHistory> query, bool? isNew)

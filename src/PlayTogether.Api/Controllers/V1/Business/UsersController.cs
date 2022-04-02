@@ -30,6 +30,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly IUnActiveBalanceService _unActiveBalanceService;
         private readonly IDonateService _donateService;
+        private readonly IRecommendService _recommendService;
 
         public UsersController(
             IAppUserService appUserService,
@@ -38,7 +39,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IOrderService orderService,
             ITransactionHistoryService transactionHistoryService,
             IUnActiveBalanceService unActiveBalanceService,
-            IDonateService donateService)
+            IDonateService donateService,
+            IRecommendService recommendService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
@@ -47,6 +49,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _transactionHistoryService = transactionHistoryService;
             _unActiveBalanceService = unActiveBalanceService;
             _donateService = donateService;
+            _recommendService = recommendService;
         }
 
         /*
@@ -464,6 +467,27 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _donateService.CreateDonateAsync(HttpContext.User, charityId, request);
             return response ? Ok() : NotFound();
+        }
+
+        /*
+        *================================================
+        *                                              ||
+        * ML APIs SECTION                              ||
+        *                                              ||
+        *================================================
+        */
+        /// <summary>
+        /// Train model
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("train-model")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> TrainModel(){
+            var response = await _recommendService.TrainModel();
+            return response ? Ok() : NoContent();
         }
 
     }

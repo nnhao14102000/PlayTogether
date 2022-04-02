@@ -24,6 +24,7 @@ using PlayTogether.Core.Services.Business.Order;
 using PlayTogether.Core.Services.Business.Player;
 using PlayTogether.Core.Services.Business.Rank;
 using PlayTogether.Core.Services.Business.Rating;
+using PlayTogether.Core.Services.Business.Recommend;
 using PlayTogether.Core.Services.Business.Report;
 using PlayTogether.Core.Services.Business.SearchHistory;
 using PlayTogether.Core.Services.Business.TransactionHistory;
@@ -49,6 +50,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Order;
 using PlayTogether.Infrastructure.Repositories.Business.Player;
 using PlayTogether.Infrastructure.Repositories.Business.Rank;
 using PlayTogether.Infrastructure.Repositories.Business.Rating;
+using PlayTogether.Infrastructure.Repositories.Business.Recommend;
 using PlayTogether.Infrastructure.Repositories.Business.Report;
 using PlayTogether.Infrastructure.Repositories.Business.SearchHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TransactionHistory;
@@ -187,6 +189,10 @@ namespace PlayTogether.Api.Helpers
             // Config for UnActiveBalance service DI
             services.AddScoped<IUnActiveBalanceService, UnActiveBalanceService>();
             services.AddScoped<IUnActiveBalanceRepository, UnActiveBalanceRepository>();
+
+            // Config for Recommend service DI
+            services.AddScoped<IRecommendService, RecommendService>();
+            services.AddScoped<IRecommendRepository, RecommendRepository>();
 
             services.AddHttpClient();
 
