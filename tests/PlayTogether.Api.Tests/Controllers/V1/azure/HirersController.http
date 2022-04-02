@@ -136,6 +136,8 @@ Authorization: {{authToken}}
 
 # Get all Transaction
 GET {{baseUrl}}/api/play-together/v1/users/transactions
+?type=refund
+&operation=add
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
