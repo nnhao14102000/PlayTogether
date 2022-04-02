@@ -30,9 +30,19 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?name=cáo
+?name=
+
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+# Get search history
+GET {{baseUrl}}/api/play-together/v1/search-histories
+?isNew=true
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
 
 ###
 
@@ -95,6 +105,14 @@ Authorization: {{authToken}}
 
 # Cancel order
 PUT {{baseUrl}}/api/play-together/v1/users/orders/cancel/cb621e06-9cad-45b1-a634-761ea61275ea
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -153,7 +153,7 @@
 >   ***Description***: Update user service info    
 >   ***Role Access***: User   
 >
-> - ``PUT /api/play-together/v1/users/User ``  
+> - ``PUT /api/play-together/v1/users/player ``  
 >   ***Description***: Update user IsPlayer State to Enable or Disable   
 >   ***Role Access***: User   
 >

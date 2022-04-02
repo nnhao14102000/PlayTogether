@@ -2,7 +2,7 @@ namespace PlayTogether.Core.Parameters
 {
     public class UserParameters : QueryStringParameters
     {
-        public string SearchString { get; set; }
+        public string Search { get; set; }
         public string Name {get; set;}
         public bool? Gender { get; set; }
         public string GameId { get; set; }

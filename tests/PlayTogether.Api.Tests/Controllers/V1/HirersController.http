@@ -32,10 +32,18 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?name=
-&IsOrderByRating=true
+?search=tham
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+# Get search history
+GET {{baseUrl}}/api/play-together/v1/search-histories
+?isNew=true
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
 
 ###
 

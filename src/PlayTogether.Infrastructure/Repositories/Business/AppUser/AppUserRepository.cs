@@ -159,7 +159,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterActiveUser(ref query, true);
             FilterIsPlayerUser(ref query, true);
 
-            Search(ref query, user.Id, param.SearchString);
+            Search(ref query, user.Id, param.Search);
 
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, param.Name);
