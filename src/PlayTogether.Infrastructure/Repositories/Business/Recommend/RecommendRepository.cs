@@ -73,6 +73,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 if(!Directory.Exists(pathDirectory)){
                     Directory.CreateDirectory(pathDirectory);
                 }
+                
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
                         tw.WriteLine(item);
