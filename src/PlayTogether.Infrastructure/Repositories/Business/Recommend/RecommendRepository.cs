@@ -20,7 +20,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
         public async Task<bool> TrainModel()
         {
             // Environment.CurrentDirectory
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataFile", "Recommend_Data.txt");
+            // AppContext.BaseDirectory
+            // AppDomain.CurrentDomain.BaseDirectory
+            var path = Path.Combine(AppContext.BaseDirectory, "DataFile", "Recommend_Data.txt");
 
             var path_directory = Path.Combine(AppDomain.CurrentDomain
             .BaseDirectory, "DataFile");
@@ -32,7 +34,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
 
             if (!File.Exists(path)) {
 
-                for (int i = 0; i < listRecommend.Count() - 1; i++) {
+                for (int i = 0; i < listRecommend.Count(); i++) {
                     var objRecommend = new RecommendSerialize {
                         UserId = listRecommend[i].UserId,
                         UserAge = listRecommend[i].UserAge,
@@ -64,7 +66,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 var logList = new List<string>(logFile);
 
                 if (logList.Count() == 0) {
-                    for (int i = 0; i < listRecommend.Count() - 1; i++) {
+                    for (int i = 0; i < listRecommend.Count(); i++) {
                         var objRecommend = new RecommendSerialize {
                             UserId = listRecommend[i].UserId,
                             UserAge = listRecommend[i].UserAge,
@@ -78,11 +80,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                         };
                         listAppend.Add(objRecommend);
                     }
+                    foreach (var item in listAppend) {
+                        var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                        listFinal.Add(str);
+                    }
+                    using (var tw = new StreamWriter(path, true)) {
+                        foreach (var item in listFinal) {
+                            tw.WriteLine(item);
+                        }
+                    }
+                    return true;
                 }
                 else {
-                    if (logList.Count() <= listRecommend.Count()) {
-                        var countFile = logList.Count();
-                        for (int i = (listRecommend.Count() - (logList.Count() + 1)); i < listRecommend.Count() - 1; i++) {
+                    if (listRecommend.Count() > logList.Count()) {
+                       
+                        for (int i = listRecommend.Count() - (listRecommend.Count() - logList.Count()); i < listRecommend.Count(); i++) {
                             var objRecommend = new RecommendSerialize {
                                 UserId = listRecommend[i].UserId,
                                 UserAge = listRecommend[i].UserAge,
@@ -96,19 +108,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                             };
                             listAppend.Add(objRecommend);
                         }
+                        foreach (var item in listAppend) {
+                            var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
+                            listFinal.Add(str);
+                        }
+                        using (var tw = new StreamWriter(path, true)) {
+                            foreach (var item in listFinal) {
+                                tw.WriteLine(item);
+                            }
+                        }
+                        return true;
                     }
                 }
 
-                foreach (var item in listAppend) {
-                    var str = item.UserId.ToString() + " " + item.UserAge.ToString() + " " + item.UserGender.ToString() + " " + item.GameOrderId.ToString() + " " + item.PlayerId.ToString() + " " + item.PlayerAge.ToString() + " " + item.PlayerGender.ToString() + " " + item.GameOfPlayerId.ToString() + " " + item.Rate.ToString();
-                    listFinal.Add(str);
-                }
-                using (var tw = new StreamWriter(path, true)) {
-                    foreach (var item in listFinal) {
-                        tw.WriteLine(item);
-                    }
-                }
-                return true;
+
+
             }
             return false;
         }
