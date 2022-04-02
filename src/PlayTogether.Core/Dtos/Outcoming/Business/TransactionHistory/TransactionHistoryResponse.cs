@@ -1,3 +1,5 @@
+using System;
+
 namespace PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory
 {
     public class TransactionHistoryResponse
@@ -7,5 +9,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory
         public float Money { get; set; }
         public string TypeOfTransaction { get; set; }
         public string ReferenceTransactionId { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
