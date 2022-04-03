@@ -119,7 +119,7 @@ Authorization: {{authToken}}
 
 
 # Get Notification
-GET {{baseUrl}}/api/play-together/v1/notification
+GET {{baseUrl}}/api/play-together/v1/notification?isNew=true
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

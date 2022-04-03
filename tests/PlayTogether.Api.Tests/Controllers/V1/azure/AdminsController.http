@@ -23,9 +23,25 @@ content-type: {{contentType}}
 
 
 # Get all users
-GET {{baseUrl}}/api/play-together/v1/admins/users
+GET {{baseUrl}}/api/play-together/v1/admins/users?name=manh
 content-type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+
+# Disable account
+PUT {{baseUrl}}/api/play-together/v1/admins/users/activate/7c963402-6898-4f5b-8189-55d3da4cbbf0
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isActive": true,
+  "note": "test khoa acc tí....",
+  "dateDisable": "2022-04-03T10:13:50.331Z",
+  "dateActive": "2022-04-04T10:13:50.331Z",
+  "numDateDisable": 1
+}
 
 ###
 
@@ -104,17 +120,7 @@ Authorization: {{authToken}}
 ###
 
 
-# Disable account
-PUT {{baseUrl}}/api/play-together/v1/admins/hirer-status/2181af98-904a-4df9-9b9a-96bc925956ff
-Content-Type: {{contentType}}
-Authorization: {{authToken}}
 
-{
-  "isActive" : false,
-  "message" : "Sao bạn chửi player chơi ngu...."
-}
-
-###
 
 
 # Get all orders of a specific Hirer

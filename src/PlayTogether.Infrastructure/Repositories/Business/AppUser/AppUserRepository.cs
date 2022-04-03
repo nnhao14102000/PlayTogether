@@ -499,6 +499,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     return false;
                 }
                 user.IsActive = true;
+
+                var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
+                if(disable is not null){
+                    disable.IsActive = false;
+                }
                 return await _context.SaveChangesAsync() >= 0;
             }
             else {
@@ -511,7 +516,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 if(request.NumDateDisable <= 0){
                     return false;
                 }
-                if(request.DateDisable.Day == 0 || request.DateActive.Day == 0){
+                if(request.DateDisable.Year == 0 || request.DateActive.Year == 0){
                     return false;
                 }
                 
