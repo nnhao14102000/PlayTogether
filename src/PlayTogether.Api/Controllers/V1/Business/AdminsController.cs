@@ -16,6 +16,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Player;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
+using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -304,6 +305,26 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _charityService.ChangeStatusCharityByAdminAsync(charityId, request);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Active or disable user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("users/activate/{userId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> ActiveUser(string userId, IsActiveChangeRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _appUserService.ChangeIsActiveUserForAdminAsync(userId, request);
             return response ? NoContent() : NotFound();
         }
     }

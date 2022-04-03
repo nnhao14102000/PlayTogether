@@ -24,6 +24,23 @@ namespace PlayTogether.Core.Services.Business.AppUser
             _logger = logger;
         }
 
+        public async Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
+        {
+            try {
+                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                if (request is null){
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _appUserRepository.ChangeIsActiveUserForAdminAsync(userId, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ChangeIsActiveUserForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
         {
             try {

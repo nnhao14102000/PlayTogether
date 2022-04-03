@@ -19,5 +19,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PagedResult<UserSearchResponse>> GetAllUsersAsync(ClaimsPrincipal principal, UserParameters param);
 
         Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param);
+        Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request);
     }
 }

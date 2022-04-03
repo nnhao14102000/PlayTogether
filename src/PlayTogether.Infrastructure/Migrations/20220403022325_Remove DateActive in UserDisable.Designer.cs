@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayTogether.Infrastructure.Data;
 
 namespace PlayTogether.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220403022325_Remove DateActive in UserDisable")]
+    partial class RemoveDateActiveinUserDisable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,10 +402,7 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("DateActive")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateDisable")
+                    b.Property<DateTime?>("DateDisable")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")

@@ -121,6 +121,10 @@
 >   ***Description***: Disable or Active charity account   
 >   ***Role Access***: Admin  
 >
+> - ``PUT /api/play-together/v1/admins/users/activate/{userId} ``  
+>   ***Description***: Disable or Active user account   
+>   ***Role Access***: Admin  
+>   ***Note***: if active , just input only 1 field IsActive, else is disable, fill all info input   
 
 
 

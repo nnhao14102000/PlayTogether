@@ -394,7 +394,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var existSearch = _context.SearchHistories.Where(x => x.UserId == userId).Any(x => x.SearchString.ToLower() == searchString.ToLower());
             if (existSearch is true) {
                 var search = _context.SearchHistories.FirstOrDefault(x => x.UserId == userId && x.SearchString.ToLower() == searchString.ToLower());
-                if(search is not null){
+                if (search is not null) {
                     search.UpdateDate = DateTime.UtcNow.AddHours(7);
                     search.IsActive = true;
                 }
@@ -484,6 +484,47 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
             query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
+        }
+
+        public async Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
+        {
+            var user = await _context.AppUsers.FindAsync(userId);
+
+            if (user is null) {
+                return false;
+            }
+
+            if (request.IsActive == true) {
+                user.IsActive = true;
+                return await _context.SaveChangesAsync() >= 0;
+            }
+            else {
+                if (String.IsNullOrEmpty(request.Note) || String.IsNullOrWhiteSpace(request.Note)) {
+                    return false;
+                }
+                if(request.NumDateDisable <= 0){
+                    return false;
+                }
+                if(request.DateDisable.Day == 0 || request.DateActive.Day == 0){
+                    return false;
+                }
+                
+                await _context.DisableUsers.AddAsync(
+                    Helpers.DisableUserHelpers.PopulateDisableUser(user.Id, request.DateDisable, request.DateActive, request.Note, request.NumDateDisable)
+                );
+                if(await _context.SaveChangesAsync() >= 0){
+                    user.IsActive = false;
+                    Helpers.NotificationHelpers.PopulateNotification(
+                        userId, $"Xin chào {user.Name}, bạn đã bị khóa tài khoản {request.NumDateDisable} ngày!!!",
+                        $"Vì: {request.Note}. Tài khoản của bạn sẽ mở lại lúc {request.DateActive}!!!. Bắt đầu khóa lúc {request.DateDisable}. Chào bạn!!!",
+                        ""
+                    );
+                    return await _context.SaveChangesAsync() >= 0;
+                }
+            }
+
+            return false;
+
         }
     }
 }
