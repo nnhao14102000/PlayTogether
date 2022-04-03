@@ -11,7 +11,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Rating
 
         [Required]
         [Range(1, 5)]
-        public float Rate { get; set; }
+        public int Rate { get; set; }
         public bool IsViolate = false;
         public bool IsActive = true;
         public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);

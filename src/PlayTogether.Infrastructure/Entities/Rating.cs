@@ -19,8 +19,8 @@ namespace PlayTogether.Infrastructure.Entities
 
         public string Comment { get; set; }
         
-        [Column(TypeName = "float")]
-        public float Rate { get; set; }
+        [Range(1, 5)]
+        public int Rate { get; set; }
         public bool IsViolate { get; set; }
         public bool IsActive { get; set; }
     }

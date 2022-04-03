@@ -146,13 +146,13 @@ Authorization: {{authToken}}
 ###
 
 # Create rating
-POST {{baseUrl}}/api/play-together/v1/rating/215ce761-b9a8-41e9-a87b-fc9cfb9027ae
+POST {{baseUrl}}/api/play-together/v1/rating/3f266f34-1d61-4a56-bb74-6aa5912750eb
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "comment": "Đánh đc,...tiếc là đi sớm qá...",
-  "rate": 4
+  "comment": "Cups sowm quassss",
+  "rate": 1
 }
 
 ###

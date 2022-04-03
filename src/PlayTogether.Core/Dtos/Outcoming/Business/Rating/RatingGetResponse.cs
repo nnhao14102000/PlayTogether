@@ -5,7 +5,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Rating
     {
         public string Id { get; set; }
         public UserRateResponse User { get; set; }
-        public float Rate { get; set; }
+        public int Rate { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Comment { get; set; }
     }
