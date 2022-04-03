@@ -14,6 +14,7 @@ namespace PlayTogether.Infrastructure.Helpers
                 DateActive = dateActive,
                 Note = note,
                 NumberDateDisable = numDateDisable,
+                IsActive = true,
                 CreatedDate = DateTime.UtcNow.AddHours(7)
             };
         }

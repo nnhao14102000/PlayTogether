@@ -60,8 +60,28 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
 
             if (appUser is not null) {
-                appUser.Status = UserStatusConstants.Online;
-                await _context.SaveChangesAsync();
+                if (appUser.IsActive == true) {
+                    appUser.Status = UserStatusConstants.Online;
+                    await _context.SaveChangesAsync();
+                }
+                else {
+                    var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == appUser.Id && x.IsActive == true);
+                    if (disable is null) {
+                        return new AuthResult {
+                            Errors = new List<string>() { "Có lỗi xảy ra trong quá trình active tài khoản. Vui lòng liên hệ hỗ trợ qua email : PtoAdmin@contact.com" }
+                        };
+                    }
+                    if (DateTime.UtcNow.AddHours(7) < disable.DateActive) {
+                        return new AuthResult {
+                            Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
+                        };
+                    }
+                    else {
+                        disable.IsActive = false;
+                        appUser.IsActive = true;
+                        await _context.SaveChangesAsync();
+                    }
+                }
             }
             else {
                 return new AuthResult {
@@ -102,6 +122,13 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 return new AuthResult {
                     Errors = new List<string>() { "Tài khoản không tồn tại." }
                 };
+            }
+            else {
+                if (charity.IsActive == false) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Tài khoản đã bị khóa. Vui lòng liên hệ email tới PtoAdmin@contact.com để được hỗ trợ." }
+                    };
+                }
             }
 
 
@@ -219,8 +246,36 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 await _userManager.AddLoginAsync(user, info);
 
                 var appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
-                appUser.Status = UserStatusConstants.Online;
-                await _context.SaveChangesAsync();
+
+                if (appUser is not null) {
+                    if (appUser.IsActive == true) {
+                        appUser.Status = UserStatusConstants.Online;
+                        await _context.SaveChangesAsync();
+                    }
+                    else {
+                        var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == appUser.Id && x.IsActive == true);
+                        if (disable is null) {
+                            return new AuthResult {
+                                Errors = new List<string>() { "Có lỗi xảy ra trong quá trình active tài khoản. Vui lòng liên hệ hỗ trợ qua email : PtoAdmin@contact.com" }
+                            };
+                        }
+                        if (DateTime.UtcNow.AddHours(7) < disable.DateActive) {
+                            return new AuthResult {
+                                Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
+                            };
+                        }
+                        else {
+                            disable.IsActive = false;
+                            appUser.IsActive = true;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+                else {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Tài khoản không tồn tại." }
+                    };
+                }
 
                 var token = await GenerateToken(user);
                 return new AuthResult {

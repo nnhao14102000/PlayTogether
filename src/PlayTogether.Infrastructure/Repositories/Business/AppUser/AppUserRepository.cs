@@ -495,10 +495,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
 
             if (request.IsActive == true) {
+                if(user.IsActive == true){
+                    return false;
+                }
                 user.IsActive = true;
                 return await _context.SaveChangesAsync() >= 0;
             }
             else {
+                if(user.IsActive == false){
+                    return false;
+                }
                 if (String.IsNullOrEmpty(request.Note) || String.IsNullOrWhiteSpace(request.Note)) {
                     return false;
                 }

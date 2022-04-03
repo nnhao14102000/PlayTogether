@@ -13,5 +13,7 @@ namespace PlayTogether.Infrastructure.Entities
         public string Note { get; set; }
         public int NumberDateDisable { get; set; }
 
+        public bool IsActive { get; set; }
+
     }
 }
