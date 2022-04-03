@@ -72,9 +72,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         };
                     }
                     if (DateTime.UtcNow.AddHours(7) < disable.DateActive) {
-                        return new AuthResult {
-                            Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
-                        };
+                        // return new AuthResult {
+                        //     Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
+                        // };
                     }
                     else {
                         disable.IsActive = false;
@@ -123,14 +123,6 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     Errors = new List<string>() { "Tài khoản không tồn tại." }
                 };
             }
-            else {
-                if (charity.IsActive == false) {
-                    return new AuthResult {
-                        Errors = new List<string>() { "Tài khoản đã bị khóa. Vui lòng liên hệ email tới PtoAdmin@contact.com để được hỗ trợ." }
-                    };
-                }
-            }
-
 
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
 
@@ -260,9 +252,9 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                             };
                         }
                         if (DateTime.UtcNow.AddHours(7) < disable.DateActive) {
-                            return new AuthResult {
-                                Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
-                            };
+                            // return new AuthResult {
+                            //     Errors = new List<string>() { $"Tài khoản sẽ được active lúc: {disable.DateActive}" }
+                            // };
                         }
                         else {
                             disable.IsActive = false;

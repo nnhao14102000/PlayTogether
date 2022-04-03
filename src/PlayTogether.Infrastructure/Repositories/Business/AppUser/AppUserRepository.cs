@@ -124,14 +124,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
             double totalTime = 0;
-            foreach (var item in orders)
-            {
-                totalTime += GetTime(item.TimeStart , item.TimeFinish);
+            foreach (var item in orders) {
+                totalTime += GetTime(item.TimeStart, item.TimeFinish);
             }
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);
             response.NumOfRate = rates.Count();
             response.NumOfOrder = orders.Count();
-            response.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime/3600));
+            response.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
             return response;
         }
 
@@ -554,6 +553,51 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             return false;
 
+        }
+
+        public async Task<DisableUserResponse> GetDisableInfoAsync(ClaimsPrincipal principal)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return null;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                return null;
+            }
+
+            var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
+            if (disable is not null) {
+                return _mapper.Map<DisableUserResponse>(disable);
+            }
+            return null;
+        }
+
+        public async Task<bool> ActiveUserAsync(ClaimsPrincipal principal)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                return false;
+            }
+
+            var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
+            if (disable is null) {
+                return false;
+            }
+            if (DateTime.UtcNow.AddHours(7) > disable.DateActive) {
+                disable.IsActive = false;
+                user.IsActive = true;
+                return await _context.SaveChangesAsync() >= 0; 
+            }
+            return false;
         }
     }
 }

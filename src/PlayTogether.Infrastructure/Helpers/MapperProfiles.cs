@@ -158,6 +158,9 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<DonateCreateRequest, Donate>();
             CreateMap<Donate, DonateResponse>();
 
+            // DisableUser mapper Profile
+            CreateMap<DisableUser, DisableUserResponse>();
+
             // src => target
         }
     }

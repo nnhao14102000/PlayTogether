@@ -30,7 +30,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             if (existNO) return null;
 
             var existName = await _context.Ranks.Where(x => x.GameId == gameId)
-                                                .AnyAsync(x => x.Name.ToLower().Contains(request.Name.ToLower()));
+                                                .AnyAsync(x => x.Name.ToLower() == request.Name.ToLower());
             if (existName) return null;
 
             var model = _mapper.Map<Entities.Rank>(request);
