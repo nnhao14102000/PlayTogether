@@ -24,6 +24,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             _logger = logger;
         }
 
+        public async Task<bool> ActiveUserAsync(ClaimsPrincipal principal)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _appUserRepository.ActiveUserAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call ActiveUserAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
         {
             try {
@@ -79,6 +93,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllUsersForAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<DisableUserResponse> GetDisableInfoAsync(ClaimsPrincipal principal)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _appUserRepository.GetDisableInfoAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetDisableInfoAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

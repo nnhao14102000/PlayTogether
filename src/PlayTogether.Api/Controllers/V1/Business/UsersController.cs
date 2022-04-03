@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -287,7 +288,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("orders")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForHirer(
+        public async Task<ActionResult<PagedResult<OrderGetResponse>>> GetAllOrderForHirer(
             [FromQuery] UserOrderParameter param)
         {
             var response = await _orderService.GetAllOrdersAsync(HttpContext.User, param);
@@ -330,7 +331,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("orders/requests")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetAllOrderForPlayer(
+        public async Task<ActionResult<PagedResult<OrderGetResponse>>> GetAllOrderForPlayer(
             [FromQuery] UserOrderParameter param)
         {
             var response = await _orderService.GetAllOrderRequestsAsync(HttpContext.User, param);
@@ -383,7 +384,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("transactions")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<TransactionHistoryResponse>> GetAllTransaction(
+        public async Task<ActionResult<PagedResult<TransactionHistoryResponse>>> GetAllTransaction(
             [FromQuery] TransactionParameters param)
         {
             var response = await _transactionHistoryService.GetAllTransactionHistoriesAsync(HttpContext.User, param);
@@ -411,7 +412,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("un-active-balance")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<UnActiveBalanceResponse>> GetAllUnActiveBalance(
+        public async Task<ActionResult<PagedResult<UnActiveBalanceResponse>>> GetAllUnActiveBalance(
             [FromQuery] UnActiveBalanceParameters param)
         {
             var response = await _unActiveBalanceService.GetAllUnActiveBalancesAsync(HttpContext.User, param);
@@ -467,6 +468,43 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _donateService.CreateDonateAsync(HttpContext.User, charityId, request);
             return response ? Ok() : NotFound();
+        }
+
+
+        /*
+        *================================================
+        *                                              ||
+        * Active APIs SECTION                          ||
+        *                                              ||
+        *================================================
+        */
+        /// <summary>
+        /// Get disable info
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("disable")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult<DisableUserResponse>> GetDisableInfo(){
+            var response = await _appUserService.GetDisableInfoAsync(HttpContext.User);
+            return response is not null ? Ok(response) : NotFound();
+        }
+
+        /// <summary>
+        /// Active account
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("active")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> ActiveUser()
+        {
+            var response = await _appUserService.ActiveUserAsync(HttpContext.User);
+            return response ? NoContent() : NotFound();
         }
 
         /*
