@@ -93,6 +93,14 @@ Authorization: {{authToken}}
 
 
 
+# Get all un active money
+GET {{baseUrl}}/api/play-together/v1/rating/a17bd7c6-0fcc-48ea-89de-43823a1ec09c?IsNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
 
 # Get user personal information
 GET {{baseUrl}}/api/play-together/v1/users/personal

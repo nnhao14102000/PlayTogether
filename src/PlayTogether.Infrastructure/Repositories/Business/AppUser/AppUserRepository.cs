@@ -122,9 +122,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
+            var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
+            double totalTime = 0;
+            foreach (var item in orders)
+            {
+                totalTime += GetTime(item.TimeStart , item.TimeFinish);
+            }
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);
             response.NumOfRate = rates.Count();
+            response.NumOfOrder = orders.Count();
+            response.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime/3600));
             return response;
+        }
+
+        public double GetTime(DateTime dateStart, DateTime dateFinish)
+        {
+            TimeSpan ts = dateFinish - dateStart;
+            var timeDone = ts.TotalSeconds;
+            return timeDone;
         }
 
         public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)

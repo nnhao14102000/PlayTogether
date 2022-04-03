@@ -343,8 +343,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             if (DateTime.UtcNow.AddHours(7) >= order.ProcessExpired) {
                 order.Status = OrderStatusConstants.OverTime; // change status of Order
-                await _context.Notifications.AddAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}", "")
+                toUser.IsPlayer = false;
+                await _context.Notifications.AddRangeAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}.", ""),
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Chế độ nhận thuê đã tắt!!!", $"Có lẽ bạn không thật sự Online. Hệ thống đã tự động tắt chế độ nhận thuê!!!", "")
                 );
             }
             else {

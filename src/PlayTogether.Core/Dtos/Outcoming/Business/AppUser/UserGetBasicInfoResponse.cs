@@ -17,6 +17,8 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public string Description { get; set; }
         public float Rate { get; set; }
         public int NumOfRate { get; set; }
+        public int NumOfOrder { get; set; }
+        public int TotalTimeOrder { get; set; }
         public string Status { get; set; }
         public bool IsActive { get; set; } = true;
         public float PricePerHour { get; set; }
