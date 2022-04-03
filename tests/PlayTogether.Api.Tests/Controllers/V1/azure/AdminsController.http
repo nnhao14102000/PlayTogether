@@ -37,9 +37,9 @@ Authorization: {{authToken}}
 
 {
   "isActive": true,
-  "note": "test khoa acc tí....",
-  "dateDisable": "2022-04-03T10:13:50.331Z",
-  "dateActive": "2022-04-04T10:13:50.331Z",
+  "note": "KHóa tài khoản 1 lúc",
+  "dateDisable": "2022-04-03T10:31:50.331Z",
+  "dateActive": "2022-04-04T10:31:50.331Z",
   "numDateDisable": 1
 }
 

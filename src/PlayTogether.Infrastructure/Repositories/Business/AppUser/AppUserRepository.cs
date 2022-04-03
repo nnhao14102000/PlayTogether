@@ -495,40 +495,43 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
 
             if (request.IsActive == true) {
-                if(user.IsActive == true){
+                if (user.IsActive == true) {
                     return false;
                 }
                 user.IsActive = true;
 
                 var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
-                if(disable is not null){
+                if (disable is not null) {
                     disable.IsActive = false;
                 }
                 return await _context.SaveChangesAsync() >= 0;
             }
             else {
-                if(user.IsActive == false){
+                if (user.IsActive == false) {
                     return false;
                 }
                 if (String.IsNullOrEmpty(request.Note) || String.IsNullOrWhiteSpace(request.Note)) {
                     return false;
                 }
-                if(request.NumDateDisable <= 0){
+                if (request.NumDateDisable <= 0) {
                     return false;
                 }
-                if(request.DateDisable.Year == 0 || request.DateActive.Year == 0){
+                if (request.DateDisable.Year == 0 || request.DateActive.Year == 0) {
                     return false;
                 }
-                
+
                 await _context.DisableUsers.AddAsync(
                     Helpers.DisableUserHelpers.PopulateDisableUser(user.Id, request.DateDisable, request.DateActive, request.Note, request.NumDateDisable)
                 );
-                if(await _context.SaveChangesAsync() >= 0){
+
+                if (await _context.SaveChangesAsync() >= 0) {
                     user.IsActive = false;
-                    Helpers.NotificationHelpers.PopulateNotification(
-                        userId, $"Xin chào {user.Name}, bạn đã bị khóa tài khoản {request.NumDateDisable} ngày!!!",
-                        $"Vì: {request.Note}. Tài khoản của bạn sẽ mở lại lúc {request.DateActive}!!!. Bắt đầu khóa lúc {request.DateDisable}. Chào bạn!!!",
-                        ""
+                    await _context.Notifications.AddAsync(
+                            Helpers.NotificationHelpers.PopulateNotification(
+                            userId, $"Xin chào {user.Name}, bạn đã bị khóa tài khoản {request.NumDateDisable} ngày!!!",
+                            $"Vì: {request.Note}. Tài khoản của bạn sẽ mở lại lúc {request.DateActive}!!!. Bắt đầu khóa lúc {request.DateDisable}. Chào bạn!!!",
+                            ""
+                        )
                     );
                     return await _context.SaveChangesAsync() >= 0;
                 }
