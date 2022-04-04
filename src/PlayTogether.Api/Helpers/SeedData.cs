@@ -847,23 +847,23 @@ namespace PlayTogether.Api.Helpers
                 }
                 dbContext.SaveChanges();
 
-                if (!dbContext.BehaviorPoints.Any()){
-                    var users = dbContext.AppUsers.ToList();
+                // if (!dbContext.BehaviorPoints.Any()){
+                //     var users = dbContext.AppUsers.ToList();
                     
-                    foreach (var user in users)
-                    {
-                        dbContext.BehaviorPoints.Add(
-                            new Infrastructure.Entities.BehaviorPoint{
-                                Id = Guid.NewGuid().ToString(),
-                                CreatedDate = DateTime.UtcNow.AddHours(7),
-                                UserId = user.Id,
-                                Point = 100,
-                                SatisfiedPoint = 100
-                            }
-                        );
-                        dbContext.SaveChanges();
-                    }
-                }
+                //     foreach (var user in users)
+                //     {
+                //         dbContext.BehaviorPoints.Add(
+                //             new Infrastructure.Entities.BehaviorPoint{
+                //                 Id = Guid.NewGuid().ToString(),
+                //                 CreatedDate = DateTime.UtcNow.AddHours(7),
+                //                 UserId = user.Id,
+                //                 Point = 100,
+                //                 SatisfiedPoint = 100
+                //             }
+                //         );
+                //         dbContext.SaveChanges();
+                //     }
+                // }
             }
         }
     }
