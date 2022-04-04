@@ -17,6 +17,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public string Description { get; set; }
         public float Rate { get; set; }
         public UserBalanceResponse UserBalance { get; set; }
+        public BehaviorPointResponse BehaviorPoint { get; set; }
         public string Status { get; set; }
         public bool IsActive { get; set; } = true;
     }

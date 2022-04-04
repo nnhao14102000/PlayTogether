@@ -109,10 +109,10 @@ POST {{baseUrl}}/api/play-together/v1/accounts/register-user
 content-type: {{contentType}}
 
 {
-  "email": "user@example.com",
+  "email": "user01@example.com",
   "password": "Pa55w0rd!",
   "confirmPassword": "Pa55w0rd!",
-  "name": "user",
+  "name": "user01",
   "city": "Ho Chi Minh City",
   "dateOfBirth": "2002-01-22",
   "gender": true,

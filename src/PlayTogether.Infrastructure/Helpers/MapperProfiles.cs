@@ -87,6 +87,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<AppUser, PersonalInfoResponse>();
             CreateMap<Image, ImageUserResponse>();
             CreateMap<UserBalance, UserBalanceResponse>();
+            CreateMap<BehaviorPoint, BehaviorPointResponse>();
 
             CreateMap<UserPersonalInfoUpdateRequest, AppUser>();
             CreateMap<UserIsPlayerChangeRequest, AppUser>();

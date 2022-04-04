@@ -74,6 +74,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
+            await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
 
             return _mapper.Map<PersonalInfoResponse>(user);
         }
@@ -121,6 +122,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return null;
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
+            await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
+            
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
             double totalTime = 0;
