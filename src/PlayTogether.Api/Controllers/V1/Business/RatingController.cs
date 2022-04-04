@@ -81,7 +81,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult> ReportViolateFeedback(string rateId)
         {
-            var response = await _ratingService.ViolateFeedbackAsync(rateId);
+            var response = await _ratingService.ViolateRatingAsync(rateId);
             return response ? Ok() : NotFound();
         }
 
@@ -112,18 +112,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Disable violate feedback
+        /// Process violate feedback
         /// </summary>
         /// <param name="rateId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         /// <remarks>
         /// Roles Access: Admin
         /// </remarks>
-        [HttpPut("disable/{rateId}")]
+        [HttpPut("process/{rateId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> DisableFeedback(string rateId)
+        public async Task<ActionResult> DisableFeedback(string rateId, ProcessViolateRatingRequest request)
         {
-            var response = await _ratingService.DisableFeedbackAsync(rateId);
+            var response = await _ratingService.ProcessViolateRatingAsync(rateId, request);
             return response ? Ok() : NotFound();
         }
     }

@@ -61,6 +61,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             await _context.Notifications.AddAsync(
                 Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"{order.User.Name} đã vote cho bạn {request.Rate} ⭐.", $"{order.User.Name}: {request.Comment}", "")
             );
+            toUser.NumOfRate += 1;
 
 
             await _context.Entry(order).Collection(x => x.GameOfOrders).LoadAsync();
@@ -79,7 +80,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     foreach (var game in order.GameOfOrders) {
                         await _context.Recommends.AddAsync(
                             Helpers.RecommendHelpers.PopulateRecommend(order.UserId, GetAge(order.User.DateOfBirth), order.User.Gender, game.Id, toUser.Id, GetAge(toUser.DateOfBirth), toUser.Gender, skill.GameId, request.Rate));
-                        if(await _context.SaveChangesAsync() < 0){
+                        if (await _context.SaveChangesAsync() < 0) {
                             continue;
                         }
                     }
@@ -170,7 +171,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             query = query.Where(x => x.Rate == vote);
         }
 
-        public async Task<bool> ViolateFeedbackAsync(string ratingId)
+        public async Task<bool> ViolateRatingAsync(string ratingId)
         {
             var rating = await _context.Ratings.FindAsync(ratingId);
             if (rating is null) {
@@ -181,26 +182,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async Task<bool> DisableFeedbackAsync(string ratingId)
+        public async Task<bool> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
         {
             var rating = await _context.Ratings.FindAsync(ratingId);
             if (rating is null) {
                 return false;
             }
 
-            var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
-            rating.IsActive = false;
-
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == rating.ToUserId).Average(x => x.Rate);
-                toUser.Rate = (float) rateOfPlayer;
-
-                if ((await _context.SaveChangesAsync() < 0)) {
-                    return false;
-                }
-                return true;
+            if (request.IsApprove is false) {
+                rating.IsViolate = false;
             }
-            return false;
+            else {
+                var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
+                rating.IsActive = false;
+                toUser.NumOfRate -= 1;
+
+                if ((await _context.SaveChangesAsync() >= 0)) {
+                    var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == rating.ToUserId).Average(x => x.Rate);
+                    toUser.Rate = (float)rateOfPlayer;
+                }
+            }
+
+
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }

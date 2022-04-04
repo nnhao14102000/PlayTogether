@@ -38,16 +38,19 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
-        public async Task<bool> DisableFeedbackAsync(string ratingId)
+        public async Task<bool> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(ratingId)) {
                     throw new ArgumentNullException(nameof(ratingId));
                 }
-                return await _ratingRepository.DisableFeedbackAsync(ratingId);
+                if(request is null){
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _ratingRepository.ProcessViolateRatingAsync(ratingId, request);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call DisableFeedbackAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call ProcessViolateRatingAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
@@ -77,16 +80,16 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
-        public async Task<bool> ViolateFeedbackAsync(string ratingId)
+        public async Task<bool> ViolateRatingAsync(string ratingId)
         { 
             try {
                 if (String.IsNullOrEmpty(ratingId)) {
                     throw new ArgumentNullException(nameof(ratingId));
                 }
-                return await _ratingRepository.ViolateFeedbackAsync(ratingId);
+                return await _ratingRepository.ViolateRatingAsync(ratingId);
             }
             catch (Exception ex) {
-                _logger.LogError($"Error while trying to call ViolateFeedbackAsync in service class, Error Message: {ex}.");
+                _logger.LogError($"Error while trying to call ViolateRatingAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

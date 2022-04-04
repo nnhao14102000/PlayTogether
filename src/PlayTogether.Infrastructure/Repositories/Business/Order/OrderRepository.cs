@@ -416,6 +416,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     ""));
             }
             else {
+                fromUser.NumOfOrder += 1;
                 fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
@@ -468,6 +469,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Status = OrderStatusConstants.Finish;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
+            toUser.NumOfFinishOnTime += 1;
+            toUser.TotalTimeOrder += order.TotalTimes;
 
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.FinalPrices = order.TotalPrices;
@@ -534,6 +537,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Status = OrderStatusConstants.FinishSoon;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
+            
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.Reason = request.Reason;
 
@@ -555,11 +559,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         "")
                 );
             }
-            var priceDone = (order.TotalPrices * GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
+            var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             order.FinalPrices = ((float)priceDone);
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 toUser.UserBalance.Balance += order.FinalPrices;
+                toUser.TotalTimeOrder = Convert.ToInt32(Math.Round(Helpers.UtilsHelpers.GetTime(order.TimeStart, order.TimeFinish)/3600)); 
                 order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
                 order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
 
@@ -592,12 +597,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             return false;
         }
-        public double GetTimeDone(DateTime date)
-        {
-            TimeSpan ts = DateTime.UtcNow.AddHours(7) - date;
-            var timeDone = ts.TotalSeconds;
-            return timeDone;
-        }
+        
 
         public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(
             string userId,

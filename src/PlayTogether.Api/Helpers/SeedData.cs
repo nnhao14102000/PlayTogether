@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Linq;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 
 namespace PlayTogether.Api.Helpers
 {
@@ -16,6 +17,25 @@ namespace PlayTogether.Api.Helpers
                         DbContextOptions<AppDbContext>>())) {
 
                 dbContext.Database.EnsureCreated();
+
+                if (dbContext.AppUsers.Any()) {
+                    var users = dbContext.AppUsers.ToList();
+                    foreach (var user in users) {
+                        var rates =  dbContext.Ratings.Where(x => x.ToUserId == user.Id).ToList();
+                        var orders =  dbContext.Orders.Where(x => x.ToUserId == user.Id).ToList();
+                        var orderOnTimes =  dbContext.Orders.Where(x => x.ToUserId == user.Id
+                                                                            && x.Status == OrderStatusConstants.Finish).ToList();
+                        double totalTime = 0;
+                        foreach (var item in orders) {
+                            totalTime += Infrastructure.Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
+                        }
+                        user.NumOfRate = rates.Count();
+                        user.NumOfOrder = orders.Count();
+                        user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
+                        user.NumOfFinishOnTime = orderOnTimes.Count();
+                        dbContext.SaveChanges();
+                    }
+                }
 
                 if (!dbContext.Games.Any()) {
                     dbContext.Games.AddRange(
@@ -668,7 +688,7 @@ namespace PlayTogether.Api.Helpers
                     );
                 }
                 dbContext.SaveChanges();
-                
+
                 if (!dbContext.Ranks.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
@@ -812,7 +832,7 @@ namespace PlayTogether.Api.Helpers
                     );
                 }
                 dbContext.SaveChanges();
-                
+
                 if (!dbContext.TypeOfGames.Any()) {
                     var aov = dbContext.Games.FirstOrDefault(x => x.Name == "Arena of Valor");
                     var lol = dbContext.Games.FirstOrDefault(x => x.Name == "League Of Legends");
@@ -849,7 +869,7 @@ namespace PlayTogether.Api.Helpers
 
                 // if (!dbContext.BehaviorPoints.Any()){
                 //     var users = dbContext.AppUsers.ToList();
-                    
+
                 //     foreach (var user in users)
                 //     {
                 //         dbContext.BehaviorPoints.Add(

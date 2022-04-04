@@ -289,9 +289,9 @@
 >   ***Use for***: User report the violate feedback   
 >   ***Role Access***: User    
 >
-> - ``PUT /api/play-together/v1/rating/disable/{rateId} ``  
->   ***Description***: Disable violate Feedback  
->   ***Use for***: Admin disable the violate feedback  
+> - ``PUT /api/play-together/v1/rating/process/{rateId} ``  
+>   ***Description***: Process violate Feedback  
+>   ***Use for***: Admin process the violate feedback  
 >   ***Role Access***: Admin
 
 

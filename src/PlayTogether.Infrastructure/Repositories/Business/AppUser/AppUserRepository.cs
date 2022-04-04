@@ -76,6 +76,19 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
 
+            var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
+            var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
+            var orderOnTimes = await _context.Orders.Where(x => x.ToUserId == user.Id
+                                                                && x.Status == OrderStatusConstants.Finish).ToListAsync();
+            double totalTime = 0;
+            foreach (var item in orders) {
+                totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
+            }
+            user.NumOfRate = rates.Count();
+            user.NumOfOrder = orders.Count();
+            user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
+            user.NumOfFinishOnTime = orderOnTimes.Count();
+
             return _mapper.Map<PersonalInfoResponse>(user);
         }
 
@@ -123,25 +136,22 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
-            
+
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
+            var orderOnTimes = await _context.Orders.Where(x => x.ToUserId == user.Id
+                                                                && x.Status == OrderStatusConstants.Finish).ToListAsync();
             double totalTime = 0;
             foreach (var item in orders) {
-                totalTime += GetTime(item.TimeStart, item.TimeFinish);
+                totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
             }
-            var response = _mapper.Map<UserGetBasicInfoResponse>(user);
-            response.NumOfRate = rates.Count();
-            response.NumOfOrder = orders.Count();
-            response.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
-            return response;
-        }
+            user.NumOfRate = rates.Count();
+            user.NumOfOrder = orders.Count();
+            user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
+            user.NumOfFinishOnTime = orderOnTimes.Count();
 
-        public double GetTime(DateTime dateStart, DateTime dateFinish)
-        {
-            TimeSpan ts = dateFinish - dateStart;
-            var timeDone = ts.TotalSeconds;
-            return timeDone;
+            var response = _mapper.Map<UserGetBasicInfoResponse>(user);
+            return response;
         }
 
         public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)
@@ -288,12 +298,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
-            var list = query.ToList();
-            foreach (var item in list) {
-                _context.Entry(item).Collection(x => x.Ratings).Load();
-            }
-            query = list.AsQueryable();
-            query = query.OrderByDescending(x => x.Rate).ThenByDescending(x => x.Ratings.Count()).ThenBy(x => x.CreatedDate);
+            query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.NumOfRate).ThenByDescending(x => x.Rate);
         }
 
         private void OrderUserByASCName(ref IQueryable<Entities.AppUser> query, bool? isOrderByName)
@@ -598,7 +603,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (DateTime.UtcNow.AddHours(7) > disable.DateActive) {
                 disable.IsActive = false;
                 user.IsActive = true;
-                return await _context.SaveChangesAsync() >= 0; 
+                return await _context.SaveChangesAsync() >= 0;
             }
             return false;
         }

@@ -16,6 +16,10 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public ICollection<ImageUserResponse> Images { get; set; }
         public string Description { get; set; }
         public float Rate { get; set; }
+        public int NumOfRate { get; set; }
+        public int NumOfOrder { get; set; }
+        public int TotalTimeOrder { get; set; }
+        public int NumOfFinishOnTime { get; set; }
         public UserBalanceResponse UserBalance { get; set; }
         public BehaviorPointResponse BehaviorPoint { get; set; }
         public string Status { get; set; }

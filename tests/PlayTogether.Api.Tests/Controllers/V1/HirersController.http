@@ -16,7 +16,7 @@ POST {{baseUrl}}/api/play-together/v1/accounts/login-user
 Content-type: {{contentType}}
 
 {
-  "email": "user01@example.com",
+  "email": "hien@example.com",
   "password": "Pa55w0rd!"
 }
 
