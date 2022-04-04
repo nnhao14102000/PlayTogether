@@ -10,6 +10,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.GameType;
 using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
+using PlayTogether.Core.Dtos.Incoming.Business.Notification;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
@@ -130,6 +131,7 @@ namespace PlayTogether.Infrastructure.Helpers
             // Notification mapper profile
             CreateMap<Notification, NotificationGetAllResponse>();
             CreateMap<Notification, NotificationGetDetailResponse>();
+            CreateMap<NotificationCreateRequest, Notification>();
 
             // Rating mapper profile
             CreateMap<Rating, RatingGetResponse>();

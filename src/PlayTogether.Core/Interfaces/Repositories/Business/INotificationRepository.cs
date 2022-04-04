@@ -1,3 +1,4 @@
+using PlayTogether.Core.Dtos.Incoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Parameters;
@@ -12,5 +13,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id);
 
         Task<bool> DeleteNotificationAsync(string id);
+
+        Task<bool> CreateNotificationAsync(NotificationCreateRequest request);
     }
 }

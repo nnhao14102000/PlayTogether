@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PlayTogether.Core.Dtos.Incoming.Business.Notification;
 using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
@@ -52,17 +53,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if(loggedInUser is not null && user is null && charity is null){
+            if (loggedInUser is not null && user is null && charity is null) {
                 FilterByReceiverId(ref query, "");
                 FilterByIsReadNotification(ref query, param.IsRead);
-                OrderByCreatedDate(ref query, param.IsNew);                
+                OrderByCreatedDate(ref query, param.IsNew);
 
                 notifications = query.ToList();
                 var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
                 return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
-            
+
 
             if (user is not null) {
                 FilterByReceiverId(ref query, user.Id);
@@ -92,9 +93,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             if (!query.Any() || isRead is null) {
                 return;
             }
-            if(isRead is false){
+            if (isRead is false) {
                 query = query.Where(x => x.Status == NotificationStatusConstants.NotRead);
-            }else{
+            }
+            else {
                 query = query.Where(x => x.Status == NotificationStatusConstants.Read);
             }
         }
@@ -134,6 +136,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             }
 
             return _mapper.Map<NotificationGetDetailResponse>(noti);
+        }
+
+        public async Task<bool> CreateNotificationAsync(NotificationCreateRequest request)
+        {
+            var user = await _context.AppUsers.FindAsync(request.ReceiverId);
+            if (user is null) {
+                return false;
+            }
+            var model = _mapper.Map<Entities.Notification>(request);
+            await _context.Notifications.AddAsync(model);
+
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }

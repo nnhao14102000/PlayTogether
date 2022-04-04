@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
@@ -81,6 +82,25 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteNotification(string id){
             var response = await _notificationService.DeleteNotificationAsync(id);
             return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Create notification
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpPost]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
+                        + AuthConstant.RoleUser)]
+        public async Task<ActionResult> CreateNotification(NotificationCreateRequest request){
+            if(!ModelState.IsValid){
+                return BadRequest();
+            }
+            var response = await _notificationService.CreateNotificationAsync(request);
+            return response ? Ok() : NotFound();
         }
     }
 }

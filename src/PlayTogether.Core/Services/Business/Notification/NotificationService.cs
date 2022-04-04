@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Incoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Business.Notification;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -20,6 +21,21 @@ namespace PlayTogether.Core.Services.Business.Notification
             _notificationRepository = notificationRepository;
             _logger = logger;
         }
+
+        public async Task<bool> CreateNotificationAsync(NotificationCreateRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _notificationRepository.CreateNotificationAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CreateNotificationAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<bool> DeleteNotificationAsync(string id)
         {
             try {
@@ -39,7 +55,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             NotificationParameters param)
         {
             try {
-                if(principal is null){
+                if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
                 return await _notificationRepository.GetAllNotificationsAsync(principal, param);

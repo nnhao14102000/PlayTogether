@@ -481,6 +481,11 @@
 
 <h2 id="notification">Notification  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
+> - ``POST /api/play-together/v1/notification ``  
+>   ***Description***: Create a Notification   
+>   ***Use for***: Send a notification reply to a specific user  
+>   ***Role Access***: Admin, User  
+>
 > - ``GET /api/play-together/v1/notification ``  
 >   ***Description***: Get all Notifications   
 >   ***Use for***: View all notifications  
