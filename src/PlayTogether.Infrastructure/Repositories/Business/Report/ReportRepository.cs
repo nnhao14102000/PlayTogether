@@ -110,7 +110,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             var reports = await _context.Reports.Where(x => x.ToUserId == userId).ToListAsync();
             var query = reports.AsQueryable();
 
-            FilterByStatus(ref query, true);
+            FilterByStatus(ref query, param.IsApprove);
             FilterFromDateToDate(ref query, param.FromDate, param.ToDate);
             OrderByCreatedDate(ref query, param.IsNew);
 

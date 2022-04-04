@@ -29,6 +29,32 @@ Authorization: {{authToken}}
 
 ###
 
+# Get reports of user
+GET {{baseUrl}}/api/play-together/v1/reports/323f3b6b-a989-4daf-8ef4-1d2263ed782a
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+
+# Get all reports
+GET {{baseUrl}}/api/play-together/v1/admins/reports
+?IsApprove=
+&IsNew=true
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get a report in detail
+GET {{baseUrl}}/api/play-together/v1/admins/reports/36fcb091-89de-4d70-9b64-fa2d12100dfc
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 
 # Disable account
 PUT {{baseUrl}}/api/play-together/v1/admins/users/activate/7c963402-6898-4f5b-8189-55d3da4cbbf0

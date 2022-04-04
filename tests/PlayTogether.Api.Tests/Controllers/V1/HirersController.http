@@ -61,6 +61,14 @@ Authorization: {{authToken}}
 
 ###
 
+# Get reports of user
+GET {{baseUrl}}/api/play-together/v1/reports/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
 # Get user by Id
 GET {{baseUrl}}/api/play-together/v1/users/a17bd7c6-0fcc-48ea-89de-43823a1ec09c
 Content-type: {{contentType}}
