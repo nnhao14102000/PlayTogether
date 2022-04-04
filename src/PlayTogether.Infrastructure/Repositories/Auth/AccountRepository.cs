@@ -223,6 +223,15 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                             userBalance.ActiveBalance = 0;
                             await _context.UserBalances.AddAsync(userBalance);
 
+                            var userPoint = new BehaviorPoint();
+                            userPoint.UserId = userEntityModel.Id;
+                            userPoint.CreatedDate = DateTime.UtcNow.AddHours(7);
+                            userPoint.UpdateDate = null;
+                            userPoint.Point = 100;
+                            userPoint.SatisfiedPoint = 100;
+                            await _context.BehaviorPoints.AddAsync(userPoint);
+
+
                             if (await _context.SaveChangesAsync() >= 0) {
                                 var token = await GenerateToken(user);
                                 return new AuthResult {
@@ -385,6 +394,14 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userBalance.Balance = 0;
                     userBalance.ActiveBalance = 0;
                     await _context.UserBalances.AddAsync(userBalance);
+
+                    var userPoint = new BehaviorPoint();
+                    userPoint.UserId = userEntityModel.Id;
+                    userPoint.CreatedDate = DateTime.UtcNow.AddHours(7);
+                    userPoint.UpdateDate = null;
+                    userPoint.Point = 100;
+                    userPoint.SatisfiedPoint = 100;
+                    await _context.BehaviorPoints.AddAsync(userPoint);
 
                     if (await _context.SaveChangesAsync() >= 0) {
                         return new AuthResult {
