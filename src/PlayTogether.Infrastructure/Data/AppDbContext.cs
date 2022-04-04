@@ -38,5 +38,6 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<BehaviorHistory> BehaviorHistories { get; set; }
         public DbSet<Dating> Datings { get; set; }
         public DbSet<Ignore> Ignores { get; set; }
+        public DbSet<SystemFeedback> SystemFeedbacks { get; set; }
     }
 }

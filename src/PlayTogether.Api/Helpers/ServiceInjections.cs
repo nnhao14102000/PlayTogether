@@ -27,6 +27,7 @@ using PlayTogether.Core.Services.Business.Rating;
 using PlayTogether.Core.Services.Business.Recommend;
 using PlayTogether.Core.Services.Business.Report;
 using PlayTogether.Core.Services.Business.SearchHistory;
+using PlayTogether.Core.Services.Business.SystemFeedback;
 using PlayTogether.Core.Services.Business.TransactionHistory;
 using PlayTogether.Core.Services.Business.TypeOfGame;
 using PlayTogether.Core.Services.Business.UnActiveBalance;
@@ -53,6 +54,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Rating;
 using PlayTogether.Infrastructure.Repositories.Business.Recommend;
 using PlayTogether.Infrastructure.Repositories.Business.Report;
 using PlayTogether.Infrastructure.Repositories.Business.SearchHistory;
+using PlayTogether.Infrastructure.Repositories.Business.SystemFeedback;
 using PlayTogether.Infrastructure.Repositories.Business.TransactionHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance;
@@ -193,6 +195,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Recommend service DI
             services.AddScoped<IRecommendService, RecommendService>();
             services.AddScoped<IRecommendRepository, RecommendRepository>();
+
+            // Config for SystemFeedback service DI
+            services.AddScoped<ISystemFeedbackService, SystemFeedbackService>();
+            services.AddScoped<ISystemFeedbackRepository, SystemFeedbackRepository>();
 
             services.AddHttpClient();
 

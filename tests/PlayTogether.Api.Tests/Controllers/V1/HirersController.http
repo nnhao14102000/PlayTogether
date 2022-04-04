@@ -212,6 +212,57 @@ Authorization: {{authToken}}
 ###
 
 
+# Get all Feedbacks 
+GET {{baseUrl}}/api/play-together/v1/feedbacks
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+
+# Get a feedback
+GET {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Create Feedback
+POST {{baseUrl}}/api/play-together/v1/feedbacks
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "title": "Test Feedback",
+  "message": "Test chuc nang feedback...",
+  "typeOfFeedback": "Test"
+}
+
+###
+
+
+# Update Feedback
+PUT {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "title": "Test Feedback",
+  "message": "Test chuc nang feedback..aaaaaaaaa.",
+  "typeOfFeedback": "Test"
+}
+
+###
+
+# Delete Feedback
+DELETE {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
 
 
 # Train model

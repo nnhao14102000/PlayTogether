@@ -21,6 +21,7 @@
 - <a href="#notification" target="_self">Notification</a> <br>
 - <a href="#image" target="_self">Image</a> <br>
 - <a href="#donate" target="_self">Donate</a> <br>
+- <a href="#feedback" target="_self">System Feedback</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -124,8 +125,12 @@
 > - ``PUT /api/play-together/v1/admins/users/activate/{userId} ``  
 >   ***Description***: Disable or Active user account   
 >   ***Role Access***: Admin  
->   ***Note***: if active , just input only 1 field IsActive, else is disable, fill all info input   
-
+>   ***Note***: if active , just input only 1 field IsActive, else is disable, fill all info input  
+> 
+> - ``PUT /api/play-together/v1/admins/feedbacks/{feedbackId} ``  
+>   ***Description***: Process the feedback   
+>   ***Role Access***: Admin  
+>
 
 
 <h2 id="user">User <a href="#table-of-contents" target="_self">🔙</a></h2>
@@ -530,6 +535,31 @@
 > - ``GET /api/play-together/v1/donates/{id} ``  
 >   ***Description***: Get donate by Id  
 >   ***Role Access***: User, Charity   
+>
+
+<h2 id="feedback">System Feedback  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``GET /api/play-together/v1/feedbacks ``  
+>   ***Description***: Get all feedbacks    
+>   ***Role Access***: Admin, User  
+>   ***Extension***: Paging, Filter by type, day, order newest feedback  
+>   ***Note***: If role access is admin, it will get all feedbacks, if role access is user , it will get only feedbacks of this user  
+>
+> - ``GET /api/play-together/v1/feedbacks/{feedbackId} ``  
+>   ***Description***: Get a feedback By Id  
+>   ***Role Access***: Admin, User  
+>
+> - ``POST /api/play-together/v1/feedbacks ``  
+>   ***Description***: Create feedback  
+>   ***Role Access***: User  
+>
+> - ``PUT /api/play-together/v1/feedbacks/{feedbackId} ``  
+>   ***Description***: Update feedback  
+>   ***Role Access***: User  
+> 
+> - ``DELETE /api/play-together/v1/feedbacks/{feedbackId} ``  
+>   ***Description***: Delete feedback  
+>   ***Role Access***: User    
 >
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   

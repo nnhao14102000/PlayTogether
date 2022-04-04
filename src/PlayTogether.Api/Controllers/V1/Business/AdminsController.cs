@@ -17,6 +17,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -30,6 +31,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IAppUserService _appUserService;
         private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly ICharityService _charityService;
+        private readonly ISystemFeedbackService _systemFeedbackService;
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
@@ -39,17 +41,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IReportService reportService,
             IAppUserService appUserService,
             ITransactionHistoryService transactionHistoryService,
-            ICharityService charityService
+            ICharityService charityService,
+            ISystemFeedbackService systemFeedbackService
         //     IPlayerService playerService
         )
         {
             //     _adminService = adminService;
             //     _hirerService = hirerService;
-                _orderService = orderService;
+            _orderService = orderService;
             _reportService = reportService;
             _appUserService = appUserService;
             _transactionHistoryService = transactionHistoryService;
             _charityService = charityService;
+            _systemFeedbackService = systemFeedbackService;
             //     _playerService = playerService;
         }
 
@@ -140,7 +144,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return response is not null ? Ok(response) : NotFound();
         }
 
-        
+
 
         // /// <summary>
         // /// Active or Disable (1 day) a hirer account
@@ -286,7 +290,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     var response = await _playerService.UpdatePlayerStatusForAdminAsync(playerId, request);
         //     return response ? NoContent() : NotFound();
         // }
-        
+
 
         /// <summary>
         /// Active or disable charity
@@ -325,6 +329,26 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _appUserService.ChangeIsActiveUserForAdminAsync(userId, request);
+            return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Process feedback
+        /// </summary>
+        /// <param name="feedbackId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("feedbacks/{feedbackId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> ProcessFeedback(string feedbackId, ProcessFeedbackRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _systemFeedbackService.ProcessFeedbackAsync(feedbackId, request);
             return response ? NoContent() : NotFound();
         }
     }

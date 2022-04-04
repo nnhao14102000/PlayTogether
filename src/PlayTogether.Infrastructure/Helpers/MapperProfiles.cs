@@ -14,6 +14,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
+using PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
@@ -30,6 +31,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Business.Report;
 using PlayTogether.Core.Dtos.Outcoming.Business.SearchHistory;
+using PlayTogether.Core.Dtos.Outcoming.Business.SystemFeedback;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
@@ -161,6 +163,13 @@ namespace PlayTogether.Infrastructure.Helpers
 
             // DisableUser mapper Profile
             CreateMap<DisableUser, DisableUserResponse>();
+
+            // SystemFeedback mapper Profile
+            CreateMap<ProcessFeedbackRequest, SystemFeedback>();
+            CreateMap<CreateFeedbackRequest, SystemFeedback>();
+            CreateMap<UpdateFeedbackRequest, SystemFeedback>();
+            CreateMap<SystemFeedback, SystemFeedbackDetailResponse>();
+            CreateMap<SystemFeedback, SystemFeedbackResponse>();
 
             // src => target
         }

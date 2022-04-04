@@ -5,15 +5,15 @@ using PlayTogether.Core.Parameters;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace PlayTogether.Core.Interfaces.Repositories.Business
+namespace PlayTogether.Core.Interfaces.Services.Business
 {
-    public interface ISystemFeedbackRepository
+    public interface ISystemFeedbackService
     {
         Task<bool> CreateFeedbackAsync(ClaimsPrincipal principal, CreateFeedbackRequest request);
         Task<bool> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId);
-        Task<bool> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request);
-        Task<SystemFeedbackDetailResponse> GetFeedbackByIdAsync(string feedbackId);
+        Task<bool> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedBackId, UpdateFeedbackRequest request);
+        Task<SystemFeedbackDetailResponse> GetFeedbackByIdAsync(string feedBackId);
         Task<PagedResult<SystemFeedbackResponse>> GetAllFeedbacksAsync(ClaimsPrincipal principal, SystemFeedbackParameters param);
-        Task<bool> ProcessFeedbackAsync(string feedbackId ,ProcessFeedbackRequest request);
+        Task<bool> ProcessFeedbackAsync(string feedBackId, ProcessFeedbackRequest request);
     }
-}   
+}
