@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayTogether.Infrastructure.Data;
 
 namespace PlayTogether.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220403131750_Add Behavior Tables")]
+    partial class AddBehaviorTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,9 +324,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Property<int>("Point")
                         .HasColumnType("int");
 
-                    b.Property<int>("SatisfiedPoint")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime");
 
@@ -451,56 +450,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Dating", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("FromHour")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsFRI")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMON")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSAT")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSUN")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTHU")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTUE")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsWED")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ToHour")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Datings");
                 });
 
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.DisableUser", b =>
@@ -722,41 +671,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Hobbies");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Ignore", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("IgnoreUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsForever")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TimeIgnore")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Ignores");
                 });
 
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Image", b =>
@@ -1327,15 +1241,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Dating", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
-                        .WithMany("Datings")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PlayTogether.Infrastructure.Entities.DisableUser", b =>
                 {
                     b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
@@ -1401,15 +1306,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Game");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PlayTogether.Infrastructure.Entities.Ignore", b =>
-                {
-                    b.HasOne("PlayTogether.Infrastructure.Entities.AppUser", "User")
-                        .WithMany("Ignores")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1554,8 +1450,6 @@ namespace PlayTogether.Infrastructure.Migrations
 
                     b.Navigation("Chats");
 
-                    b.Navigation("Datings");
-
                     b.Navigation("DisableUsers");
 
                     b.Navigation("Donates");
@@ -1563,8 +1457,6 @@ namespace PlayTogether.Infrastructure.Migrations
                     b.Navigation("GamesOfUsers");
 
                     b.Navigation("Hobbies");
-
-                    b.Navigation("Ignores");
 
                     b.Navigation("Images");
 

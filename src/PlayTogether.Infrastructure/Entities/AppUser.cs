@@ -27,6 +27,7 @@ namespace PlayTogether.Infrastructure.Entities
         public string Avatar { get; set; }
 
         public UserBalance UserBalance { get; set; }
+        public BehaviorPoint BehaviorPoint { get; set; }
 
         public bool IsActive { get; set; } = true;
         public bool IsPlayer { get; set; } = false;
@@ -56,6 +57,8 @@ namespace PlayTogether.Infrastructure.Entities
         public ICollection<DisableUser> DisableUsers { get; set; }
         public ICollection<Chat> Chats { get; set; }
         public ICollection<Recommend> Recommends { get; set; }
+        public ICollection<Dating> Datings { get; set; }
+        public ICollection<Ignore> Ignores { get; set; }
         public IList<Hobby> Hobbies { get; set; }
     }
 }

@@ -34,5 +34,9 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Recommend> Recommends { get; set; }
         public DbSet<TransactionHistory> TransactionHistories { get; set; }
         public DbSet<DisableUser> DisableUsers { get; set; }
+        public DbSet<BehaviorPoint> BehaviorPoints { get; set; }
+        public DbSet<BehaviorHistory> BehaviorHistories { get; set; }
+        public DbSet<Dating> Datings { get; set; }
+        public DbSet<Ignore> Ignores { get; set; }
     }
 }
