@@ -21,6 +21,14 @@ content-type: {{contentType}}
 ###
 
 
+# Get dash board
+GET {{baseUrl}}/api/play-together/v1/admins/dash-board
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
 # Get all users
 GET {{baseUrl}}/api/play-together/v1/admins/users
 content-type: {{contentType}}

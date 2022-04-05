@@ -21,10 +21,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
 
         public async Task<(int, int, int, int)> AdminStatisticAsync()
         {
-            int numOfReport = -1;
-            int numOfDisableUser = -1;
-            int numOfSuggestFeedback = -1;
-            int numOfNewUser = -1;
+            int numOfReport = 0;
+            int numOfDisableUser = 0;
+            int numOfSuggestFeedback = 0;
+            int numOfNewUser = 0;
 
             numOfReport = await _context.Reports.Where(x => x.IsApprove == null).CountAsync();
             numOfDisableUser = await _context.AppUsers.Where(x => x.IsActive == false).CountAsync();
@@ -36,7 +36,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             foreach (var item in users)
             {
                 var date = item.CreatedDate?.ToShortDateString();
-                if(date.Equals(DateTime.UtcNow.AddHours(7).ToShortDateString())){
+                var toDay = DateTime.UtcNow.AddHours(7).ToShortDateString();
+                if(date.Equals(toDay)){
                     numOfNewUser += 1;
                 }
             }
