@@ -32,6 +32,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly ICharityService _charityService;
         private readonly ISystemFeedbackService _systemFeedbackService;
+        private readonly IRecommendService _recommendService;
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
@@ -42,7 +43,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IAppUserService appUserService,
             ITransactionHistoryService transactionHistoryService,
             ICharityService charityService,
-            ISystemFeedbackService systemFeedbackService
+            ISystemFeedbackService systemFeedbackService,
+            IRecommendService recommendService
         //     IPlayerService playerService
         )
         {
@@ -54,6 +56,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _transactionHistoryService = transactionHistoryService;
             _charityService = charityService;
             _systemFeedbackService = systemFeedbackService;
+            _recommendService = recommendService;
             //     _playerService = playerService;
         }
 
@@ -367,6 +370,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
                    && response.Item2 >= 0
                    && response.Item3 >= 0
                    && response.Item4 >= 0 ? Ok(response) : BadRequest();
+        }
+
+        /// <summary>
+        /// Train model
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("train-model")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> TrainModel(){
+            var response = await _recommendService.TrainModel();
+            return response ? Ok() : NoContent();
         }
     }
 }

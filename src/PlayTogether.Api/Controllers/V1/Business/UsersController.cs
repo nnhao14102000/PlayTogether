@@ -514,19 +514,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         *                                              ||
         *================================================
         */
-        /// <summary>
-        /// Train model
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: User
-        /// </remarks>
-        [HttpGet, Route("train-model")]
-        [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> TrainModel(){
-            var response = await _recommendService.TrainModel();
-            return response ? Ok() : NoContent();
-        }
+        
 
     }
 }
