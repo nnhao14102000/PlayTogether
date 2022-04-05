@@ -31,6 +31,7 @@ Authorization: {{authToken}}
 
 # Get reports of user
 GET {{baseUrl}}/api/play-together/v1/reports/323f3b6b-a989-4daf-8ef4-1d2263ed782a
+?isApprove=
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

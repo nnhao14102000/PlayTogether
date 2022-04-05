@@ -18,24 +18,24 @@ namespace PlayTogether.Api.Helpers
 
                 dbContext.Database.EnsureCreated();
 
-                // if (dbContext.AppUsers.Any()) {
-                //     var users = dbContext.AppUsers.ToList();
-                //     foreach (var user in users) {
-                //         var rates =  dbContext.Ratings.Where(x => x.ToUserId == user.Id).ToList();
-                //         var orders =  dbContext.Orders.Where(x => x.ToUserId == user.Id).ToList();
-                //         var orderOnTimes =  dbContext.Orders.Where(x => x.ToUserId == user.Id
-                //                                                             && x.Status == OrderStatusConstants.Finish).ToList();
-                //         double totalTime = 0;
-                //         foreach (var item in orders) {
-                //             totalTime += Infrastructure.Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
-                //         }
-                //         user.NumOfRate = rates.Count();
-                //         user.NumOfOrder = orders.Count();
-                //         user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
-                //         user.NumOfFinishOnTime = orderOnTimes.Count();
-                //         dbContext.SaveChanges();
-                //     }
-                // }
+                if (dbContext.AppUsers.Any()) {
+                    var users = dbContext.AppUsers.ToList();
+                    foreach (var user in users) {
+                        var rates =  dbContext.Ratings.Where(x => x.ToUserId == user.Id).ToList();
+                        var orders =  dbContext.Orders.Where(x => x.ToUserId == user.Id).ToList();
+                        var orderOnTimes =  dbContext.Orders.Where(x => x.ToUserId == user.Id
+                                                                            && x.Status == OrderStatusConstants.Finish).ToList();
+                        double totalTime = 0;
+                        foreach (var item in orders) {
+                            totalTime += Infrastructure.Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
+                        }
+                        user.NumOfRate = rates.Count();
+                        user.NumOfOrder = orders.Count();
+                        user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
+                        user.NumOfFinishOnTime = orderOnTimes.Count();
+                        dbContext.SaveChanges();
+                    }
+                }
 
                 if (!dbContext.Games.Any()) {
                     dbContext.Games.AddRange(

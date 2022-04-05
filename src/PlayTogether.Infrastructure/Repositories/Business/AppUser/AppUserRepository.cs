@@ -86,7 +86,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             user.NumOfRate = rates.Count();
             user.NumOfOrder = orders.Count();
-            user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
+            user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
             return _mapper.Map<PersonalInfoResponse>(user);
@@ -147,7 +147,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             user.NumOfRate = rates.Count();
             user.NumOfOrder = orders.Count();
-            user.TotalTimeOrder = Convert.ToInt32(Math.Round(totalTime / 3600));
+            user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);

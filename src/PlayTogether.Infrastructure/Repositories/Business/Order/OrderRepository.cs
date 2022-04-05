@@ -564,7 +564,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 toUser.UserBalance.Balance += order.FinalPrices;
-                toUser.TotalTimeOrder = Convert.ToInt32(Math.Round(Helpers.UtilsHelpers.GetTime(order.TimeStart, order.TimeFinish)/3600)); 
+                toUser.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(Helpers.UtilsHelpers.GetTime(order.TimeStart, order.TimeFinish)/3600)); 
                 order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
                 order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
 
