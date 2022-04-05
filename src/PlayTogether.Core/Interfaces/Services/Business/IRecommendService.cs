@@ -4,6 +4,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IRecommendService
     {
-        Task<bool> WriteToFile();
+        Task<bool> TrainModel();
     }
 }

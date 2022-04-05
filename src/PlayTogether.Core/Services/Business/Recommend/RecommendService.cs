@@ -16,10 +16,10 @@ namespace PlayTogether.Core.Services.Business.Recommend
             _recommendRepository = recommendRepository;
             _logger = logger;
         }
-        public async Task<bool> WriteToFile()
+        public async Task<bool> TrainModel()
         {
             try {
-                return await _recommendRepository.WriteToFile();
+                return await _recommendRepository.TrainModel();
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call TrainModel in service class, Error Message: {ex}.");

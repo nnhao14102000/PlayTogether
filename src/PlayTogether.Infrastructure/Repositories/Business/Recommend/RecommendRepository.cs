@@ -1,5 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
+using Microsoft.ML.Trainers;
+using PlayTogether.Core.Dtos.Incoming.Business.Recommend;
 using PlayTogether.Core.Dtos.Outcoming.Business.Recommend;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Infrastructure.Data;
@@ -17,7 +20,82 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
         {
         }
 
-        public async Task<bool> WriteToFile()
+        public async Task<bool> TrainModel()
+        {
+            await WriteDataToFile();
+            MLContext mlContext = new MLContext();
+            (IDataView trainingDataView, IDataView testDataView) = LoadData(mlContext);
+            ITransformer model = BuildAndTrainModel(mlContext, trainingDataView);
+            EvaluateModel(mlContext, testDataView, model);
+            UseModelForSinglePrediction(mlContext, model);
+            SaveModel(mlContext, trainingDataView.Schema, model);
+            return false;
+        }
+
+        void SaveModel(MLContext mlContext, DataViewSchema trainingDataViewSchema, ITransformer model)
+        {
+            var modelPath = Path.Combine(Environment.CurrentDirectory, "DataFile", "PTORecommenderModel.zip");
+
+            Console.WriteLine("=============== Saving the model to a file ===============");
+            mlContext.Model.Save(model, trainingDataViewSchema, modelPath);
+            
+        }
+
+        void UseModelForSinglePrediction(MLContext mlContext, ITransformer model)
+        {
+            Console.WriteLine("=============== Making a prediction ===============");
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<RecommendInputRequest, RecommendInputPredictRequest>(model);
+            var testInput = new RecommendInputRequest { userId = "d04a4aa1-0f83-4acd-a645-f6aaae367154", playerId = "a17bd7c6-0fcc-48ea-89de-43823a1ec09c" };
+
+            var movieRatingPrediction = predictionEngine.Predict(testInput);
+            if (Math.Round(movieRatingPrediction.Score, 1) > 3.5) {
+                Console.WriteLine("Player " + testInput.playerId + " is recommended for user " + testInput.userId);
+            }
+            else {
+                Console.WriteLine("Player " + testInput.playerId + " is not recommended for user " + testInput.userId);
+            }
+        }
+
+        void EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
+        {
+            Console.WriteLine("=============== Evaluating the model ===============");
+            var prediction = model.Transform(testDataView);
+            var metrics = mlContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
+            Console.WriteLine("Root Mean Squared Error : " + metrics.RootMeanSquaredError.ToString());
+            Console.WriteLine("RSquared: " + metrics.RSquared.ToString());
+        }
+
+        ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
+        {
+            IEstimator<ITransformer> estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "userIdEncoded", inputColumnName: "userId")
+                .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "playerIdEncoded", inputColumnName: "playerId"));
+            var options = new MatrixFactorizationTrainer.Options {
+                MatrixColumnIndexColumnName = "userIdEncoded",
+                MatrixRowIndexColumnName = "playerIdEncoded",
+                LabelColumnName = "Label",
+                NumberOfIterations = 20,
+                ApproximationRank = 100
+            };
+
+            var trainerEstimator = estimator.Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
+            Console.WriteLine("=============== Training the model ===============");
+            ITransformer model = trainerEstimator.Fit(trainingDataView);
+
+            return model;
+        }
+
+        (IDataView training, IDataView test) LoadData(MLContext mlContext)
+        {
+            var trainingDataPath = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
+            var testDataPath = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
+
+            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<RecommendInputRequest>(trainingDataPath, hasHeader: false, separatorChar: ',');
+            IDataView testDataView = mlContext.Data.LoadFromTextFile<RecommendInputRequest>(testDataPath, hasHeader: false, separatorChar: ',');
+
+            return (trainingDataView, testDataView);
+        }
+
+        private async Task WriteDataToFile()
         {
             var path = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
             var pathDirectory = Path.Combine(Environment.CurrentDirectory, "DataFile");
@@ -63,13 +141,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                 }
 
                 Directory.CreateDirectory(pathDirectory);
-                
+
                 using (var tw = new StreamWriter(path)) {
                     foreach (var item in listFinal) {
                         tw.WriteLine(item);
                     }
                 }
-                return true;
             }
             else if (File.Exists(path)) {
                 var logFile = File.ReadAllLines(path);
@@ -115,7 +192,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                             tw.WriteLine(item);
                         }
                     }
-                    return true;
                 }
                 else {
                     if (listRecommend.Count() > logList.Count()) {
@@ -159,14 +235,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
                                 tw.WriteLine(item);
                             }
                         }
-                        return true;
                     }
                 }
             }
-            
-            
-            
-            return false;
         }
 
 
