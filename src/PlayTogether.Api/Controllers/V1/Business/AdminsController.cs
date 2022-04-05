@@ -24,7 +24,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
     [ApiVersion("1.0")]
     public class AdminsController : BaseController
     {
-        // private readonly IAdminService _adminService;
+        private readonly IAdminService _adminService;
         // private readonly IHirerService _hirerService;
         private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
@@ -35,7 +35,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         // private readonly IPlayerService _playerService;
 
         public AdminsController(
-        //     IAdminService adminService,
+            IAdminService adminService,
         //     IHirerService hirerService,
             IOrderService orderService,
             IReportService reportService,
@@ -46,7 +46,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     IPlayerService playerService
         )
         {
-            //     _adminService = adminService;
+                _adminService = adminService;
             //     _hirerService = hirerService;
             _orderService = orderService;
             _reportService = reportService;
@@ -350,6 +350,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             var response = await _systemFeedbackService.ProcessFeedbackAsync(feedbackId, request);
             return response ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Get number of Report, DisableUser, SystemFeedback Suggest, New User
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet, Route("dash-board")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult<(int, int, int, int)>> AdminStatistic(){
+            var response = await _adminService.AdminStatisticAsync();
+            return response.Item1 >= 0
+                   && response.Item2 >= 0
+                   && response.Item3 >= 0
+                   && response.Item4 >= 0 ? Ok(response) : BadRequest();
         }
     }
 }

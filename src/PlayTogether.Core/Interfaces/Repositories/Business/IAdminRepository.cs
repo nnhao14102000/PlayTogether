@@ -8,6 +8,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     public interface IAdminRepository
     {
         // Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param);
-        
+        Task<(int, int, int, int)> AdminStatisticAsync();
     }
 }

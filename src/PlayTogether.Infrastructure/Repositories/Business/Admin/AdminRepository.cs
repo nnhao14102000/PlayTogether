@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -16,6 +17,31 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
     {
         public AdminRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
         {
+        }
+
+        public async Task<(int, int, int, int)> AdminStatisticAsync()
+        {
+            int numOfReport = -1;
+            int numOfDisableUser = -1;
+            int numOfSuggestFeedback = -1;
+            int numOfNewUser = -1;
+
+            numOfReport = await _context.Reports.Where(x => x.IsApprove == null).CountAsync();
+            numOfDisableUser = await _context.AppUsers.Where(x => x.IsActive == false).CountAsync();
+            numOfSuggestFeedback = await _context.SystemFeedbacks
+                                                    .Where(x => x.TypeOfFeedback.ToLower()
+                                                            .Contains(SystemFeedbackTypeConstants.Suggest.ToLower()))
+                                                    .CountAsync();
+            var users = await _context.AppUsers.ToListAsync();
+            foreach (var item in users)
+            {
+                var date = item.CreatedDate?.ToShortDateString();
+                if(date.Equals(DateTime.UtcNow.AddHours(7).ToShortDateString())){
+                    numOfNewUser += 1;
+                }
+            }
+
+            return (numOfReport, numOfDisableUser, numOfSuggestFeedback, numOfNewUser);
         }
 
         // public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)

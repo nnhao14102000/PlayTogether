@@ -88,6 +88,11 @@
 
 <h2 id="admin">Admin <a href="#table-of-contents" target="_self">🔙</a></h2>  
 
+> - ``GET /api/play-together/v1/admins/dash-board ``  
+>   ***Description***: Get number of Report, DisableUser, SystemFeedback Suggest, New User    
+>   ***Role Access***: Admin  
+>   ***Use for***: Fill info in Dash Board of Admin 
+>
 > - ``GET /api/play-together/v1/admins/reports ``  
 >   ***Description***: Get all reports of all users   
 >   ***Role Access***: Admin  

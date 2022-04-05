@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?IsSameHobbies=true
+?search=na
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
@@ -46,7 +46,7 @@ Authorization: {{authToken}}
 ###
 
 # Get user basic information
-GET {{baseUrl}}/api/play-together/v1/users/0e317a69-2098-4a34-8115-439c30038faa
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

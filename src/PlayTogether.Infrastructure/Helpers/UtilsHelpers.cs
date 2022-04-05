@@ -17,5 +17,6 @@ namespace PlayTogether.Infrastructure.Helpers
             var timeDone = ts.TotalSeconds;
             return timeDone;
         }
+
     }
 }

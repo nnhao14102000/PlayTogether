@@ -11,14 +11,14 @@ namespace PlayTogether.Core.Services.Business.Admin
 {
     public class AdminService : IAdminService
     {
-        // private readonly IAdminRepository _adminRepository;
-        // private readonly ILogger<AdminService> _logger;
+        private readonly IAdminRepository _adminRepository;
+        private readonly ILogger<AdminService> _logger;
 
-        // public AdminService(IAdminRepository adminRepository, ILogger<AdminService> logger)
-        // {
-        //     _adminRepository = adminRepository;
-        //     _logger = logger;
-        // }
+        public AdminService(IAdminRepository adminRepository, ILogger<AdminService> logger)
+        {
+            _adminRepository = adminRepository;
+            _logger = logger;
+        }
 
         // public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)
         // {
@@ -30,6 +30,18 @@ namespace PlayTogether.Core.Services.Business.Admin
         //         throw;
         //     }
         // }
+
+
+        public async Task<(int, int, int, int)> AdminStatisticAsync()
+        {
+            try {
+                return await _adminRepository.AdminStatisticAsync();
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call AdminStatisticAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
 
         
     }
