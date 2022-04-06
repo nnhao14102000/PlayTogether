@@ -80,7 +80,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orderOnTimes = await _context.Orders.Where(x => x.ToUserId == user.Id
-                                                                && x.Status == OrderStatusConstants.Finish).ToListAsync();
+                                                                && x.Status == OrderStatusConstants.Complete).ToListAsync();
             double totalTime = 0;
             foreach (var item in orders) {
                 totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
@@ -142,7 +142,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orderOnTimes = await _context.Orders.Where(x => x.ToUserId == user.Id
-                                                                && x.Status == OrderStatusConstants.Finish).ToListAsync();
+                                                                && x.Status == OrderStatusConstants.Complete).ToListAsync();
             double totalTime = 0;
             foreach (var item in orders) {
                 totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
@@ -437,7 +437,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
             var orders = _context.Orders.Where(x => x.UserId == userId
-                                                    && (x.Status == OrderStatusConstants.Finish
+                                                    && (x.Status == OrderStatusConstants.Complete
                                                         || x.Status == OrderStatusConstants.FinishSoonHirer
                                                         || x.Status == OrderStatusConstants.FinishSoonPlayer)
                                                         )

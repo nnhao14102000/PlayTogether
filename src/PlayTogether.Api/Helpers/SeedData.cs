@@ -24,7 +24,7 @@ namespace PlayTogether.Api.Helpers
                         var rates =  dbContext.Ratings.Where(x => x.ToUserId == user.Id).ToList();
                         var orders =  dbContext.Orders.Where(x => x.ToUserId == user.Id).ToList();
                         var orderOnTimes =  dbContext.Orders.Where(x => x.ToUserId == user.Id
-                                                                            && x.Status == OrderStatusConstants.Finish).ToList();
+                                                                            && x.Status == OrderStatusConstants.Complete).ToList();
                         double totalTime = 0;
                         foreach (var item in orders) {
                             totalTime += Infrastructure.Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);

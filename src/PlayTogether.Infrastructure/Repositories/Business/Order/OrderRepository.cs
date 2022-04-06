@@ -258,7 +258,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
                 return;
             }
-            query = query.Where(x => x.Status == status);
+            query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
         }
 
         public async Task<OrderGetResponse> GetOrderByIdAsync(ClaimsPrincipal principal, string orderId)
@@ -466,7 +466,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                           .Reference(x => x.UserBalance)
                           .LoadAsync();
 
-            order.Status = OrderStatusConstants.Finish;
+            order.Status = OrderStatusConstants.Complete;
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
             toUser.NumOfFinishOnTime += 1;

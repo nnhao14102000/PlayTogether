@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?search=
+?isRecentOrder=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
