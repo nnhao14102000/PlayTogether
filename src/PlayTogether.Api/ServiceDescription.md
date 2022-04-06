@@ -22,6 +22,7 @@
 - <a href="#image" target="_self">Image</a> <br>
 - <a href="#donate" target="_self">Donate</a> <br>
 - <a href="#feedback" target="_self">System Feedback</a> <br>
+- <a href="#dating" target="_self">Dating</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -569,6 +570,18 @@
 > 
 > - ``DELETE /api/play-together/v1/feedbacks/{feedbackId} ``  
 >   ***Description***: Delete feedback  
+>   ***Role Access***: User    
+>
+
+
+<h2 id="dating">Dating  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/dating ``  
+>   ***Description***: Create dating  
+>   ***Role Access***: User  
+> 
+> - ``DELETE /api/play-together/v1/dating/{datingId} ``  
+>   ***Description***: Delete dating  
 >   ***Role Access***: User    
 >
 

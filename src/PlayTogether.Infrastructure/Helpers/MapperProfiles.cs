@@ -4,6 +4,7 @@ using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.Chat;
+using PlayTogether.Core.Dtos.Incoming.Business.Dating;
 using PlayTogether.Core.Dtos.Incoming.Business.Donate;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
@@ -172,6 +173,9 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<UpdateFeedbackRequest, SystemFeedback>();
             CreateMap<SystemFeedback, SystemFeedbackDetailResponse>();
             CreateMap<SystemFeedback, SystemFeedbackResponse>();
+
+            // Dating mapper profile
+            CreateMap<DatingCreateRequest, Dating>();
 
             // src => target
         }

@@ -10,6 +10,7 @@ using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.AppUser;
 using PlayTogether.Core.Services.Business.Charity;
 using PlayTogether.Core.Services.Business.Chat;
+using PlayTogether.Core.Services.Business.Dating;
 using PlayTogether.Core.Services.Business.Donate;
 using PlayTogether.Core.Services.Business.Game;
 using PlayTogether.Core.Services.Business.GameOfUser;
@@ -37,6 +38,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Admin;
 using PlayTogether.Infrastructure.Repositories.Business.AppUser;
 using PlayTogether.Infrastructure.Repositories.Business.Charity;
 using PlayTogether.Infrastructure.Repositories.Business.Chat;
+using PlayTogether.Infrastructure.Repositories.Business.Dating;
 using PlayTogether.Infrastructure.Repositories.Business.Donate;
 using PlayTogether.Infrastructure.Repositories.Business.Game;
 using PlayTogether.Infrastructure.Repositories.Business.GameOfUser;
@@ -199,6 +201,10 @@ namespace PlayTogether.Api.Helpers
             // Config for SystemFeedback service DI
             services.AddScoped<ISystemFeedbackService, SystemFeedbackService>();
             services.AddScoped<ISystemFeedbackRepository, SystemFeedbackRepository>();
+
+            // Config for Dating service DI
+            services.AddScoped<IDatingService, DatingService>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
 
             services.AddHttpClient();
 

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
 {
@@ -28,7 +29,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
         public async Task<IEnumerable<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId)
         {
             var player = await _context.AppUsers.FindAsync(userId);
-            if (player is null) {
+            if (player is null || player.IsActive is false) {
                 return null;
             }
 
@@ -65,7 +66,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null) {
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
                 return null;
             }
 
@@ -117,7 +118,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null) {
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
                 return false;
             }
 
@@ -165,7 +166,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null) {
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
                 return false;
             }
 

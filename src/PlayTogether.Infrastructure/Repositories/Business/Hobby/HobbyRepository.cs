@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Hobby;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -35,7 +36,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null) {
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
                 return false;
             }
 
@@ -81,7 +82,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null) {
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
                 return false;
             }
 
