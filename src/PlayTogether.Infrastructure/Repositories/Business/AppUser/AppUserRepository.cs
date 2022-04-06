@@ -350,7 +350,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             var orders = _context.Orders.Where(x => x.UserId == userId
                                                     && (x.Status == OrderStatusConstants.Finish
-                                                        || x.Status == OrderStatusConstants.FinishSoon)
+                                                        || x.Status == OrderStatusConstants.FinishSoonHirer
+                                                        || x.Status == OrderStatusConstants.FinishSoonPlayer)
                                                         )
                                         .OrderByDescending(x => x.CreatedDate)
                                         .ToList();

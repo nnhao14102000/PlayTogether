@@ -534,7 +534,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                           .Reference(x => x.UserBalance)
                           .LoadAsync();
 
-            order.Status = OrderStatusConstants.FinishSoon;
+            
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
             
@@ -542,6 +542,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.Reason = request.Reason;
 
             if (order.User.IdentityId == identityId) {
+                order.Status = OrderStatusConstants.FinishSoonHirer;
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         toUser.Id,
@@ -551,6 +552,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 );
             }
             else {
+                order.Status = OrderStatusConstants.FinishSoonPlayer;
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         order.UserId,

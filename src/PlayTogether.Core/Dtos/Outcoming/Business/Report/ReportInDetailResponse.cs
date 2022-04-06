@@ -11,6 +11,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Report
         public string ToUserId { get; set; }
         public OrderUserResponse ToUser { get; set; }
         public string ReportMessage { get; set; }
+        public bool? IsApprove { get; set; }
         public OrderGetDetailResponse Order { get; set; }
     }
 }
