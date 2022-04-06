@@ -14,6 +14,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public bool Gender { get; set; }
         public string Email { get; set; }
         public ICollection<ImageUserResponse> Images { get; set; }
+        public ICollection<DatingUserResponse> Datings { get; set; }
         public string Description { get; set; }
         public float Rate { get; set; }
         public int NumOfRate { get; set; }

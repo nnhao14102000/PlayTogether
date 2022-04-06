@@ -74,6 +74,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
+            await _context.Entry(user).Collection(x => x.Datings).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
 
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
@@ -135,6 +136,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return null;
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
+            await _context.Entry(user).Collection(x => x.Datings).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
 
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
@@ -194,6 +196,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
+            FilterUserByHour(ref query, param.FromHour, param.ToHour);
+            FilterUserByDate(ref query, param.Date);
 
             FilterUserByItSelf(ref query, user.Id);
 
@@ -213,6 +217,90 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterUserByDate(ref IQueryable<Entities.AppUser> query, string date)
+        {
+            if (!query.Any()
+               || String.IsNullOrEmpty(date)
+               || String.IsNullOrWhiteSpace(date)) {
+                return;
+            }
+            var list = new List<Entities.AppUser>();
+            if (date.ToLower() is "mon") {
+                var datings = _context.Datings.Where(x => x.IsMON == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "tue") {
+                var datings = _context.Datings.Where(x => x.IsTUE == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "wed") {
+                var datings = _context.Datings.Where(x => x.IsWED == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "thu") {
+                var datings = _context.Datings.Where(x => x.IsTHU == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "fri") {
+                var datings = _context.Datings.Where(x => x.IsFRI == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "sat") {
+                var datings = _context.Datings.Where(x => x.IsSAT == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            if (date.ToLower() is "sun") {
+                var datings = _context.Datings.Where(x => x.IsSUN == true);
+                foreach (var item in datings) {
+                    var user = _context.AppUsers.Find(item.UserId);
+                    list.Add(user);
+                }
+            }
+            query = list.AsQueryable();
+        }
+
+        private void FilterUserByHour(ref IQueryable<Entities.AppUser> query, string fromHour, string toHour)
+        {
+            if (!query.Any()
+               || String.IsNullOrEmpty(fromHour)
+               || String.IsNullOrWhiteSpace(fromHour)
+               || String.IsNullOrEmpty(toHour)
+               || String.IsNullOrWhiteSpace(toHour)) {
+                return;
+            }
+
+            int fH = Int32.Parse(fromHour);
+            int tH = Int32.Parse(toHour);
+            if (fH > tH) {
+                return;
+            }
+            var list = new List<Entities.AppUser>();
+            var datings = _context.Datings.Where(x => x.FromHour >= fH && x.ToHour >= tH);
+            foreach (var item in datings) {
+                var user = _context.AppUsers.Find(item.UserId);
+                list.Add(user);
+            }
+            query = list.AsQueryable();
         }
 
         public async Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param)
