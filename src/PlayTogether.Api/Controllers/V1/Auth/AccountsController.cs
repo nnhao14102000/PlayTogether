@@ -225,12 +225,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="request"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: User, Charity
+        /// Roles Access: All
         /// </remarks>
         [HttpPut, Route("reset-password-token")]
-        [Authorize(Roles = AuthConstant.RoleUser
-                           + ","
-                           + AuthConstant.RoleCharity)]
         public async Task<ActionResult<AuthResult>> ResetPasswordToken(ResetPasswordTokenRequest request){
             var response = await _accountService.ResetPasswordTokenAsync(request);
             return Ok(response);
@@ -242,12 +239,8 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// <param name="request"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: User, Charity
-        /// </remarks>
-        [HttpPut, Route("reset-password")]
-        [Authorize(Roles = AuthConstant.RoleUser
-                           + ","
-                           + AuthConstant.RoleCharity)]
+        /// Roles Access: All
+        /// </remarks>]
         public async Task<ActionResult<AuthResult>> ResetPassword(ResetPasswordRequest request){
             var response = await _accountService.ResetPasswordAsync(request);
             return Ok(response);

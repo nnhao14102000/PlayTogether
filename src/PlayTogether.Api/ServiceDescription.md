@@ -68,12 +68,10 @@
 >
 > - ``PUT /api/play-together/v1/accounts/reset-password-token ``  
 >   ***Description***: Get token for reset password  
->   ***Role Access***: User, Charity  
 >   ***Use for***: Get token for reset password, go with verify email
 >
 > - ``PUT /api/play-together/v1/accounts/reset-password ``  
 >   ***Description***: Reset password  
->   ***Role Access***: User, Charity  
 >
 > - ``POST /api/play-together/v1/accounts/register-multi-User ``  
 >   ***Description***: Register multi User Account **for TEST**  
