@@ -147,3 +147,11 @@ Authorization: {{authToken}}
 }
 
 ###
+
+
+# Train model
+GET {{baseUrl}}/api/play-together/v1/admins/train-model
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###

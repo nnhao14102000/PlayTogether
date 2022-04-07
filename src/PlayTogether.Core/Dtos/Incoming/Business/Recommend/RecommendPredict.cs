@@ -1,6 +1,6 @@
 namespace PlayTogether.Core.Dtos.Incoming.Business.Recommend
 {
-    public class RecommendInputPredictRequest
+    public class RecommendPredict
     {
         public float Label;
         public float Score;

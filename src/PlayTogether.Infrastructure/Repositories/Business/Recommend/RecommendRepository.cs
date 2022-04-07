@@ -44,11 +44,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
         void UseModelForSinglePrediction(MLContext mlContext, ITransformer model)
         {
             Console.WriteLine("=============== Making a prediction ===============");
-            var predictionEngine = mlContext.Model.CreatePredictionEngine<RecommendInputRequest, RecommendInputPredictRequest>(model);
-            var testInput = new RecommendInputRequest { userId = "d04a4aa1-0f83-4acd-a645-f6aaae367154", playerId = "a17bd7c6-0fcc-48ea-89de-43823a1ec09c" };
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<RecommendData, RecommendPredict>(model);
+            var testInput = new RecommendData { userId = "d04a4aa1-0f83-4acd-a645-f6aaae367154", playerId = "a17bd7c6-0fcc-48ea-89de-43823a1ec09c" };
 
-            var movieRatingPrediction = predictionEngine.Predict(testInput);
-            if (Math.Round(movieRatingPrediction.Score, 1) > 3.5) {
+            var ratingPrediction = predictionEngine.Predict(testInput);
+            if (Math.Round(ratingPrediction.Score, 1) > 3.5) {
                 Console.WriteLine("Player " + testInput.playerId + " is recommended for user " + testInput.userId);
             }
             else {
@@ -89,8 +89,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
             var trainingDataPath = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
             var testDataPath = Path.Combine(Environment.CurrentDirectory, "DataFile", "Recommend_Data.txt");
 
-            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<RecommendInputRequest>(trainingDataPath, hasHeader: false, separatorChar: ',');
-            IDataView testDataView = mlContext.Data.LoadFromTextFile<RecommendInputRequest>(testDataPath, hasHeader: false, separatorChar: ',');
+            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<RecommendData>(trainingDataPath, hasHeader: false, separatorChar: ',');
+            IDataView testDataView = mlContext.Data.LoadFromTextFile<RecommendData>(testDataPath, hasHeader: false, separatorChar: ',');
 
             return (trainingDataView, testDataView);
         }

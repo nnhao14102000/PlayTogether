@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ML;
 using Microsoft.IdentityModel.Tokens;
 using PlayTogether.Api.Helpers;
+using PlayTogether.Core.Dtos.Incoming.Business.Recommend;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Text;
@@ -27,6 +29,8 @@ namespace PlayTogether.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureServiceInjection(Configuration);
+            services.AddPredictionEnginePool<RecommendData, RecommendPredict>()
+                .FromFile(modelName: "PTORecommenderModel", filePath: "DataFile/PTORecommenderModel.zip", watchForChanges: true);
 
             services.AddControllers()
                 .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
