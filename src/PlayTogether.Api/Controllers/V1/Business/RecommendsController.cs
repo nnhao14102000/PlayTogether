@@ -43,11 +43,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
             RecommendPredict prediction = _predictEnginePool.Predict(modelName: "PTORecommenderModel", example: request);
             string result = "";
             if (Math.Round(prediction.Score, 1) > 3.5) {
-                result = "Player " + request.playerId + " is recommended for user " + request.userId;
+                result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is recommended for user " + request.userId;
                 return Ok(result);
             }
             else {
-                result = "Player " + request.playerId + " is not recommended for user " + request.userId;
+                result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is not recommended for user " + request.userId;
                 return Ok(result);
             }
         }
