@@ -98,6 +98,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
 
         private void OrderByMostFavorite(ref IQueryable<Entities.Game> query, bool? isMostFavorite)
         {
+            if(!query.Any() || isMostFavorite is null || isMostFavorite is false){
+                return;
+            }
             var listGameOfUser = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()}).OrderByDescending(x => x.count);
 
             var listGame = new List<Entities.Game>();
