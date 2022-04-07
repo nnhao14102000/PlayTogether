@@ -16,7 +16,7 @@ Content-type: {{contentType}}
 
 {
   "email": "manhnguyen@gmail.com",
-  "password": "Pa55w0rd!"
+  "password": "Manh1234@"
 }
 
 ###
@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?isRecentOrder=true
+?isRecentOrder=
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 
@@ -161,5 +161,18 @@ Authorization: {{authToken}}
 GET {{baseUrl}}/api/play-together/v1/users/train-model
 Content-type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+
+# Predict
+POST {{baseUrl}}/api/play-together/v1/recommends
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+   "userId": "7c963402-6898-4f5b-8189-55d3da4cbbf0",
+   "playerId": "14085799-aec5-41b5-9fd9-46aa9a773443"
+}
 
 ###
