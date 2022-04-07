@@ -177,8 +177,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             if (rating is null) {
                 return false;
             }
+            if (rating.IsActive is false) {
+                return false;
+            }
 
-            rating.IsViolate = true;
+            if (rating.IsViolate is true) {
+                rating.IsViolate = false;
+            }
+            else if (rating.IsViolate is false) {
+                rating.IsViolate = true;
+            }
             return (await _context.SaveChangesAsync() >= 0);
         }
 
