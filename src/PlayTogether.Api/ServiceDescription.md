@@ -23,6 +23,7 @@
 - <a href="#donate" target="_self">Donate</a> <br>
 - <a href="#feedback" target="_self">System Feedback</a> <br>
 - <a href="#dating" target="_self">Dating</a> <br>
+- <a href="#recommend" target="_self">Recommend</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -135,6 +136,15 @@
 >   ***Description***: Process the feedback   
 >   ***Role Access***: Admin  
 >
+> - ``PUT /api/play-together/v1/admins/feedbacks/{feedbackId} ``  
+>   ***Description***: Process the feedback   
+>   ***Role Access***: Admin  
+>
+> - ``GET /api/play-together/v1/admins/train-model ``  
+>   ***Description***: Train the model    
+>   ***Role Access***: Admin  
+>
+
 
 
 <h2 id="user">User <a href="#table-of-contents" target="_self">🔙</a></h2>
@@ -581,6 +591,13 @@
 > - ``DELETE /api/play-together/v1/dating/{datingId} ``  
 >   ***Description***: Delete dating  
 >   ***Role Access***: User    
+>
+
+<h2 id="recommend">Recommend  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/recommends ``  
+>   ***Description***: Check is Player recommend for User  
+>   ***Role Access***: User  
 >
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
