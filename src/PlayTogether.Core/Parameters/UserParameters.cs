@@ -13,6 +13,7 @@ namespace PlayTogether.Core.Parameters
         public bool? IsRecentOrder { get; set; }
         public bool? IsSameHobbies { get; set; }
         public bool? IsNewAccount { get; set; }
+        public bool? IsPlayer { get; set; }
         public string FromHour { get; set; }
         public string ToHour { get; set; }
         public string Date { get; set; }

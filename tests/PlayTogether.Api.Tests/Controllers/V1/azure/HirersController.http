@@ -30,7 +30,9 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?name=hao
+?search=a
+&pageNumber=1
+&pageSize=50
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

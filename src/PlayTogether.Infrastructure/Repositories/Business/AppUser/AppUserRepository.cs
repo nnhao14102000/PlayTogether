@@ -185,11 +185,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var query = users.AsQueryable();
 
-            FilterActiveUser(ref query, true);
-            FilterIsPlayerUser(ref query, true);
-
             Search(ref query, user.Id, param.Search);
-
+            FilterActiveUser(ref query, true);
+            FilterIsPlayerUser(ref query, param.IsPlayer);
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, user.Id, param.Name);
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
