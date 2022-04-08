@@ -40,8 +40,19 @@ Authorization: {{authToken}}
 
 # Get search history
 GET {{baseUrl}}/api/play-together/v1/search-histories
-?isNew=true
-&isHotSearch=true
+?content=
+&isNew=true
+&PageNumber=1
+&PageSize=20
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get search history
+GET {{baseUrl}}/api/play-together/v1/search-histories
+?isHotSearch=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

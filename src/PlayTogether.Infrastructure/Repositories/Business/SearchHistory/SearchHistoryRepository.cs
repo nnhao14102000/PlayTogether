@@ -75,7 +75,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
 
         private void GetHotSearch(ref IQueryable<Entities.SearchHistory> query, bool? isHotSearch)
         {
-            if (!query.Any() || isHotSearch is null || isHotSearch is false) {
+            if (isHotSearch is null || isHotSearch is false) {
                 return;
             }
             var listSearch = _context.SearchHistories.GroupBy(x => x.SearchString)
