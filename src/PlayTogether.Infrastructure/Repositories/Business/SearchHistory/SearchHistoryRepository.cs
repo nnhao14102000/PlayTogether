@@ -99,10 +99,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
                 return;
             }
             if (isNew is true) {
-                query = query.OrderByDescending(x => x.UpdateDate).ThenByDescending(x => x.CreatedDate);
+                query = query.OrderByDescending(x => x.CreatedDate).ThenByDescending(x => x.UpdateDate);
             }
             else {
-                query = query.OrderBy(x => x.UpdateDate).ThenBy(x => x.CreatedDate);
+                query = query.OrderBy(x => x.CreatedDate).ThenBy(x => x.UpdateDate);
             }
         }
 
