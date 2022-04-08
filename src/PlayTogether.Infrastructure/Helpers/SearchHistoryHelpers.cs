@@ -9,6 +9,7 @@ namespace PlayTogether.Infrastructure.Helpers
             return new SearchHistory{
                 Id = Guid.NewGuid().ToString(),
                 CreatedDate = DateTime.UtcNow.AddHours(7),
+                UpdateDate = DateTime.UtcNow.AddHours(7),
                 UserId = userId,
                 SearchString = searchString,
                 IsActive = true
