@@ -78,10 +78,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             if (!query.Any() || isHotSearch is null || isHotSearch is false) {
                 return;
             }
-            var listSearch = _context.SearchHistories.GroupBy(x => x.SearchString).Select(g => new { searchId = g.Key, count = g.Count() }).OrderByDescending(x => x.count);
+            var listSearch = _context.SearchHistories.GroupBy(x => x.SearchString)
+                                .Select(g => new { searchName = g.Key, count = g.Count()})
+                                .OrderByDescending(x => x.count).ToList();
+
             var list = new List<Entities.SearchHistory>();
             foreach (var item in listSearch) {
-                var s = _context.SearchHistories.Find(item.searchId);
+                var s = _context.SearchHistories.FirstOrDefault(x => x.SearchString == item.searchName);
                 if (s is null) {
                     continue;
                 }

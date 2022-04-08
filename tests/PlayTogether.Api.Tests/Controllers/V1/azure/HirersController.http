@@ -38,7 +38,7 @@ Authorization: {{authToken}}
 
 # Get search history
 GET {{baseUrl}}/api/play-together/v1/search-histories
-?isNew=true
+?isHotSearch=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

@@ -191,7 +191,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             Search(ref query, user.Id, param.Search);
 
             FilterUserStatus(ref query, param.Status);
-            FilterUserByName(ref query, param.Name);
+            FilterUserByName(ref query, user.Id, param.Name);
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
             FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
             FilterUserByGameId(ref query, param.GameId);
@@ -454,11 +454,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
         private void FilterUserByName(
             ref IQueryable<Entities.AppUser> query,
+            string userId,
             string name)
         {
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
             }
+            var existSearch = _context.SearchHistories.Where(x => x.UserId == userId).Any(x => x.SearchString.ToLower() == name.ToLower());
+            if (existSearch is true) {
+                var search = _context.SearchHistories.FirstOrDefault(x => x.UserId == userId && x.SearchString.ToLower() == name.ToLower());
+                if (search is not null) {
+                    search.UpdateDate = DateTime.UtcNow.AddHours(7);
+                    search.IsActive = true;
+                }
+            }
+            else {
+                _context.SearchHistories.Add(Helpers.SearchHistoryHelpers.PopulateSearchHistory(userId, name));
+            }
+            if (_context.SaveChanges() < 0) return;
             query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
         }
 

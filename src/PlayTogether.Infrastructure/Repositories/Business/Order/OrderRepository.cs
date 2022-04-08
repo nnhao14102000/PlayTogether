@@ -601,9 +601,22 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         // Calculate time / money
         private float CalculateMoneyRefund(int totalTime, float totalPrice, int timeDone){
             var is_ten_percent = false;
-            var is_fifty_percent = false;
+            var is_less_fifty_percent = false;
+            var is_more_fifty_percent = false;
             var is_ninety_percent = false;
-
+            var percent = timeDone/totalTime;
+            if(percent <= 1/10){
+                is_ten_percent = true;
+            }
+            if(percent > 1/10 && percent < 5/10){
+                is_less_fifty_percent = true;
+            }
+            if(percent >=5/10 && percent < 9/10){
+                is_more_fifty_percent = true;
+            }
+            if(percent >= 9/10){
+                is_ninety_percent = true;
+            }
             return 0;
         }
         
