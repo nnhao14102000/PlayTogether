@@ -101,10 +101,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if(!query.Any() || isMostFavorite is null || isMostFavorite is false){
                 return;
             }
-            var listGameOfUser = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()}).OrderByDescending(x => x.count);
+            var listGameFavorite = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()}).Union(_context.Hobbies.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()})).OrderByDescending(x => x.count);
 
             var listGame = new List<Entities.Game>();
-            foreach (var gameOfUser in listGameOfUser)
+            foreach (var gameOfUser in listGameFavorite)
             {
                 var game = _context.Games.Find(gameOfUser.gameId);
                 if (game is null) continue;
