@@ -77,16 +77,19 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
         }
 
-        public async Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request)
+        public async Task<bool> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
         {
             try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
                 if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 if (String.IsNullOrEmpty(charityId)) {
                     throw new ArgumentNullException(nameof(charityId));
                 }
-                return await _charityRepository.UpdateProfileAsync(charityId, request);
+                return await _charityRepository.UpdateProfileAsync(principal, charityId, request);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call UpdateProfileAsync in service class, Error Message: {ex}.");

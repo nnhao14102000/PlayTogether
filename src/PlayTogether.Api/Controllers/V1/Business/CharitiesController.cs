@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
@@ -92,30 +93,30 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleCharity)]
         public async Task<ActionResult> UpdateCharityProfile(string charityId, CharityUpdateRequest request)
         {
-            if(!ModelState.IsValid){
+            if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _charityService.UpdateProfileAsync(charityId, request);
+            var response = await _charityService.UpdateProfileAsync(HttpContext.User, charityId, request);
             return response ? NoContent() : NotFound();
         }
 
-        // /// <summary>
-        // /// Calculate Donate
-        // /// </summary>
-        // /// <param name="param"></param>
-        // /// <returns></returns>
-        // /// <remarks>
-        // /// Roles Access: Charity
-        // /// </remarks>
-        // [HttpGet("calculate-donate")]
-        // [Authorize(Roles = AuthConstant.RoleCharity)]
-        // public async Task<ActionResult<(int, float, int, float)>> GetNumberOfDonateInDay()
-        // {
-        //     var response = await _donateService.CalculateDonateAsync(HttpContext.User);
-        //     return response.Item1 >= 0
-        //            && response.Item2 >= 0
-        //            && response.Item3 >= 0
-        //            && response.Item4 >= 0 ? Ok(response) : BadRequest();
-        // }
+        /// <summary>
+        /// Calculate Donate
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Charity
+        /// </remarks>
+        [HttpGet("dash-board")]
+        [Authorize(Roles = AuthConstant.RoleCharity)]
+        public async Task<ActionResult<(int, float, int, float)>> GetNumberOfDonateInDay()
+        {
+            var response = await _donateService.CalculateDonateAsync(HttpContext.User);
+            return response.Item1 >= 0
+                   && response.Item2 >= 0
+                   && response.Item3 >= 0
+                   && response.Item4 >= 0 ? Ok(response) : BadRequest();
+        }
     }
 }

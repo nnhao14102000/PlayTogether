@@ -79,8 +79,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                     Helpers.NotificationHelpers.PopulateNotification(model.CharityId,
                     $"{user.Name}, đã donate!",
                     (String.IsNullOrEmpty(request.Message) || (String.IsNullOrWhiteSpace(request.Message)))
-                    ?$"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn. Xin kiểm tra lại tài khoản!."
-                    :$"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn với lời nhắn: {request.Message}. Xin kiểm tra lại tài khoản!.",
+                    ? $"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn. Xin kiểm tra lại tài khoản!."
+                    : $"{user.Name} đã donate {request.Money}đ tới tổ chức {charity.OrganizationName} của bạn với lời nhắn: {request.Message}. Xin kiểm tra lại tài khoản!.",
                     $"{ValueConstants.BaseUrl}/v1/donates/{model.Id}")
 
                 );
@@ -159,72 +159,73 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             return _mapper.Map<DonateResponse>(donate);
         }
 
-        // public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
-        // {
-        //     var loggedInUser = await _userManager.GetUserAsync(principal);
-        //     if (loggedInUser is null) {
-        //         return (-1, -1, -1, -1);
-        //     }
-        //     var identityId = loggedInUser.Id;
+        public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return (0, 0, 0, 0);
+            }
+            var identityId = loggedInUser.Id;
 
-        //     var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-        //     if (charity is null) {
-        //         return (-1, -1, -1, -1);
-        //     }
+            if (charity is null) {
+                return (0, 0, 0, 0);
+            }
 
-        //     var donate = await _context.Donates.Where(x => x.CharityId == charity.Id).ToListAsync();
-        //     int countNumberOfDonateInDay = CountNumberOfDonateInDay(donate);
-        //     float totalMoneyDonatedInDay = TotalMoneyDonateReceiveInDay(donate);
-        //     int countTotalNumberOfPeopleDonateInDay = 0;
-        //     int count4 = 0;
+            var donate = await _context.Donates.Where(x => x.CharityId == charity.Id).ToListAsync();
+            int countNumberOfDonateInDay = CountNumberOfDonateInDay(donate);
+            float totalMoneyDonatedInDay = TotalMoneyDonateReceiveInDay(donate);
+            int count3 = donate.Count();
+            float count4 = TotalMoneyReceive(donate);
 
-        //     return (countNumberOfDonateInDay, totalMoneyDonatedInDay, countTotalNumberOfPeopleDonateInDay, count4);
-        // }
+            return (countNumberOfDonateInDay, totalMoneyDonatedInDay, count3, count4);
+        }
 
-        // private int CountNumberOfDonateInDay(List<Entities.Donate> donates)
-        // {
-        //     if(!donates.Any()) {
-        //         return 0;
-        //     }
-        //     string strDate = DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy");
-        //     int count = 0;
-        //     foreach (var item in donates)
-        //     {
-        //         var date = item.CreatedDate?.ToString("dd/MM/yyyy");
-        //         if(date.Contains(strDate)){
-        //             count ++;
-        //         }
-        //     }
-        //     return count;
-        // }
+        private float TotalMoneyReceive(List<Entities.Donate> donates)
+        {
+            if (!donates.Any()) {
+                return 0;
+            }
+            float total = 0;
+            foreach (var item in donates) {
+                total += item.Money;
+            }
 
-        // private int CountTotalNumberOfPeopleDonateInDay(List<Entities.Donate> donates){
-        //     if(!donates.Any()) {
-        //         return 0;
-        //     }
-        //     int count = 0;
+            return total;
+        }
 
-        //     return count;
-        // }
+        private int CountNumberOfDonateInDay(List<Entities.Donate> donates)
+        {
+            if (!donates.Any()) {
+                return 0;
+            }
+            string strDate = DateTime.UtcNow.AddHours(7).ToShortDateString();
+            int count = 0;
+            foreach (var item in donates) {
+                var date = item.CreatedDate?.ToShortDateString();
+                if (date.Contains(strDate)) {
+                    count++;
+                }
+            }
+            return count;
+        }
 
-        // private float TotalMoneyDonateReceiveInDay(List<Entities.Donate> donates)
-        // {
-        //     if(!donates.Any()) {
-        //         return 0;
-        //     }
-        //     float total = 0;
-        //     string strDate = DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy");
-        //     foreach (var item in donates)
-        //     {
-        //         _context.Entry(item).Reference(x => x.Order).Load();
-        //         var date = item.CreatedDate?.ToString("dd/MM/yyyy");
-        //         if(date.Contains(strDate)){
-        //             total += item.Order.TotalPrices;
-        //         }
-        //     }
+        private float TotalMoneyDonateReceiveInDay(List<Entities.Donate> donates)
+        {
+            if (!donates.Any()) {
+                return 0;
+            }
+            float total = 0;
+            string strDate = DateTime.UtcNow.AddHours(7).ToShortDateString();
+            foreach (var item in donates) {
+                var date = item.CreatedDate?.ToShortDateString();
+                if (date.Contains(strDate)) {
+                    total += item.Money;
+                }
+            }
 
-        //     return total;
-        // }
+            return total;
+        }
     }
 }

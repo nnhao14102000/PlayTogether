@@ -177,6 +177,9 @@ namespace PlayTogether.Infrastructure.Helpers
             // Dating mapper profile
             CreateMap<DatingCreateRequest, Dating>();
 
+            // Charity with draw
+            CreateMap<CharityWithDrawRequest, CharityWithdraw>();
+
             // src => target
         }
     }

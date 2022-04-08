@@ -87,14 +87,43 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             return _mapper.Map<CharityResponse>(charity);
         }
 
-        public async Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request)
+        public async Task<bool> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
         {
-            var charity = await _context.Charities.FindAsync(charityId);
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id;
+
+            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (charity is null || charity.Id != charityId) {
+                return false;
+            }
             if (charity is null) return false;
             var model = _mapper.Map(request, charity);
             _context.Charities.Update(model);
             return (await _context.SaveChangesAsync() >= 0);
 
+        }
+
+        public async Task<bool> CharityWithDrawAsync(ClaimsPrincipal principal, CharityWithDrawRequest request)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id;
+
+            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (charity is null) {
+                return false;
+            }
+
+            var model = _mapper.Map<Entities.CharityWithdraw>(request);
+            model.CharityId = charity.Id;
+            await _context.CharityWithdraws.AddAsync(model);
+
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }

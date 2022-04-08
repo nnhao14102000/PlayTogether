@@ -13,6 +13,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<CharityResponse> GetCharityByIdAsync(string charityId);
         Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request);
         Task<CharityResponse> GetProfileAsync(ClaimsPrincipal principal);
-        Task<bool> UpdateProfileAsync(string charityId, CharityUpdateRequest request);
+        Task<bool> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request);
     }
 }

@@ -256,6 +256,10 @@
 >   ***Description***: Get a Charity profile   
 >   ***Role Access***: Charity   
 >
+> - ``GET /api/play-together/v1/charities/dash-board ``  
+>   ***Description***: Get a Charity dashboard: number of donate in day, total donate receive in day, total donate, total money receive     
+>   ***Role Access***: Charity   
+>
 
 <h2 id="order">Order  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
