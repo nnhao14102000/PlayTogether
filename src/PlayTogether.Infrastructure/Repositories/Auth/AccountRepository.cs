@@ -209,6 +209,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userEntityModel.Email = payload["email"].ToString();
                         userEntityModel.Avatar = payload["picture"].ToString();
                         userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
+                        userEntityModel.IsPlayer = false;
                         userEntityModel.Status = UserStatusConstants.Online;
 
                         await _context.AppUsers.AddAsync(userEntityModel);
@@ -382,6 +383,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.Gender = request.Gender;
                 userEntityModel.Status = UserStatusConstants.Online;
                 userEntityModel.Avatar = ValueConstants.DefaultAvatar;
+                userEntityModel.IsPlayer = false;
 
                 await _context.AppUsers.AddAsync(userEntityModel);
 

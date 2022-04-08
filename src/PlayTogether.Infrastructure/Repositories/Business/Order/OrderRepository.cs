@@ -340,6 +340,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             toUser.Status = UserStatusConstants.Online;
             order.User.Status = UserStatusConstants.Online;
+            await _context.SaveChangesAsync();
 
             if (DateTime.UtcNow.AddHours(7) >= order.ProcessExpired) {
                 order.Status = OrderStatusConstants.OverTime; // change status of Order
@@ -356,10 +357,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 );
             }
 
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                return true;
-            }
-            return false;
+            return await _context.SaveChangesAsync() >= 0;
         }
 
         public async Task<bool> ProcessOrderAsync(
@@ -598,6 +596,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return (await _context.SaveChangesAsync() >= 0);
             }
             return false;
+        }
+
+        // Calculate time / money
+        private float CalculateMoneyRefund(int totalTime, float totalPrice, int timeDone){
+            var is_ten_percent = false;
+            var is_fifty_percent = false;
+            var is_ninety_percent = false;
+
+            return 0;
         }
         
 
