@@ -541,6 +541,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             if (order.User.IdentityId == identityId) {
                 order.Status = OrderStatusConstants.FinishSoonHirer;
+                order.Reason = request.Reason;
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         toUser.Id,
@@ -551,6 +552,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             else {
                 order.Status = OrderStatusConstants.FinishSoonPlayer;
+                order.Reason = request.Reason;
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(
                         order.UserId,
