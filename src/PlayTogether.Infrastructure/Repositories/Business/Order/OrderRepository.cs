@@ -561,7 +561,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         "")
                 );
             }
-            var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
+            // var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
+            var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
             order.FinalPrices = ((float)priceDone);
 
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -601,59 +602,40 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
 
         // Calculate time / money
-        private float CalculateMoneyRefund(int totalTime, float totalPrice, int timeDone){
+        private float CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone){
             double finalPrice = 0;
-            var is_ten_percent = false;
-            var is_twenty_percent = false;
-            var is_thirty_percent = false;
-            var is_fourty_percent = false;
-            var is_fifty_percent = false;
-            var is_sixty_percent = false;
-            var is_seventy_percent = false;
-            var is_eighty_percent = false;
-            var is_ninety_percent = false;
             var percent = timeDone/totalTime;
             if(percent <= 1/10){
-                is_ten_percent = true;
-            }
-            if(percent > 1/10 && percent <= 2/ 10){
-                    
-            }
-            if(percent > 2/10 && percent <= 3/ 10){
-
-            }
-            if(percent > 3/10 && percent <= 4/ 10){
-
-            }
-            if(percent > 4/10 && percent < 5/ 10){
-
-            }
-            if(percent >= 5/10 && percent <= 6/ 10){
-                    
-            }
-            if(percent > 6/10 && percent <= 7/ 10){
-
-            }
-            if(percent > 7/10 && percent <= 8/ 10){
-
-            }
-            if(percent > 8/10 && percent < 9/ 10){
-
-            }
-            if(percent >= 9/10){
-                is_ninety_percent = true;
-            }
-
-            if(is_ten_percent is true){
                 finalPrice = 0;
             }
-
-            
-
-            if(is_ninety_percent is true){
+            if(percent > 1/10 && percent <= 2/ 10){
+                finalPrice = totalPrice * 1/10;
+            }
+            if(percent > 2/10 && percent <= 3/ 10){
+                finalPrice = totalPrice * 2/10;
+            }
+            if(percent > 3/10 && percent <= 4/ 10){
+                finalPrice = totalPrice * 3/10;
+            }
+            if(percent > 4/10 && percent <= 5/ 10){
+                finalPrice = totalPrice * 4/10;
+            }
+            if(percent > 5/10 && percent <= 6/ 10){
+                finalPrice = totalPrice * 5/10;
+            }
+            if(percent > 6/10 && percent <= 7/ 10){
+                finalPrice = totalPrice * 6/10;
+            }
+            if(percent > 7/10 && percent <= 8/ 10){
+                finalPrice = totalPrice * 7/10;
+            }
+            if(percent > 8/10 && percent <= 9/ 10){
+                finalPrice = totalPrice * 8/10;
+            }
+            if(percent > 9/10){
                 finalPrice = totalPrice;
             }
-            return 0;
+            return ((float)finalPrice);
         }
         
 
