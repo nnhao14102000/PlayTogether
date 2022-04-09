@@ -337,6 +337,10 @@
 >   ***Description***: Delete a hobby  
 >   ***Role Access***: User  
 >
+> - ``DELETE /api/play-together/v1/hobbies ``  
+>   ***Description***: Delete multi hobbies  
+>   ***Role Access***: User  
+>
 
 
 

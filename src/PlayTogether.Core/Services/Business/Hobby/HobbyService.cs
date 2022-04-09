@@ -70,5 +70,22 @@ namespace PlayTogether.Core.Services.Business.Hobby
                 throw;
             }
         }
+
+        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<string> hobbyIds)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (hobbyIds is null || hobbyIds.Count == 0) {
+                    throw new ArgumentNullException(nameof(hobbyIds));
+                }
+                return await _hobbyRepository.DeleteRangesHobbiesAsync(principal, hobbyIds);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call DeleteRangesHobbiesAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
     }
 }

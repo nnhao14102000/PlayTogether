@@ -48,5 +48,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _hobbyService.DeleteHobbyAsync(HttpContext.User, hobbyId);
             return response ? NoContent() : NotFound();
         }
+
+        /// <summary>
+        /// Delete a hobby
+        /// </summary>
+        /// <param name="hobbyIds"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpDelete]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> DeleteRangeHobbies(List<string> hobbyIds)
+        {
+            var response = await _hobbyService.DeleteRangesHobbiesAsync(HttpContext.User, hobbyIds);
+            return response ? NoContent() : NotFound();
+        }
     }
 }

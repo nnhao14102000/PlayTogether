@@ -400,12 +400,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(toUser)
                 .Reference(x => x.UserBalance)
                 .LoadAsync();
+            
+            await _context.Entry(toUser)
+                .Reference(x => x.BehaviorPoint)
+                .LoadAsync();
 
             if (request.IsAccept == false) {
                 order.Status = OrderStatusConstants.Reject;
                 order.User.Status = UserStatusConstants.Online;
 
                 toUser.Status = UserStatusConstants.Online;
+                // toUser.BehaviorPoint.SatisfiedPoint -= 1;
+
+                // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, ))
+
 
                 await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
                     order.UserId,

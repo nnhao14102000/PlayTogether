@@ -92,5 +92,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             _context.Hobbies.Remove(hobby);
             return (await _context.SaveChangesAsync() >= 0);
         }
+
+        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<string> hobbyIds)
+        {
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                return false;
+            }
+            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
+                return false;
+            }
+            var list = new List<Entities.Hobby>();
+            foreach (var hobbyId in hobbyIds) {
+                var hobby = await _context.Hobbies.FindAsync(hobbyId);
+                if (hobby is null) return false;
+                if (hobby.UserId != user.Id) return false;
+                list.Add(hobby);
+            }
+
+            _context.Hobbies.RemoveRange(list);
+            return (await _context.SaveChangesAsync() >= 0);
+        }
     }
 }

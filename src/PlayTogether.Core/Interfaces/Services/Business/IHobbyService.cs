@@ -13,5 +13,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<bool> CreateHobbiesAsync(ClaimsPrincipal principal, List<HobbyCreateRequest> requests);
         Task<PagedResult<HobbiesGetAllResponse>> GetAllHobbiesAsync(string userId, HobbyParameters param);
         Task<bool> DeleteHobbyAsync(ClaimsPrincipal principal, string hobbyId);
+        Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<string> hobbyIds);
     }
 }
