@@ -602,22 +602,56 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
         // Calculate time / money
         private float CalculateMoneyRefund(int totalTime, float totalPrice, int timeDone){
+            double finalPrice = 0;
             var is_ten_percent = false;
-            var is_less_fifty_percent = false;
-            var is_more_fifty_percent = false;
+            var is_twenty_percent = false;
+            var is_thirty_percent = false;
+            var is_fourty_percent = false;
+            var is_fifty_percent = false;
+            var is_sixty_percent = false;
+            var is_seventy_percent = false;
+            var is_eighty_percent = false;
             var is_ninety_percent = false;
             var percent = timeDone/totalTime;
             if(percent <= 1/10){
                 is_ten_percent = true;
             }
-            if(percent > 1/10 && percent < 5/10){
-                is_less_fifty_percent = true;
+            if(percent > 1/10 && percent <= 2/ 10){
+                    
             }
-            if(percent >=5/10 && percent < 9/10){
-                is_more_fifty_percent = true;
+            if(percent > 2/10 && percent <= 3/ 10){
+
+            }
+            if(percent > 3/10 && percent <= 4/ 10){
+
+            }
+            if(percent > 4/10 && percent < 5/ 10){
+
+            }
+            if(percent >= 5/10 && percent <= 6/ 10){
+                    
+            }
+            if(percent > 6/10 && percent <= 7/ 10){
+
+            }
+            if(percent > 7/10 && percent <= 8/ 10){
+
+            }
+            if(percent > 8/10 && percent < 9/ 10){
+
             }
             if(percent >= 9/10){
                 is_ninety_percent = true;
+            }
+
+            if(is_ten_percent is true){
+                finalPrice = 0;
+            }
+
+            
+
+            if(is_ninety_percent is true){
+                finalPrice = totalPrice;
             }
             return 0;
         }

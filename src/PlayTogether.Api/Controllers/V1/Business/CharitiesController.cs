@@ -9,6 +9,11 @@ using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
+using System.Linq;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using System;
+using Microsoft.Extensions.Configuration;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -17,11 +22,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
     {
         private readonly ICharityService _charityService;
         private readonly IDonateService _donateService;
+        private readonly string _azureConnectionString;
 
-        public CharitiesController(ICharityService charityService, IDonateService donateService)
+        public CharitiesController(ICharityService charityService, IDonateService donateService, IConfiguration configuration)
         {
             _charityService = charityService;
             _donateService = donateService;
+            _azureConnectionString = configuration.GetConnectionString("ImageAzureConnectionString");
         }
 
         /// <summary>
@@ -118,5 +125,47 @@ namespace PlayTogether.Api.Controllers.V1.Business
                    && response.Item3 >= 0
                    && response.Item4 >= 0 ? Ok(response) : BadRequest();
         }
+
+        /// <summary>
+        /// Update image
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Role Access: Charity
+        /// </remarks>
+        [HttpPost("images")]
+        [Authorize(Roles = AuthConstant.RoleCharity)]
+		public async Task<IActionResult> Upload()
+		{
+			try
+			{
+				var formCollection = await Request.ReadFormAsync();
+				var file = formCollection.Files.First();
+
+				if (file.Length > 0)
+				{
+					var container = new BlobContainerClient(_azureConnectionString, "upload-container");
+					var createResponse = await container.CreateIfNotExistsAsync();
+					if (createResponse != null && createResponse.GetRawResponse().Status == 201)
+						await container.SetAccessPolicyAsync(PublicAccessType.Blob);
+
+					var blob = container.GetBlobClient(file.FileName);
+					await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
+
+					using (var fileStream = file.OpenReadStream())
+					{
+						await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = file.ContentType });
+					}
+
+					return Ok(blob.Uri.ToString());
+				}
+
+				return BadRequest();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Internal server error: {ex}");
+			}
+		}
     }
 }
