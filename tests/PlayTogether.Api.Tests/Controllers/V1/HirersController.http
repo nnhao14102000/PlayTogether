@@ -254,9 +254,9 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "title": "Test Feedback",
-  "message": "Test chuc nang feedback...",
-  "typeOfFeedback": "Test"
+  "title": "Test Feedback again",
+  "message": "Test chuc nang feedback..Vui long thong camr.",
+  "typeOfFeedback": "Suggestt"
 }
 
 ###

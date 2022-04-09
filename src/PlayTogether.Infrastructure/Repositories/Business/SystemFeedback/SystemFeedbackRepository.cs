@@ -44,8 +44,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             }
 
             if (!request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.Service)
-                || !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.SystemError)
-                || !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.Suggest)) {
+                && !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.SystemError)
+                && !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.Suggest)) {
                 return false;
             }
 
