@@ -93,7 +93,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<string> hobbyIds)
+        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds)
         {
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -107,7 +107,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             }
             var list = new List<Entities.Hobby>();
             foreach (var hobbyId in hobbyIds) {
-                var hobby = await _context.Hobbies.FindAsync(hobbyId);
+                var hobby = await _context.Hobbies.FindAsync(hobbyId.HobbyId);
                 if (hobby is null) return false;
                 if (hobby.UserId != user.Id) return false;
                 list.Add(hobby);

@@ -71,7 +71,7 @@ namespace PlayTogether.Core.Services.Business.Hobby
             }
         }
 
-        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<string> hobbyIds)
+        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds)
         {
             try {
                 if (principal is null) {

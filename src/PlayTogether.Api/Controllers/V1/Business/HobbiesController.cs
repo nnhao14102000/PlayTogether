@@ -50,7 +50,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Delete a hobby
+        /// Delete multi hobbies
         /// </summary>
         /// <param name="hobbyIds"></param>
         /// <returns></returns>
@@ -59,7 +59,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpDelete]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> DeleteRangeHobbies(List<string> hobbyIds)
+        public async Task<ActionResult> DeleteRangeHobbies(List<HobbyDeleteRequest> hobbyIds)
         {
             var response = await _hobbyService.DeleteRangesHobbiesAsync(HttpContext.User, hobbyIds);
             return response ? NoContent() : NotFound();
