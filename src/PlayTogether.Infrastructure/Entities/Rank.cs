@@ -11,6 +11,8 @@ namespace PlayTogether.Infrastructure.Entities
         [MaxLength(50)]
         public string Name { get; set; }
 
+        [MaxLength(100)]
+        [Required]
         public string GameId { get; set; }
         public Game Game { get; set; }
     }
