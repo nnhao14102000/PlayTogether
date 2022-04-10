@@ -281,6 +281,13 @@ Authorization: {{authToken}}
 
 ###
 
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 
 # Create Dating
 POST {{baseUrl}}/api/play-together/v1/dating
@@ -288,16 +295,16 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "fromHour": 13,
-  "toHour": 14,
-  "isMON": true,
-  "isTUE": true,
-  "isWED": true,
-  "isTHU": true,
-  "isFRI": true,
-  "isSAT": true,
-  "isSUN": true
+  "fromHour": 17,
+  "toHour": 19,
+  "dayInWeek": 3
 }
 
 ###
 
+# Delete Dating
+DELETE {{baseUrl}}/api/play-together/v1/dating/ca0c8bbb-3960-4c1c-ab91-d105cd908226
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###

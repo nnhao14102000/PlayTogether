@@ -56,6 +56,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 response.HasNext,
                 response.HasPrevious
             };
+
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
             return Ok(response);
         }
@@ -91,8 +92,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 response.HasNext,
                 response.HasPrevious
             };
+
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-            return Ok(Response);
+            return Ok(response);
         }
 
 

@@ -35,8 +35,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 return false;
             }
 
-            if (request.IsMON is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsMON == true).ToListAsync();
+            if (request.DayInWeek == 2) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 2).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -53,8 +53,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 }
 
             }
-            else if (request.IsTUE is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsTUE == true).ToListAsync();
+            else if (request.DayInWeek == 3) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 3).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -70,8 +70,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                     }
                 }
             }
-            else if (request.IsWED is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsWED == true).ToListAsync();
+            else if (request.DayInWeek == 4) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 4).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -87,8 +87,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                     }
                 }
             }
-            else if (request.IsTHU is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsTHU == true).ToListAsync();
+            else if (request.DayInWeek == 5) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 5).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -104,8 +104,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                     }
                 }
             }
-            else if (request.IsFRI is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsFRI == true).ToListAsync();
+            else if (request.DayInWeek == 6) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 6).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -121,8 +121,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                     }
                 }
             }
-            else if (request.IsSAT is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsSAT == true).ToListAsync();
+            else if (request.DayInWeek == 7) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 7).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;
@@ -138,8 +138,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                     }
                 }
             }
-            else if (request.IsSUN is true) {
-                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.IsSUN == true).ToListAsync();
+            else if (request.DayInWeek == 8) {
+                var datings = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == 8).ToListAsync();
                 foreach (var item in datings) {
                     if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                         return false;

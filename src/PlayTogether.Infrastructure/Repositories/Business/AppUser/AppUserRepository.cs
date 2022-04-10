@@ -78,7 +78,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
-            await _context.Entry(user).Collection(x => x.Datings).LoadAsync();
+            await _context.Entry(user).Collection(x => x.Datings).Query().OrderBy(x => x.DayInWeek).ThenBy(x => x.FromHour).LoadAsync();
 
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
             var orders = await _context.Orders.Where(x => x.ToUserId == user.Id).ToListAsync();
@@ -141,7 +141,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return null;
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
-            await _context.Entry(user).Collection(x => x.Datings).LoadAsync();
+            await _context.Entry(user).Collection(x => x.Datings).Query().OrderBy(x => x.DayInWeek).ThenBy(x => x.FromHour).LoadAsync();
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
 
             var rates = await _context.Ratings.Where(x => x.ToUserId == user.Id).ToListAsync();
@@ -212,8 +212,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
+            FilterUserByDate(ref query, param.DayInWeek);
             FilterUserByHour(ref query, param.FromHour, param.ToHour);
-            FilterUserByDate(ref query, param.Date);
 
             FilterUserByItSelf(ref query, user.Id);
 
@@ -235,58 +235,57 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     param.PageSize);
         }
 
-        private void FilterUserByDate(ref IQueryable<Entities.AppUser> query, string date)
+        private void FilterUserByDate(ref IQueryable<Entities.AppUser> query, int DayInWeek)
         {
             if (!query.Any()
-               || String.IsNullOrEmpty(date)
-               || String.IsNullOrWhiteSpace(date)) {
+               || DayInWeek == 0) {
                 return;
             }
             var list = new List<Entities.AppUser>();
-            if (date.ToLower() is "mon") {
-                var datings = _context.Datings.Where(x => x.IsMON == true);
+            if (DayInWeek ==  2) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 2);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "tue") {
-                var datings = _context.Datings.Where(x => x.IsTUE == true);
+            if (DayInWeek == 3) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 3);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "wed") {
-                var datings = _context.Datings.Where(x => x.IsWED == true);
+            if (DayInWeek == 4) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 4);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "thu") {
-                var datings = _context.Datings.Where(x => x.IsTHU == true);
+            if (DayInWeek == 5) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 5);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "fri") {
-                var datings = _context.Datings.Where(x => x.IsFRI == true);
+            if (DayInWeek == 6) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 6);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "sat") {
-                var datings = _context.Datings.Where(x => x.IsSAT == true);
+            if (DayInWeek == 7) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 7);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);
                 }
             }
-            if (date.ToLower() is "sun") {
-                var datings = _context.Datings.Where(x => x.IsSUN == true);
+            if (DayInWeek == 8) {
+                var datings = _context.Datings.Where(x => x.DayInWeek == 8);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
                     list.Add(user);

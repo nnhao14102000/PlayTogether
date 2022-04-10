@@ -32,7 +32,7 @@ Authorization: {{authToken}}
 
 
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/89592649-2bba-4d06-9443-50867ffac6da/ranks
+GET {{baseUrl}}/api/play-together/v1/games/7c35408c-7988-4f3b-8479-6822cb222d77/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -55,7 +55,7 @@ Authorization: {{authToken}}
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-?name=string
+?name=lol
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

@@ -16,6 +16,6 @@ namespace PlayTogether.Core.Parameters
         public bool? IsPlayer { get; set; }
         public string FromHour { get; set; }
         public string ToHour { get; set; }
-        public string Date { get; set; }
+        public int DayInWeek { get; set; }
     }
 }

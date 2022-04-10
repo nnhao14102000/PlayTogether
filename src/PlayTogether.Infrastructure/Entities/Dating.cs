@@ -9,17 +9,16 @@ namespace PlayTogether.Infrastructure.Entities
         public string UserId { get; set; }
         public AppUser User { get; set; }
 
-        [Range(0,23)]
-        public int FromHour { get; set; }
         [Range(0, 23)]
+        [Required]
+        public int FromHour { get; set; }
+
+        [Range(0, 23)]
+        [Required]
         public int ToHour { get; set; }
 
-        public bool IsMON { get; set; }
-        public bool IsTUE { get; set; }
-        public bool IsWED { get; set; }
-        public bool IsTHU { get; set; }
-        public bool IsFRI { get; set; }
-        public bool IsSAT { get; set; }
-        public bool IsSUN { get; set; }
+        [Range(2, 8)]
+        [Required]
+        public int DayInWeek { get; set; }
     }
 }

@@ -12,12 +12,8 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Dating
         [Required]
         public int ToHour { get; set; }
 
-        public bool IsMON { get; set; }
-        public bool IsTUE { get; set; }
-        public bool IsWED { get; set; }
-        public bool IsTHU { get; set; }
-        public bool IsFRI { get; set; }
-        public bool IsSAT { get; set; }
-        public bool IsSUN { get; set; }
+        [Range(2, 8)]
+        [Required]
+        public int DayInWeek { get; set; }
     }
 }
