@@ -105,6 +105,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             if (!query.Any() || fromDate is null || toDate is null) {
                 return;
             }
+
+            if (fromDate > toDate) {
+                return;
+            }
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 

@@ -49,18 +49,18 @@ Authorization: {{authToken}}
 
 ###
 # Get by Id
-GET {{baseUrl}}/api/play-together/v1/game-types/650e0e7e-d6f4-4684-ae26-fe6bf94947e3
+GET {{baseUrl}}/api/play-together/v1/game-types/f3fde2b6-941c-4763-b39a-fd833f47dbf9
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Update game type
-PUT {{baseUrl}}/api/play-together/v1/game-types/650e0e7e-d6f4-4684-ae26-fe6bf94947e3
+PUT {{baseUrl}}/api/play-together/v1/game-types/f3fde2b6-941c-4763-b39a-fd833f47dbf9
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "Hành động",
+  "name": "string",
   "shortName": "asdfsda",
   "otherName": "strvvvving",
   "description": "string"
@@ -68,6 +68,6 @@ Authorization: {{authToken}}
 
 ###
 # Delete
-DELETE {{baseUrl}}/api/play-together/v1/game-types/650e0e7e-d6f4-4684-ae26-fe6bf94947e3
+DELETE {{baseUrl}}/api/play-together/v1/game-types/f3fde2b6-941c-4763-b39a-fd833f47dbf9
 content-type: {{contentType}}
 Authorization: {{authToken}}
