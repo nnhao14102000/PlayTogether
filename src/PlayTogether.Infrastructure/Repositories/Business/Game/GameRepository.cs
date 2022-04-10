@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Game;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Game;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -19,29 +20,41 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
         {
         }
 
-        public async Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request)
+        public async Task<Result<GameCreateResponse>> CreateGameAsync(GameCreateRequest request)
         {
-            var exitGame = await _context.Games.AnyAsync(x => (x.Name + x.OtherName + x.DisplayName).ToLower().Contains(request.Name));
+            var result = new Result<GameCreateResponse>();
+            var exitGame = await _context.Games.AnyAsync(x => (x.Name).ToLower() == request.Name.ToLower());
+            if (exitGame is true) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" game có tên {request.Name}");
+                return result;
+            }
+
             var model = _mapper.Map<Entities.Game>(request);
             await _context.Games.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
-                return _mapper.Map<GameCreateResponse>(model);
+                var response = _mapper.Map<GameCreateResponse>(model);
+                result.Content = response;
+                return result;
             }
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> DeleteGameAsync(string gameId)
+        public async Task<Result<BooleanContent>> DeleteGameAsync(string gameId)
         {
+            var result = new Result<BooleanContent>();
             var game = await _context.Games.FindAsync(gameId);
             if (game is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                return result;
             }
 
             var ranks = await _context.Ranks.Where(x => x.GameId == gameId).ToListAsync();
             if (ranks.Count >= 0) {
                 _context.Ranks.RemoveRange(ranks);
                 if (await _context.SaveChangesAsync() < 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
@@ -49,7 +62,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (gameOfUser.Count >= 0) {
                 _context.GameOfUsers.RemoveRange(gameOfUser);
                 if (await _context.SaveChangesAsync() < 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
@@ -57,7 +71,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (gameOfOrder.Count >= 0) {
                 _context.GameOfOrders.RemoveRange(gameOfOrder);
                 if (await _context.SaveChangesAsync() < 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
@@ -65,7 +80,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (hobbies.Count >= 0) {
                 _context.Hobbies.RemoveRange(hobbies);
                 if (await _context.SaveChangesAsync() < 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
@@ -73,12 +89,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             if (typeOfGame.Count >= 0) {
                 _context.TypeOfGames.RemoveRange(typeOfGame);
                 if (await _context.SaveChangesAsync() < 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
             _context.Games.Remove(game);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = new BooleanContent(SuccessMessageConstants.Delete);
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param)
@@ -98,14 +120,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
 
         private void OrderByMostFavorite(ref IQueryable<Entities.Game> query, bool? isMostFavorite)
         {
-            if(!query.Any() || isMostFavorite is null || isMostFavorite is false){
+            if (!query.Any() || isMostFavorite is null || isMostFavorite is false) {
                 return;
             }
-            var listGameFavorite = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()}).Union(_context.Hobbies.GroupBy(x => x.GameId).Select(g => new {gameId = g.Key, count = g.Count()})).OrderByDescending(x => x.count);
+            var listGameFavorite = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new { gameId = g.Key, count = g.Count() }).Union(_context.Hobbies.GroupBy(x => x.GameId).Select(g => new { gameId = g.Key, count = g.Count() })).OrderByDescending(x => x.count);
 
             var listGame = new List<Entities.Game>();
-            foreach (var gameOfUser in listGameFavorite)
-            {
+            foreach (var gameOfUser in listGameFavorite) {
                 var game = _context.Games.Find(gameOfUser.gameId);
                 if (game is null) continue;
                 listGame.Add(game);
@@ -135,12 +156,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
                                                    .Contains(name.ToLower()));
         }
 
-        public async Task<GameGetByIdResponse> GetGameByIdAsync(string gameId)
+        public async Task<Result<GameGetByIdResponse>> GetGameByIdAsync(string gameId)
         {
+            var result = new Result<GameGetByIdResponse>();
             var game = await _context.Games.FindAsync(gameId);
 
             if (game is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                return result;
             }
 
             await _context.Entry(game)
@@ -155,20 +178,35 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
                 .OrderBy(r => r.NO)
                 .LoadAsync();
 
-            return _mapper.Map<GameGetByIdResponse>(game);
+            var response = _mapper.Map<GameGetByIdResponse>(game);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> UpdateGameAsync(string gameId, GameUpdateRequest request)
+        public async Task<Result<BooleanContent>> UpdateGameAsync(string gameId, GameUpdateRequest request)
         {
+            var result = new Result<BooleanContent>();
             var game = await _context.Games.FindAsync(gameId);
 
             if (game is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                return result;
+            }
+
+            var exitGame = await _context.Games.AnyAsync(x => (x.Name).ToLower() == request.Name.ToLower() && x.Id != gameId);
+            if (exitGame is true) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" game có tên {request.Name}");
+                return result;
             }
 
             var model = _mapper.Map(request, game);
             _context.Games.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = new BooleanContent(SuccessMessageConstants.Update);
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

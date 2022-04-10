@@ -23,7 +23,7 @@ namespace PlayTogether.Core.Services.Business.Game
             _logger = logger;
         }
 
-        public async Task<GameCreateResponse> CreateGameAsync(GameCreateRequest request)
+        public async Task<Result<GameCreateResponse>> CreateGameAsync(GameCreateRequest request)
         {
             try {
                 if (request is null) {
@@ -37,7 +37,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<bool> DeleteGameAsync(string gameId)
+        public async Task<Result<BooleanContent>> DeleteGameAsync(string gameId)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {
@@ -62,7 +62,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<GameGetByIdResponse> GetGameByIdAsync(string gameId)
+        public async Task<Result<GameGetByIdResponse>> GetGameByIdAsync(string gameId)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {
@@ -76,7 +76,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<bool> UpdateGameAsync(string gameId, GameUpdateRequest request)
+        public async Task<Result<BooleanContent>> UpdateGameAsync(string gameId, GameUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {

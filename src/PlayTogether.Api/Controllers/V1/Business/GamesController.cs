@@ -35,7 +35,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<GameGetAllResponse>>> GetAllGames(
+        public async Task<ActionResult> GetAllGames(
             [FromQuery] GameParameter param)
         {
             var response = await _gameService.GetAllGamesAsync(param);
@@ -63,7 +63,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{gameId}/ranks")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<IEnumerable<RankGetByIdResponse>>> GetAllRanksInGame(string gameId)
+        public async Task<ActionResult> GetAllRanksInGame(string gameId)
         {
             var response = await _rankService.GetAllRanksInGameAsync(gameId);
             return response is not null ? Ok(response) : NotFound();
@@ -81,7 +81,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost("{gameId}/ranks")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<RankCreateResponse>> CreateRank(string gameId, RankCreateRequest request)
+        public async Task<ActionResult> CreateRank(string gameId, RankCreateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
@@ -101,7 +101,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{gameId}", Name = "GetGameById")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<GameGetByIdResponse>> GetGameById(string gameId)
+        public async Task<ActionResult> GetGameById(string gameId)
         {
             var response = await _gameService.GetGameByIdAsync(gameId);
             return response is not null ? Ok(response) : NotFound();
@@ -117,13 +117,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<GameCreateResponse>> CreateGame(GameCreateRequest request)
+        public async Task<ActionResult> CreateGame(GameCreateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _gameService.CreateGameAsync(request);
-            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetGameById), new { gameId = response.Id }, response);
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return CreatedAtRoute(nameof(GetGameById), new { gameId = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -143,7 +151,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameService.UpdateGameAsync(gameId, request);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -159,7 +178,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteGame(string gameId)
         {
             var response = await _gameService.DeleteGameAsync(gameId);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

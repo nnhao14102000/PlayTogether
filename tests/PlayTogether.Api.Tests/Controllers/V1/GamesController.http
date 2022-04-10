@@ -10,7 +10,7 @@
 
 ###
 # @name login
-POST {{baseUrl}}/api/play-together/v1/accounts/login
+POST {{baseUrl}}/api/play-together/v1/accounts/login-admin
 content-type: {{contentType}}
 
 {
@@ -23,7 +23,7 @@ content-type: {{contentType}}
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-?pageSize=100
+?pageSize=10
 &pageNumber=1
 content-type: {{contentType}}
 Authorization: {{authToken}}
@@ -55,7 +55,7 @@ Authorization: {{authToken}}
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-  ?name= lien
+?name=csgo
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -80,8 +80,9 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "CSGO",
-  "displayName": ""
+  "name": "fTes...",
+  "displayName": "Té",
+  "otherName": "string"
 }
 
 ###
@@ -90,12 +91,12 @@ Authorization: {{authToken}}
 
 
 # Update a game
-PUT {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387
+PUT {{baseUrl}}/api/play-together/v1/games/33a8029b-e121-4f5f-8d97-50039a1fb110
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "League Of Legends",
+  "name": "CSGO",
   "displayName": "Liên Minh Huyền Thoại",
   "otherName": "Liên minh / lol / lien minh"
 }
@@ -106,6 +107,6 @@ Authorization: {{authToken}}
 
 
 # Delete a game
-DELETE {{baseUrl}}/api/play-together/v1/games/310c8cf1-053a-40f7-b5eb-bfaca7c96ac3
+DELETE {{baseUrl}}/api/play-together/v1/games/33a8029b-e121-4f5f-8d97-50039a1fb110
 content-type: {{contentType}}
 Authorization: {{authToken}}
