@@ -111,7 +111,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<PersonalInfoResponse> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<Result<PersonalInfoResponse>> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {

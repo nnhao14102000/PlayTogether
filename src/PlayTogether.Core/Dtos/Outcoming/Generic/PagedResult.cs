@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PlayTogether.Core.Dtos.Outcoming.Generic
 {
-    public class PagedResult<T> : List<T>
+    public class PagedResult<T> : Result<List<T>>
     {
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
@@ -22,8 +22,13 @@ namespace PlayTogether.Core.Dtos.Outcoming.Generic
             PageSize = pageSize;
             CurrentPage = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            Content = new List<T>();
+            Content.AddRange(items);
+        }
 
-            AddRange(items);
+        public PagedResult()
+        {
+            
         }
 
         public static PagedResult<T> ToPagedList(List<T> source, int pageNumber, int pageSize)

@@ -135,7 +135,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("personal")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PersonalInfoResponse>> GetPersonalInfo()
+        public async Task<ActionResult> GetPersonalInfo()
         {
             var response = await _appUserService.GetPersonalInfoByIdentityIdAsync(HttpContext.User);
             return response is not null ? Ok(response) : Unauthorized();
@@ -230,7 +230,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<UserSearchResponse>>> GetAllUser([FromQuery] UserParameters param)
+        public async Task<ActionResult> GetAllUser([FromQuery] UserParameters param)
         {
             var response = await _appUserService.GetAllUsersAsync(HttpContext.User, param);
 

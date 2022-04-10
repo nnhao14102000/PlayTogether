@@ -59,17 +59,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async Task<PersonalInfoResponse> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
+        public async Task<Result<PersonalInfoResponse>> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<PersonalInfoResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
@@ -90,7 +93,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
-            return _mapper.Map<PersonalInfoResponse>(user);
+            var response = _mapper.Map<PersonalInfoResponse>(user);
+            result.Content = response;
+            return result;
         }
 
         public async Task<bool> UpdateUserServiceInfoAsync(ClaimsPrincipal principal, UserInfoForIsPlayerUpdateRequest request)
@@ -169,16 +174,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             ClaimsPrincipal principal,
             UserParameters param)
         {
+            var result = new PagedResult<UserSearchResponse>();            
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (user is null || user.IsActive is false || user.Status == UserStatusConstants.Offline) {
-                return null;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status == UserStatusConstants.Offline) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Offline);
+                return result;
             }
 
             var users = await _context.AppUsers.ToListAsync();
@@ -210,7 +228,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 var rates = await _context.Ratings.Where(x => x.ToUserId == item.Id).ToListAsync();
                 item.NumOfRate = rates.Count();
             }
-            return PagedResult<UserSearchResponse>
+            return result = PagedResult<UserSearchResponse>
                 .ToPagedList(
                     response,
                     param.PageNumber,

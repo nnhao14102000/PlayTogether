@@ -61,8 +61,10 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (appUser is not null) {
                 if (appUser.IsActive == true) {
-                    appUser.Status = UserStatusConstants.Online;
-                    await _context.SaveChangesAsync();
+                    if (appUser.Status == UserStatusConstants.Offline) {
+                        appUser.Status = UserStatusConstants.Online;
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 else {
                     var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == appUser.Id && x.IsActive == true);
@@ -251,8 +253,10 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
                 if (appUser is not null) {
                     if (appUser.IsActive == true) {
-                        appUser.Status = UserStatusConstants.Online;
-                        await _context.SaveChangesAsync();
+                        if (appUser.Status == UserStatusConstants.Offline) {
+                            appUser.Status = UserStatusConstants.Online;
+                            await _context.SaveChangesAsync();
+                        }
                     }
                     else {
                         var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == appUser.Id && x.IsActive == true);

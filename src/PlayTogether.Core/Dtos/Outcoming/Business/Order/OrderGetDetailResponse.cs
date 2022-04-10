@@ -23,6 +23,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
         public ICollection<RatingInOrderResponse> Ratings { get; set; }
         public ICollection<ReportInOrderResponse> Reports { get; set; }
         
+        public DateTime ProcessExpired {get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
         public string Status { get; set; }
