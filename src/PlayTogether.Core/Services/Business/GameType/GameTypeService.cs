@@ -23,7 +23,7 @@ namespace PlayTogether.Core.Services.Business.GameType
             _logger = logger;
         }
 
-        public async Task<GameTypeCreateResponse> CreateGameTypeAsync(GameTypeCreateRequest request)
+        public async Task<Result<GameTypeCreateResponse>> CreateGameTypeAsync(GameTypeCreateRequest request)
         {
             try {
                 if (request is null) {
@@ -37,7 +37,7 @@ namespace PlayTogether.Core.Services.Business.GameType
             }
         }
 
-        public async Task<bool> DeleteGameTypeAsync(string gameTypeId)
+        public async Task<Result<bool>> DeleteGameTypeAsync(string gameTypeId)
         {
             try {
                 if (String.IsNullOrEmpty(gameTypeId)) {
@@ -62,7 +62,7 @@ namespace PlayTogether.Core.Services.Business.GameType
             }
         }
 
-        public async Task<GameTypeGetByIdResponse> GetGameTypeByIdAsync(string gameTypeId)
+        public async Task<Result<GameTypeGetByIdResponse>> GetGameTypeByIdAsync(string gameTypeId)
         {
             try {
                 if (String.IsNullOrEmpty(gameTypeId)) {
@@ -76,7 +76,7 @@ namespace PlayTogether.Core.Services.Business.GameType
             }
         }
 
-        public async Task<bool> UpdateGameTypeAsync(string gameTypeId, GameTypeUpdateRequest request)
+        public async Task<Result<bool>> UpdateGameTypeAsync(string gameTypeId, GameTypeUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(gameTypeId)) {

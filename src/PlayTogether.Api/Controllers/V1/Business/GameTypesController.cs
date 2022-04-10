@@ -32,11 +32,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<GameTypeGetAllResponse>>> GetAllGameTypes(
+        public async Task<ActionResult> GetAllGameTypes(
             [FromQuery] GameTypeParameter param)
         {
             var response = await _gameTypeService.GetAllGameTypesAsync(param);
 
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -46,8 +56,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             };
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -60,10 +69,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{gameTypeId}", Name = "GetGameTypeById")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<GameTypeGetByIdResponse>> GetGameTypeById(string gameTypeId)
+        public async Task<ActionResult> GetGameTypeById(string gameTypeId)
         {
             var response = await _gameTypeService.GetGameTypeByIdAsync(gameTypeId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if (response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -82,7 +99,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameTypeService.CreateGameTypeAsync(request);
-            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetGameTypeById), new { gameTypeId = response.Id }, response);
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return CreatedAtRoute(nameof(GetGameTypeById), new { gameTypeId = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -102,7 +127,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameTypeService.UpdateGameTypeAsync(gameTypeId, request);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -118,7 +154,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteGameType(string gameTypeId)
         {
             var response = await _gameTypeService.DeleteGameTypeAsync(gameTypeId);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

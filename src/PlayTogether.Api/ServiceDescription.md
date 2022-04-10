@@ -386,7 +386,7 @@
 >   ***Description***: Get all Game Types  
 >   ***Use for***: Get all game types  
 >   ***Role Access***: Admin, User  
->   ***Extension***: Paging, Filter by info input  
+>   ***Extension***: Paging, Filter by type name  
 >
 > - ``GET /api/play-together/v1/game-types/{gameTypeId} ``  
 >   ***Description***: Get a Game Type By Id  
