@@ -6,9 +6,9 @@ namespace PlayTogether.Infrastructure.Entities
     public class Game : BaseEntity
     {
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
-
+        
         [MaxLength(50)]
         public string DisplayName { get; set; }
 

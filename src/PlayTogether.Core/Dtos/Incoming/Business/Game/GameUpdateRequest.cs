@@ -6,7 +6,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Game
     public class GameUpdateRequest
     {
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         [MaxLength(50)]
