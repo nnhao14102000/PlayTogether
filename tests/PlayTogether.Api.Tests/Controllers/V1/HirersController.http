@@ -282,5 +282,22 @@ Authorization: {{authToken}}
 ###
 
 
+# Create Dating
+POST {{baseUrl}}/api/play-together/v1/dating
+Content-type: {{contentType}}
+Authorization: {{authToken}}
 
+{
+  "fromHour": 13,
+  "toHour": 14,
+  "isMON": true,
+  "isTUE": true,
+  "isWED": true,
+  "isTHU": true,
+  "isFRI": true,
+  "isSAT": true,
+  "isSUN": true
+}
+
+###
 
