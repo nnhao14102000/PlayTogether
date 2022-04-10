@@ -30,10 +30,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{rankId}", Name = "GetRankById")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<RankGetByIdResponse>> GetRankById(string rankId)
+        public async Task<ActionResult> GetRankById(string rankId)
         {
             var response = await _rankService.GetRankByIdAsync(rankId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 400) {
+                    return BadRequest(response);
+                }
+                else if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -53,7 +64,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _rankService.UpdateRankAsync(rankId, request);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 400) {
+                    return BadRequest(response);
+                }
+                else if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -69,7 +91,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteRank(string rankId)
         {
             var response = await _rankService.DeleteRankAsync(rankId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 400) {
+                    return BadRequest(response);
+                }
+                else if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

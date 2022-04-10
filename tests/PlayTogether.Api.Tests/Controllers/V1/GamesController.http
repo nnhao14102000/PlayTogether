@@ -32,7 +32,7 @@ Authorization: {{authToken}}
 
 
 # Get all Ranks in game
-GET {{baseUrl}}/api/play-together/v1/games/dbbda087-30e5-4561-be36-e4513f9ca387/ranks
+GET {{baseUrl}}/api/play-together/v1/games/89592649-2bba-4d06-9443-50867ffac6da/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -40,13 +40,13 @@ Authorization: {{authToken}}
 
 
 # Create a new rank in game
-POST {{baseUrl}}/api/play-together/v1/games/7caacf43-a337-4df0-b4bf-f1e07a37fe7e/ranks
+POST {{baseUrl}}/api/play-together/v1/games/89592649-2bba-4d06-9443-50867ffac6da/ranks
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "no": 8,
-  "name": "Thách Đấu"
+  "no": 3,
+  "name": "Bạch Kim"
 }
 
 ###
@@ -55,7 +55,7 @@ Authorization: {{authToken}}
 
 # Get all Games
 GET {{baseUrl}}/api/play-together/v1/games
-?name=csgo
+?name=string
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -80,8 +80,8 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "name": "fTes...",
-  "displayName": "Té",
+  "name": "Tafo lao",
+  "displayName": "Tafo lao",
   "otherName": "string"
 }
 
@@ -107,6 +107,6 @@ Authorization: {{authToken}}
 
 
 # Delete a game
-DELETE {{baseUrl}}/api/play-together/v1/games/33a8029b-e121-4f5f-8d97-50039a1fb110
+DELETE {{baseUrl}}/api/play-together/v1/games/75fb7522-48c3-4ed7-9089-e84ce05dd9cd
 content-type: {{contentType}}
 Authorization: {{authToken}}

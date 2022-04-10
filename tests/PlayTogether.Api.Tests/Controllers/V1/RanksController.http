@@ -20,13 +20,13 @@ content-type: {{contentType}}
 
 ###
 # Get rank by Id
-GET {{baseUrl}}/api/play-together/v1/ranks/400e56f9-a172-4012-9b86-74af5b6e2eed
+GET {{baseUrl}}/api/play-together/v1/ranks/ec006e5f-b4aa-48a2-bee6-bcbd6e9ef444
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 # Update rank
-PUT {{baseUrl}}/api/play-together/v1/ranks/5d37a5fe-dfa2-4a44-8f33-5255e1a26ae3
+PUT {{baseUrl}}/api/play-together/v1/ranks/ec006e5f-b4aa-48a2-bee6-bcbd6e9ef444
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -36,7 +36,7 @@ Authorization: {{authToken}}
 
 ###
 # Delete rank by Id
-DELETE {{baseUrl}}/api/play-together/v1/ranks/400e56f9-a172-4012-9b86-74af5b6e2eed
+DELETE {{baseUrl}}/api/play-together/v1/ranks/9b1e65b9-4664-4cb1-9b0c-c3249aaf1dd2
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

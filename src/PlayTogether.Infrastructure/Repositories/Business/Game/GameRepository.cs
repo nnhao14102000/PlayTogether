@@ -40,9 +40,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             return result;
         }
 
-        public async Task<Result<BooleanContent>> DeleteGameAsync(string gameId)
+        public async Task<Result<bool>> DeleteGameAsync(string gameId)
         {
-            var result = new Result<BooleanContent>();
+            var result = new Result<bool>();
             var game = await _context.Games.FindAsync(gameId);
             if (game is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
@@ -96,14 +96,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
 
             _context.Games.Remove(game);
             if (await _context.SaveChangesAsync() >= 0) {
-                result.Content = new BooleanContent(SuccessMessageConstants.Delete);
+                result.Content = true;
                 return result;
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
 
-        public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param)
+        public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameters param)
         {
             var games = await _context.Games.ToListAsync();
             var query = games.AsQueryable();
@@ -183,9 +183,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             return result;
         }
 
-        public async Task<Result<BooleanContent>> UpdateGameAsync(string gameId, GameUpdateRequest request)
+        public async Task<Result<bool>> UpdateGameAsync(string gameId, GameUpdateRequest request)
         {
-            var result = new Result<BooleanContent>();
+            var result = new Result<bool>();
             var game = await _context.Games.FindAsync(gameId);
 
             if (game is null) {
@@ -202,7 +202,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             var model = _mapper.Map(request, game);
             _context.Games.Update(model);
             if (await _context.SaveChangesAsync() >= 0) {
-                result.Content = new BooleanContent(SuccessMessageConstants.Update);
+                result.Content = true;
                 return result;
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);

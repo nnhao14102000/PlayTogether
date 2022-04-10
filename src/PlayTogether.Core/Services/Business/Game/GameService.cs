@@ -37,7 +37,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<Result<BooleanContent>> DeleteGameAsync(string gameId)
+        public async Task<Result<bool>> DeleteGameAsync(string gameId)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {
@@ -51,7 +51,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param)
+        public async Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameters param)
         {
             try {
                 return await _gameRepository.GetAllGamesAsync(param);
@@ -76,7 +76,7 @@ namespace PlayTogether.Core.Services.Business.Game
             }
         }
 
-        public async Task<Result<BooleanContent>> UpdateGameAsync(string gameId, GameUpdateRequest request)
+        public async Task<Result<bool>> UpdateGameAsync(string gameId, GameUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {

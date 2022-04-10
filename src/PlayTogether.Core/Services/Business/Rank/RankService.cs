@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
+using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +24,7 @@ namespace PlayTogether.Core.Services.Business.Rank
             _logger = logger;
         }
 
-        public async Task<RankCreateResponse> CreateRankAsync(string gameId, RankCreateRequest request)
+        public async Task<Result<RankCreateResponse>> CreateRankAsync(string gameId, RankCreateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {
@@ -39,7 +41,7 @@ namespace PlayTogether.Core.Services.Business.Rank
             }
         }
 
-        public async Task<bool> DeleteRankAsync(string id)
+        public async Task<Result<bool>> DeleteRankAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {
@@ -53,13 +55,13 @@ namespace PlayTogether.Core.Services.Business.Rank
             }
         }
 
-        public async Task<IEnumerable<RankGetAllResponse>> GetAllRanksInGameAsync(string gameId)
+        public async Task<PagedResult<RankGetAllResponse>> GetAllRanksInGameAsync(string gameId, RankParameters param)
         {
             try {
                 if (String.IsNullOrEmpty(gameId)) {
                     throw new ArgumentNullException(nameof(gameId));
                 }
-                return await _rankRepository.GetAllRanksInGameAsync(gameId);
+                return await _rankRepository.GetAllRanksInGameAsync(gameId, param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllRanksInGameAsync in service class, Error Message: {ex}.");
@@ -67,7 +69,7 @@ namespace PlayTogether.Core.Services.Business.Rank
             }
         }
 
-        public async Task<RankGetByIdResponse> GetRankByIdAsync(string id)
+        public async Task<Result<RankGetByIdResponse>> GetRankByIdAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {
@@ -81,7 +83,7 @@ namespace PlayTogether.Core.Services.Business.Rank
             }
         }
 
-        public async Task<bool> UpdateRankAsync(string id, RankUpdateRequest request)
+        public async Task<Result<bool>> UpdateRankAsync(string id, RankUpdateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

@@ -437,6 +437,7 @@
 >   ***Description***: Get all Ranks in Game   
 >   ***Use for***: View all ranks in a game  
 >   ***Role Access***: Admin, User  
+>   ***Extension***: Paging  
 >
 > - ``POST /api/play-together/v1/games/{gameId}/ranks ``  
 >   ***Description***: Create a rank in game   

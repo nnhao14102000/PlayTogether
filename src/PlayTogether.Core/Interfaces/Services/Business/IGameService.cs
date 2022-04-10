@@ -9,9 +9,9 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface IGameService
     {
         Task<Result<GameCreateResponse>> CreateGameAsync(GameCreateRequest request);
-        Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameter param);
+        Task<PagedResult<GameGetAllResponse>> GetAllGamesAsync(GameParameters param);
         Task<Result<GameGetByIdResponse>> GetGameByIdAsync(string gameId);
-        Task<Result<BooleanContent>> UpdateGameAsync(string gameId, GameUpdateRequest request);
-        Task<Result<BooleanContent>> DeleteGameAsync(string gameId);
+        Task<Result<bool>> UpdateGameAsync(string gameId, GameUpdateRequest request);
+        Task<Result<bool>> DeleteGameAsync(string gameId);
     }
 }

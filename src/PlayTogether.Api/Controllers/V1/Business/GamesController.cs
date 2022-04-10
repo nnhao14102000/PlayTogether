@@ -36,10 +36,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
         public async Task<ActionResult> GetAllGames(
-            [FromQuery] GameParameter param)
+            [FromQuery] GameParameters param)
         {
             var response = await _gameService.GetAllGamesAsync(param);
-
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -47,26 +56,43 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 response.HasNext,
                 response.HasPrevious
             };
-
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
         /// Get all Ranks in Game
         /// </summary>
         /// <param name="gameId"></param>
+        /// <param name="param"></param>
         /// <returns></returns>
         /// <remarks>
         /// Roles Access: Admin, User
         /// </remarks>
         [HttpGet("{gameId}/ranks")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult> GetAllRanksInGame(string gameId)
+        public async Task<ActionResult> GetAllRanksInGame(string gameId, [FromQuery] RankParameters param)
         {
-            var response = await _rankService.GetAllRanksInGameAsync(gameId);
-            return response is not null ? Ok(response) : NotFound();
+            var response = await _rankService.GetAllRanksInGameAsync(gameId, param);
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            return Ok(Response);
         }
 
 
@@ -87,8 +113,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _rankService.CreateRankAsync(gameId, request);
-
-            return response is null ? BadRequest() : CreatedAtRoute(nameof(RanksController.GetRankById), new { rankId = response.Id }, response);
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return CreatedAtRoute(nameof(RanksController.GetRankById), new { rankId = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -116,7 +151,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Add New a Game
+        /// Create New a Game
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
