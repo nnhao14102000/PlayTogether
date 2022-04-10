@@ -410,6 +410,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 order.User.Status = UserStatusConstants.Online;
 
                 toUser.Status = UserStatusConstants.Online;
+                order.Reason = request.Reason;
                 // toUser.BehaviorPoint.SatisfiedPoint -= 1;
 
                 // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, ))
@@ -418,7 +419,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
                     order.UserId,
                     $"{toUser.Name} đã từ chối đề nghị!",
-                    $"Xin lỗi vì không thể ghép được với bạn. Mong có thể ghép với bạn vào lần sau!",
+                    $"Xin lỗi vì không thể ghép được với bạn, vì {request.Reason}. Mong có thể ghép với bạn vào lần sau!",
                     ""));
             }
             else {

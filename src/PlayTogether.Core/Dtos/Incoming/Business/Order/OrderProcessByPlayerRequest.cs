@@ -6,5 +6,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Order
     {
         [Required]
         public bool IsAccept { get; set; }
+        public string Reason { get; set; }
     }
 }
