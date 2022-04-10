@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback
@@ -15,5 +16,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback
         [Required]
         [MaxLength(100)]
         public string TypeOfFeedback { get; set; }
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }
