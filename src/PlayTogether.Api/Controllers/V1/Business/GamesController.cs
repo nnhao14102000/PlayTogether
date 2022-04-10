@@ -104,7 +104,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetGameById(string gameId)
         {
             var response = await _gameService.GetGameByIdAsync(gameId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if (response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
