@@ -90,7 +90,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
 
         private void FilterByIsApprove(ref IQueryable<Entities.SystemFeedback> query, bool? isApprove)
         {
-            if (!query.Any() || isApprove is null) {
+            if (!query.Any()) {
                 return;
             }
             query = query.Where(x => x.IsApprove == isApprove);
