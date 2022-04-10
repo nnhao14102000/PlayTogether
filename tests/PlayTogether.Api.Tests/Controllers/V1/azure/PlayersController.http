@@ -96,14 +96,14 @@ Authorization: {{authToken}}
 ###
 
 # Get user skill
-GET {{baseUrl}}/api/play-together/v1/users/65f18c3f-c91e-48bf-a23d-ca468d429071/games
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/games
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Get user hobbies
-GET {{baseUrl}}/api/play-together/v1/users/65f18c3f-c91e-48bf-a23d-ca468d429071/hobbies
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/hobbies
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -191,17 +191,32 @@ Authorization: {{authToken}}
 
 [
   {
-    "gameId": "fc05342f-8bba-4ef1-a396-4c5ff499a240"
+    "gameId": "141e7262-3c64-4c1d-a9a2-f8f9c18ae499"
   },
   {
-    "gameId": "6c211880-ecd9-4975-806e-237fe1bc4294"
+    "gameId": "246c453d-8595-4d44-818a-c4ce158670df"
   },
   {
-    "gameId": "a22cc921-25ce-41b7-b9a4-23fcb6e0db89"
+    "gameId": "27be12d7-7add-4ed9-a4d2-2af1d1f948d7"
   },
   {
-    "gameId": "34c265fb-bd1a-480b-86dd-29733954f3cc"
+    "gameId": "2c7c6c41-b49b-46b2-a4a4-c899057ebc34"
   },
+]
+
+###
+
+# Delete hobbies
+DELETE {{baseUrl}}/api/play-together/v1/hobbies
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+[
+  {
+    "hobbyId": "150c1e97-655c-4eb8-a133-43760db0dd29",
+    "hobbyId": "2550c869-2a9b-4093-8763-4876ac667163",
+    "hobbyId": "5bc8f198-9b77-47cb-bd3b-33e80df604c1"
+  }
 ]
 
 ###

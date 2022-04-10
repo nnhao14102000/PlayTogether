@@ -30,6 +30,13 @@ Authorization: {{authToken}}
 
 ###
 
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/d04a4aa1-0f83-4acd-a645-f6aaae367154/hobbies
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/?pageSize=5&pageNumber=2
 Content-Type: : {{contentType}}
@@ -306,5 +313,83 @@ Authorization: {{authToken}}
 DELETE {{baseUrl}}/api/play-together/v1/dating/ca0c8bbb-3960-4c1c-ab91-d105cd908226
 Content-type: {{contentType}}
 Authorization: {{authToken}}
+
+###
+
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user skill
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/games
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get user hobbies
+GET {{baseUrl}}/api/play-together/v1/users/d04a4aa1-0f83-4acd-a645-f6aaae367154/hobbies
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all users / Search users
+GET {{baseUrl}}/api/play-together/v1/users/
+?searchString=th
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get all Games
+GET {{baseUrl}}/api/play-together/v1/games
+?name=
+&isMostFavorite=false
+&pageSize=50
+&pageNumber=1
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Create game of Hobbies
+POST {{baseUrl}}/api/play-together/v1/hobbies
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+[
+  {
+    "gameId": "11614602-3a32-4901-821f-9cfc36a006ec"
+  },
+  {
+    "gameId": "2e52cd92-cf0a-4499-aa96-b1fa0d3dcc23"
+  },
+  {
+    "gameId": "2eeecd82-49c3-4cc6-b238-39c3f67660a9"
+  },
+  {
+    "gameId": "2f07e88a-8874-4898-b356-02f40bdb54e5"
+  },
+]
+
+###
+
+# Delete hobbies
+DELETE {{baseUrl}}/api/play-together/v1/hobbies
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+[
+  {
+    "hobbyId": "baa835c4-b4ba-4f9e-8213-9bb74c30cf86"
+  },
+  {
+    "hobbyId": "2e56f572-8845-442d-bc98-c565fd4bad17"
+  }
+]
 
 ###
