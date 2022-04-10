@@ -80,11 +80,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
 
             FilterByType(ref query, param.Type);
             FilterInDayRange(ref query, param.FromDate, param.ToDate);
+            FilterByIsApprove(ref query, param.IsApprove);
             OrderByNewFeedback(ref query, param.IsNew);
 
             listFeedbacks = query.ToList();
             var response = _mapper.Map<List<SystemFeedbackResponse>>(listFeedbacks);
             return PagedResult<SystemFeedbackResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void FilterByIsApprove(ref IQueryable<Entities.SystemFeedback> query, bool? isApprove)
+        {
+            if (!query.Any() || isApprove is null) {
+                return;
+            }
+            query = query.Where(x => x.IsApprove == isApprove);
         }
 
         private void OrderByNewFeedback(ref IQueryable<Entities.SystemFeedback> query, bool? isNew)

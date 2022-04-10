@@ -240,6 +240,8 @@ Authorization: {{authToken}}
 
 # Get all Feedbacks 
 GET {{baseUrl}}/api/play-together/v1/feedbacks
+?fromDate=2022-04-10
+&toDate=2022-05-10
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -248,7 +250,7 @@ Authorization: {{authToken}}
 
 
 # Get a feedback
-GET {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+GET {{baseUrl}}/api/play-together/v1/feedbacks/408790d0-090e-42db-8985-78116c2bee1a
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -262,14 +264,14 @@ Authorization: {{authToken}}
 {
   "title": "Test Feedback again",
   "message": "Test chuc nang feedback..Vui long thong camr.",
-  "typeOfFeedback": "Suggestt"
+  "typeOfFeedback": "Suggest"
 }
 
 ###
 
 
 # Update Feedback
-PUT {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+PUT {{baseUrl}}/api/play-together/v1/feedbacks/408790d0-090e-42db-8985-78116c2bee1a
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -282,7 +284,7 @@ Authorization: {{authToken}}
 ###
 
 # Delete Feedback
-DELETE {{baseUrl}}/api/play-together/v1/feedbacks/d05fbc3a-9865-4aa4-a823-c67ef7d330d9
+DELETE {{baseUrl}}/api/play-together/v1/feedbacks/408790d0-090e-42db-8985-78116c2bee1a
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

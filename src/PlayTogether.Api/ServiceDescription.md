@@ -570,7 +570,7 @@
 > - ``GET /api/play-together/v1/feedbacks ``  
 >   ***Description***: Get all feedbacks    
 >   ***Role Access***: Admin, User  
->   ***Extension***: Paging, Filter by type, day, order newest feedback  
+>   ***Extension***: Paging, Filter by type, day, order newest feedback, filter approve status of feedback    
 >   ***Note***: If role access is admin, it will get all feedbacks, if role access is user , it will get only feedbacks of this user  
 >
 > - ``GET /api/play-together/v1/feedbacks/{feedbackId} ``  

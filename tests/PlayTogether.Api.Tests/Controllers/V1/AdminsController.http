@@ -131,19 +131,19 @@ Authorization: {{authToken}}
 
 
 # Get a feedback
-GET {{baseUrl}}/api/play-together/v1/feedbacks/67ecd81b-6a04-4871-a824-cdc4cf837fda
+GET {{baseUrl}}/api/play-together/v1/feedbacks/408790d0-090e-42db-8985-78116c2bee1a
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Process feedback
-PUT {{baseUrl}}/api/play-together/v1/admins/feedbacks/67ecd81b-6a04-4871-a824-cdc4cf837fda
+PUT {{baseUrl}}/api/play-together/v1/admins/feedbacks/408790d0-090e-42db-8985-78116c2bee1a
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "isApprove": true
+  "isApprove": false
 }
 
 ###

@@ -7,6 +7,7 @@ namespace PlayTogether.Core.Parameters
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate {get;set;}
         public bool? IsNew { get; set; }
+        public bool? IsApprove { get; set; }
         public string Type { get; set; }
     }
 }
