@@ -45,7 +45,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             var result = new Result<bool>();
             var game = await _context.Games.FindAsync(gameId);
             if (game is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game bạn muốn xóa. Vui lòng thử lại.");
                 return result;
             }
 
@@ -162,7 +162,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             var game = await _context.Games.FindAsync(gameId);
 
             if (game is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
                 return result;
             }
 
@@ -189,7 +189,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             var game = await _context.Games.FindAsync(gameId);
 
             if (game is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
                 return result;
             }
 

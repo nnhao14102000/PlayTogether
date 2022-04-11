@@ -44,7 +44,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             var result = new Result<bool>();
             var type = await _context.GameTypes.FindAsync(gameTypeId);
             if (type is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại {gameTypeId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại game bạn muốn xóa. Vui lòng thử lại.");
                 return result;
             }
 
@@ -93,7 +93,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             var type = await _context.GameTypes.FindAsync(gameTypeId);
 
             if (type is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại {gameTypeId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại game.");
                 return result;
             }
 
@@ -114,7 +114,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
             var type = await _context.GameTypes.FindAsync(gameTypeId);
 
             if (type is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại {gameTypeId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thể loại game.");
                 return result;
             }
 

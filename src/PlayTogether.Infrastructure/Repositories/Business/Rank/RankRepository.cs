@@ -26,7 +26,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             var result = new Result<RankCreateResponse>();
             var game = await _context.Games.FindAsync(gameId);
             if (game is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
                 return result;
             }
 
@@ -62,7 +62,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             var rank = await _context.Ranks.FindAsync(rankId);
             if (rank is null) {
                 if (rank is null) {
-                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank {rankId}");
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
                     return result;
                 }
             }
@@ -91,7 +91,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             var result = new PagedResult<RankGetAllResponse>();
             var game = await _context.Games.FindAsync(gameId);
             if (game is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game {gameId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
                 return result;
             }
             var ranksInGame = await _context.Ranks.Where(x => x.GameId == gameId)
@@ -108,7 +108,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             var rank = await _context.Ranks.FindAsync(rankId);
 
             if (rank is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank {rankId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
                 return result;
             }
 
@@ -123,7 +123,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
             var rank = await _context.Ranks.FindAsync(rankId);
 
             if (rank is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank {rankId}");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
                 return result;
             }
 
