@@ -81,7 +81,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             var result = new PagedResult<HobbiesGetAllResponse>();
             var user = await _context.AppUsers.FindAsync(userId);
             if (user is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.DisableUser);
                 return result;
             }
             var hobbies = await _context.Hobbies.Where(x => x.UserId == user.Id).ToListAsync();

@@ -186,8 +186,9 @@
 >   ***Role Access***: User, Admin   
 >
 > - ``GET /api/play-together/v1/users/{userId}/games ``  
->   ***Description***: Get a specific user skill (games of user)    
+>   ***Description***: Get a specific user skills (games of user)    
 >   ***Role Access***: User   
+>   ***Extension***: Paging  
 >
 > - ``POST /api/play-together/v1/users/orders/{toUserId} ``  
 >   ***Description***: Create a order request to a specific User    

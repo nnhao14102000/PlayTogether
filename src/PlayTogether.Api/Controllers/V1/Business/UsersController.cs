@@ -158,11 +158,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _hobbyService.GetAllHobbiesAsync(userId, param);
 
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
                     return NotFound(response);
                 }
-                else{
+                else {
                     return BadRequest(response);
                 }
             }
@@ -223,10 +223,27 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{userId}/games")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<IEnumerable<GamesOfUserResponse>>> GetAllGameOfUser(string userId)
+        public async Task<ActionResult> GetAllGameOfUser(string userId, [FromQuery] GameOfUserParameters param)
         {
-            var response = await _gameOfUserService.GetAllGameOfUserAsync(userId);
-            return response is not null ? Ok(response) : NotFound();
+            var response = await _gameOfUserService.GetAllGameOfUserAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+            return Ok(response);
         }
 
         /// <summary>
@@ -496,7 +513,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("disable")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<DisableUserResponse>> GetDisableInfo(){
+        public async Task<ActionResult<DisableUserResponse>> GetDisableInfo()
+        {
             var response = await _appUserService.GetDisableInfoAsync(HttpContext.User);
             return response is not null ? Ok(response) : NotFound();
         }
@@ -523,7 +541,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         *                                              ||
         *================================================
         */
-        
+
 
     }
 }

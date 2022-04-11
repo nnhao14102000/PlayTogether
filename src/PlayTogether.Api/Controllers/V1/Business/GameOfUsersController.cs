@@ -30,7 +30,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<GameOfUserGetByIdResponse>> CreateGameOfUser(
+        public async Task<ActionResult> CreateGameOfUser(
             GameOfUserCreateRequest request)
         {
             if (!ModelState.IsValid) {
@@ -38,8 +38,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
 
             var response = await _gameOfUserService.CreateGameOfUserAsync(HttpContext.User, request);
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
 
-            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetGameOfUserById), new { gameOfUserId = response.Id }, response);
+            return CreatedAtRoute(nameof(GetGameOfUserById), new { gameOfUserId = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -52,10 +60,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{gameOfUserId}", Name = "GetGameOfUserById")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<GameOfUserGetByIdResponse>> GetGameOfUserById(string gameOfUserId)
+        public async Task<ActionResult> GetGameOfUserById(string gameOfUserId)
         {
             var response = await _gameOfUserService.GetGameOfUserByIdAsync(gameOfUserId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -75,7 +91,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _gameOfUserService.UpdateGameOfUserAsync(HttpContext.User, gameOfUserId, request);
-            return response ? NoContent() : BadRequest();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -91,7 +115,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteGameOfUser(string gameOfUserId)
         {
             var response = await _gameOfUserService.DeleteGameOfUserAsync(HttpContext.User, gameOfUserId);
-            return response ? NoContent() : BadRequest();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

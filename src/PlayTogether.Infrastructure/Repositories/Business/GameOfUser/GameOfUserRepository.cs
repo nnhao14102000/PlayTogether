@@ -12,6 +12,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Generic;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
+using PlayTogether.Core.Parameters;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
 {
@@ -26,11 +28,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId)
+        public async Task<PagedResult<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId, GameOfUserParameters param)
         {
-            var player = await _context.AppUsers.FindAsync(userId);
-            if (player is null || player.IsActive is false) {
-                return null;
+            var result = new PagedResult<GamesOfUserResponse>();
+            var user = await _context.AppUsers.FindAsync(userId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.DisableUser);
+                return result;
             }
 
             var gamesOfPlayer = await _context.GameOfUsers.Where(x => x.UserId == userId)
@@ -43,7 +52,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                               .Query()
                               .LoadAsync();
             }
-            var response = _mapper.Map<IEnumerable<GamesOfUserResponse>>(gamesOfPlayer);
+            var response = _mapper.Map<List<GamesOfUserResponse>>(gamesOfPlayer);
             foreach (var item in response) {
                 if (String.IsNullOrEmpty(item.RankId) || String.IsNullOrWhiteSpace(item.RankId)) {
                     continue;
@@ -51,33 +60,48 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                 var rank = await _context.Ranks.FindAsync(item.RankId);
                 item.Rank = _mapper.Map<RankGetByIdResponse>(rank);
             }
-            return response;
+            return PagedResult<GamesOfUserResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
 
         }
 
-        public async Task<GameOfUserGetByIdResponse> CreateGameOfUserAsync(
+        public async Task<Result<GameOfUserGetByIdResponse>> CreateGameOfUserAsync(
             ClaimsPrincipal principal,
             GameOfUserCreateRequest request)
         {
+            var result = new Result<GameOfUserGetByIdResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
-                return null;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
 
             var game = await _context.Games.FindAsync(request.GameId);
             if (game is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
+                return result;
             }
 
             var existGame = await _context.GameOfUsers.Where(x => x.UserId == user.Id).AnyAsync(x => x.GameId == request.GameId);
             if (existGame) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" game này trong danh sách kĩ năng của bạn.");
+                return result;
             }
 
             var model = _mapper.Map<Entities.GameOfUser>(request);
@@ -88,11 +112,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             else {
                 var existRank = await _context.Ranks.Where(x => x.GameId == request.GameId).AnyAsync(x => x.Id == request.RankId);
                 if (!existRank) {
-                    return null;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
+                    return result;
                 }
             }
             await _context.GameOfUsers.AddAsync(model);
-            if ((await _context.SaveChangesAsync() >= 0)) {
+            if (await _context.SaveChangesAsync() >= 0) {
                 var response = _mapper.Map<GameOfUserGetByIdResponse>(model);
                 if (!String.IsNullOrEmpty(response.RankId) || !String.IsNullOrWhiteSpace(response.RankId)) {
                     var rank = await _context.Ranks.FindAsync(response.RankId);
@@ -102,39 +127,67 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                         Name = rank.Name
                     };
                 }
-                return response;
+                result.Content = response;
+                return result;
             }
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> DeleteGameOfUserAsync(
+        public async Task<Result<bool>> DeleteGameOfUserAsync(
             ClaimsPrincipal principal,
             string gameOfUserId)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
-                return false;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
-            var gameOfUser = await _context.GameOfUsers.FindAsync(gameOfUserId);
-            if (gameOfUser is null || gameOfUser.UserId != user.Id) {
-                return false;
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
             }
-            _context.GameOfUsers.Remove(gameOfUser);
-            return (await _context.SaveChangesAsync() >= 0);
-        }
 
-        public async Task<GameOfUserGetByIdResponse> GetGameOfUserByIdAsync(string gameOfUserId)
-        {
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
+            }
+
             var gameOfUser = await _context.GameOfUsers.FindAsync(gameOfUserId);
             if (gameOfUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" kĩ năng này.");
+                return result;
+            }
+
+            if (gameOfUser.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+            _context.GameOfUsers.Remove(gameOfUser);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
+
+        public async Task<Result<GameOfUserGetByIdResponse>> GetGameOfUserByIdAsync(string gameOfUserId)
+        {
+            var result = new Result<GameOfUserGetByIdResponse>();
+            var gameOfUser = await _context.GameOfUsers.FindAsync(gameOfUserId);
+            if (gameOfUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" kĩ năng này.");
+                return result;
             }
 
             await _context.Entry(gameOfUser)
@@ -151,28 +204,48 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                     Name = rank.Name
                 };
             }
-            return response;
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> UpdateGameOfUserAsync(
+        public async Task<Result<bool>> UpdateGameOfUserAsync(
             ClaimsPrincipal principal,
             string gameOfUserId,
             GameOfUserUpdateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
-                return false;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
 
             var gameOfUser = await _context.GameOfUsers.FindAsync(gameOfUserId);
-            if (gameOfUser is null || gameOfUser.UserId != user.Id) {
-                return false;
+            if (gameOfUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" kĩ năng này.");
+                return result;
+            }
+
+            if (gameOfUser.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
             }
 
             var model = _mapper.Map(request, gameOfUser);
@@ -182,11 +255,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             else {
                 var existRank = await _context.Ranks.Where(x => x.GameId == gameOfUser.GameId).AnyAsync(x => x.Id == request.RankId);
                 if (!existRank) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
+                    return result;
                 }
             }
             _context.GameOfUsers.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

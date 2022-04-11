@@ -40,9 +40,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _gameService.GetAllGamesAsync(param);
             if(!response.IsSuccess){
-                if (response.Error.Code == 400){
-                    return BadRequest(response);
-                }else if(response.Error.Code == 404){
+                if(response.Error.Code == 404){
                     return NotFound(response);
                 }
                 else{
@@ -76,9 +74,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _rankService.GetAllRanksInGameAsync(gameId, param);
             if(!response.IsSuccess){
-                if (response.Error.Code == 400){
-                    return BadRequest(response);
-                }else if(response.Error.Code == 404){
+                if(response.Error.Code == 404){
                     return NotFound(response);
                 }
                 else{
@@ -116,9 +112,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             var response = await _rankService.CreateRankAsync(gameId, request);
             if(!response.IsSuccess){
-                if (response.Error.Code == 400){
-                    return BadRequest(response);
-                }else if(response.Error.Code == 404){
+                if(response.Error.Code == 404){
                     return NotFound(response);
                 }
                 else{
@@ -169,8 +163,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             var response = await _gameService.CreateGameAsync(request);
             if(!response.IsSuccess){
-                if (response.Error.Code == 400){
-                    return BadRequest(response);
+                if (response.Error.Code == 404){
+                    return NotFound(response);
                 }
                 else{
                     return BadRequest(response);
@@ -199,9 +193,6 @@ namespace PlayTogether.Api.Controllers.V1.Business
             if(!response.IsSuccess){
                 if(response.Error.Code == 404){
                     return NotFound(response);
-                }
-                else if (response.Error.Code == 400){
-                    return BadRequest(response);
                 }
                 else{
                     return BadRequest(response);

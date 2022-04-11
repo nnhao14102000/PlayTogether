@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
+using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -23,7 +25,7 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             _logger = logger;
         }
 
-        public async Task<GameOfUserGetByIdResponse> CreateGameOfUserAsync(
+        public async Task<Result<GameOfUserGetByIdResponse>> CreateGameOfUserAsync(
             ClaimsPrincipal principal,
             GameOfUserCreateRequest request)
         {
@@ -42,7 +44,7 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             }
         }
 
-        public async Task<bool> DeleteGameOfUserAsync(ClaimsPrincipal principal, string gameOfUserId)
+        public async Task<Result<bool>> DeleteGameOfUserAsync(ClaimsPrincipal principal, string gameOfUserId)
         {
             try {
                 if (principal is null) {
@@ -59,13 +61,13 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             }
         }
 
-        public async Task<IEnumerable<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId)
+        public async Task<PagedResult<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId, GameOfUserParameters param)
         {
             try {
                 if (String.IsNullOrEmpty(userId)) {
                     throw new ArgumentNullException(nameof(userId));
                 }
-                return await _gameOfUserRepository.GetAllGameOfUserAsync(userId);
+                return await _gameOfUserRepository.GetAllGameOfUserAsync(userId, param);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GetAllGameOfUserAsync in service class, Error Message: {ex}.");
@@ -73,7 +75,7 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             }
         }
 
-        public async Task<GameOfUserGetByIdResponse> GetGameOfUserByIdAsync(string gameOfUserId)
+        public async Task<Result<GameOfUserGetByIdResponse>> GetGameOfUserByIdAsync(string gameOfUserId)
         {
             try {
                 if (String.IsNullOrEmpty(gameOfUserId)) {
@@ -87,7 +89,7 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             }
         }
 
-        public async Task<bool> UpdateGameOfUserAsync(
+        public async Task<Result<bool>> UpdateGameOfUserAsync(
             ClaimsPrincipal principal,
             string gameOfUserId,
             GameOfUserUpdateRequest request)

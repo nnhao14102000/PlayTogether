@@ -11,7 +11,7 @@ namespace PlayTogether.Infrastructure.Entities
 
         [MaxLength(100)]
         public string RankId { get; set; }
-        
+
         [MaxLength(100)]
         [Required]
         public string UserId { get; set; }
