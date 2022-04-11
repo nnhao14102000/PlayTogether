@@ -134,11 +134,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId)
+        public async Task<Result<UserGetBasicInfoResponse>> GetUserBasicInfoByIdAsync(string userId)
         {
+            var result = new Result<UserGetBasicInfoResponse>();
             var user = await _context.AppUsers.FindAsync(userId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
             await _context.Entry(user).Collection(x => x.Images).LoadAsync();
             await _context.Entry(user).Collection(x => x.Datings).Query().OrderBy(x => x.DayInWeek).ThenBy(x => x.FromHour).LoadAsync();
@@ -158,16 +160,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);
-            return response;
+            result.Content = response;
+            return result;
         }
 
-        public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)
+        public async Task<Result<UserGetServiceInfoResponse>> GetUserServiceInfoByIdAsync(string userId)
         {
+            var result = new Result<UserGetServiceInfoResponse>();
             var user = await _context.AppUsers.FindAsync(userId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
-            return _mapper.Map<UserGetServiceInfoResponse>(user);
+            var response = _mapper.Map<UserGetServiceInfoResponse>(user);
+            result.Content = response;
+            return result;
         }
 
         public async Task<PagedResult<UserSearchResponse>> GetAllUsersAsync(

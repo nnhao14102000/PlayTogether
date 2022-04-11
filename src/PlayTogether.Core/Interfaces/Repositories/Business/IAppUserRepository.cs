@@ -13,9 +13,9 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<bool> UpdatePersonalInfoAsync(ClaimsPrincipal principal, UserPersonalInfoUpdateRequest request);
         Task<bool> UpdateUserServiceInfoAsync(ClaimsPrincipal principal, UserInfoForIsPlayerUpdateRequest request);
         Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request);
-        Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId);
+        Task<Result<UserGetServiceInfoResponse>> GetUserServiceInfoByIdAsync(string userId);
         
-        Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId);
+        Task<Result<UserGetBasicInfoResponse>> GetUserBasicInfoByIdAsync(string userId);
         Task<PagedResult<UserSearchResponse>> GetAllUsersAsync(ClaimsPrincipal principal, UserParameters param);
 
         Task<PagedResult<UserGetByAdminResponse>> GetAllUsersForAdminAsync(AdminUserParameters param);

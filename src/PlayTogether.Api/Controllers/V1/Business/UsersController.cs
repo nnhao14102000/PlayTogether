@@ -191,10 +191,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("service/{userId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<UserGetServiceInfoResponse>> GetUserServiceInfoById(string userId)
+        public async Task<ActionResult> GetUserServiceInfoById(string userId)
         {
             var response = await _appUserService.GetUserServiceInfoByIdAsync(userId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -207,10 +214,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{userId}")]
         [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<UserGetBasicInfoResponse>> GetUserBasicInfoById(string userId)
+        public async Task<ActionResult> GetUserBasicInfoById(string userId)
         {
             var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>

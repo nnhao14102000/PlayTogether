@@ -69,14 +69,14 @@ Authorization: {{authToken}}
 ###
 
 # Get user skill information
-GET {{baseUrl}}/api/play-together/v1/users/0e317a69-2098-4a34-8115-439c30038faa/games
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443/games
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
 # Get user service information
-GET {{baseUrl}}/api/play-together/v1/users/service/0e317a69-2098-4a34-8115-439c30038faa
+GET {{baseUrl}}/api/play-together/v1/users/service/14085799-aec5-41b5-9fd9-46aa9a773443
 content-type: {{contentType}}
 Authorization: {{authToken}}
 

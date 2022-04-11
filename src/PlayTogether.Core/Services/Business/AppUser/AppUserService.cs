@@ -125,7 +125,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<UserGetBasicInfoResponse> GetUserBasicInfoByIdAsync(string userId)
+        public async Task<Result<UserGetBasicInfoResponse>> GetUserBasicInfoByIdAsync(string userId)
         {
             try {
                 if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
@@ -139,7 +139,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<UserGetServiceInfoResponse> GetUserServiceInfoByIdAsync(string userId)
+        public async Task<Result<UserGetServiceInfoResponse>> GetUserServiceInfoByIdAsync(string userId)
         {
             try {
                 if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
