@@ -23,7 +23,7 @@ namespace PlayTogether.Core.Services.Business.Hobby
             _logger = logger;
         }
 
-        public async Task<bool> CreateHobbiesAsync(ClaimsPrincipal principal, List<HobbyCreateRequest> requests)
+        public async Task<Result<bool>> CreateHobbiesAsync(ClaimsPrincipal principal, List<HobbyCreateRequest> requests)
         {
             try {
                 if (principal is null) {
@@ -54,7 +54,7 @@ namespace PlayTogether.Core.Services.Business.Hobby
             }
         }
 
-        public async Task<bool> DeleteHobbyAsync(ClaimsPrincipal principal, string hobbyId)
+        public async Task<Result<bool>> DeleteHobbyAsync(ClaimsPrincipal principal, string hobbyId)
         {
             try {
                 if (principal is null) {
@@ -71,7 +71,7 @@ namespace PlayTogether.Core.Services.Business.Hobby
             }
         }
 
-        public async Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds)
+        public async Task<Result<bool>> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds)
         {
             try {
                 if (principal is null) {

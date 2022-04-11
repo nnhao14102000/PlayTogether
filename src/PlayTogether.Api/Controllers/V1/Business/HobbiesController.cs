@@ -30,7 +30,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> CreateHobbies(List<HobbyCreateRequest> requests)
         {
             var response = await _hobbyService.CreateHobbiesAsync(HttpContext.User, requests);
-            return response ? Ok() : NotFound();
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok();
         }
 
         /// <summary>
@@ -46,7 +56,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteHobby(string hobbyId)
         {
             var response = await _hobbyService.DeleteHobbyAsync(HttpContext.User, hobbyId);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -62,7 +82,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteRangeHobbies(List<HobbyDeleteRequest> hobbyIds)
         {
             var response = await _hobbyService.DeleteRangesHobbiesAsync(HttpContext.User, hobbyIds);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if (response.Error.Code == 400){
+                    return BadRequest(response);
+                }else if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

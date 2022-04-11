@@ -10,9 +10,9 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IHobbyService
     {
-        Task<bool> CreateHobbiesAsync(ClaimsPrincipal principal, List<HobbyCreateRequest> requests);
+        Task<Result<bool>> CreateHobbiesAsync(ClaimsPrincipal principal, List<HobbyCreateRequest> requests);
         Task<PagedResult<HobbiesGetAllResponse>> GetAllHobbiesAsync(string userId, HobbyParameters param);
-        Task<bool> DeleteHobbyAsync(ClaimsPrincipal principal, string hobbyId);
-        Task<bool> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds);
+        Task<Result<bool>> DeleteHobbyAsync(ClaimsPrincipal principal, string hobbyId);
+        Task<Result<bool>> DeleteRangesHobbiesAsync(ClaimsPrincipal principal, List<HobbyDeleteRequest> hobbyIds);
     }
 }

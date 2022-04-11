@@ -152,11 +152,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{userId}/hobbies")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<HobbiesGetAllResponse>>> GetAllHobbies(
+        public async Task<ActionResult> GetAllHobbies(
             string userId,
             [FromQuery] HobbyParameters param)
         {
             var response = await _hobbyService.GetAllHobbiesAsync(userId, param);
+
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
 
             var metaData = new {
                 response.TotalCount,
@@ -168,7 +177,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
 

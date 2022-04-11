@@ -29,9 +29,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             numOfReport = await _context.Reports.Where(x => x.IsApprove == null).CountAsync();
             numOfDisableUser = await _context.AppUsers.Where(x => x.IsActive == false).CountAsync();
             numOfSuggestFeedback = await _context.SystemFeedbacks
-                                                    .Where(x => x.TypeOfFeedback.ToLower()
-                                                            .Contains(SystemFeedbackTypeConstants.Suggest.ToLower()))
-                                                    .CountAsync();
+                                                    .Where(x => x.IsApprove == null).CountAsync();
             var users = await _context.AppUsers.ToListAsync();
             foreach (var item in users)
             {

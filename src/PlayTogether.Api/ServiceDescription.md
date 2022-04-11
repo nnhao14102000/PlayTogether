@@ -167,6 +167,7 @@
 >   ***Description***: Get all hobbies of a specific user  
 >   ***Use for***: View hobbies of a specific user  
 >   ***Role Access***: User  
+>   ***Extension***: Paging, sorting new created hobbies
 >
 > - ``PUT /api/play-together/v1/users/service/{userId} ``  
 >   ***Description***: Get a specific user service info    
