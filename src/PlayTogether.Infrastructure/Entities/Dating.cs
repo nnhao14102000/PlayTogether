@@ -9,11 +9,11 @@ namespace PlayTogether.Infrastructure.Entities
         public string UserId { get; set; }
         public AppUser User { get; set; }
 
-        [Range(0, 23)]
+        [Range(0, 1440)]
         [Required]
         public int FromHour { get; set; }
 
-        [Range(0, 23)]
+        [Range(0, 1440)]
         [Required]
         public int ToHour { get; set; }
 

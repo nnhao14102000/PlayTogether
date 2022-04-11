@@ -4,11 +4,11 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Dating
 {
     public class DatingCreateRequest
     {
-        [Range(0, 23)]
+        [Range(0, 1440)]
         [Required]
         public int FromHour { get; set; }
         
-        [Range(0, 23)]
+        [Range(0, 1440)]
         [Required]
         public int ToHour { get; set; }
 
