@@ -6,7 +6,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Rank
     public class RankCreateRequest
     {
         [Required]
-        [Range(1, 100)]
+        [Range(0, int.MaxValue)]
         public int NO { get; set; }
 
         [Required]
