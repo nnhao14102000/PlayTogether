@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Auth;
@@ -30,10 +31,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{typeOfGameId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<TypeOfGameGetByIdResponse>> GetTypeOfGameById(string typeOfGameId)
+        public async Task<ActionResult> GetTypeOfGameById(string typeOfGameId)
         {
             var response = await _typeOfGameService.GetTypeOfGameByIdAsync(typeOfGameId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -53,7 +62,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _typeOfGameService.CreateTypeOfGameAsync(request);
-            return response ? Ok() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else if (response.Error.Code == 400) {
+                    return BadRequest(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok();
         }
 
         /// <summary>
@@ -69,7 +89,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteTypeOfGame(string typeOfGameId)
         {
             var response = await _typeOfGameService.DeleteTypeOfGameAsync(typeOfGameId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

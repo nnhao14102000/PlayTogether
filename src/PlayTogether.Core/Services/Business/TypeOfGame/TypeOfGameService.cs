@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
 using System;
@@ -21,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.TypeOfGame
             _logger = logger;
         }
 
-        public async Task<bool> CreateTypeOfGameAsync(
+        public async Task<Result<bool>> CreateTypeOfGameAsync(
             TypeOfGameCreateRequest request)
         {
             try {
@@ -36,7 +37,7 @@ namespace PlayTogether.Core.Services.Business.TypeOfGame
             }
         }
 
-        public async Task<bool> DeleteTypeOfGameAsync(string typeOfGameId)
+        public async Task<Result<bool>> DeleteTypeOfGameAsync(string typeOfGameId)
         {
             try {
                 if (String.IsNullOrEmpty(typeOfGameId)) {
@@ -50,7 +51,7 @@ namespace PlayTogether.Core.Services.Business.TypeOfGame
             }
         }
 
-        public async Task<TypeOfGameGetByIdResponse> GetTypeOfGameByIdAsync(string typeOfGameId)
+        public async Task<Result<TypeOfGameGetByIdResponse>> GetTypeOfGameByIdAsync(string typeOfGameId)
         {
             try {
                 if (String.IsNullOrEmpty(typeOfGameId)) {
