@@ -367,6 +367,10 @@
 >   ***Description***: Create a skill (Game of User)  
 >   ***Role Access***: User   
 >
+> - ``POST /api/play-together/v1/games-of-user/multi-games ``  
+>   ***Description***: Create multi skills (Game of User)  
+>   ***Role Access***: User   
+>
 > - ``GET /api/play-together/v1/games-of-user/{gameOfUserId} ``  
 >   ***Description***: Get a specific skill (Game of User)  
 >   ***Role Access***: User    

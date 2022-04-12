@@ -38,7 +38,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                     return BadRequest(response);
                 }
             }
-            return Ok();
+            return Ok(response);
         }
 
         /// <summary>

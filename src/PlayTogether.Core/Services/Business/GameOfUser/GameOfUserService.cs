@@ -44,6 +44,23 @@ namespace PlayTogether.Core.Services.Business.GameOfUser
             }
         }
 
+        public async Task<Result<bool>> CreateMultiGameOfUserAsync(ClaimsPrincipal principal, List<GameOfUserCreateRequest> requests)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (requests is null || requests.Count == 0) {
+                    throw new ArgumentNullException(nameof(requests));
+                }
+                return await _gameOfUserRepository.CreateMultiGameOfUserAsync(principal, requests);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CreateMultiGameOfUserAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> DeleteGameOfUserAsync(ClaimsPrincipal principal, string gameOfUserId)
         {
             try {

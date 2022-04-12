@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Api.Helpers;
@@ -21,7 +22,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
-        /// Create game of user
+        /// Create game of user / skill
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -48,6 +49,36 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
 
             return CreatedAtRoute(nameof(GetGameOfUserById), new { gameOfUserId = response.Content.Id }, response);
+        }
+
+        /// <summary>
+        /// Create multi games of user / skills
+        /// </summary>
+        /// <param name="requests"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost, Route("multi-games")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> CreateMultiGamesOfUser(
+            List<GameOfUserCreateRequest> requests)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+
+            var response = await _gameOfUserService.CreateMultiGameOfUserAsync(HttpContext.User, requests);
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+
+            return Ok(response);
         }
 
         /// <summary>

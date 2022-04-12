@@ -267,5 +267,80 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
+
+        public async Task<Result<bool>> CreateMultiGameOfUserAsync(ClaimsPrincipal principal, List<GameOfUserCreateRequest> requests)
+        {
+            var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
+            }
+
+            foreach (var request in requests) {
+                var game = await _context.Games.FindAsync(request.GameId);
+                if (game is null) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" game.");
+                    return result;
+                }
+
+                var existGame = await _context.GameOfUsers.Where(x => x.UserId == user.Id).AnyAsync(x => x.GameId == request.GameId);
+                if (existGame) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" game này trong danh sách kĩ năng của bạn.");
+                    return result;
+                }
+
+                var model = _mapper.Map<Entities.GameOfUser>(request);
+                model.UserId = user.Id;
+                
+                var ranksOfGame = await _context.Ranks.Where(x => x.GameId == game.Id).ToListAsync();
+                if (ranksOfGame.Count() > 0) {
+                    var no0Rank = ranksOfGame.FirstOrDefault(x => x.NO == 0);
+                    if (no0Rank is null) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" None Rank của game {game.Name}. Bạn có thể suggest Admin sửa lỗi này. Xin lỗi vì sự bất tiện.");
+                        return result;
+                    }
+                    model.RankId = no0Rank.Id;
+                }
+                else {
+                    model.RankId = "None";
+                }
+                // if (String.IsNullOrEmpty(request.RankId) || String.IsNullOrWhiteSpace(request.RankId)) {
+                //     model.RankId = "None";
+
+                // }
+                // else {
+                //     var existRank = await _context.Ranks.Where(x => x.GameId == request.GameId).AnyAsync(x => x.Id == request.RankId);
+                //     if (!existRank) {
+                //         result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" rank.");
+                //         return result;
+                //     }
+                // }
+                await _context.GameOfUsers.AddAsync(model);
+                if (await _context.SaveChangesAsync() < 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+                }
+            }
+            result.Content = true;
+            return result;
+        }
     }
 }

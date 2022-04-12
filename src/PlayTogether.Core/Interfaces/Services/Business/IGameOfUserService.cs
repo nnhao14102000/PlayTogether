@@ -12,6 +12,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     {
         Task<PagedResult<GamesOfUserResponse>> GetAllGameOfUserAsync(string userId, GameOfUserParameters param);
         Task<Result<GameOfUserGetByIdResponse>> CreateGameOfUserAsync(ClaimsPrincipal principal, GameOfUserCreateRequest request);
+        Task<Result<bool>> CreateMultiGameOfUserAsync(ClaimsPrincipal principal, List<GameOfUserCreateRequest> requests);
         Task<Result<GameOfUserGetByIdResponse>> GetGameOfUserByIdAsync(string gameOfUserId);
         Task<Result<bool>> UpdateGameOfUserAsync(ClaimsPrincipal principal, string gameOfUserId, GameOfUserUpdateRequest request);
         Task<Result<bool>> DeleteGameOfUserAsync(ClaimsPrincipal principal, string gameOfUserId);
