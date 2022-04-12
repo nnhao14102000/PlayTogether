@@ -314,7 +314,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                 if (ranksOfGame.Count() > 0) {
                     var no0Rank = ranksOfGame.FirstOrDefault(x => x.NO == 0);
                     if (no0Rank is null) {
-                        model.RankId = "";
+                        model.RankId = "None";
                     }
                     model.RankId = no0Rank.Id;
                 }
