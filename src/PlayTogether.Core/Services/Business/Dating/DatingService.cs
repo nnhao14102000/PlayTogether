@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Business.Dating
             _datingRepository = datingRepository;
             _logger = logger;
         }
-        public async Task<bool> CreateDatingAsync(ClaimsPrincipal principal, DatingCreateRequest request)
+        public async Task<Result<bool>> CreateDatingAsync(ClaimsPrincipal principal, DatingCreateRequest request)
         {
             try {
                 if (principal is null) {
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Business.Dating
             }
         }
 
-        public async Task<bool> DeleteDatingAsync(ClaimsPrincipal principal, string datingId)
+        public async Task<Result<bool>> DeleteDatingAsync(ClaimsPrincipal principal, string datingId)
         {
             try {
                 if (principal is null) {

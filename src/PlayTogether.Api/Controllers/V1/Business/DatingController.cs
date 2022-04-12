@@ -33,8 +33,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _datingService.CreateDatingAsync(HttpContext.User, request);
-            return response ? Ok() : BadRequest();
-        }   
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
 
         /// <summary>
         /// Delete Dating
@@ -49,7 +57,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteDating(string datingId)
         {
             var response = await _datingService.DeleteDatingAsync(HttpContext.User, datingId);
-            return response ? NoContent() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -65,16 +81,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetDatingById(string datingId)
         {
             var response = await _datingService.GetDatingByIdAsync(datingId);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
                     return NotFound(response);
-                }else{
+                }
+                else {
                     return BadRequest(response);
                 }
             }
             return Ok(response);
         }
 
-        
+
     }
 }
