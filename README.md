@@ -26,7 +26,7 @@ Default is: <br> `Server=(local);Database=PlayTogetherDb;Trusted_Connection=True
 Example: <br> `Server=YOUR_SQL_SERVER_NAME;Database=NAME_OF_DB;User=sa;Password=YOUR_PASSWORD;Trusted_Connection=False;Trusted_Connection=False;MultipleActiveResultSets=true;`
 
 - Open project with VSCode (*Recommend*) or Visual Studio  
-    - Open Terminal: ` Ctrl+ ` \` for (VSCode) or  ` View -> Terminal ` (Visual Studio)
+    - Open Terminal: `` Ctrl + ` `` for (VSCode) or  ` View -> Terminal ` (Visual Studio)
     - Type: `cd src` (go to src directory)
     - Type: `cd PlayTogether.Api` (go to Api project)
     - Type: `dotnet run` (run project)  
