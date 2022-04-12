@@ -27,36 +27,59 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             _userManager = userManager;
         }
 
-        public async Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
+        public async Task<Result<bool>> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
 
             if (request.IsPlayer is true) {
-                if (user.IsActive is false) return false;
-
-                if (user.Status is UserStatusConstants.Offline) return false;
-
-                if (user.PricePerHour < ValueConstants.PricePerHourMinValue) return false;
+                if (user.PricePerHour < ValueConstants.PricePerHourMinValue) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Giá tiền thuê trong 1h của bạn hiện tại là {user.PricePerHour}. Thấp hơn mức qui định là {ValueConstants.PricePerHourMinValue}. Vui lòng chỉnh sửa thông tin và thử lại.");
+                    return result;
+                }
 
                 if (user.MaxHourHire < ValueConstants.MaxHourHireMinValue
-                    || user.MaxHourHire > ValueConstants.MaxHourHireMaxValue) return false;
+                    || user.MaxHourHire > ValueConstants.MaxHourHireMaxValue) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Số giờ thuê tối đa 1 lượt thuê của bạn nên ở trong mức từ {ValueConstants.MaxHourHireMinValue} giờ đến {ValueConstants.MaxHourHireMaxValue} giờ. Vui lòng chỉnh sửa thông tin và thử lại.");
+                    return result;
+                }
 
                 var gameOfUserExist = await _context.GameOfUsers.AnyAsync(x => x.UserId == user.Id);
-                if (!gameOfUserExist) return false;
+                if (!gameOfUserExist) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Bạn chưa thêm kĩ năng game nào vào danh sách kĩ năng. Vui lòng thêm các game mà bạn có kĩ năng tốt và thử lại.");
+                    return result;
+                }
 
             }
             _mapper.Map(request, user);
             _context.AppUsers.Update(user);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<Result<PersonalInfoResponse>> GetPersonalInfoByIdentityIdAsync(ClaimsPrincipal principal)
@@ -67,11 +90,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
                 return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
                 return result;
             }
 
@@ -98,40 +121,65 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             return result;
         }
 
-        public async Task<bool> UpdateUserServiceInfoAsync(ClaimsPrincipal principal, UserInfoForIsPlayerUpdateRequest request)
+        public async Task<Result<bool>> UpdateUserServiceInfoAsync(ClaimsPrincipal principal, UserInfoForIsPlayerUpdateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
 
             _mapper.Map(request, user);
             _context.AppUsers.Update(user);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> UpdatePersonalInfoAsync(ClaimsPrincipal principal, UserPersonalInfoUpdateRequest request)
+        public async Task<Result<bool>> UpdatePersonalInfoAsync(ClaimsPrincipal principal, UserPersonalInfoUpdateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
-
+            var identityId = loggedInUser.Id;
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             _mapper.Map(request, user);
             _context.AppUsers.Update(user);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<Result<UserGetBasicInfoResponse>> GetUserBasicInfoByIdAsync(string userId)
@@ -181,18 +229,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             ClaimsPrincipal principal,
             UserParameters param)
         {
-            var result = new PagedResult<UserSearchResponse>();            
+            var result = new PagedResult<UserSearchResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
                 return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id; 
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
             if (user is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
                 return result;
             }
 
@@ -249,7 +297,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
             var list = new List<Entities.AppUser>();
-            if (DayInWeek ==  2) {
+            if (DayInWeek == 2) {
                 var datings = _context.Datings.Where(x => x.DayInWeek == 2);
                 foreach (var item in datings) {
                     var user = _context.AppUsers.Find(item.UserId);
@@ -408,7 +456,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
-            query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.NumOfRate).ThenByDescending(x => x.Rate);
+            query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.Rate).ThenByDescending(x => x.NumOfRate);
         }
 
         private void OrderUserByASCName(ref IQueryable<Entities.AppUser> query, bool? isOrderByName)
@@ -622,8 +670,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = finalList.AsQueryable();
         }
 
-
-
         private void FilterByStatus(ref IQueryable<Entities.AppUser> query, string status)
         {
             if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
@@ -632,17 +678,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
         }
 
-        public async Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
+        public async Task<Result<bool>> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
         {
+            var result = new Result<bool>();
             var user = await _context.AppUsers.FindAsync(userId);
 
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             if (request.IsActive == true) {
                 if (user.IsActive == true) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản user {user.Name} hiện đang active.");
+                    return result;
                 }
                 user.IsActive = true;
 
@@ -650,20 +699,34 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 if (disable is not null) {
                     disable.IsActive = false;
                 }
-                return await _context.SaveChangesAsync() >= 0;
+                if (await _context.SaveChangesAsync() >= 0) {
+                    result.Content = true;
+                    return result;
+                }
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
             }
             else {
                 if (user.IsActive == false) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản user {user.Name} hiện đang bị khóa.");
+                    return result;
                 }
                 if (String.IsNullOrEmpty(request.Note) || String.IsNullOrWhiteSpace(request.Note)) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Bạn chưa nhập lí do khóa tài khoản.");
+                    return result;
                 }
                 if (request.NumDateDisable <= 0) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Số ngày khóa tài khoản nhập không phù hợp. Vui lòng kiểm tra và nhập lại.");
+                    return result;
                 }
-                if (request.DateDisable.Year == 0 || request.DateActive.Year == 0) {
-                    return false;
+                if (request.DateDisable.Year == 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Thời gian khóa tài khoản nhập không phù hợp. Vui lòng kiểm tra và nhập lại.");
+                    return result;
+                }
+
+                if (request.DateActive.Year == 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Thời gian tài khoản được mở lại nhập không phù hợp. Vui lòng kiểm tra và nhập lại.");
+                    return result;
                 }
 
                 await _context.DisableUsers.AddAsync(
@@ -679,57 +742,81 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                             ""
                         )
                     );
-                    return await _context.SaveChangesAsync() >= 0;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
             }
 
-            return false;
+            result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Có lỗi xảy ra. Vui lòng thử lại.");
+            return result;
 
         }
 
-        public async Task<DisableUserResponse> GetDisableInfoAsync(ClaimsPrincipal principal)
+        public async Task<Result<DisableUserResponse>> GetDisableInfoAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<DisableUserResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
             if (disable is not null) {
-                return _mapper.Map<DisableUserResponse>(disable);
+                var response = _mapper.Map<DisableUserResponse>(disable);
+                result.Content = response;
+                return result;
             }
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy thông tin khóa tài khoản.");
+            return result;
         }
 
-        public async Task<bool> ActiveUserAsync(ClaimsPrincipal principal)
+        public async Task<Result<bool>> ActiveUserAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var disable = await _context.DisableUsers.FirstOrDefaultAsync(x => x.UserId == user.Id && x.IsActive == true);
             if (disable is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy thông tin khóa tài khoản.");
+                return result;
             }
             if (DateTime.UtcNow.AddHours(7) > disable.DateActive) {
                 disable.IsActive = false;
                 user.IsActive = true;
-                return await _context.SaveChangesAsync() >= 0;
+                if (await _context.SaveChangesAsync() >= 0) {
+                    result.Content = true;
+                    return result;
+                }
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
             }
-            return false;
+            result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản của bạn sẽ được mở lại lúc {disable.DateActive}.");
+            return result;
         }
     }
 }

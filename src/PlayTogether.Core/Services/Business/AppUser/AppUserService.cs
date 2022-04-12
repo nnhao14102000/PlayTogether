@@ -24,7 +24,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             _logger = logger;
         }
 
-        public async Task<bool> ActiveUserAsync(ClaimsPrincipal principal)
+        public async Task<Result<bool>> ActiveUserAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<bool> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
+        public async Task<Result<bool>> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
         {
             try {
                 if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
@@ -55,7 +55,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<bool> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
+        public async Task<Result<bool>> ChangeIsPlayerAsync(ClaimsPrincipal principal, UserIsPlayerChangeRequest request)
         {
             try {
                 if (principal is null) {
@@ -97,7 +97,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<DisableUserResponse> GetDisableInfoAsync(ClaimsPrincipal principal)
+        public async Task<Result<DisableUserResponse>> GetDisableInfoAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {
@@ -153,7 +153,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<bool> UpdatePersonalInfoAsync(
+        public async Task<Result<bool>> UpdatePersonalInfoAsync(
             ClaimsPrincipal principal,
             UserPersonalInfoUpdateRequest request)
         {
@@ -172,7 +172,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
-        public async Task<bool> UpdateUserServiceInfoAsync(
+        public async Task<Result<bool>> UpdateUserServiceInfoAsync(
             ClaimsPrincipal principal,
             UserInfoForIsPlayerUpdateRequest request)
         {

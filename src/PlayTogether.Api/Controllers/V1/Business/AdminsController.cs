@@ -48,7 +48,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         //     IPlayerService playerService
         )
         {
-                _adminService = adminService;
+            _adminService = adminService;
             //     _hirerService = hirerService;
             _orderService = orderService;
             _reportService = reportService;
@@ -241,7 +241,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("users")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<UserGetByAdminResponse>>> GetAllUser([FromQuery] AdminUserParameters param)
+        public async Task<ActionResult> GetAllUser([FromQuery] AdminUserParameters param)
         {
             var response = await _appUserService.GetAllUsersForAdminAsync(param);
 
@@ -255,7 +255,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         // /// <summary>
@@ -332,7 +332,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _appUserService.ChangeIsActiveUserForAdminAsync(userId, request);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -364,7 +372,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("dash-board")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<(int, int, int, int)>> AdminStatistic(){
+        public async Task<ActionResult<(int, int, int, int)>> AdminStatistic()
+        {
             var response = await _adminService.AdminStatisticAsync();
             return response.Item1 >= 0
                    && response.Item2 >= 0
@@ -381,7 +390,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("train-model")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> TrainModel(){
+        public async Task<ActionResult> TrainModel()
+        {
             var response = await _recommendService.TrainModel();
             return response ? Ok() : NoContent();
         }

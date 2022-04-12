@@ -10,7 +10,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.AppUser
         public int MaxHourHire { get; set; }
 
         [Required]
-        [Range(10000, 1000000000000)]
+        [Range(10000, int.MaxValue)]
         public float PricePerHour { get; set; }
 
         public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);

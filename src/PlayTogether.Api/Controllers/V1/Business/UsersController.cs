@@ -78,7 +78,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _appUserService.UpdatePersonalInfoAsync(HttpContext.User, request);
-            return response ? NoContent() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -97,7 +105,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _appUserService.UpdateUserServiceInfoAsync(HttpContext.User, request);
-            return response ? NoContent() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -116,7 +132,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _appUserService.ChangeIsPlayerAsync(HttpContext.User, request);
-            return response ? NoContent() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /*
@@ -138,7 +162,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetPersonalInfo()
         {
             var response = await _appUserService.GetPersonalInfoByIdentityIdAsync(HttpContext.User);
-            return response is not null ? Ok(response) : Unauthorized();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -194,10 +226,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetUserServiceInfoById(string userId)
         {
             var response = await _appUserService.GetUserServiceInfoByIdAsync(userId);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
                     return NotFound(response);
-                }else{
+                }
+                else {
                     return BadRequest(response);
                 }
             }
@@ -217,10 +250,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetUserBasicInfoById(string userId)
         {
             var response = await _appUserService.GetUserBasicInfoByIdAsync(userId);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
                     return NotFound(response);
-                }else{
+                }
+                else {
                     return BadRequest(response);
                 }
             }
@@ -274,6 +308,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             var response = await _appUserService.GetAllUsersAsync(HttpContext.User, param);
 
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -284,7 +327,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /*
@@ -530,7 +573,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<DisableUserResponse>> GetDisableInfo()
         {
             var response = await _appUserService.GetDisableInfoAsync(HttpContext.User);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -545,7 +596,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> ActiveUser()
         {
             var response = await _appUserService.ActiveUserAsync(HttpContext.User);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /*
