@@ -303,8 +303,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
 
                 var existGame = await _context.GameOfUsers.Where(x => x.UserId == user.Id).AnyAsync(x => x.GameId == request.GameId);
                 if (existGame) {
-                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" game này trong danh sách kĩ năng của bạn.");
-                    return result;
+                    continue;
                 }
 
                 var model = _mapper.Map<Entities.GameOfUser>(request);
