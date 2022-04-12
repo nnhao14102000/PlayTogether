@@ -32,8 +32,15 @@ Example: <br> `Server=YOUR_SQL_SERVER_NAME;Database=NAME_OF_DB;User=sa;Password=
     - Type: `dotnet run` (run project)  
 
 ## Reference
-- [.NET Core REST API Design | Youtube](https://www.youtube.com/watch?v=TEeb0Hba8jI&list=PLKwiLOxvy13_IEpQ7iZPFiC3ejzfvD28f)  
-- [Clean Architecture Solution Template for .NET 6 | GitHub](https://github.com/jasontaylordev/CleanArchitecture)  
-- [Common web application architectures | Microsoft Document](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)  
-- [CI/CD with GitHub Actions and .NET 5 | Youtube](https://youtu.be/R5ppadIsGbA)
-- [.NET Core 3.1 MVC REST API | Youtube](https://youtu.be/fmvcAzHpsk8)
+- Architecture
+    - [.NET Core REST API Design | Youtube](https://www.youtube.com/watch?v=TEeb0Hba8jI&list=PLKwiLOxvy13_IEpQ7iZPFiC3ejzfvD28f)  
+    - [Clean Architecture Solution Template for .NET 6 | GitHub](https://github.com/jasontaylordev/CleanArchitecture)  
+    - [Common web application architectures | Microsoft Document](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)  
+
+- Code
+    - [CI/CD with GitHub Actions and .NET 5 | Youtube](https://youtu.be/R5ppadIsGbA)
+    - [.NET Core 3.1 MVC REST API | Youtube](https://youtu.be/fmvcAzHpsk8)
+
+- Machine Learning with ML.NET
+    - [Tutorial: Build a movie recommender using matrix factorization with ML.NET | Microsoft Document](https://docs.microsoft.com/vi-vn/dotnet/machine-learning/tutorials/movie-recommendation)
+    - [Matrix Factorization Collaborative Filtering | Machine Learning cơ bản | VietNamese Language](https://machinelearningcoban.com/2017/05/31/matrixfactorization/)
