@@ -29,4 +29,11 @@ Example: <br> `Server=YOUR_SQL_SERVER_NAME;Database=NAME_OF_DB;User=sa;Password=
     - Open Terminal: ` Ctrl+ ` \` for (VSCode) or  ` View -> Terminal ` (Visual Studio)
     - Type: `cd src` (go to src directory)
     - Type: `cd PlayTogether.Api` (go to Api project)
-    - Type: `dotnet run` (run project)
+    - Type: `dotnet run` (run project)  
+
+## Reference
+- [.NET Core REST API Design | Youtube](https://www.youtube.com/watch?v=TEeb0Hba8jI&list=PLKwiLOxvy13_IEpQ7iZPFiC3ejzfvD28f)  
+- [Clean Architecture Solution Template for .NET 6 | GitHub](https://github.com/jasontaylordev/CleanArchitecture)  
+- [Common web application architectures | Microsoft Document](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)  
+- [CI/CD with GitHub Actions and .NET 5 | Youtube](https://youtu.be/R5ppadIsGbA)
+- [.NET Core 3.1 MVC REST API | Youtube](https://youtu.be/fmvcAzHpsk8)
