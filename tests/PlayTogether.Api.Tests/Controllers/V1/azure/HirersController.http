@@ -30,7 +30,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?name=a
+?name=na
 &isPlayer=
 &pageNumber=1
 &pageSize=50
@@ -41,7 +41,7 @@ Authorization: {{authToken}}
 
 # Get search history
 GET {{baseUrl}}/api/play-together/v1/search-histories
-?content=
+?content=na
 &isNew=true
 &PageNumber=1
 &PageSize=20
@@ -62,7 +62,7 @@ Authorization: {{authToken}}
 
 
 # Get user basic information
-GET {{baseUrl}}/api/play-together/v1/users/14085799
+GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

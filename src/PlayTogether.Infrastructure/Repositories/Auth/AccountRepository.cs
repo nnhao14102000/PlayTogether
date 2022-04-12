@@ -382,6 +382,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                 userEntityModel.Name = request.Name;
+                userEntityModel.Email = request.Email;
                 userEntityModel.City = request.City;
                 userEntityModel.DateOfBirth = request.DateOfBirth;
                 userEntityModel.Gender = request.Gender;
@@ -447,6 +448,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                     userEntityModel.Name = registerDto.Name;
+                    userEntityModel.Email = registerDto.Email;
                     userEntityModel.City = registerDto.City;
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;
@@ -498,6 +500,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
 
                     userEntityModel.Name = registerDto.Name;
+                    userEntityModel.Email = registerDto.Email;
                     userEntityModel.City = registerDto.City;
                     userEntityModel.DateOfBirth = registerDto.DateOfBirth;
                     userEntityModel.Gender = registerDto.Gender;

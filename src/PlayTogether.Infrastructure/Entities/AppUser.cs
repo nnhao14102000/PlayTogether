@@ -8,9 +8,11 @@ namespace PlayTogether.Infrastructure.Entities
     public class AppUser : BaseEntity
     {
         [MaxLength(100)]
+        [Required]
         public string IdentityId { get; set; }
 
         [MaxLength(50)]
+        [Required]
         public string Name { get; set; }
 
         [Column(TypeName = "date")]
@@ -22,6 +24,7 @@ namespace PlayTogether.Infrastructure.Entities
         public bool Gender { get; set; }
 
         [MaxLength(50)]
+        [Required]
         public string Email { get; set; }
 
         public string Avatar { get; set; }
@@ -33,6 +36,7 @@ namespace PlayTogether.Infrastructure.Entities
         public bool IsPlayer { get; set; } = false;
 
         [MaxLength(50)]
+        [Required]
         public string Status { get; set; } = "Online";
 
         public string Description { get; set; }
