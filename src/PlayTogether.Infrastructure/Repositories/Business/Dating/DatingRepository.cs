@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Dating;
 using PlayTogether.Core.Dtos.Incoming.Generic;
+using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Infrastructure.Data;
 using System.Linq;
@@ -185,6 +187,19 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
             }
             _context.Datings.Remove(dating);
             return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<Result<DatingUserResponse>> GetDatingByIdAsync(string datingId)
+        {
+            var result = new Result<DatingUserResponse>();
+            var dating = await _context.Datings.FindAsync(datingId);
+            if(dating is null){
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + " khung thời gian này.");
+                return result;
+            }
+            var response = _mapper.Map<DatingUserResponse>(dating);
+            result.Content = response;
+            return result;
         }
     }
 }

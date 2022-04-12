@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.Dating;
+using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
 using System;
@@ -48,6 +50,20 @@ namespace PlayTogether.Core.Services.Business.Dating
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call DeleteDatingAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<Result<DatingUserResponse>> GetDatingByIdAsync(string datingId)
+        {
+            try {
+                if (String.IsNullOrEmpty(datingId) || String.IsNullOrWhiteSpace(datingId)) {
+                    throw new ArgumentNullException(nameof(datingId));
+                }
+                return await _datingRepository.GetDatingByIdAsync(datingId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetDatingByIdAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

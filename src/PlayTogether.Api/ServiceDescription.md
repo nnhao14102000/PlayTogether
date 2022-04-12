@@ -603,6 +603,10 @@
 >   ***Description***: Delete dating  
 >   ***Role Access***: User    
 >
+> - ``GET /api/play-together/v1/dating/{datingId} ``  
+>   ***Description***: Get dating by Id  
+>   ***Role Access***: User    
+>
 
 <h2 id="recommend">Recommend  <a href="#table-of-contents" target="_self">🔙</a></h2>  
 

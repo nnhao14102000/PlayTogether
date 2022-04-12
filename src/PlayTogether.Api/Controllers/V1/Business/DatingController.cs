@@ -49,7 +49,30 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteDating(string datingId)
         {
             var response = await _datingService.DeleteDatingAsync(HttpContext.User, datingId);
-            return response ? Ok() : BadRequest();
+            return response ? NoContent() : BadRequest();
+        }
+
+        /// <summary>
+        /// Get Dating by Id
+        /// </summary>
+        /// <param name="datingId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet("{datingId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetDatingById(string datingId)
+        {
+            var response = await _datingService.GetDatingByIdAsync(datingId);
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
     }
 }
