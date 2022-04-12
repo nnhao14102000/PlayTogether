@@ -10,10 +10,10 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     {
         Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(ClaimsPrincipal principal, NotificationParameters param);
 
-        Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id);
+        Task<Result<NotificationGetDetailResponse>> GetNotificationByIdAsync(string id);
 
-        Task<bool> DeleteNotificationAsync(string id);
+        Task<Result<bool>> DeleteNotificationAsync(string id);
 
-        Task<bool> CreateNotificationAsync(NotificationCreateRequest request);
+        Task<Result<bool>> CreateNotificationAsync(NotificationCreateRequest request);
     }
 }

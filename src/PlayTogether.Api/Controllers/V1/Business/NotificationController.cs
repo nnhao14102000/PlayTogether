@@ -30,13 +30,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, Charity, User
         /// </remarks>
         [HttpGet]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
+        [Authorize(Roles = AuthConstant.RoleAdmin + ","
+                        + AuthConstant.RoleCharity + ","
                         + AuthConstant.RoleUser)]
         public async Task<ActionResult<PagedResult<NotificationGetAllResponse>>> GetAllNotifications(
             [FromQuery] NotificationParameters param)
         {
             var response = await _notificationService.GetAllNotificationsAsync(HttpContext.User, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -47,7 +55,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -59,12 +67,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, Charity, User
         /// </remarks>
         [HttpGet("{id}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
+        [Authorize(Roles = AuthConstant.RoleAdmin + ","
+                        + AuthConstant.RoleCharity + ","
                         + AuthConstant.RoleUser)]
-        public async Task<ActionResult<NotificationGetDetailResponse>> GetNotificationById(string id){
+        public async Task<ActionResult<NotificationGetDetailResponse>> GetNotificationById(string id)
+        {
             var response = await _notificationService.GetNotificationByIdAsync(id);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -76,12 +93,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, Charity, User
         /// </remarks>
         [HttpDelete("{id}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
-                        + AuthConstant.RoleCharity + "," 
+        [Authorize(Roles = AuthConstant.RoleAdmin + ","
+                        + AuthConstant.RoleCharity + ","
                         + AuthConstant.RoleUser)]
-        public async Task<ActionResult> DeleteNotification(string id){
+        public async Task<ActionResult> DeleteNotification(string id)
+        {
             var response = await _notificationService.DeleteNotificationAsync(id);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -93,14 +119,23 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, User
         /// </remarks>
         [HttpPost]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," 
+        [Authorize(Roles = AuthConstant.RoleAdmin + ","
                         + AuthConstant.RoleUser)]
-        public async Task<ActionResult> CreateNotification(NotificationCreateRequest request){
-            if(!ModelState.IsValid){
+        public async Task<ActionResult> CreateNotification(NotificationCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _notificationService.CreateNotificationAsync(request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
     }
 }

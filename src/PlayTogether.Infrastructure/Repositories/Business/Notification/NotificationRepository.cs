@@ -27,28 +27,42 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             _userManager = userManager;
         }
 
-        public async Task<bool> DeleteNotificationAsync(string id)
+        public async Task<Result<bool>> DeleteNotificationAsync(string id)
         {
+            var result = new Result<bool>();
             var noti = await _context.Notifications.FindAsync(id);
-            if (noti is null || noti.Status is NotificationStatusConstants.NotRead) {
-                return false;
+            if (noti is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thông báo.");
+                return result;
+            }
+
+            if (noti.Status is NotificationStatusConstants.NotRead) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReadNoti);
+                return result;
             }
             _context.Notifications.Remove(noti);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<NotificationGetAllResponse>> GetAllNotificationsAsync(
             ClaimsPrincipal principal,
             NotificationParameters param)
         {
-            var notifications = await _context.Notifications.ToListAsync();
-            var query = notifications.AsQueryable();
-
+            var result = new PagedResult<NotificationGetAllResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
+
+            var notifications = await _context.Notifications.ToListAsync();
+            var query = notifications.AsQueryable();
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
@@ -62,8 +76,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 var response = _mapper.Map<List<NotificationGetAllResponse>>(notifications);
                 return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
-
-
 
             if (user is not null) {
                 FilterByReceiverId(ref query, user.Id);
@@ -85,7 +97,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 return PagedResult<NotificationGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
             }
 
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Có lỗi xảy ra. Bạn vui lòng đăng nhập và thử lại.");
+            return result;
         }
 
         private void FilterByIsReadNotification(ref IQueryable<Entities.Notification> query, bool? isRead)
@@ -123,31 +136,43 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             }
         }
 
-        public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
+        public async Task<Result<NotificationGetDetailResponse>> GetNotificationByIdAsync(string id)
         {
+            var result = new Result<NotificationGetDetailResponse>();
             var noti = await _context.Notifications.FindAsync(id);
             if (noti is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thông báo.");
+                return result;
             }
 
             noti.Status = NotificationStatusConstants.Read;
             if (await _context.SaveChangesAsync() < 0) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
             }
 
-            return _mapper.Map<NotificationGetDetailResponse>(noti);
+            var response = _mapper.Map<NotificationGetDetailResponse>(noti);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> CreateNotificationAsync(NotificationCreateRequest request)
+        public async Task<Result<bool>> CreateNotificationAsync(NotificationCreateRequest request)
         {
+            var result = new Result<bool>();
             var user = await _context.AppUsers.FindAsync(request.ReceiverId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thông báo.");
+                return result;
             }
             var model = _mapper.Map<Entities.Notification>(request);
             await _context.Notifications.AddAsync(model);
 
-            return await _context.SaveChangesAsync() >= 0;
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             _logger = logger;
         }
 
-        public async Task<bool> CreateNotificationAsync(NotificationCreateRequest request)
+        public async Task<Result<bool>> CreateNotificationAsync(NotificationCreateRequest request)
         {
             try {
                 if (request is null) {
@@ -36,7 +36,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             }
         }
 
-        public async Task<bool> DeleteNotificationAsync(string id)
+        public async Task<Result<bool>> DeleteNotificationAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {
@@ -66,7 +66,7 @@ namespace PlayTogether.Core.Services.Business.Notification
             }
         }
 
-        public async Task<NotificationGetDetailResponse> GetNotificationByIdAsync(string id)
+        public async Task<Result<NotificationGetDetailResponse>> GetNotificationByIdAsync(string id)
         {
             try {
                 if (String.IsNullOrEmpty(id)) {

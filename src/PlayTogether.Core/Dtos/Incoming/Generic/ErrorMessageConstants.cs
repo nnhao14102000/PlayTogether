@@ -14,5 +14,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
         public const string SaveChangesFailed = "Không lưu nhưng thay đổi được. Vui lòng thử lại.";
         public const string NotReady = "Tài khoản không sẵn sàng cho thao tác này.";
         public const string PriceLow = "Giá tiền thuê của bạn thấp";
+        public const string NotReadNoti = "Chưa đọc thông báo.";
     }
 }
