@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PlayTogether.Infrastructure.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using PlayTogether.Core.Parameters;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Dating
 {
@@ -187,6 +189,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
             }
             _context.Datings.Remove(dating);
             return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<PagedResult<DatingUserResponse>> GetAllDatingsOfUserAsync(string userId, DatingParameters param)
+        {
+            var result = new PagedResult<DatingUserResponse>();
+            var user = await _context.AppUsers.FindAsync(userId);
+            if(user is null){
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.DisableUser);
+                return result;
+            }
+            var datings = await _context.Datings.Where(x => x.UserId == user.Id).ToListAsync();
+            var response = _mapper.Map<List<DatingUserResponse>>(datings);
+            return PagedResult<DatingUserResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
         public async Task<Result<DatingUserResponse>> GetDatingByIdAsync(string datingId)

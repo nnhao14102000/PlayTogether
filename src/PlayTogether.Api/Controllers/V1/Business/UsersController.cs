@@ -32,6 +32,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IUnActiveBalanceService _unActiveBalanceService;
         private readonly IDonateService _donateService;
         private readonly IRecommendService _recommendService;
+        private readonly IDatingService _datingService;
 
         public UsersController(
             IAppUserService appUserService,
@@ -41,7 +42,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             ITransactionHistoryService transactionHistoryService,
             IUnActiveBalanceService unActiveBalanceService,
             IDonateService donateService,
-            IRecommendService recommendService)
+            IRecommendService recommendService,
+            IDatingService datingService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
@@ -51,6 +53,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _unActiveBalanceService = unActiveBalanceService;
             _donateService = donateService;
             _recommendService = recommendService;
+            _datingService = datingService;
         }
 
         /*
@@ -327,6 +330,30 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all dating of a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("{userId}/datings")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetAllDatings(string userId,[FromQuery] DatingParameters param)
+        {
+            var response = await _datingService.GetAllDatingsOfUserAsync(userId, param);
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
             return Ok(response);
         }
 

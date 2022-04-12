@@ -74,5 +74,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             return Ok(response);
         }
+
+        
     }
 }
