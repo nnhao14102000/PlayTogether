@@ -4,7 +4,7 @@
 
 This project is API build base on these technical:
 
-- .NET 6 Web API
+- .NET 5 Web API
 - C#
 - Clean Architecture
 - SQL
