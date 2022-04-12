@@ -309,13 +309,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
 
                 var model = _mapper.Map<Entities.GameOfUser>(request);
                 model.UserId = user.Id;
-                
+
                 var ranksOfGame = await _context.Ranks.Where(x => x.GameId == game.Id).ToListAsync();
                 if (ranksOfGame.Count() > 0) {
                     var no0Rank = ranksOfGame.FirstOrDefault(x => x.NO == 0);
                     if (no0Rank is null) {
-                        result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" None Rank của game {game.Name}. Bạn có thể suggest Admin sửa lỗi này. Xin lỗi vì sự bất tiện.");
-                        return result;
+                        model.RankId = "";
                     }
                     model.RankId = no0Rank.Id;
                 }
