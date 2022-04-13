@@ -263,7 +263,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterIsPlayerUser(ref query, param.IsPlayer);
             FilterUserStatus(ref query, param.Status);
             FilterUserByName(ref query, user.Id, param.Name);
-            FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
+            FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id, param.IsPlayer);
             FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user, param.IsPlayer);
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
@@ -503,7 +503,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = result.AsQueryable();
         }
 
-        private void FilterUserRecentHired(ref IQueryable<Entities.AppUser> query, bool? isRecent, string userId)
+        private void FilterUserRecentHired(ref IQueryable<Entities.AppUser> query, bool? isRecent, string userId, bool? isPlayer)
         {
             if ((!query.Any())
                 || isRecent is null
@@ -526,6 +526,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 players.Add(player);
             }
             query = players.AsQueryable().Distinct();
+            if(isPlayer is null){
+                return ;
+            }
+            query = query.Where(x => x.IsPlayer == isPlayer);
         }
 
         private void FilterUserByName(
