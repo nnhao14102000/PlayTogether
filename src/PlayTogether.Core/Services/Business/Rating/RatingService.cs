@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Business.Rating
             _ratingRepository = ratingRepository;
         }
 
-        public async Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
+        public async Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(orderId)) {
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
-        public async Task<bool> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
+        public async Task<Result<bool>> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(ratingId)) {
@@ -80,7 +80,7 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
-        public async Task<bool> ViolateRatingAsync(string ratingId)
+        public async Task<Result<bool>> ViolateRatingAsync(string ratingId)
         { 
             try {
                 if (String.IsNullOrEmpty(ratingId)) {
@@ -90,6 +90,20 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call ViolateRatingAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<Result<RatingGetResponse>> GetRatingByIdAsync(string ratingId)
+        {
+            try {
+                if (String.IsNullOrEmpty(ratingId)) {
+                    throw new ArgumentNullException(nameof(ratingId));
+                }
+                return await _ratingRepository.GetRatingByIdAsync(ratingId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetRatingByIdAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }

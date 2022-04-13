@@ -303,6 +303,10 @@
 >   ***Role Access***: User, Admin  
 >   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
 >
+> - ``GET /api/play-together/v1/rating/{ratingId} ``  
+>   ***Description***: Get a Ratings   
+>   ***Role Access***: User, Admin  
+>
 > - ``GET /api/play-together/v1/rating/violates ``  
 >   ***Description***: Get all Violate Ratings of a User   
 >   ***Use for***: Admin get all violate ratings   

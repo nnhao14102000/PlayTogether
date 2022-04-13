@@ -1,7 +1,11 @@
-﻿namespace PlayTogether.Infrastructure.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PlayTogether.Infrastructure.Entities
 {
     public class BehaviorHistory : BaseEntity
     {
+        [Required]
+        [MaxLength(100)]
         public string BehaviorPointId { get; set; }
         public BehaviorPoint BehaviorPoint { get; set; }
         public string Operation { get; set; }

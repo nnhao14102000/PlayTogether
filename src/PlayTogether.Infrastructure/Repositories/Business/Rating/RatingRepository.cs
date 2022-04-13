@@ -21,51 +21,177 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
         {
         }
 
-        public async Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
+        public async Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
         {
+            var result = new Result<bool>();
             var order = await _context.Orders.FindAsync(orderId);
 
-            if (order is null
-                || order.Status is OrderStatusConstants.Start
-                || order.Status is OrderStatusConstants.Cancel
-                || order.Status is OrderStatusConstants.Processing
-                || order.Status is OrderStatusConstants.Interrupt
-                // || DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
-                || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
+            if (order is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Start) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order chưa kết thúc.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Cancel) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đã bị hủy.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đang được xử lí.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Interrupt) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đã bị buộc dừng lại.");
+                return result;
+            }
+
+            if (DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
+                // || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
                 ) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Đã hết thời gian cho phép đánh giá.");
+                return result;
             }
 
             await _context.Entry(order).Collection(x => x.Ratings).LoadAsync();
             await _context.Entry(order).Collection(x => x.Reports).LoadAsync();
             if (order.Ratings.Count >= 1) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã đánh giá rồi.");
+                return result;
             }
 
             if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã tố cáo người chơi nên bạn không thể đánh giá.");
+                return result;
             }
 
 
             await _context.Entry(order).Reference(x => x.User).LoadAsync();
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
-
+            await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
             var model = _mapper.Map<Entities.Rating>(request);
             model.OrderId = orderId;
             model.UserId = order.UserId;
             model.ToUserId = order.ToUserId;
             await _context.Ratings.AddAsync(model);
-            // order.Status = OrderStatusConstants.Complete;
 
             await _context.Notifications.AddAsync(
                 Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"{order.User.Name} đã vote cho bạn {request.Rate} ⭐.", $"{order.User.Name}: {request.Comment}", "")
             );
             toUser.NumOfRate += 1;
 
-
             await _context.Entry(order).Collection(x => x.GameOfOrders).LoadAsync();
             await _context.Entry(toUser).Collection(x => x.GamesOfUsers).LoadAsync();
+
+            if ((await _context.SaveChangesAsync() < 0)) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
+            }
+
+            if (request.Rate == 5) {
+                toUser.BehaviorPoint.Point += 3;
+                if (toUser.BehaviorPoint.Point >= 100) {
+                    toUser.BehaviorPoint.Point = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 3, BehaviorTypeConstants.Point, model.Id
+                ));
+            }
+            if (request.Rate == 4) {
+                toUser.BehaviorPoint.Point += 2;
+                if (toUser.BehaviorPoint.Point >= 100) {
+                    toUser.BehaviorPoint.Point = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 2, BehaviorTypeConstants.Point, model.Id
+                ));
+            }
+            if (request.Rate == 3) {
+                toUser.BehaviorPoint.Point += 1;
+                if (toUser.BehaviorPoint.Point >= 100) {
+                    toUser.BehaviorPoint.Point = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 1, BehaviorTypeConstants.Point, model.Id
+                ));
+            }
+            if (request.Rate == 2) {
+                toUser.BehaviorPoint.Point -= 1;
+                if (toUser.BehaviorPoint.Point <= 0) {
+                    toUser.BehaviorPoint.Point = 0;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingLow, 1, BehaviorTypeConstants.Point, model.Id
+                ));
+            }
+            if (request.Rate == 1) {
+                toUser.BehaviorPoint.Point -= 2;
+                if (toUser.BehaviorPoint.Point <= 0) {
+                    toUser.BehaviorPoint.Point = 0;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingLow, 2, BehaviorTypeConstants.Point, model.Id
+                ));
+            }
+
+
+            if (request.Rate == 5) {
+                toUser.BehaviorPoint.SatisfiedPoint += 6;
+
+                if (toUser.BehaviorPoint.SatisfiedPoint >= 100) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 6, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
+            }
+            if (request.Rate == 4) {
+                toUser.BehaviorPoint.SatisfiedPoint += 4;
+
+                if (toUser.BehaviorPoint.SatisfiedPoint >= 100) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 4, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
+            }
+            if (request.Rate == 3) {
+                toUser.BehaviorPoint.SatisfiedPoint += 2;
+
+                if (toUser.BehaviorPoint.SatisfiedPoint >= 100) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 100;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingHigh, 3, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
+            }
+            if (request.Rate == 2) {
+                toUser.BehaviorPoint.SatisfiedPoint -= 2;
+
+                if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 0;
+                }
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingLow, 2, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
+            }
+            if (request.Rate == 1) {
+                toUser.BehaviorPoint.SatisfiedPoint -= 4;
+
+                if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 0;
+                }
+
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingLow, 4, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
+            }
 
 
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -73,7 +199,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
                 toUser.Rate = (float)rateOfPlayer;
                 if ((await _context.SaveChangesAsync() < 0)) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
 
                 foreach (var skill in toUser.GamesOfUsers) {
@@ -86,9 +213,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     }
                 }
 
-                return true;
+                result.Content = true;
+                return result;
             }
-            return false;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public int GetAge(DateTime dob)
@@ -100,9 +229,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
         public async Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string userId, RatingParameters param)
         {
-            var player = await _context.AppUsers.FindAsync(userId);
-            if (player is null || player.IsActive is false) {
-                return null;
+            var result = new PagedResult<RatingGetResponse>();
+            var user = await _context.AppUsers.FindAsync(userId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.DisableUser);
+                return result;
             }
 
             var ratings = await _context.Ratings.Where(x => x.ToUserId == userId).ToListAsync();
@@ -171,14 +307,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             query = query.Where(x => x.Rate == vote);
         }
 
-        public async Task<bool> ViolateRatingAsync(string ratingId)
+        public async Task<Result<bool>> ViolateRatingAsync(string ratingId)
         {
+            var result = new Result<bool>();
             var rating = await _context.Ratings.FindAsync(ratingId);
             if (rating is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
+                return result;
             }
             if (rating.IsActive is false) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
             }
 
             if (rating.IsViolate is true) {
@@ -187,14 +326,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             else if (rating.IsViolate is false) {
                 rating.IsViolate = true;
             }
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
+        public async Task<Result<bool>> ProcessViolateRatingAsync(string ratingId, ProcessViolateRatingRequest request)
         {
+            var result = new Result<bool>();
             var rating = await _context.Ratings.FindAsync(ratingId);
             if (rating is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
+                return result;
             }
 
             if (request.IsApprove is false) {
@@ -205,14 +351,131 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 rating.IsActive = false;
                 toUser.NumOfRate -= 1;
 
+                if (rating.Rate == 5) {
+                    toUser.BehaviorPoint.Point -= 3;
+                    if (toUser.BehaviorPoint.Point <= 0) {
+                        toUser.BehaviorPoint.Point = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 3, BehaviorTypeConstants.Point, rating.Id
+                    ));
+                }
+                if (rating.Rate == 4) {
+                    toUser.BehaviorPoint.Point -= 2;
+                    if (toUser.BehaviorPoint.Point <= 0) {
+                        toUser.BehaviorPoint.Point = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.Point, rating.Id
+                    ));
+                }
+                if (rating.Rate == 3) {
+                    toUser.BehaviorPoint.Point -= 1;
+                    if (toUser.BehaviorPoint.Point <= 0) {
+                        toUser.BehaviorPoint.Point = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 1, BehaviorTypeConstants.Point, rating.Id
+                    ));
+                }
+                if (rating.Rate == 2) {
+                    toUser.BehaviorPoint.Point += 1;
+                    if (toUser.BehaviorPoint.Point >= 100) {
+                        toUser.BehaviorPoint.Point = 100;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingViolate, 1, BehaviorTypeConstants.Point, rating.Id
+                    ));
+                }
+                if (rating.Rate == 1) {
+                    toUser.BehaviorPoint.Point += 2;
+                    if (toUser.BehaviorPoint.Point >= 100) {
+                        toUser.BehaviorPoint.Point = 100;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.Point, rating.Id
+                    ));
+                }
+
+
+                if (rating.Rate == 5) {
+                    toUser.BehaviorPoint.SatisfiedPoint -= 6;
+
+                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                        toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 6, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    ));
+                }
+                if (rating.Rate == 4) {
+                    toUser.BehaviorPoint.SatisfiedPoint -= 4;
+
+                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                        toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 4, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    ));
+                }
+                if (rating.Rate == 3) {
+                    toUser.BehaviorPoint.SatisfiedPoint -= 2;
+
+                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                        toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    ));
+                }
+                if (rating.Rate == 2) {
+                    toUser.BehaviorPoint.SatisfiedPoint += 2;
+
+                    if (toUser.BehaviorPoint.SatisfiedPoint >= 100) {
+                        toUser.BehaviorPoint.SatisfiedPoint = 100;
+                    }
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    ));
+                }
+                if (rating.Rate == 1) {
+                    toUser.BehaviorPoint.SatisfiedPoint += 4;
+
+                    if (toUser.BehaviorPoint.SatisfiedPoint >= 100) {
+                        toUser.BehaviorPoint.SatisfiedPoint = 100;
+                    }
+
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingViolate, 4, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    ));
+                }
+
                 if ((await _context.SaveChangesAsync() >= 0)) {
                     var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == rating.ToUserId).Average(x => x.Rate);
                     toUser.Rate = (float)rateOfPlayer;
                 }
+
             }
 
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
 
-            return await _context.SaveChangesAsync() >= 0;
+        public async Task<Result<RatingGetResponse>> GetRatingByIdAsync(string ratingId)
+        {
+            var result = new Result<RatingGetResponse>();
+            var rating = await _context.Ratings.FindAsync(ratingId);
+            if (rating is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
+                return result;
+            }
+            var response = _mapper.Map<RatingGetResponse>(rating);
+            result.Content = response;
+            return result;
         }
     }
 }

@@ -8,10 +8,11 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IRatingService
     {
-        Task<bool> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request);
+        Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request);
         Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string userId, RatingParameters param);
+        Task<Result<RatingGetResponse>> GetRatingByIdAsync(string ratingId);
         Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param);
-        Task<bool> ViolateRatingAsync(string ratingId);
-        Task<bool> ProcessViolateRatingAsync (string ratingId, ProcessViolateRatingRequest request);
+        Task<Result<bool>> ViolateRatingAsync(string ratingId);
+        Task<Result<bool>> ProcessViolateRatingAsync (string ratingId, ProcessViolateRatingRequest request);
     }
 }

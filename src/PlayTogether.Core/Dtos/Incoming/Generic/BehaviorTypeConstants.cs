@@ -15,6 +15,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
         public const string OrderFinish = "Order - Complete";
         public const string RatingLow = "Rating - Low"; 
         public const string RatingHigh = "Rating - High"; 
+        public const string RatingViolate = "Rating - Violate";
         
     }
 }

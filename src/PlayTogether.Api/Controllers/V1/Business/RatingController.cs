@@ -38,7 +38,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _ratingService.CreateRatingFeedbackAsync(orderId, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -53,9 +61,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [HttpGet("{userId}")]
         [Authorize(Roles = AuthConstant.RoleUser + ","
                         + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllRatings(string userId, [FromQuery] RatingParameters param)
+        public async Task<ActionResult> GetAllRatings(string userId, [FromQuery] RatingParameters param)
         {
             var response = await _ratingService.GetAllRatingsAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -66,7 +82,32 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get rating by Id
+        /// </summary>
+        /// <param name="ratingId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet("{ratingId}")]
+        [Authorize(Roles = AuthConstant.RoleUser + ","
+                        + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> GetRatingById(string ratingId)
+        {
+            var response = await _ratingService.GetRatingByIdAsync(ratingId);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -82,7 +123,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> ReportViolateFeedback(string rateId)
         {
             var response = await _ratingService.ViolateRatingAsync(rateId);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -95,9 +144,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("violates")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<RatingGetResponse>>> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
+        public async Task<ActionResult> GetAllViolateRatings([FromQuery] RatingParametersAdmin param)
         {
             var response = await _ratingService.GetAllViolateRatingsForAdminAsync(param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -108,7 +165,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -122,10 +179,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPut("process/{rateId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> DisableFeedback(string rateId, ProcessViolateRatingRequest request)
+        public async Task<ActionResult> ProcessViolateRating(string rateId, ProcessViolateRatingRequest request)
         {
             var response = await _ratingService.ProcessViolateRatingAsync(rateId, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }
