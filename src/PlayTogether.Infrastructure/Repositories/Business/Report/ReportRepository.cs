@@ -47,8 +47,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
 
             var model = _mapper.Map(request, report);
             _context.Reports.Update(model);
-
-
             if (request.IsDisableAccount is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
                 return result;

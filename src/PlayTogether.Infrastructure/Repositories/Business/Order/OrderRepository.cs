@@ -702,7 +702,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
                             order.TotalPrices,
-                            TransactionTypeConstants.Order,
+                            TransactionTypeConstants.OrderRefund,
                             orderId)
                     );
                     order.Status = OrderStatusConstants.FinishSoonHirer;
@@ -731,13 +731,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     );
                     toUser.UserBalance.Balance += order.TotalPrices;
                     await _context.TransactionHistories.AddRangeAsync(
-                        Helpers.TransactionHelpers.PopulateTransactionHistory(
-                            order.User.UserBalance.Id,
-                            TransactionTypeConstants.Sub,
-                            order.TotalPrices,
-                            TransactionTypeConstants.OrderRefund,
-                            orderId)
-                        ,
+                        // Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        //     order.User.UserBalance.Id,
+                        //     TransactionTypeConstants.Sub,
+                        //     order.TotalPrices,
+                        //     TransactionTypeConstants.OrderRefund,
+                        //     orderId)
+                        // ,
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
@@ -844,7 +844,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
                             order.TotalPrices,
-                            TransactionTypeConstants.Order,
+                            TransactionTypeConstants.OrderRefund,
                             orderId)
                     );
                     order.Status = OrderStatusConstants.FinishSoonPlayer;
@@ -884,13 +884,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     );
                     toUser.UserBalance.Balance += order.TotalPrices;
                     await _context.TransactionHistories.AddRangeAsync(
-                        Helpers.TransactionHelpers.PopulateTransactionHistory(
-                            order.User.UserBalance.Id,
-                            TransactionTypeConstants.Sub,
-                            order.TotalPrices,
-                            TransactionTypeConstants.OrderRefund,
-                            orderId)
-                        ,
+                        // Helpers.TransactionHelpers.PopulateTransactionHistory(
+                        //     order.User.UserBalance.Id,
+                        //     TransactionTypeConstants.Sub,
+                        //     order.TotalPrices,
+                        //     TransactionTypeConstants.OrderRefund,
+                        //     orderId)
+                        // ,
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
