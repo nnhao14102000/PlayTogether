@@ -48,74 +48,74 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             var model = _mapper.Map(request, report);
             _context.Reports.Update(model);
 
-            if (request.IsApprove == true) {
-                if (request.IsDisableAccount is null) {
-                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
+
+            if (request.IsDisableAccount is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
+                return result;
+            }
+            if (request.IsDisableAccount == false) {
+                if (request.Point != 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
                     return result;
                 }
-                if (request.IsDisableAccount == false) {
-                    if (request.Point != 0) {
-                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
-                        return result;
-                    }
 
-                    if (request.SatisfiedPoint != 0) {
-                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
-                        return result;
-                    }
-                    await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
-                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Nếu bạn tiếp tục vi phạm thì có thể sẽ bị khóa tài khoản.", ""
-                    ));
-                    toUser.BehaviorPoint.Point -= request.Point;
-                    toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
-                    if (toUser.BehaviorPoint.Point <= 0) {
-                        toUser.BehaviorPoint.Point = 0;
-                    }
-                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
-                        toUser.BehaviorPoint.SatisfiedPoint = 0;
-                    }
-                    await _context.BehaviorHistories.AddRangeAsync(
-                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
-                        ),
-                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
-                        )
-                    );
+                if (request.SatisfiedPoint != 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
+                    return result;
                 }
-                else {
-                    if (request.Point != 0) {
-                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
-                        return result;
-                    }
-
-                    if (request.SatisfiedPoint != 0) {
-                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
-                        return result;
-                    }
-                    await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
-                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Sẽ có thông báo chi tiết tới bạn sau ít phút.", ""
-                    ));
-
-                    toUser.BehaviorPoint.Point -= request.Point;
-                    toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
-                    if (toUser.BehaviorPoint.Point <= 0) {
-                        toUser.BehaviorPoint.Point = 0;
-                    }
-                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
-                        toUser.BehaviorPoint.SatisfiedPoint = 0;
-                    }
-                    await _context.BehaviorHistories.AddRangeAsync(
-                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
-                        ),
-                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
-                        )
-                    );
+                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                    report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Nếu bạn tiếp tục vi phạm thì có thể sẽ bị khóa tài khoản.", ""
+                ));
+                toUser.BehaviorPoint.Point -= request.Point;
+                toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
+                if (toUser.BehaviorPoint.Point <= 0) {
+                    toUser.BehaviorPoint.Point = 0;
                 }
-
+                if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 0;
+                }
+                await _context.BehaviorHistories.AddRangeAsync(
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                    ),
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                    )
+                );
             }
+            else {
+                if (request.Point != 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
+                    return result;
+                }
+
+                if (request.SatisfiedPoint != 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
+                    return result;
+                }
+                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                    report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Sẽ có thông báo chi tiết tới bạn sau ít phút.", ""
+                ));
+
+                toUser.BehaviorPoint.Point -= request.Point;
+                toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
+                if (toUser.BehaviorPoint.Point <= 0) {
+                    toUser.BehaviorPoint.Point = 0;
+                }
+                if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    toUser.BehaviorPoint.SatisfiedPoint = 0;
+                }
+                await _context.BehaviorHistories.AddRangeAsync(
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                    ),
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                    )
+                );
+            }
+
+
 
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;
