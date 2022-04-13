@@ -344,13 +344,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{userId}/datings")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> GetAllDatings(string userId,[FromQuery] DatingParameters param)
+        public async Task<ActionResult> GetAllDatings(string userId, [FromQuery] DatingParameters param)
         {
             var response = await _datingService.GetAllDatingsOfUserAsync(userId, param);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
                     return NotFound(response);
-                }else{
+                }
+                else {
                     return BadRequest(response);
                 }
             }
@@ -382,10 +383,16 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _orderService.CreateOrderAsync(HttpContext.User, toUserId, request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
 
-            return response is null
-                ? BadRequest()
-                : CreatedAtRoute(nameof(OrdersController.GetOrderById), new { id = response.Id }, response);
+            return CreatedAtRoute(nameof(OrdersController.GetOrderById), new { id = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -428,7 +435,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> CancelOrderRequest(string orderId)
         {
             var response = await _orderService.CancelOrderAsync(orderId, HttpContext.User);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -473,7 +488,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> ProcessOrderRequest(string orderId, OrderProcessByPlayerRequest request)
         {
             var response = await _orderService.ProcessOrderAsync(orderId, HttpContext.User, request);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /*

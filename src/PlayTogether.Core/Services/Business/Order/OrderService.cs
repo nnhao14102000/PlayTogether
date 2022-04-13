@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Order
             _logger = logger;
         }
 
-        public async Task<bool> CancelOrderAsync(string orderId, ClaimsPrincipal principal)
+        public async Task<Result<bool>> CancelOrderAsync(string orderId, ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {
@@ -39,7 +39,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetResponse> CreateOrderAsync(
+        public async Task<Result<OrderGetResponse>> CreateOrderAsync(
             ClaimsPrincipal principal,
             string toUserId,
             OrderCreateRequest request)
@@ -62,7 +62,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<bool> FinishOrderAsync(string orderId)
+        public async Task<Result<bool>> FinishOrderAsync(string orderId)
         {
             try {
                 if (String.IsNullOrEmpty(orderId)) {
@@ -76,7 +76,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<bool> FinishOrderSoonAsync(string orderId, ClaimsPrincipal principal, FinishSoonRequest request)
+        public async Task<Result<bool>> FinishOrderSoonAsync(string orderId, ClaimsPrincipal principal, FinishSoonRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(orderId)) {
@@ -138,7 +138,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetResponse> GetOrderByIdAsync(ClaimsPrincipal principal, string id)
+        public async Task<Result<OrderGetResponse>> GetOrderByIdAsync(ClaimsPrincipal principal, string id)
         { 
             try {
                 if (principal is null) {
@@ -155,7 +155,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailAsync(string orderId)
+        public async Task<Result<OrderGetDetailResponse>> GetOrderByIdInDetailAsync(string orderId)
         {
             try {
                 if (String.IsNullOrEmpty(orderId) || String.IsNullOrEmpty(orderId)) {
@@ -169,7 +169,7 @@ namespace PlayTogether.Core.Services.Business.Order
             }
         }
 
-        public async Task<bool> ProcessOrderAsync(string id, ClaimsPrincipal principal, OrderProcessByPlayerRequest request)
+        public async Task<Result<bool>> ProcessOrderAsync(string id, ClaimsPrincipal principal, OrderProcessByPlayerRequest request)
         {
             try {
                 if (principal is null) {

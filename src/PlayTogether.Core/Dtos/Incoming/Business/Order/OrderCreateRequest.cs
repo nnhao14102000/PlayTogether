@@ -11,7 +11,8 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Order
         [Required]
         public int TotalTimes { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
+        [Required]
         public string Message { get; set; }
 
         public List<GamesOfOrderCreateRequest> Games { get; set; }

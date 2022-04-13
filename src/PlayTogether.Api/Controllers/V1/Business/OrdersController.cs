@@ -45,7 +45,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> FinishOrder(string id)
         {
             var response = await _orderService.FinishOrderAsync(id);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -64,7 +71,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _orderService.FinishOrderSoonAsync(id, HttpContext.User, request);
-            return response ? NoContent() : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
         
 
@@ -78,10 +92,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("detail/{orderId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<OrderGetDetailResponse>> GetOrderInDetailById(string orderId)
+        public async Task<ActionResult> GetOrderInDetailById(string orderId)
         {
             var response = await _orderService.GetOrderByIdInDetailAsync(orderId);
-            return response is not null ? Ok(response) : NotFound();
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
         
     }

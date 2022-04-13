@@ -28,45 +28,79 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             _userManager = userManager;
         }
 
-        public async Task<OrderGetResponse> CreateOrderAsync(
+        public async Task<Result<OrderGetResponse>> CreateOrderAsync(
             ClaimsPrincipal principal,
             string toUserId,
             OrderCreateRequest request)
         {
-            // Check Hirer
+            var result = new Result<OrderGetResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null
-                || user.IsActive is false
-                || user.IsPlayer is true
-                || user.Status is not UserStatusConstants.Online) {
-                return null;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.IsPlayer is true) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đang bật chế độ nhận thuê. Vui lòng tắt đi và thử lại.");
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
 
             // Check player and status of player
             var toUser = await _context.AppUsers.FindAsync(toUserId);
-            if (toUser is null
-                || toUser.Status is not UserStatusConstants.Online
-                || toUser.IsActive is false
-                || toUser.IsPlayer is false) {
-                return null;
+            if (toUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy người bạn muốn thuê.");
+                return result;
+            }
+
+            if (toUser.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện không sẵn sàng nhận thuê. Vui lòng thử lại sau.");
+                return result;
+            }
+
+            if (toUser.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện đang bị khóa tài khoản. Vui lòng thử lại sau.");
+                return result;
+            }
+
+            if (toUser.IsPlayer is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện đang không nhận thuê. Vui lòng thử lại sau.");
+                return result;
             }
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
 
-            if (request.TotalTimes > toUser.MaxHourHire || request.TotalTimes < 1) {
-                return null;
+            if (request.TotalTimes > toUser.MaxHourHire) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} chỉ nhận thuê tối đa {toUser.MaxHourHire} giờ mỗi lượt thuê. Vui lòng thử lại sau.");
+                return result;
+            }
+
+            if (request.TotalTimes < 1) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Bạn vui lòng nhập giờ thuê hợp lí, Player nhận thuê với thời gian ít nhất là 1 giờ. Vui lòng nhập lại.");
+                return result;
             }
 
             // Check balance of hirer
             if ((request.TotalTimes * toUser.PricePerHour) > user.UserBalance.ActiveBalance) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản active của bạn hiện là {user.UserBalance.ActiveBalance} hiện đang không đủ để thuê Player {toUser.Name}. Vui lòng nạp tiền và quay lại.");
+                return result;
             }
 
             if (request.Games.Count == 0) {
@@ -76,13 +110,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             IEnumerable<GamesOfOrderCreateRequest> duplicates = request.Games.GroupBy(x => x)
                                         .SelectMany(g => g.Skip(1));
             if (duplicates.Count() > 0) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Bạn chưa nhập game mà bạn muốn thuê chơi cùng. Vui lòng nhập game và quay lại.");
+                return result;
             }
 
             foreach (var game in request.Games) {
                 var isSkill = await _context.GameOfUsers.Where(x => x.UserId == toUserId)
                                                             .AnyAsync(x => x.GameId == game.GameId);
-                if (!isSkill) return null;
+                if (!isSkill) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Game bạn chọn không phải là game mà Player hỗ trợ. Vui lòng nhập lại game hoặc tìm Player khác phù hợp.");
+                    return result;
+                }
             }
 
             var model = _mapper.Map<Entities.Order>(request);
@@ -90,8 +128,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             model.UserId = user.Id;
             model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
             model.Status = OrderStatusConstants.Processing;
-            // model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
-            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTimeForTest);
+            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
+            // model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTimeForTest);
 
             _context.Orders.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
@@ -104,7 +142,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     g.CreatedDate = DateTime.UtcNow.AddHours(7);
                     _context.GameOfOrders.Add(g);
                     if (await _context.SaveChangesAsync() < 0) {
-                        return null;
+                        result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                        return result;
                     }
                 }
                 toUser.Status = UserStatusConstants.Processing;
@@ -117,7 +156,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     $"{ValueConstants.BaseUrl}/v1/users/{toUserId}/orders/{model.Id}"));
 
                 if ((await _context.SaveChangesAsync() < 0)) {
-                    return null;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
                 }
                 await _context.Entry(model)
                     .Reference(x => x.User)
@@ -140,24 +180,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     IsPlayer = toUser.IsPlayer,
                     Status = toUser.Status
                 };
-                return response;
+                result.Content = response;
+                return result;
             }
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<OrderGetResponse>> GetAllOrderRequestsAsync(
             ClaimsPrincipal principal,
             UserOrderParameter param)
         {
+            var result = new PagedResult<OrderGetResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (toUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var orderRequests = await _context.Orders.Where(x => x.ToUserId == toUser.Id).ToListAsync();
@@ -194,15 +239,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             ClaimsPrincipal principal,
             UserOrderParameter param)
         {
+            var result = new PagedResult<OrderGetResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var orders = await _context.Orders.Where(x => x.UserId == user.Id).ToListAsync();
@@ -261,20 +309,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             query = query.Where(x => x.Status.ToLower().Contains(status.ToLower()));
         }
 
-        public async Task<OrderGetResponse> GetOrderByIdAsync(ClaimsPrincipal principal, string orderId)
+        public async Task<Result<OrderGetResponse>> GetOrderByIdAsync(ClaimsPrincipal principal, string orderId)
         {
+            var result = new Result<OrderGetResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
-            var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
             var order = await _context.Orders.FindAsync(orderId);
 
             if (order is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
             }
 
             if (loggedInUser is not null && user is null) {
@@ -282,7 +333,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             else {
                 if (user.Id != order.UserId && user.Id != order.ToUserId) {
-                    return null;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                    return result;
                 }
             }
 
@@ -308,28 +360,47 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 IsPlayer = toUser.IsPlayer,
                 Status = toUser.Status
             };
-
-            return response;
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> CancelOrderAsync(
+        public async Task<Result<bool>> CancelOrderAsync(
             string orderId,
             ClaimsPrincipal principal)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var hirer = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (hirer is null || hirer.Status is not UserStatusConstants.Processing) {
-                return false;
+            if (hirer is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (hirer.Status is not UserStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Người dùng không thể hủy order request này được.");
+                return result;
             }
 
             var order = await _context.Orders.FindAsync(orderId);
-            if (order is null || order.Status is not OrderStatusConstants.Processing) {
-                return false;
+            if (order is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
+            }
+
+            if (order.UserId != hirer.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order này không thuộc về bạn.");
+                return result;
+            }
+
+            if (order.Status is not OrderStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này không thể hủy được.");
+                return result;
             }
 
             await _context.Entry(order)
@@ -357,33 +428,63 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 );
             }
 
-            return await _context.SaveChangesAsync() >= 0;
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> ProcessOrderAsync(
+        public async Task<Result<bool>> ProcessOrderAsync(
             string orderId,
             ClaimsPrincipal principal,
             OrderProcessByPlayerRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            if (toUser is null
-                || toUser.IsActive is false
-                || toUser.Status is not UserStatusConstants.Processing) {
-                return false;
+            if (toUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy người bạn muốn thuê.");
+                return result;
+            }
+
+            if (toUser.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện đang bị khóa tài khoản. Vui lòng thử lại sau.");
+                return result;
+            }
+
+            if (toUser.Status is not UserStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Bạn hiện đang không có bất kì order request nào.");
+                return result;
             }
 
             var order = await _context.Orders.FindAsync(orderId);
-            if (order is null
-                || order.Status is not OrderStatusConstants.Processing
-                || order.ToUserId != toUser.Id) {
-                return false;
+            if (order is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
+            }
+
+            if (order.ProcessExpired < DateTime.UtcNow.AddHours(7)) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này đã hết hạn xử lí. Bạn chậm tay mất rồi.");
+                return result;
+            }
+
+            if (order.Status is not OrderStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này không thể xử lí.");
+                return result;
+            }
+
+            if (order.ToUserId != toUser.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này không thuộc về bạn.");
+                return result;
             }
 
             var fromUser = await _context.AppUsers.FindAsync(order.UserId);
@@ -400,7 +501,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(toUser)
                 .Reference(x => x.UserBalance)
                 .LoadAsync();
-            
+
             await _context.Entry(toUser)
                 .Reference(x => x.BehaviorPoint)
                 .LoadAsync();
@@ -411,10 +512,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
                 toUser.Status = UserStatusConstants.Online;
                 order.Reason = request.Reason;
-                // toUser.BehaviorPoint.SatisfiedPoint -= 1;
 
-                // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, ))
-
+                toUser.BehaviorPoint.SatisfiedPoint -= 1;
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderReject, 1, BehaviorTypeConstants.SatisfiedPoint, orderId));
 
                 await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
                     order.UserId,
@@ -443,24 +543,34 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         TransactionTypeConstants.Order,
                         orderId)
                 );
-                return (await _context.SaveChangesAsync() >= 0);
+                if (await _context.SaveChangesAsync() >= 0) {
+                    result.Content = true;
+                    return result;
+                }
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
             }
-            return false;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> FinishOrderAsync(string orderId)
+        public async Task<Result<bool>> FinishOrderAsync(string orderId)
         {
+            var result = new Result<bool>();
             var order = await _context.Orders.FindAsync(orderId);
             if (order is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
             }
 
             if (order.Status is not OrderStatusConstants.Start) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order này chưa bắt đầu.");
+                return result;
             }
 
             if (DateTime.UtcNow.AddHours(7) < order.TimeStart.AddHours(order.TotalTimes)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order này chưa hết giờ.");
+                return result;
             }
 
             await _context.Entry(order)
@@ -502,32 +612,43 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                         )
                 );
-                return (await _context.SaveChangesAsync() >= 0);
+                if (await _context.SaveChangesAsync() >= 0) {
+                    result.Content = true;
+                    return result;
+                }
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
             }
-            return false;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> FinishOrderSoonAsync(
+        public async Task<Result<bool>> FinishOrderSoonAsync(
             string orderId,
             ClaimsPrincipal principal,
             FinishSoonRequest request)
         {
+            var result = new Result<bool>();
             var order = await _context.Orders.FindAsync(orderId);
             if (order is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
             }
 
             if (order.Status is not OrderStatusConstants.Start) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order này chưa bắt đầu.");
+                return result;
             }
 
             if (DateTime.UtcNow.AddHours(7) > order.TimeStart.AddHours(order.TotalTimes)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order này đã hết giờ. Vui lòng chờ hệ thống kết thúc.");
+                return result;
             }
 
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
@@ -540,118 +661,367 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             await _context.Entry(toUser)
                           .Reference(x => x.UserBalance)
                           .LoadAsync();
+            await _context.Entry(toUser)
+                            .Reference(x => x.BehaviorPoint)
+                            .LoadAsync();
 
-            
+
             order.User.Status = UserStatusConstants.Online;
             toUser.Status = UserStatusConstants.Online;
-            
+
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.Reason = request.Reason;
 
-            if (order.User.IdentityId == identityId) {
-                order.Status = OrderStatusConstants.FinishSoonHirer;
-                order.Reason = request.Reason;
-                await _context.Notifications.AddAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(
-                        toUser.Id,
-                        $"{order.User.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
-                        "")
-                );
-            }
-            else {
-                order.Status = OrderStatusConstants.FinishSoonPlayer;
-                order.Reason = request.Reason;
-                await _context.Notifications.AddAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(
-                        order.UserId,
-                        $"{toUser.Name} đã yêu cầu kết thúc sớm",
-                        (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{toUser.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}",
-                        "")
-                );
-            }
             // var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
-            order.FinalPrices = ((float)priceDone);
+            order.FinalPrices = ((float)priceDone.Item1);
 
-            if ((await _context.SaveChangesAsync() >= 0)) {
-                toUser.UserBalance.Balance += order.FinalPrices;
-                toUser.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(Helpers.UtilsHelpers.GetTime(order.TimeStart, order.TimeFinish)/3600)); 
-                order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
-                order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+            if (order.User.IdentityId == identityId) { // Hirer finish soon
+                order.Reason = request.Reason;
+                if (priceDone.Item2 == 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Có lỗi xảy ra không kết thúc order sớm được.");
+                    return result;
+                }
+                else if (priceDone.Item2 == 1) {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"{order.User.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho {order.User.Name}.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho bạn.",
+                            "")
+                    );
+                    order.User.UserBalance.Balance += order.TotalPrices;
+                    order.User.UserBalance.ActiveBalance += order.TotalPrices;
+                    order.Status = OrderStatusConstants.FinishSoonHirer;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
 
-                await _context.TransactionHistories.AddRangeAsync(
-                    Helpers.TransactionHelpers.PopulateTransactionHistory(
-                        order.User.UserBalance.Id,
-                        TransactionTypeConstants.Add,
-                        (order.TotalPrices - order.FinalPrices),
-                        TransactionTypeConstants.OrderRefund,
-                        orderId)
-                    ,
-                    Helpers.TransactionHelpers.PopulateTransactionHistory(
-                        toUser.UserBalance.Id,
-                        TransactionTypeConstants.Add,
-                        order.FinalPrices,
-                        TransactionTypeConstants.Order,
-                        orderId)
-                );
+                }
+                else if (priceDone.Item2 == 10) {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"{order.User.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
+                            "")
+                    );
+                    toUser.UserBalance.Balance += order.TotalPrices;
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Sub,
+                            order.TotalPrices,
+                            TransactionTypeConstants.OrderRefund,
+                            orderId)
+                        ,
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            toUser.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.TotalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
 
-                await _context.UnActiveBalances.AddAsync(
-                    Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
-                        toUser.UserBalance.Id,
-                        orderId,
-                        order.FinalPrices,
-                        // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
-                        DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                    await _context.UnActiveBalances.AddAsync(
+                        Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                            toUser.UserBalance.Id,
+                            orderId,
+                            order.TotalPrices,
+                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                            )
+                    );
+                    order.Status = OrderStatusConstants.Complete;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+
+                }
+                else {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"{order.User.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}.",
+                            "")
+                    );
+                    toUser.UserBalance.Balance += order.FinalPrices;
+                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Sub,
+                            (order.TotalPrices - order.FinalPrices),
+                            TransactionTypeConstants.OrderRefund,
+                            orderId)
+                        ,
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            toUser.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.FinalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
+
+                    await _context.UnActiveBalances.AddAsync(
+                        Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                            toUser.UserBalance.Id,
+                            orderId,
+                            order.FinalPrices,
+                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                            )
+                    );
+                    order.Status = OrderStatusConstants.FinishSoonHirer;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+                }
+            }
+            else { // Player finish soon
+                order.Reason = request.Reason;
+                if (priceDone.Item2 == 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Có lỗi xảy ra không kết thúc order sớm được.");
+                    return result;
+                }
+                else if (priceDone.Item2 == 1) {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"{toUser.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho bạn.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho {order.User.Name}. Bạn bị trừ 9 điểm tích cực vì đã kết thúc order quá sớm.",
+                            "")
+                    );
+                    order.User.UserBalance.Balance += order.TotalPrices;
+                    order.User.UserBalance.ActiveBalance += order.TotalPrices;
+                    order.Status = OrderStatusConstants.FinishSoonPlayer;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    toUser.BehaviorPoint.SatisfiedPoint -= 9;
+                    await _context.BehaviorHistories.AddRangeAsync(
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.BehaviorPoint.Id,
+                            BehaviorTypeConstants.Sub,
+                            BehaviorTypeConstants.OrderFinishSoon,
+                            9,
+                            BehaviorTypeConstants.SatisfiedPoint,
+                            orderId
                         )
-                );
-                return (await _context.SaveChangesAsync() >= 0);
+                    );
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+
+                }
+                else if (priceDone.Item2 == 10) {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"{toUser.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
+                            "")
+                    );
+                    toUser.UserBalance.Balance += order.TotalPrices;
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Sub,
+                            order.TotalPrices,
+                            TransactionTypeConstants.OrderRefund,
+                            orderId)
+                        ,
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            toUser.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.TotalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
+
+                    await _context.UnActiveBalances.AddAsync(
+                        Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                            toUser.UserBalance.Id,
+                            orderId,
+                            order.TotalPrices,
+                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                            )
+                    );
+                    order.Status = OrderStatusConstants.Complete;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+
+                }
+                else {
+                    await _context.Notifications.AddRangeAsync(
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            order.User.Id,
+                            $"{toUser.Name} đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}.",
+                            ""),
+                        Helpers.NotificationHelpers.PopulateNotification(
+                            toUser.Id,
+                            $"Bạn đã yêu cầu kết thúc sớm",
+                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Bạn bị trừ {10 - priceDone.Item2} điểm tích cực vì đã kết thúc order sớm.",
+                            "")
+                    );
+                    toUser.UserBalance.Balance += order.FinalPrices;
+                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Sub,
+                            (order.TotalPrices - order.FinalPrices),
+                            TransactionTypeConstants.OrderRefund,
+                            orderId)
+                        ,
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            toUser.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.FinalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
+
+                    await _context.UnActiveBalances.AddAsync(
+                        Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
+                            toUser.UserBalance.Id,
+                            orderId,
+                            order.FinalPrices,
+                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                            )
+                    );
+                    order.Status = OrderStatusConstants.FinishSoonHirer;
+                    order.User.Status = UserStatusConstants.Online;
+                    toUser.Status = UserStatusConstants.Online;
+                    toUser.BehaviorPoint.SatisfiedPoint -= (10 - priceDone.Item2);
+                    await _context.BehaviorHistories.AddRangeAsync(
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.BehaviorPoint.Id,
+                            BehaviorTypeConstants.Sub,
+                            BehaviorTypeConstants.OrderFinishSoon,
+                            (10 - priceDone.Item2),
+                            BehaviorTypeConstants.SatisfiedPoint,
+                            orderId
+                        )
+                    );
+                    if (await _context.SaveChangesAsync() >= 0) {
+                        result.Content = true;
+                        return result;
+                    }
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+                }
             }
-            return false;
+            
         }
 
-        // Calculate time / money
-        private float CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone){
-            double finalPrice = 0;
-            var percent = timeDone/totalTime;
-            if(percent <= 1/10){
+        private (float, int) CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone)
+        {
+            float finalPrice = 0;
+            var percent = timeDone / totalTime;
+            if (percent <= 1 / 10) {
                 finalPrice = 0;
+                return (finalPrice, 1);
             }
-            if(percent > 1/10 && percent <= 2/ 10){
-                finalPrice = totalPrice * 1/10;
+            if (percent > 1 / 10 && percent <= 2 / 10) {
+                finalPrice = totalPrice * 1 / 10;
+                return (finalPrice, 2);
             }
-            if(percent > 2/10 && percent <= 3/ 10){
-                finalPrice = totalPrice * 2/10;
+            if (percent > 2 / 10 && percent <= 3 / 10) {
+                finalPrice = totalPrice * 2 / 10;
+                return (finalPrice, 3);
             }
-            if(percent > 3/10 && percent <= 4/ 10){
-                finalPrice = totalPrice * 3/10;
+            if (percent > 3 / 10 && percent <= 4 / 10) {
+                finalPrice = totalPrice * 3 / 10;
+                return (finalPrice, 4);
             }
-            if(percent > 4/10 && percent <= 5/ 10){
-                finalPrice = totalPrice * 4/10;
+            if (percent > 4 / 10 && percent <= 5 / 10) {
+                finalPrice = totalPrice * 4 / 10;
+                return (finalPrice, 5);
             }
-            if(percent > 5/10 && percent <= 6/ 10){
-                finalPrice = totalPrice * 5/10;
+            if (percent > 5 / 10 && percent <= 6 / 10) {
+                finalPrice = totalPrice * 5 / 10;
+                return (finalPrice, 6);
             }
-            if(percent > 6/10 && percent <= 7/ 10){
-                finalPrice = totalPrice * 6/10;
+            if (percent > 6 / 10 && percent <= 7 / 10) {
+                finalPrice = totalPrice * 6 / 10;
+                return (finalPrice, 7);
             }
-            if(percent > 7/10 && percent <= 8/ 10){
-                finalPrice = totalPrice * 7/10;
+            if (percent > 7 / 10 && percent <= 8 / 10) {
+                finalPrice = totalPrice * 7 / 10;
+                return (finalPrice, 8);
             }
-            if(percent > 8/10 && percent <= 9/ 10){
-                finalPrice = totalPrice * 8/10;
+            if (percent > 8 / 10 && percent <= 9 / 10) {
+                finalPrice = totalPrice * 8 / 10;
+                return (finalPrice, 9);
             }
-            if(percent > 9/10){
+            if (percent > 9 / 10) {
                 finalPrice = totalPrice;
+                return (finalPrice, 10);
             }
-            return ((float)finalPrice);
+            return (0, 0);
         }
-        
+
 
         public async Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(
             string userId,
             AdminOrderParameters param)
         {
+            var result = new PagedResult<OrderGetResponse>();
             var orders = await _context.Orders.Where(x => (x.UserId + x.ToUserId).Contains(userId))
                                               .ToListAsync();
 
@@ -696,12 +1066,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             && x.CreatedDate <= toDate);
         }
 
-        public async Task<OrderGetDetailResponse> GetOrderByIdInDetailAsync(string orderId)
+        public async Task<Result<OrderGetDetailResponse>> GetOrderByIdInDetailAsync(string orderId)
         {
+            var result = new Result<OrderGetDetailResponse>();
             var order = await _context.Orders.FindAsync(orderId);
 
             if (order is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
             }
 
             await _context.Entry(order)
@@ -736,7 +1108,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 Status = toUser.Status
             };
 
-            return response;
+            result.Content = response;
+            return result;
         }
     }
 }
