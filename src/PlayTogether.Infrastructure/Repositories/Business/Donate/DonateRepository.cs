@@ -101,7 +101,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-
                 if (charity is null) {
                     return null;
                 }
@@ -117,6 +116,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             else {
                 donates = await _context.Donates.Where(x => x.UserId == user.Id)
                                                 .ToListAsync();
+            }
+            foreach (var donate in donates) {
+                await _context.Entry(donate).Reference(x => x.User).LoadAsync();
+                await _context.Entry(donate).Reference(x => x.Charity).LoadAsync();
             }
 
             var query = donates.AsQueryable();
@@ -156,6 +159,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             if (donate is null) {
                 return null;
             }
+            await _context.Entry(donate).Reference(x => x.User).LoadAsync();
+            await _context.Entry(donate).Reference(x => x.Charity).LoadAsync();
             return _mapper.Map<DonateResponse>(donate);
         }
 
