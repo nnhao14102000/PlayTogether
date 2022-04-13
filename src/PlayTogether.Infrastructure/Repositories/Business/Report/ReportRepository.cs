@@ -45,8 +45,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
 
             await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
-            var model = _mapper.Map(request, report);
-            _context.Reports.Update(model);
+
             if (request.IsDisableAccount is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
                 return result;
@@ -74,10 +73,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 }
                 await _context.BehaviorHistories.AddRangeAsync(
                     Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
                     ),
                     Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
                     )
                 );
             }
@@ -105,15 +104,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 }
                 await _context.BehaviorHistories.AddRangeAsync(
                     Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
                     ),
                     Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
                     )
                 );
             }
 
-
+            report.IsApprove = request.IsApprove;
 
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;

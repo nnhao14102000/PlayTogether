@@ -196,12 +196,12 @@ Authorization: {{authToken}}
 
 
 # Create report
-POST {{baseUrl}}/api/play-together/v1/reports/d7503c35-fa0c-4727-98ff-84ad64da81c5
+POST {{baseUrl}}/api/play-together/v1/reports/57c9e597-326c-482c-8e9c-9feedc34dfff
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "reportMessage": "Bỏ giữa chừng..."
+  "reportMessage": "Bỏ giữa chừng...banj test tis "
 }
 
 ###

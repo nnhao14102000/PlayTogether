@@ -57,7 +57,7 @@ Authorization: {{authToken}}
 
 
 # Get a report in detail
-GET {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+GET {{baseUrl}}/api/play-together/v1/admins/reports/e3f92af3-5d1c-47b7-b86b-8883efaf90fe
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -65,12 +65,15 @@ Authorization: {{authToken}}
 
 
 # Approve or Denied a report in detail
-PUT {{baseUrl}}/api/play-together/v1/admins/reports/ce5097a8-3050-4fa5-ae19-b2f453fc9538
+PUT {{baseUrl}}/api/play-together/v1/admins/reports/e3f92af3-5d1c-47b7-b86b-8883efaf90fe
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "isApprove": true
+  "isApprove": true,
+  "point": 1,
+  "satisfiedPoint": 1,
+  "isDisableAccount": false
 }
 ###
 
