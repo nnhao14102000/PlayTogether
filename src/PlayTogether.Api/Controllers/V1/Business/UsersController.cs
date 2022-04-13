@@ -33,6 +33,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IDonateService _donateService;
         private readonly IRecommendService _recommendService;
         private readonly IDatingService _datingService;
+        private readonly IImageService _imageService;
 
         public UsersController(
             IAppUserService appUserService,
@@ -43,7 +44,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IUnActiveBalanceService unActiveBalanceService,
             IDonateService donateService,
             IRecommendService recommendService,
-            IDatingService datingService)
+            IDatingService datingService,
+            IImageService imageService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
@@ -54,6 +56,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _donateService = donateService;
             _recommendService = recommendService;
             _datingService = datingService;
+            _imageService = imageService;
         }
 
         /*
@@ -347,6 +350,31 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetAllDatings(string userId, [FromQuery] DatingParameters param)
         {
             var response = await _datingService.GetAllDatingsOfUserAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all images of a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("{userId}/images")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetAllImages(string userId, [FromQuery] ImageParameters param)
+        {
+            var response = await _imageService.GetAllImagesByUserId(userId, param);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);

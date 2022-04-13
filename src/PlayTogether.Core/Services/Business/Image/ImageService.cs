@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.Image;
 using PlayTogether.Core.Dtos.Outcoming.Business.Image;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
+using PlayTogether.Core.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +17,7 @@ namespace PlayTogether.Core.Services.Business.Image
         private readonly ILogger<ImageService> _logger;
 
         public ImageService(
-            IImageRepository imageRepository, 
+            IImageRepository imageRepository,
             ILogger<ImageService> logger)
         {
             _imageRepository = imageRepository;
@@ -74,6 +76,20 @@ namespace PlayTogether.Core.Services.Business.Image
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call DeleteMultiImageAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<PagedResult<ImageGetByIdResponse>> GetAllImagesByUserId(string userId, ImageParameters param)
+        {
+            try {
+                if (String.IsNullOrEmpty(userId)) {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _imageRepository.GetAllImagesByUserId(userId, param);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetAllImagesByUserId in service class, Error Message: {ex}.");
                 throw;
             }
         }

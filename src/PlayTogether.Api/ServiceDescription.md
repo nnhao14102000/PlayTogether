@@ -243,6 +243,11 @@
 >   ***Role Access***: User     
 >   ***Extension***: Paging, sort by day in week    
 >
+> - ``GET /api/play-together/v1/users/{userId}/images ``  
+>   ***Description***: Get all user images    
+>   ***Role Access***: User     
+>   ***Extension***: Paging, sort new images    
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
