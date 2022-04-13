@@ -347,7 +347,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 return result;
             }
 
-            var datingsInDay = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == dating.DayInWeek).ToListAsync();
+            var datingsInDay = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == dating.DayInWeek && x.Id != dating.Id).ToListAsync();
             foreach (var item in datingsInDay) {
                 if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, item.DayInWeek < 8 ? $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày thứ {item.DayInWeek}" : $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày Chủ Nhật");
