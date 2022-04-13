@@ -36,6 +36,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" tố cáo này.");
                 return result;
             }
+            var toUser = await _context.AppUsers.FindAsync(report.ToUserId);
+
+            await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
             var model = _mapper.Map(request, report);
             _context.Reports.Update(model);
@@ -56,12 +59,54 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                         return result;
                     }
                     await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
-                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Bạn sẽ bị giảm {request.Point} điểm uy tín, {request.SatisfiedPoint} điểm tích cực.", ""
+                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Nếu bạn tiếp tục vi phạm thì có thể sẽ bị khóa tài khoản.", ""
                     ));
+                    toUser.BehaviorPoint.Point -= request.Point;
+                    toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
+                    if(toUser.BehaviorPoint.Point <= 0){
+                        toUser.BehaviorPoint.Point = 0;
+                    }
+                    if(toUser.BehaviorPoint.SatisfiedPoint <= 0){
+                        toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    }
+                    await _context.BehaviorHistories.AddRangeAsync(
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                        ),
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                        )
+                    );
                 }else{
+                    if (request.Point != 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
+                        return result;
+                    }
+
+                    if (request.SatisfiedPoint != 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
+                        return result;
+                    }
                     await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
-                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Bạn sẽ bị khóa tài khoản trong 1 thời gian nhất đinh. Sẽ có thông báo chi tiết tới bạn sau ít phút.", ""
+                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Sẽ có thông báo chi tiết tới bạn sau ít phút.", ""
                     ));
+
+                    toUser.BehaviorPoint.Point -= request.Point;
+                    toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
+                    if(toUser.BehaviorPoint.Point <= 0){
+                        toUser.BehaviorPoint.Point = 0;
+                    }
+                    if(toUser.BehaviorPoint.SatisfiedPoint <= 0){
+                        toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    }
+                    await _context.BehaviorHistories.AddRangeAsync(
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.Point, BehaviorTypeConstants.Point, reportId
+                        ),
+                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                            toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
+                        )
+                    );
                 }                
 
             }
@@ -175,7 +220,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 model.IsApprove = null;
 
                 await _context.Reports.AddAsync(model);
-                toUser.BehaviorPoint.SatisfiedPoint -= 1;
                 toUser.BehaviorPoint.SatisfiedPoint -= 1;
                 await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
                     toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.Report, 1, BehaviorTypeConstants.SatisfiedPoint, model.Id
