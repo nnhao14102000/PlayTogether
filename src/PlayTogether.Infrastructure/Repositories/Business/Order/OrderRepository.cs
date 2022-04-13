@@ -697,6 +697,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     );
                     order.User.UserBalance.Balance += order.TotalPrices;
                     order.User.UserBalance.ActiveBalance += order.TotalPrices;
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.TotalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
                     order.Status = OrderStatusConstants.FinishSoonHirer;
                     order.User.Status = UserStatusConstants.Online;
                     toUser.Status = UserStatusConstants.Online;
@@ -831,6 +839,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     );
                     order.User.UserBalance.Balance += order.TotalPrices;
                     order.User.UserBalance.ActiveBalance += order.TotalPrices;
+                    await _context.TransactionHistories.AddRangeAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            order.User.UserBalance.Id,
+                            TransactionTypeConstants.Add,
+                            order.TotalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
                     order.Status = OrderStatusConstants.FinishSoonPlayer;
                     order.User.Status = UserStatusConstants.Online;
                     toUser.Status = UserStatusConstants.Online;
