@@ -49,7 +49,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return result;
             }
 
-            if(order.UserId != user.Id){
+            if (order.UserId != user.Id) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
                 return result;
             }
@@ -102,6 +102,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             model.OrderId = orderId;
             model.UserId = order.UserId;
             model.ToUserId = order.ToUserId;
+
             await _context.Ratings.AddAsync(model);
 
             await _context.Notifications.AddAsync(
@@ -136,7 +137,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 ));
             }
             if (request.Rate == 3) {
-                
+
             }
             if (request.Rate == 2) {
                 toUser.BehaviorPoint.Point -= 3;
@@ -179,7 +180,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 ));
             }
             if (request.Rate == 3) {
-                
+
             }
             if (request.Rate == 2) {
                 toUser.BehaviorPoint.SatisfiedPoint -= 6;
@@ -330,6 +331,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return result;
             }
 
+            if (rating.IsApprove is not null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đánh giá này đã được kiểm duyệt.");
+                return result;
+            }
+
             if (rating.IsViolate is true) {
                 rating.IsViolate = false;
             }
@@ -352,35 +358,41 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
                 return result;
             }
+            if (rating.IsApprove is not null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đánh giá này đã được kiểm duyệt.");
+                return result;
+            }
 
             if (request.IsApprove is false) {
                 rating.IsViolate = false;
+                rating.IsApprove = true;
             }
             else {
                 var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
                 rating.IsActive = false;
+                rating.IsApprove = false;
                 toUser.NumOfRate -= 1;
 
                 if (rating.Rate == 5) {
-                    toUser.BehaviorPoint.Point -= 2;
-                    if (toUser.BehaviorPoint.Point <= 0) {
-                        toUser.BehaviorPoint.Point = 0;
-                    }
-                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.Point, rating.Id
-                    ));
+                    // toUser.BehaviorPoint.Point -= 2;
+                    // if (toUser.BehaviorPoint.Point <= 0) {
+                    //     toUser.BehaviorPoint.Point = 0;
+                    // }
+                    // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    //     toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.Point, rating.Id
+                    // ));
                 }
                 if (rating.Rate == 4) {
-                    toUser.BehaviorPoint.Point -= 1;
-                    if (toUser.BehaviorPoint.Point <= 0) {
-                        toUser.BehaviorPoint.Point = 0;
-                    }
-                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 1, BehaviorTypeConstants.Point, rating.Id
-                    ));
+                    // toUser.BehaviorPoint.Point -= 1;
+                    // if (toUser.BehaviorPoint.Point <= 0) {
+                    //     toUser.BehaviorPoint.Point = 0;
+                    // }
+                    // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    //     toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 1, BehaviorTypeConstants.Point, rating.Id
+                    // ));
                 }
                 if (rating.Rate == 3) {
-                    
+
                 }
                 if (rating.Rate == 2) {
                     toUser.BehaviorPoint.Point += 3;
@@ -423,7 +435,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     ));
                 }
                 if (rating.Rate == 3) {
-                    
+
                 }
                 if (rating.Rate == 2) {
                     toUser.BehaviorPoint.SatisfiedPoint += 6;
