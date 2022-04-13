@@ -54,12 +54,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 return result;
             }
             if (request.IsDisableAccount == false) {
-                if (request.Point != 0) {
+                if (request.Point == 0) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
                     return result;
                 }
 
-                if (request.SatisfiedPoint != 0) {
+                if (request.SatisfiedPoint == 0) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
                     return result;
                 }
@@ -84,12 +84,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 );
             }
             else {
-                if (request.Point != 0) {
+                if (request.Point == 0) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
                     return result;
                 }
 
-                if (request.SatisfiedPoint != 0) {
+                if (request.SatisfiedPoint == 0) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
                     return result;
                 }
