@@ -588,6 +588,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
                 rating.IsActive = false;
                 rating.IsApprove = false;
+                rating.IsViolate = true;
                 toUser.NumOfRate -= 1;
 
                 if (rating.Rate == 5) {
@@ -854,6 +855,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
                 return result;
             }
+            await _context.Entry(rating).Reference(x => x.User).LoadAsync();
             var response = _mapper.Map<RatingGetResponse>(rating);
             result.Content = response;
             return result;
