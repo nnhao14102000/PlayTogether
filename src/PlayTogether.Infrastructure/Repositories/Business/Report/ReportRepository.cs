@@ -36,6 +36,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" tố cáo này.");
                 return result;
             }
+
+            if (report.IsApprove is not null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã xử lí tố cáo này rồi.");
+                return result;
+            }
             var toUser = await _context.AppUsers.FindAsync(report.ToUserId);
 
             await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
@@ -44,9 +49,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             _context.Reports.Update(model);
 
             if (request.IsApprove == true) {
-                if(request.IsDisableAccount is null){
+                if (request.IsDisableAccount is null) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
-                        return result;
+                    return result;
                 }
                 if (request.IsDisableAccount == false) {
                     if (request.Point != 0) {
@@ -63,10 +68,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                     ));
                     toUser.BehaviorPoint.Point -= request.Point;
                     toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
-                    if(toUser.BehaviorPoint.Point <= 0){
+                    if (toUser.BehaviorPoint.Point <= 0) {
                         toUser.BehaviorPoint.Point = 0;
                     }
-                    if(toUser.BehaviorPoint.SatisfiedPoint <= 0){
+                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
                         toUser.BehaviorPoint.SatisfiedPoint = 0;
                     }
                     await _context.BehaviorHistories.AddRangeAsync(
@@ -77,7 +82,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                             toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
                         )
                     );
-                }else{
+                }
+                else {
                     if (request.Point != 0) {
                         result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
                         return result;
@@ -93,10 +99,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
 
                     toUser.BehaviorPoint.Point -= request.Point;
                     toUser.BehaviorPoint.SatisfiedPoint -= request.SatisfiedPoint;
-                    if(toUser.BehaviorPoint.Point <= 0){
+                    if (toUser.BehaviorPoint.Point <= 0) {
                         toUser.BehaviorPoint.Point = 0;
                     }
-                    if(toUser.BehaviorPoint.SatisfiedPoint <= 0){
+                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
                         toUser.BehaviorPoint.SatisfiedPoint = 0;
                     }
                     await _context.BehaviorHistories.AddRangeAsync(
@@ -107,7 +113,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                             toUser.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.ReportTrue, request.SatisfiedPoint, BehaviorTypeConstants.SatisfiedPoint, reportId
                         )
                     );
-                }                
+                }
 
             }
 
