@@ -21,6 +21,13 @@ Content-type: {{contentType}}
 
 ###
 
+# Get user personal information
+GET {{baseUrl}}/api/play-together/v1/users/personal
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
 # Get order request (receiver order)
 GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true
 Content-type: {{contentType}}

@@ -34,6 +34,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly IRecommendService _recommendService;
         private readonly IDatingService _datingService;
         private readonly IImageService _imageService;
+        private readonly IRatingService _ratingService;
 
         public UsersController(
             IAppUserService appUserService,
@@ -45,7 +46,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
             IDonateService donateService,
             IRecommendService recommendService,
             IDatingService datingService,
-            IImageService imageService)
+            IImageService imageService,
+            IRatingService ratingService)
         {
             _appUserService = appUserService;
             _hobbyService = hobbyService;
@@ -57,6 +59,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _recommendService = recommendService;
             _datingService = datingService;
             _imageService = imageService;
+            _ratingService = ratingService;
         }
 
         /*
@@ -383,6 +386,42 @@ namespace PlayTogether.Api.Controllers.V1.Business
                     return BadRequest(response);
                 }
             }
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all rating of a Player
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet("{userId}/ratings")]
+        [Authorize(Roles = AuthConstant.RoleUser + ","
+                        + AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> GetAllRatings(string userId, [FromQuery] RatingParameters param)
+        {
+            var response = await _ratingService.GetAllRatingsAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
             return Ok(response);
         }
 

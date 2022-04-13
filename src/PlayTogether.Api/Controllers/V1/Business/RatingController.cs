@@ -49,41 +49,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
-        /// <summary>
-        /// Get all rating of a Player
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin, User
-        /// </remarks>
-        [HttpGet("{userId}")]
-        [Authorize(Roles = AuthConstant.RoleUser + ","
-                        + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> GetAllRatings(string userId, [FromQuery] RatingParameters param)
-        {
-            var response = await _ratingService.GetAllRatingsAsync(userId, param);
-            if (!response.IsSuccess) {
-                if (response.Error.Code == 404) {
-                    return NotFound(response);
-                }
-                else {
-                    return BadRequest(response);
-                }
-            }
-            var metaData = new {
-                response.TotalCount,
-                response.PageSize,
-                response.CurrentPage,
-                response.HasNext,
-                response.HasPrevious
-            };
-
-            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-
-            return Ok(response);
-        }
+        
 
         /// <summary>
         /// Get rating by Id

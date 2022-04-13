@@ -248,6 +248,12 @@
 >   ***Role Access***: User     
 >   ***Extension***: Paging, sort new images    
 >
+> - ``GET /api/play-together/v1/users/{userId}/ratings ``  
+>   ***Description***: Get all Ratings of a User   
+>   ***Use for***: View all ratings of one specific User   
+>   ***Role Access***: User, Admin  
+>   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
@@ -297,12 +303,6 @@
 
 <h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
-> - ``GET /api/play-together/v1/rating/{userId} ``  
->   ***Description***: Get all Ratings of a User   
->   ***Use for***: View all ratings of one specific User   
->   ***Role Access***: User, Admin  
->   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
->
 > - ``GET /api/play-together/v1/rating/{ratingId} ``  
 >   ***Description***: Get a Ratings   
 >   ***Role Access***: User, Admin  

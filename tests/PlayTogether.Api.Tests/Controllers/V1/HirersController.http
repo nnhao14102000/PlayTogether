@@ -414,3 +414,10 @@ content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# Rating
+GET {{baseUrl}}/api/play-together/v1/users/a17bd7c6-0fcc-48ea-89de-43823a1ec09c/ratings
+content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
