@@ -12,22 +12,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 {
     public class RatingRepository : BaseRepository, IRatingRepository
     {
-        public RatingRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public RatingRepository(IMapper mapper, AppDbContext context, UserManager<IdentityUser> userManager) : base(mapper, context)
         {
+            _userManager = userManager;
         }
 
-        public async Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
+        public async Task<Result<bool>> CreateRatingFeedbackAsync(ClaimsPrincipal principal, string orderId, RatingCreateRequest request)
         {
             var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
             var order = await _context.Orders.FindAsync(orderId);
 
             if (order is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
+            }
+
+            if(order.UserId != user.Id){
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
                 return result;
             }
 

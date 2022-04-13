@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Report
             _logger = logger;
         }
 
-        public async Task<bool> ProcessReportAsync(string reportId, ReportCheckRequest request)
+        public async Task<Result<bool>> ProcessReportAsync(string reportId, ReportCheckRequest request)
         {
             try {
                 if (String.IsNullOrEmpty(reportId)) {
@@ -39,7 +39,7 @@ namespace PlayTogether.Core.Services.Business.Report
             }
         }
 
-        public async Task<bool> CreateReportAsync(ClaimsPrincipal principal, string orderId, ReportCreateRequest request)
+        public async Task<Result<bool>> CreateReportAsync(ClaimsPrincipal principal, string orderId, ReportCreateRequest request)
         {
             try {
                 if(principal is null){
@@ -84,7 +84,7 @@ namespace PlayTogether.Core.Services.Business.Report
             }
         }
 
-        public async Task<ReportInDetailResponse> GetReportInDetailByIdForAdminAsync(string reportId)
+        public async Task<Result<ReportInDetailResponse>> GetReportInDetailByIdForAdminAsync(string reportId)
         {
             try {
                 if (String.IsNullOrEmpty(reportId)) {

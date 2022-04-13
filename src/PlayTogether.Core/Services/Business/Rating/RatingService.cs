@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
@@ -21,16 +22,19 @@ namespace PlayTogether.Core.Services.Business.Rating
             _ratingRepository = ratingRepository;
         }
 
-        public async Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request)
+        public async Task<Result<bool>> CreateRatingFeedbackAsync(ClaimsPrincipal principal, string orderId, RatingCreateRequest request)
         {
             try {
+                if(principal is null){
+                    throw new ArgumentNullException(nameof(principal));
+                }
                 if (String.IsNullOrEmpty(orderId)) {
                     throw new ArgumentNullException(nameof(orderId));
                 }
                 if(request is null){
                     throw new ArgumentNullException(nameof(request));
                 }
-                return await _ratingRepository.CreateRatingFeedbackAsync(orderId, request);
+                return await _ratingRepository.CreateRatingFeedbackAsync(principal, orderId, request);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call CreateRatingFeedbackAsync in service class, Error Message: {ex}.");

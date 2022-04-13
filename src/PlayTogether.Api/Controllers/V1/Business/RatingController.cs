@@ -37,7 +37,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            var response = await _ratingService.CreateRatingFeedbackAsync(orderId, request);
+            var response = await _ratingService.CreateRatingFeedbackAsync(HttpContext.User, orderId, request);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);

@@ -27,38 +27,107 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             _userManager = userManager;
         }
 
-        public async Task<bool> ProcessReportAsync(string reportId, ReportCheckRequest request)
+        public async Task<Result<bool>> ProcessReportAsync(string reportId, ReportCheckRequest request)
         {
+            var result = new Result<bool>();
             var report = await _context.Reports.FindAsync(reportId);
 
             if (report is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" tố cáo này.");
+                return result;
             }
 
             var model = _mapper.Map(request, report);
             _context.Reports.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+
+            if (request.IsApprove == true) {
+                if(request.IsDisableAccount is null){
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng xác nhận có hay không khóa tài khoản người chơi.");
+                        return result;
+                }
+                if (request.IsDisableAccount == false) {
+                    if (request.Point != 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm uy tín (Point)");
+                        return result;
+                    }
+
+                    if (request.SatisfiedPoint != 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng nhập số điểm trừ gồm điểm tích cực (SatisfiedPoint)");
+                        return result;
+                    }
+                    await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Bạn sẽ bị giảm {request.Point} điểm uy tín, {request.SatisfiedPoint} điểm tích cực.", ""
+                    ));
+                }else{
+                    await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                        report.ToUserId, "Bạn đã bị tố cáo.", $"Nội dung tố cáo: {report.ReportMessage}. Qua quá trình xét duyệt, thì tố cáo trên là đúng, phù hợp với dữ liệu thu thập được trong hệ thống. Bạn sẽ bị khóa tài khoản trong 1 thời gian nhất đinh. Sẽ có thông báo chi tiết tới bạn sau ít phút.", ""
+                    ));
+                }                
+
+            }
+
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> CreateReportAsync(ClaimsPrincipal principal, string orderId, ReportCreateRequest request)
+        public async Task<Result<bool>> CreateReportAsync(ClaimsPrincipal principal, string orderId, ReportCreateRequest request)
         {
-            var order = await _context.Orders.FindAsync(orderId);
-            if (order is null
-                || order.Status is OrderStatusConstants.Start
-                || order.Status is OrderStatusConstants.Cancel
-                || order.Status is OrderStatusConstants.Processing
-                || order.Status is OrderStatusConstants.Interrupt
-                // || DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
-                || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
-                ) {
-                return false;
-            }
+            var result = new Result<bool>();
 
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" order này.");
+                return result;
+            }
+
+            if ((order.UserId != user.Id && order.ToUserId != user.Id)) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Start) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order chưa kết thúc.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Cancel) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đã bị hủy.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Processing) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đang được xử lí.");
+                return result;
+            }
+
+            if (order.Status is OrderStatusConstants.Interrupt) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đã bị buộc dừng lại.");
+                return result;
+            }
+
+            if (DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
+                // || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
+                ) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Đã hết thời gian cho phép đánh giá.");
+                return result;
+            }
 
 
             await _context.Entry(order).Reference(x => x.User).LoadAsync();
@@ -67,17 +136,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
 
             await _context.Entry(order).Collection(x => x.Reports).LoadAsync();
             if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã tố cáo rồi.");
+                return result;
             }
 
-            if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.ToUserId == order.ToUserId)) {
-                return false;
+            if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.ToUserId)) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã tố cáo rồi.");
+                return result;
             }
 
             await _context.Entry(order).Collection(x => x.Ratings).LoadAsync();
             if (order.Ratings.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã đánh giá người chơi nên bạn không thể tố cáo.");
+                return result;
             }
+
+            await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
+            await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
             if (toUser.IdentityId == identityId) {
                 var model = _mapper.Map<Entities.Report>(request);
@@ -87,6 +162,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 model.IsApprove = null;
 
                 await _context.Reports.AddAsync(model);
+                user.BehaviorPoint.SatisfiedPoint -= 1;
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    user.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.Report, 1, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
             }
             else {
                 var model = _mapper.Map<Entities.Report>(request);
@@ -96,15 +175,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 model.IsApprove = null;
 
                 await _context.Reports.AddAsync(model);
+                toUser.BehaviorPoint.SatisfiedPoint -= 1;
+                toUser.BehaviorPoint.SatisfiedPoint -= 1;
+                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.Report, 1, BehaviorTypeConstants.SatisfiedPoint, model.Id
+                ));
             }
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<ReportGetResponse>> GetAllReportsAsync(string userId, ReportParamters param)
         {
+            var result = new PagedResult<ReportGetResponse>();
             var user = await _context.AppUsers.FindAsync(userId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var reports = await _context.Reports.Where(x => x.ToUserId == userId).ToListAsync();
@@ -164,11 +255,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
 
         }
 
-        public async Task<ReportInDetailResponse> GetReportInDetailByIdForAdminAsync(string reportId)
+        public async Task<Result<ReportInDetailResponse>> GetReportInDetailByIdForAdminAsync(string reportId)
         {
+            var result = new Result<ReportInDetailResponse>();
             var report = await _context.Reports.FindAsync(reportId);
             if (report is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" tố cáo này.");
+                return result;
             }
             await _context.Entry(report).Reference(x => x.Order).Query().Include(x => x.Ratings).LoadAsync();
             await _context.Entry(report).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
@@ -186,7 +279,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             };
 
 
-            return response;
+            result.Content = response;
+            return result;
         }
     }
 }

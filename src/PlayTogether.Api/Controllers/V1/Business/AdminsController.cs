@@ -179,9 +179,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("reports")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports([FromQuery] ReportAdminParameters param)
+        public async Task<ActionResult> GetAllReports([FromQuery] ReportAdminParameters param)
         {
             var response = await _reportService.GetAllReportsForAdminAsync(param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -192,7 +200,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -208,7 +216,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId)
         {
             var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return  Ok(response);
         }
 
         /// <summary>
@@ -228,7 +244,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _reportService.ProcessReportAsync(reportId, request);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>

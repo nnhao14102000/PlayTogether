@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Business.Rating;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
@@ -8,7 +9,7 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IRatingService
     {
-        Task<Result<bool>> CreateRatingFeedbackAsync(string orderId, RatingCreateRequest request);
+        Task<Result<bool>> CreateRatingFeedbackAsync(ClaimsPrincipal principal, string orderId, RatingCreateRequest request);
         Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string userId, RatingParameters param);
         Task<Result<RatingGetResponse>> GetRatingByIdAsync(string ratingId);
         Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param);

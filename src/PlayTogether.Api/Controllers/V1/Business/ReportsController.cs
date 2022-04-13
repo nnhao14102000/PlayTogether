@@ -39,7 +39,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _reportService.CreateReportAsync(HttpContext.User, orderId, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -55,11 +63,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleUser
                            + ","
                            + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<ReportGetResponse>>> GetAllReports(
+        public async Task<ActionResult> GetAllReports(
             string userId,
             [FromQuery] ReportParamters param)
         {
             var response = await _reportService.GetAllReportsAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -70,7 +86,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
     }
 }
