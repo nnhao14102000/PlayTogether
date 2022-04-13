@@ -586,6 +586,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
             else {
                 var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
+                await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
                 rating.IsActive = false;
                 rating.IsApprove = false;
                 rating.IsViolate = true;

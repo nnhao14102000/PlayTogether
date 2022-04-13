@@ -145,12 +145,12 @@ Authorization: {{authToken}}
 ###
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/c6f58d96-a767-4e11-a237-f819bc1feca3
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/91678b9b-75ce-47b4-9a0c-3aff98ee6754
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "reason": "Nghi ddi banj oiw...."
+  "reason": "Nghi ddi banj oiw....tui trau law...."
 }
 
 ###
@@ -183,12 +183,12 @@ Authorization: {{authToken}}
 ###
 
 # Create rating
-POST {{baseUrl}}/api/play-together/v1/rating/3f266f34-1d61-4a56-bb74-6aa5912750eb
+POST {{baseUrl}}/api/play-together/v1/rating/91678b9b-75ce-47b4-9a0c-3aff98ee6754
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "comment": "Cups sowm quassss",
+  "comment": "Cups sowm quassss, dcmmmmmmm",
   "rate": 1
 }
 

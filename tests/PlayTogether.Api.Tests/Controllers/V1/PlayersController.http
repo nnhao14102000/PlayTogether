@@ -36,7 +36,7 @@ Authorization: {{authToken}}
 ###
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/57c9e597-326c-482c-8e9c-9feedc34dfff
+GET {{baseUrl}}/api/play-together/v1/orders/91678b9b-75ce-47b4-9a0c-3aff98ee6754
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -44,7 +44,7 @@ Authorization: {{authToken}}
 
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/57c9e597-326c-482c-8e9c-9feedc34dfff/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/91678b9b-75ce-47b4-9a0c-3aff98ee6754/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -56,7 +56,7 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/57c9e597-326c-482c-8e9c-9feedc34dfff
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/91678b9b-75ce-47b4-9a0c-3aff98ee6754
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -242,6 +242,21 @@ Authorization: {{authToken}}
 
 # Delete chat
 DELETE {{baseUrl}}/api/play-together/v1/chats/{chatId}
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+
+# Get all rating
+GET {{baseUrl}}/api/play-together/v1/users/a17bd7c6-0fcc-48ea-89de-43823a1ec09c/ratings?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Report violate rating
+PUT {{baseUrl}}/api/play-together/v1/rating/violate/f2959786-3ae6-4cca-9f02-cb4dda88f65f
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

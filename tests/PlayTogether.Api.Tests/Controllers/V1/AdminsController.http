@@ -82,17 +82,20 @@ Authorization: {{authToken}}
 # Get all player rating violate
 GET {{baseUrl}}/api/play-together/v1/rating/violates
 ?IsNew=true
-&IsActive=
+&IsActive=true
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
 
-# Disable violate rating
-PUT {{baseUrl}}/api/play-together/v1/rating/disable/5472b317-6902-4fa1-ab9b-99e6e77c1227
+# Process violate rating
+PUT {{baseUrl}}/api/play-together/v1/rating/process/f2959786-3ae6-4cca-9f02-cb4dda88f65f
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
+{
+  "isApprove": true
+}
 ###
 
 
