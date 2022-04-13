@@ -201,7 +201,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                         return result;
                     }
                 }
-            }            
+            }
 
             var model = _mapper.Map<Entities.Dating>(request);
             model.UserId = user.Id;
@@ -282,12 +282,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
 
         private void SortByDay(ref IQueryable<Entities.Dating> query, bool? sortByDay)
         {
-            if(!query.Any() || sortByDay is null){
+            if (!query.Any() || sortByDay is null) {
                 return;
             }
-            if(sortByDay is true){
+            if (sortByDay is true) {
                 query = query.OrderBy(x => x.DayInWeek);
-            }else{
+            }
+            else {
                 query = query.OrderByDescending(x => x.DayInWeek);
             }
         }
@@ -302,6 +303,79 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
             }
             var response = _mapper.Map<DatingUserResponse>(dating);
             result.Content = response;
+            return result;
+        }
+
+        public async Task<Result<bool>> UpdateDatingAsync(ClaimsPrincipal principal, string datingId, DatingUpdateRequest request)
+        {
+            var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
+            }
+            if (request.FromHour >= request.ToHour) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Giờ bắt đầu {request.FromHour} nên thấp hơn giờ kết thúc {request.ToHour}");
+                return result;
+            }
+
+            var dating = await _context.Datings.FindAsync(datingId);
+            if (dating is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy khung thời gian này.");
+                return result;
+            }
+
+            if (dating.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+
+            var datingsInDay = await _context.Datings.Where(x => x.UserId == user.Id && x.DayInWeek == dating.DayInWeek).ToListAsync();
+            foreach (var item in datingsInDay) {
+                if (request.FromHour >= item.FromHour && request.ToHour <= item.ToHour) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, item.DayInWeek < 8 ? $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày thứ {item.DayInWeek}" : $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày Chủ Nhật");
+                    return result;
+                }
+                if (request.FromHour >= item.FromHour && request.FromHour <= item.ToHour) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, item.DayInWeek < 8 ? $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày thứ {item.DayInWeek}" : $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày Chủ Nhật");
+                    return result;
+                }
+                if (request.ToHour >= item.FromHour && request.ToHour <= item.ToHour) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, item.DayInWeek < 8 ? $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày thứ {item.DayInWeek}" : $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày Chủ Nhật");
+                    return result;
+                }
+                if (request.FromHour < item.FromHour && request.ToHour > item.ToHour) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, item.DayInWeek < 8 ? $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày thứ {item.DayInWeek}" : $"Khung giờ {request.FromHour} tới {request.ToHour} đã tồn tại hoặc bị khung giờ khác bao phủ. Vui lòng kiểm tra lại các khung giờ ngày Chủ Nhật");
+                    return result;
+                }
+            }
+
+            var model = _mapper.Map<Entities.Dating>(request);
+            model.UserId = user.Id;
+            await _context.Datings.AddAsync(model);
+
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
     }

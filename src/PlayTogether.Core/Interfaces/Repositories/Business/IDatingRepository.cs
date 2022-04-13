@@ -9,6 +9,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     public interface IDatingRepository
     {
         Task<Result<bool>> CreateDatingAsync(ClaimsPrincipal principal, DatingCreateRequest request);
+        Task<Result<bool>> UpdateDatingAsync(ClaimsPrincipal principal, string datingId, DatingUpdateRequest request);
         Task<Result<bool>> DeleteDatingAsync(ClaimsPrincipal principal, string datingId);
         Task<Result<DatingUserResponse>> GetDatingByIdAsync(string datingId);
         Task<PagedResult<DatingUserResponse>> GetAllDatingsOfUserAsync(string userId, DatingParameters param);

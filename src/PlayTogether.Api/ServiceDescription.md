@@ -617,6 +617,10 @@
 >   ***Description***: Delete dating  
 >   ***Role Access***: User    
 >
+> - ``PUT /api/play-together/v1/dating/{datingId} ``  
+>   ***Description***: Update dating  
+>   ***Role Access***: User    
+>
 > - ``GET /api/play-together/v1/dating/{datingId} ``  
 >   ***Description***: Get dating by Id  
 >   ***Role Access***: User    

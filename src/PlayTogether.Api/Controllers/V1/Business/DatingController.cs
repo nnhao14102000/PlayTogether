@@ -92,6 +92,32 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
-
+        /// <summary>
+        /// Update dating
+        /// </summary>
+        /// <param name="datingId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("{datingId}")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> UpdateDating(string datingId, DatingUpdateRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _datingService.UpdateDatingAsync(HttpContext.User, datingId, request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
+        }
     }
 }

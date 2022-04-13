@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Business.Dating
 {
-    public class DatingCreateRequest
+    public class DatingUpdateRequest
     {
         [Range(0, 1440)]
         [Required]
@@ -13,9 +13,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.Dating
         [Required]
         public int ToHour { get; set; }
 
-        [Range(2, 8)]
-        [Required]
-        public int DayInWeek { get; set; }
-        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
+        public DateTime UpdateDate = DateTime.UtcNow.AddHours(7);
+
     }
 }
