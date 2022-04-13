@@ -367,9 +367,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 }
             }
 
-            var model = _mapper.Map<Entities.Dating>(request);
+            var model = _mapper.Map(request, dating);
             model.UserId = user.Id;
-            await _context.Datings.AddAsync(model);
+            _context.Datings.Update(model);
 
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;
