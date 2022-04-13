@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using PlayTogether.Core.Parameters;
+using System;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Dating
 {
@@ -272,8 +273,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 return result;
             }
             var datings = await _context.Datings.Where(x => x.UserId == user.Id).ToListAsync();
+            var query = datings.AsQueryable();
+            SortByDay(ref query, param.SortByDay);
+            datings = query.ToList();
             var response = _mapper.Map<List<DatingUserResponse>>(datings);
             return PagedResult<DatingUserResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void SortByDay(ref IQueryable<Entities.Dating> query, bool? sortByDay)
+        {
+            if(!query.Any() || sortByDay is null){
+                return;
+            }
+            if(sortByDay is true){
+                query = query.OrderBy(x => x.DayInWeek);
+            }else{
+                query = query.OrderByDescending(x => x.DayInWeek);
+            }
         }
 
         public async Task<Result<DatingUserResponse>> GetDatingByIdAsync(string datingId)

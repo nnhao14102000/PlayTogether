@@ -241,7 +241,7 @@
 > - ``GET /api/play-together/v1/users/{userId}/datings ``  
 >   ***Description***: Get all user datings    
 >   ***Role Access***: User     
->   ***Extension***: Paging    
+>   ***Extension***: Paging, sort by day in week    
 >
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
