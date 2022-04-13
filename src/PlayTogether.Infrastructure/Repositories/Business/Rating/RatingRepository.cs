@@ -632,24 +632,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
 
                 if (rating.Rate == 5) {
-                    toUser.BehaviorPoint.SatisfiedPoint -= 4;
+                    // toUser.BehaviorPoint.SatisfiedPoint -= 4;
 
-                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
-                        toUser.BehaviorPoint.SatisfiedPoint = 0;
-                    }
-                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 4, BehaviorTypeConstants.SatisfiedPoint, rating.Id
-                    ));
+                    // if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    //     toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    // }
+                    // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    //     toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 4, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    // ));
                 }
                 if (rating.Rate == 4) {
-                    toUser.BehaviorPoint.SatisfiedPoint -= 2;
+                    // toUser.BehaviorPoint.SatisfiedPoint -= 2;
 
-                    if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
-                        toUser.BehaviorPoint.SatisfiedPoint = 0;
-                    }
-                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                        toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.SatisfiedPoint, rating.Id
-                    ));
+                    // if (toUser.BehaviorPoint.SatisfiedPoint <= 0) {
+                    //     toUser.BehaviorPoint.SatisfiedPoint = 0;
+                    // }
+                    // await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
+                    //     toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.RatingViolate, 2, BehaviorTypeConstants.SatisfiedPoint, rating.Id
+                    // ));
                 }
                 if (rating.Rate == 3) {
 
