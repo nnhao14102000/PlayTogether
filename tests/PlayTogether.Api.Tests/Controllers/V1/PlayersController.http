@@ -29,7 +29,7 @@ Authorization: {{authToken}}
 ###
 
 # Get order by Id
-GET {{baseUrl}}/api/play-together/v1/orders/3f266f34-1d61-4a56-bb74-6aa5912750eb
+GET {{baseUrl}}/api/play-together/v1/orders/c6f58d96-a767-4e11-a237-f819bc1feca3
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -37,7 +37,7 @@ Authorization: {{authToken}}
 
 
 # Process order
-PUT {{baseUrl}}/api/play-together/v1/users/orders/3f266f34-1d61-4a56-bb74-6aa5912750eb/process
+PUT {{baseUrl}}/api/play-together/v1/users/orders/c6f58d96-a767-4e11-a237-f819bc1feca3/process
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -49,7 +49,7 @@ Authorization: {{authToken}}
 
 
 # Finish order soon
-PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/3f266f34-1d61-4a56-bb74-6aa5912750eb
+PUT {{baseUrl}}/api/play-together/v1/orders/finish-soon/c6f58d96-a767-4e11-a237-f819bc1feca3
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -69,6 +69,14 @@ Authorization: {{authToken}}
 
 # Get Notification
 GET {{baseUrl}}/api/play-together/v1/notification?isNew=true
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
+# Get Notification
+GET {{baseUrl}}/api/play-together/v1/notification/511b1879-e29a-460f-a676-f73abd3d0572
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

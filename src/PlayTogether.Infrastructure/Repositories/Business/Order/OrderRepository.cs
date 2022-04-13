@@ -966,50 +966,50 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     return result;
                 }
             }
-            
+
         }
 
         private (float, int) CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone)
         {
             float finalPrice = 0;
-            var percent = timeDone / totalTime;
-            if (percent <= 1 / 10) {
+            // var percent = timeDone / totalTime;
+            if (timeDone <= ((totalTime * 1) / 10)) {
                 finalPrice = 0;
                 return (finalPrice, 1);
             }
-            if (percent > 1 / 10 && percent <= 2 / 10) {
+            if (timeDone > ((totalTime * 1) / 10) && timeDone <= ((totalTime * 2) / 10)) {
                 finalPrice = totalPrice * 1 / 10;
                 return (finalPrice, 2);
             }
-            if (percent > 2 / 10 && percent <= 3 / 10) {
+            if (timeDone > ((totalTime * 2) / 10) && timeDone <= ((totalTime * 3) / 10)) {
                 finalPrice = totalPrice * 2 / 10;
                 return (finalPrice, 3);
             }
-            if (percent > 3 / 10 && percent <= 4 / 10) {
+            if (timeDone > ((totalTime * 3) / 10) && timeDone <= ((totalTime * 4) / 10)) {
                 finalPrice = totalPrice * 3 / 10;
                 return (finalPrice, 4);
             }
-            if (percent > 4 / 10 && percent <= 5 / 10) {
+            if (timeDone > ((totalTime * 4) / 10) && timeDone <= ((totalTime * 5) / 10)) {
                 finalPrice = totalPrice * 4 / 10;
                 return (finalPrice, 5);
             }
-            if (percent > 5 / 10 && percent <= 6 / 10) {
+            if (timeDone > ((totalTime * 5) / 10) && timeDone <= ((totalTime * 6) / 10)) {
                 finalPrice = totalPrice * 5 / 10;
                 return (finalPrice, 6);
             }
-            if (percent > 6 / 10 && percent <= 7 / 10) {
+            if (timeDone > ((totalTime * 6) / 10) && timeDone <= ((totalTime * 7) / 10)) {
                 finalPrice = totalPrice * 6 / 10;
                 return (finalPrice, 7);
             }
-            if (percent > 7 / 10 && percent <= 8 / 10) {
+            if (timeDone > ((totalTime * 7) / 10) && timeDone <= ((totalTime * 8) / 10)) {
                 finalPrice = totalPrice * 7 / 10;
                 return (finalPrice, 8);
             }
-            if (percent > 8 / 10 && percent <= 9 / 10) {
+            if (timeDone > ((totalTime * 8) / 10) && timeDone <= ((totalTime * 9) / 10)) {
                 finalPrice = totalPrice * 8 / 10;
                 return (finalPrice, 9);
             }
-            if (percent > 9 / 10) {
+            if (timeDone > ((totalTime * 9) / 10)) {
                 finalPrice = totalPrice;
                 return (finalPrice, 10);
             }
