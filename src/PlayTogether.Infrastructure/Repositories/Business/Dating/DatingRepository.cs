@@ -286,10 +286,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 return;
             }
             if (sortByDay is true) {
-                query = query.OrderBy(x => x.DayInWeek);
+                query = query.OrderBy(x => x.DayInWeek).ThenBy(x => x.FromHour);
             }
             else {
-                query = query.OrderByDescending(x => x.DayInWeek);
+                query = query.OrderByDescending(x => x.DayInWeek).ThenBy(x => x.FromHour);
             }
         }
 
