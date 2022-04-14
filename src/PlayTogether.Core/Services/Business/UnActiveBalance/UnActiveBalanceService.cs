@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Business.UnActiveBalance
             _logger = logger;
         }
 
-        public async Task<bool> ActiveMoneyAsync(ClaimsPrincipal principal)
+        public async Task<Result<bool>> ActiveMoneyAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {

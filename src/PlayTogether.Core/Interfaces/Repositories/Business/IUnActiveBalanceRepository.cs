@@ -9,6 +9,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     public interface IUnActiveBalanceRepository
     {
         Task<PagedResult<UnActiveBalanceResponse>> GetAllUnActiveBalancesAsync(ClaimsPrincipal principal, UnActiveBalanceParameters param);
-        Task<bool> ActiveMoneyAsync(ClaimsPrincipal principal);
+        Task<Result<bool>> ActiveMoneyAsync(ClaimsPrincipal principal);
     }
 }

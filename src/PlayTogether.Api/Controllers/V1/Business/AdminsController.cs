@@ -2,19 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
-using PlayTogether.Core.Dtos.Incoming.Business.Hirer;
-using PlayTogether.Core.Dtos.Outcoming.Business.Admin;
-using PlayTogether.Core.Dtos.Outcoming.Business.Order;
-using PlayTogether.Core.Dtos.Outcoming.Business.Report;
-using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
-using PlayTogether.Core.Dtos.Outcoming.Business.Player;
-using PlayTogether.Core.Dtos.Incoming.Business.Player;
-using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
-using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback;
@@ -71,11 +62,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("transactions/{userId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<TransactionHistoryResponse>> GetAllTransactionOfUser(string userId,
+        public async Task<ActionResult> GetAllTransactionOfUser(string userId,
             [FromQuery] TransactionParameters param)
         {
             var response = await _transactionHistoryService.GetAllTransactionHistoriesForAdminAsync(userId, param);
-
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -86,7 +84,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
 
@@ -129,11 +127,19 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{userId}/orders")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<OrderGetResponse>>> GetAllOrderOfUserByAdmin(
+        public async Task<ActionResult> GetAllOrderOfUserByAdmin(
             string userId,
             [FromQuery] AdminOrderParameters param)
         {
             var response = await _orderService.GetAllOrderByUserIdForAdminAsync(userId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -144,7 +150,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
 
@@ -213,7 +219,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("reports/{reportId}")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<ReportInDetailResponse>> GetReportInDetailById(string reportId)
+        public async Task<ActionResult> GetReportInDetailById(string reportId)
         {
             var response = await _reportService.GetReportInDetailByIdForAdminAsync(reportId);
             if (!response.IsSuccess) {
@@ -268,6 +274,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> GetAllUser([FromQuery] AdminUserParameters param)
         {
             var response = await _appUserService.GetAllUsersForAdminAsync(param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
 
             var metaData = new {
                 response.TotalCount,

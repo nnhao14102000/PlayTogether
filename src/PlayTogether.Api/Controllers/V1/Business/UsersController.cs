@@ -584,11 +584,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("transactions")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<TransactionHistoryResponse>>> GetAllTransaction(
+        public async Task<ActionResult> GetAllTransaction(
             [FromQuery] TransactionParameters param)
         {
             var response = await _transactionHistoryService.GetAllTransactionHistoriesAsync(HttpContext.User, param);
-
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -599,7 +606,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -642,7 +649,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> CheckToActiveBalance()
         {
             var response = await _unActiveBalanceService.ActiveMoneyAsync(HttpContext.User);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /*

@@ -30,15 +30,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
             ClaimsPrincipal principal,
             UnActiveBalanceParameters param)
         {
+            var result = new PagedResult<UnActiveBalanceResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
@@ -90,17 +93,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 
-        public async Task<bool> ActiveMoneyAsync(ClaimsPrincipal principal)
+        public async Task<Result<bool>> ActiveMoneyAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
@@ -109,75 +115,108 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                                                                 && x.IsRelease == false).ToListAsync();
 
             if (unActive.Count == 0) {
-                return false;
+                result.Content = true;
+                return result;
             }
+            else {
+                foreach (var item in unActive) {
+                    await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
+                    if (item.Order.Reports.Count > 0) {
+                        foreach (var report in item.Order.Reports) {
+                            if (report.IsApprove == true && report.UserId == item.Order.UserId) {
+                                // + tiền lại cho user
+                                var fromUser = await _context.AppUsers.FindAsync(item.Order.UserId);
+                                await _context.Entry(fromUser).Reference(x => x.UserBalance).LoadAsync();
+                                fromUser.UserBalance.Balance += item.Order.TotalPrices;
+                                fromUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                if (await _context.SaveChangesAsync() < 0) {
+                                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                    return result;
+                                }
 
-            foreach (var item in unActive) {
-                await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
-                if (item.Order.Reports.Count > 0) {
-                    foreach (var report in item.Order.Reports) {
-                        if (report.IsApprove == true && report.UserId == item.Order.UserId) {
-                            // + tiền lại cho user
-                            var fromUser = await _context.AppUsers.FindAsync(item.Order.UserId);
-                            await _context.Entry(fromUser).Reference(x => x.UserBalance).LoadAsync();
-                            fromUser.UserBalance.Balance += item.Order.TotalPrices;
-                            fromUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
-                            if (await _context.SaveChangesAsync() < 0) return false;
+                                var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                                await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                                toUser.UserBalance.Balance -= item.Order.TotalPrices;
+                                if (await _context.SaveChangesAsync() < 0) {
+                                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                    return result;
+                                }
 
-                            var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
-                            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                            toUser.UserBalance.Balance -= item.Order.TotalPrices;
-                            if (await _context.SaveChangesAsync() < 0) return false;
+                                item.IsRelease = true;
+                                item.UpdateDate = DateTime.UtcNow.AddHours(7);
+                                await _context.TransactionHistories.AddRangeAsync(
+                                    Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Money, "Order", item.OrderId),
+                                    Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Money, "Order", item.OrderId)
+                                );
+                                if (await _context.SaveChangesAsync() >= 0) {
+                                    result.Content = true;
+                                    return result;
+                                }
+                                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                return result;
+                            }
+                            else if (report.IsApprove == false && report.UserId == item.Order.UserId) {
+                                var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                                await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                                toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                if (await _context.SaveChangesAsync() < 0) {
+                                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                    return result;
+                                }
 
-                            item.IsRelease = true;
-                            item.UpdateDate = DateTime.UtcNow.AddHours(7);
-                            await _context.TransactionHistories.AddRangeAsync(
-                                Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Money, "Order", item.OrderId),
-                                Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Money, "Order", item.OrderId)
-                            );
-                            if (await _context.SaveChangesAsync() < 0) return false;
+                                item.IsRelease = true;
+                                item.UpdateDate = DateTime.UtcNow.AddHours(7);
+                                if (await _context.SaveChangesAsync() >= 0) {
+                                    result.Content = true;
+                                    return result;
+                                }
+                                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                return result;
+                            }
+                            else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.UtcNow.AddHours(7) >= item.DateActive) {
+                                var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                                await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                                toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                if (await _context.SaveChangesAsync() < 0) {
+                                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                    return result;
+                                }
+
+                                item.IsRelease = true;
+                                item.UpdateDate = DateTime.UtcNow.AddHours(7);
+                                if (await _context.SaveChangesAsync() >= 0) {
+                                    result.Content = true;
+                                    return result;
+                                }
+                                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                return result;
+                            }
                         }
-                        else if (report.IsApprove == false && report.UserId == item.Order.UserId) {
-                            // tăng tiền cho thằng toUser như thường
+                    }
+                    else {
+                        if (DateTime.UtcNow.AddHours(7) >= item.DateActive) {
                             var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
                             toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
-                            if (await _context.SaveChangesAsync() < 0) return false;
+                            if (await _context.SaveChangesAsync() < 0) {
+                                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                return result;
+                            }
 
                             item.IsRelease = true;
                             item.UpdateDate = DateTime.UtcNow.AddHours(7);
-                            if (await _context.SaveChangesAsync() < 0) return false;
+                            if (await _context.SaveChangesAsync() >= 0) {
+                                result.Content = true;
+                                return result;
+                            }
+                            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                            return result;
                         }
-                        else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.UtcNow.AddHours(7) >= item.DateActive) {
-                            // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
-                            var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
-                            await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                            toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
-                            if (await _context.SaveChangesAsync() < 0) return false;
-
-                            item.IsRelease = true;
-                            item.UpdateDate = DateTime.UtcNow.AddHours(7);
-                            if (await _context.SaveChangesAsync() < 0) return false;
-                        }
-                    }
-                }
-                else {
-                    //ko có report nào thì chỉ canh tới giờ thì cộng vào thôi
-                    if (DateTime.UtcNow.AddHours(7) >= item.DateActive) {
-                        // admin chưa duyệt mà giờ cũng lỗ rồi thì công tiền luôn...
-                        var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
-                        await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                        toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
-                        if (await _context.SaveChangesAsync() < 0) return false;
-
-                        item.IsRelease = true;
-                        item.UpdateDate = DateTime.UtcNow.AddHours(7);
-                        if (await _context.SaveChangesAsync() < 0) return false;
                     }
                 }
             }
-
-            return true;
+            result.Content = true;
+            return result;
         }
     }
 }

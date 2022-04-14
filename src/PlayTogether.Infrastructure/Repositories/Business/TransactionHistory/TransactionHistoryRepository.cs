@@ -11,6 +11,7 @@ using PlayTogether.Infrastructure.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
 {
@@ -27,15 +28,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
 
         public async Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesAsync(ClaimsPrincipal principal, TransactionParameters param)
         {
+            var result = new PagedResult<TransactionHistoryResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
@@ -104,7 +108,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             FilterByTransactionType(ref query, param.Type);
             FilterByDateRange(ref query, param.FromDate, param.ToDate);
             SortNewTransaction(ref query, param.IsNew);
-
 
             trans = query.ToList();
             var response = _mapper.Map<List<TransactionHistoryResponse>>(trans);
