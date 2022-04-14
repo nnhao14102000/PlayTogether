@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Business.SystemFeedback
             _systemFeedbackRepository = systemFeedbackRepository;
             _logger = logger;
         }
-        public async Task<bool> CreateFeedbackAsync(ClaimsPrincipal principal, CreateFeedbackRequest request)
+        public async Task<Result<bool>> CreateFeedbackAsync(ClaimsPrincipal principal, CreateFeedbackRequest request)
         {
             try {
                 if (principal is null) {
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Business.SystemFeedback
             }
         }
 
-        public async Task<bool> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId)
+        public async Task<Result<bool>> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId)
         {
             try {
                 if (principal is null) {
@@ -69,7 +69,7 @@ namespace PlayTogether.Core.Services.Business.SystemFeedback
             }
         }
 
-        public async Task<SystemFeedbackDetailResponse> GetFeedbackByIdAsync(string feedbackId)
+        public async Task<Result<SystemFeedbackDetailResponse>> GetFeedbackByIdAsync(string feedbackId)
         {
             try {
                 if (String.IsNullOrEmpty(feedbackId) || String.IsNullOrWhiteSpace(feedbackId)) {
@@ -83,7 +83,7 @@ namespace PlayTogether.Core.Services.Business.SystemFeedback
             }
         }
 
-        public async Task<bool> ProcessFeedbackAsync(string feedbackId, ProcessFeedbackRequest request)
+        public async Task<Result<bool>> ProcessFeedbackAsync(string feedbackId, ProcessFeedbackRequest request)
         {
             try {
                 if (request is null) {
@@ -100,7 +100,7 @@ namespace PlayTogether.Core.Services.Business.SystemFeedback
             }
         }
 
-        public async Task<bool> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request)
+        public async Task<Result<bool>> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request)
         {
             try {
                 if (principal is null) {

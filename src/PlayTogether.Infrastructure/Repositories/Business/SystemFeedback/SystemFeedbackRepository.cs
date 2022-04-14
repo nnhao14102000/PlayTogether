@@ -28,25 +28,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             _userManager = userManager;
         }
 
-        public async Task<bool> CreateFeedbackAsync(
+        public async Task<Result<bool>> CreateFeedbackAsync(
             ClaimsPrincipal principal,
             CreateFeedbackRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             if (!request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.Service)
                 && !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.SystemError)
                 && !request.TypeOfFeedback.Equals(SystemFeedbackTypeConstants.Suggest)) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Vui lòng chọn loại feedback: Về dịch vụ hệ thống (Service), Về lỗi của hệ thống (System Error), Đề xuất sửa hoặc thêm tính năng, đóng góp ý kiến (Suggest)");
+                return result;
             }
 
             var model = _mapper.Map<Core.Entities.SystemFeedback>(request);
@@ -54,16 +58,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             model.IsApprove = null;
             await _context.SystemFeedbacks.AddAsync(model);
 
-            return await _context.SaveChangesAsync() >= 0;
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<SystemFeedbackResponse>> GetAllFeedbacksAsync(
             ClaimsPrincipal principal,
             SystemFeedbackParameters param)
         {
+            var result = new PagedResult<SystemFeedbackResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
@@ -129,65 +140,116 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             query = query.Where(x => x.TypeOfFeedback.ToLower().Contains(type.ToLower()));
         }
 
-        public async Task<SystemFeedbackDetailResponse> GetFeedbackByIdAsync(string feedbackId)
+        public async Task<Result<SystemFeedbackDetailResponse>> GetFeedbackByIdAsync(string feedbackId)
         {
+            var result = new Result<SystemFeedbackDetailResponse>();
             var feedback = await _context.SystemFeedbacks.FindAsync(feedbackId);
             if (feedback is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
+                return result;
             }
             await _context.Entry(feedback).Reference(x => x.User).LoadAsync();
-            return _mapper.Map<SystemFeedbackDetailResponse>(feedback);
+            var response = _mapper.Map<SystemFeedbackDetailResponse>(feedback);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> ProcessFeedbackAsync(
+        public async Task<Result<bool>> ProcessFeedbackAsync(
             string feedbackId,
             ProcessFeedbackRequest request)
         {
+            var result = new Result<bool>();
             var feedback = await _context.SystemFeedbacks.FindAsync(feedbackId);
             if (feedback is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
+                return result;
             }
             var model = _mapper.Map(request, feedback);
             _context.SystemFeedbacks.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId)
+        public async Task<Result<bool>> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
             var feedback = await _context.SystemFeedbacks.FindAsync(feedbackId);
-            if (feedback is null || feedback.UserId != user.Id || feedback.IsApprove is not null) {
-                return false;
+            if (feedback is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
+                return result;
+            }
+
+            if (feedback.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+
+            if (feedback.IsApprove is not null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đóng góp của bạn đã được admin xử lí.");
+                return result;
             }
 
             _context.SystemFeedbacks.Remove(feedback);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request)
+        public async Task<Result<bool>> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
 
             var feedback = await _context.SystemFeedbacks.FindAsync(feedbackId);
-            if (feedback is null || feedback.UserId != user.Id || feedback.IsApprove is not null) {
-                return false;
+            if (feedback is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
+                return result;
+            }
+
+            if (feedback.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+
+            if (feedback.IsApprove is not null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đóng góp của bạn đã được admin xử lí.");
+                return result;
             }
             var model = _mapper.Map(request, feedback);
             _context.SystemFeedbacks.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

@@ -31,12 +31,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> CreateFeedback(CreateFeedbackRequest request){
-            if(!ModelState.IsValid){
+        public async Task<ActionResult> CreateFeedback(CreateFeedbackRequest request)
+        {
+            if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _systemFeedbackService.CreateFeedbackAsync(HttpContext.User, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -49,9 +58,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpDelete, Route("{feedbackId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> DeleteFeedback(string feedbackId){
+        public async Task<ActionResult> DeleteFeedback(string feedbackId)
+        {
             var response = await _systemFeedbackService.DeleteFeedbackAsync(HttpContext.User, feedbackId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -65,13 +83,22 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPut, Route("{feedbackId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> UpdateFeedback(string feedbackId, UpdateFeedbackRequest request){
-            if(!ModelState.IsValid){
+        public async Task<ActionResult> UpdateFeedback(string feedbackId, UpdateFeedbackRequest request)
+        {
+            if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _systemFeedbackService.UpdateFeedbackAsync(HttpContext.User, feedbackId, request);
-            return response ? NoContent() : NotFound();
-        }       
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
+        }
 
         /// <summary>
         /// Get feedback by Id
@@ -83,9 +110,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{feedbackId}")]
         [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<SystemFeedbackDetailResponse>> GetFeedbackById(string feedbackId){
+        public async Task<ActionResult> GetFeedbackById(string feedbackId)
+        {
             var response = await _systemFeedbackService.GetFeedbackByIdAsync(feedbackId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -98,9 +134,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleUser + "," + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<PagedResult<SystemFeedbackResponse>>> GetAllFeedbacks(
-            [FromQuery] SystemFeedbackParameters param){
+        public async Task<ActionResult> GetAllFeedbacks(
+            [FromQuery] SystemFeedbackParameters param)
+        {
             var response = await _systemFeedbackService.GetAllFeedbacksAsync(HttpContext.User, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -111,7 +156,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface ISystemFeedbackRepository
     {
-        Task<bool> CreateFeedbackAsync(ClaimsPrincipal principal, CreateFeedbackRequest request);
-        Task<bool> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId);
-        Task<bool> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request);
-        Task<SystemFeedbackDetailResponse> GetFeedbackByIdAsync(string feedbackId);
+        Task<Result<bool>> CreateFeedbackAsync(ClaimsPrincipal principal, CreateFeedbackRequest request);
+        Task<Result<bool>> DeleteFeedbackAsync(ClaimsPrincipal principal, string feedbackId);
+        Task<Result<bool>> UpdateFeedbackAsync(ClaimsPrincipal principal, string feedbackId, UpdateFeedbackRequest request);
+        Task<Result<SystemFeedbackDetailResponse>> GetFeedbackByIdAsync(string feedbackId);
         Task<PagedResult<SystemFeedbackResponse>> GetAllFeedbacksAsync(ClaimsPrincipal principal, SystemFeedbackParameters param);
-        Task<bool> ProcessFeedbackAsync(string feedbackId ,ProcessFeedbackRequest request);
+        Task<Result<bool>> ProcessFeedbackAsync(string feedbackId ,ProcessFeedbackRequest request);
     }
 }   
