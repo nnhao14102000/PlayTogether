@@ -32,12 +32,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost("{receiveId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> CreateChat(string receiveId, ChatCreateRequest request){
-            if(!ModelState.IsValid){
+        public async Task<ActionResult> CreateChat(string receiveId, ChatCreateRequest request)
+        {
+            if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _chatService.CreateChatAsync(HttpContext.User, receiveId, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -56,6 +65,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
             [FromQuery] ChatParameters param)
         {
             var response = await _chatService.GetAllChatsAsync(HttpContext.User, receiveId, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -65,9 +82,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
             };
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
-            return response is not null ? Ok(response): NotFound();
+            return Ok(response);
         }
-        
+
         /// <summary>
         /// Remove chat message
         /// </summary>
@@ -78,9 +95,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpDelete("{chatId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> RemoveChat(string chatId){
+        public async Task<ActionResult> RemoveChat(string chatId)
+        {
             var response = await _chatService.RemoveChatAsync(HttpContext.User, chatId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

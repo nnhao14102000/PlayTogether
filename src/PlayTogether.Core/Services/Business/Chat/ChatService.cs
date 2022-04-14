@@ -21,7 +21,7 @@ namespace PlayTogether.Core.Services.Business.Chat
             _chatRepository = chatRepository;
             _logger = logger;
         }
-        public async Task<bool> CreateChatAsync(
+        public async Task<Result<bool>> CreateChatAsync(
             ClaimsPrincipal principal,
             string receiveId,
             ChatCreateRequest request)
@@ -64,7 +64,7 @@ namespace PlayTogether.Core.Services.Business.Chat
             }
         }
 
-        public async Task<bool> RemoveChatAsync(ClaimsPrincipal principal, string chatId)
+        public async Task<Result<bool>> RemoveChatAsync(ClaimsPrincipal principal, string chatId)
         {
             try {
                 if (principal is null) {

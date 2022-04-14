@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Chat;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Chat;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -25,18 +26,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
             _userManager = userManager;
         }
 
-        public async Task<bool> CreateChatAsync(
+        public async Task<Result<bool>> CreateChatAsync(
             ClaimsPrincipal principal,
             string receiveId,
             ChatCreateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
 
             var model = _mapper.Map<Core.Entities.Chat>(request);
             model.UserId = user.Id;
@@ -45,7 +52,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
 
             _context.Chats.Add(model);
 
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<ChatGetResponse>> GetAllChatsAsync(
@@ -53,14 +65,20 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
             string receiveId,
             ChatParameters param)
         {
+            var result = new PagedResult<ChatGetResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
-
             
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
 
             var chats = await _context.Chats.Where(x => (x.UserId == user.Id && x.ReceiveId == receiveId) 
                                                         || (x.UserId == receiveId && x.ReceiveId == user.Id))
@@ -75,23 +93,39 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
             return PagedResult<ChatGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        public async Task<bool> RemoveChatAsync(ClaimsPrincipal principal, string chatId)
+        public async Task<Result<bool>> RemoveChatAsync(ClaimsPrincipal principal, string chatId)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
 
             var chat = await _context.Chats.FindAsync(chatId);    
-            if (chat is null || chat.UserId != user.Id) {
-                return false;
+            if (chat is null) {                
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + " tin nhắn này.");
+                return result;
+            }
+
+            if (chat.UserId != user.Id) {
+                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
             }
             chat.IsActive = false;
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

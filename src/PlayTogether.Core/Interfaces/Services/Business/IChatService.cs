@@ -8,8 +8,8 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 {
     public interface IChatService
     {
-        Task<bool> CreateChatAsync(ClaimsPrincipal principal, string receiveId, ChatCreateRequest request);
+        Task<Result<bool>> CreateChatAsync(ClaimsPrincipal principal, string receiveId, ChatCreateRequest request);
         Task<PagedResult<ChatGetResponse>> GetAllChatsAsync(ClaimsPrincipal principal, string receiveId, ChatParameters param);
-        Task<bool> RemoveChatAsync(ClaimsPrincipal principal, string chatId);
+        Task<Result<bool>> RemoveChatAsync(ClaimsPrincipal principal, string chatId);
     }
 }
