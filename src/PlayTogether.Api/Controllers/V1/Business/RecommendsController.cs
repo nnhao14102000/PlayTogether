@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.ML;
 using PlayTogether.Core.Dtos.Incoming.Business.Recommend;
 using System;
 using System.Threading.Tasks;
+using PlayTogether.Core.Dtos.Outcoming.Business.Recommend;
+using System.Linq;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -28,29 +31,44 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Sample request:
         ///
         ///     POST /api/play-together/v1/recommends
-        ///     {
-        ///        "userId": "",
-        ///        "playerId": ""
-        ///     }
+        ///     [
+        ///         {
+        ///             "userId": "",
+        ///             "playerId": ""
+        ///         },
+        ///         {
+        ///             "userId": "",
+        ///             "playerId": ""
+        ///         },
+        ///     ]
         ///
         /// </remarks>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] RecommendData request)
+        public async Task<ActionResult> Post([FromBody] List<RecommendData> request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-            RecommendPredict prediction = _predictEnginePool.Predict(modelName: "PTORecommenderModel", example: request);
-            // string result = "";
-            // if (Math.Round(prediction.Score, 1) > 3.5) {
-            //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is recommended for user " + request.userId;
-            //     return Ok(result);
-            // }
-            // else {
-            //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is not recommended for user " + request.userId;
-            //     return Ok(result);
-            // }
-            return Ok(Math.Round(prediction.Score, 1));
+            var result = new List<RecommendResult>();
+            foreach (var item in request) {
+                RecommendPredict prediction = _predictEnginePool.Predict(modelName: "PTORecommenderModel", example: item);
+                // string result = "";
+                // if (Math.Round(prediction.Score, 1) > 3.5) {
+                //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is recommended for user " + request.userId;
+                //     return Ok(result);
+                // }
+                // else {
+                //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is not recommended for user " + request.userId;
+                //     return Ok(result);
+                // }
+                var recommendResult = new RecommendResult{
+                    PlayerId = item.playerId, 
+                    Score = Math.Round(prediction.Score, 1)
+                };
+                result.Add(recommendResult);
+            }
+            result.AsQueryable().OrderByDescending(x => x.Score);
+            return Ok(result);
         }
     }
 }
