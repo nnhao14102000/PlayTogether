@@ -79,6 +79,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             if (await _context.SaveChangesAsync() >= 0) {
                 user.UserBalance.ActiveBalance -= request.Money;
                 user.UserBalance.Balance -= request.Money;
+                charity.Balance += request.Money;
 
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
@@ -104,11 +105,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                     $"{ValueConstants.BaseUrl}/v1/donates/{model.Id}")
 
                 );
-            }
-
-            if (await _context.SaveChangesAsync() >= 0) {
-                result.Content = true;
-                return result;
+                if (await _context.SaveChangesAsync() >= 0) {
+                    result.Content = true;
+                    return result;
+                }
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
