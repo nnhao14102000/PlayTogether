@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlayTogether.Core.Dtos.Incoming.Business.Charity;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outcoming.Business.Charity;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -52,78 +53,112 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             queryCharity = queryCharity.Where(x => x.IsActive == isActive);
         }
 
-        public async Task<CharityResponse> GetCharityByIdAsync(string id)
+        public async Task<Result<CharityResponse>> GetCharityByIdAsync(string id)
         {
+            var result = new Result<CharityResponse>();
             var charity = await _context.Charities.FindAsync(id);
             if (charity is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + " không tìm thấy tổ chức từ thiện này.");
             }
-            return _mapper.Map<CharityResponse>(charity);
+            var response = _mapper.Map<CharityResponse>(charity);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
+        public async Task<Result<bool>> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
         {
+            var result = new Result<bool>();
             var charity = await _context.Charities.FindAsync(charityId);
             if (charity is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + " không tìm thấy tổ chức từ thiện này.");
             }
             var model = _mapper.Map(request, charity);
             _context.Charities.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<CharityResponse> GetProfileAsync(ClaimsPrincipal principal)
+        public async Task<Result<CharityResponse>> GetProfileAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<CharityResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (charity is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy tài khoản tổ chức của bạn.");
+                return result;
             }
-            return _mapper.Map<CharityResponse>(charity);
+            var response = _mapper.Map<CharityResponse>(charity);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<bool> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
+        public async Task<Result<bool>> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
-            }
-            var identityId = loggedInUser.Id;
-
-            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (charity is null || charity.Id != charityId) {
-                return false;
-            }
-            if (charity is null) return false;
-            var model = _mapper.Map(request, charity);
-            _context.Charities.Update(model);
-            return (await _context.SaveChangesAsync() >= 0);
-
-        }
-
-        public async Task<bool> CharityWithDrawAsync(ClaimsPrincipal principal, CharityWithDrawRequest request)
-        {
-            var loggedInUser = await _userManager.GetUserAsync(principal);
-            if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (charity is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy tài khoản tổ chức của bạn.");
+                return result;
+            }
+
+            if (charity.Id != charityId) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
+            var model = _mapper.Map(request, charity);
+            _context.Charities.Update(model);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+
+        }
+
+        public async Task<Result<bool>> CharityWithDrawAsync(ClaimsPrincipal principal, CharityWithDrawRequest request)
+        {
+            var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (charity is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy tài khoản tổ chức của bạn.");
+                return result;
             }
 
             var model = _mapper.Map<Core.Entities.CharityWithdraw>(request);
             model.CharityId = charity.Id;
             await _context.CharityWithdraws.AddAsync(model);
 
-            return await _context.SaveChangesAsync() >= 0;
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
     }
 }

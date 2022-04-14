@@ -224,7 +224,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                     return BadRequest(response);
                 }
             }
-            return  Ok(response);
+            return Ok(response);
         }
 
         /// <summary>
@@ -336,7 +336,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _charityService.ChangeStatusCharityByAdminAsync(charityId, request);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
         /// <summary>

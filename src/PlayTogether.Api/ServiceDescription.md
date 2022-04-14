@@ -270,6 +270,10 @@
 >   ***Description***: Update a Charity profile   
 >   ***Role Access***: Charity, Admin     
 >
+> - ``PUT /api/play-together/v1/charities/with-draw ``  
+>   ***Description***: With draw money   
+>   ***Role Access***: Charity       
+>
 > - ``GET /api/play-together/v1/charities/personal ``  
 >   ***Description***: Get a Charity profile   
 >   ***Role Access***: Charity   

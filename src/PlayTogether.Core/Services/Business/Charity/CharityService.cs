@@ -23,7 +23,7 @@ namespace PlayTogether.Core.Services.Business.Charity
             _logger = logger;
         }
 
-        public async Task<bool> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
+        public async Task<Result<bool>> ChangeStatusCharityByAdminAsync(string charityId, CharityStatusRequest request)
         {
             try {
                 if (request is null) {
@@ -33,6 +33,24 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call ChangeStatusCharityByAdminAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
+        public async Task<Result<bool>> CharityWithDrawAsync(ClaimsPrincipal principal, CharityWithDrawRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+
+                return await _charityRepository.CharityWithDrawAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CharityWithDrawAsync in service class, Error Message: {ex}.");
                 throw;
             }
         }
@@ -48,7 +66,7 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
         }
 
-        public async Task<CharityResponse> GetCharityByIdAsync(string charityId)
+        public async Task<Result<CharityResponse>> GetCharityByIdAsync(string charityId)
         {
             try {
                 if (String.IsNullOrEmpty(charityId)) {
@@ -62,7 +80,7 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
         }
 
-        public async Task<CharityResponse> GetProfileAsync(ClaimsPrincipal principal)
+        public async Task<Result<CharityResponse>> GetProfileAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {
@@ -77,7 +95,7 @@ namespace PlayTogether.Core.Services.Business.Charity
             }
         }
 
-        public async Task<bool> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
+        public async Task<Result<bool>> UpdateProfileAsync(ClaimsPrincipal principal, string charityId, CharityUpdateRequest request)
         {
             try {
                 if (principal is null) {
