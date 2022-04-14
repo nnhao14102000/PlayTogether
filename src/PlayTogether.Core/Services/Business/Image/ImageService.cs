@@ -24,7 +24,7 @@ namespace PlayTogether.Core.Services.Business.Image
             _logger = logger;
         }
 
-        public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
+        public async Task<Result<ImageGetByIdResponse>> CreateImageAsync(ImageCreateRequest request)
         {
             try {
                 if (request is null) {
@@ -38,7 +38,7 @@ namespace PlayTogether.Core.Services.Business.Image
             }
         }
 
-        public async Task<bool> CreateMultiImageAsync(IList<ImageCreateRequest> request)
+        public async Task<Result<bool>> CreateMultiImageAsync(IList<ImageCreateRequest> request)
         {
             try {
                 if (request is null) {
@@ -52,7 +52,7 @@ namespace PlayTogether.Core.Services.Business.Image
             }
         }
 
-        public async Task<bool> DeleteImageAsync(string imageId)
+        public async Task<Result<bool>> DeleteImageAsync(string imageId)
         {
             try {
                 if (String.IsNullOrEmpty(imageId)) {
@@ -66,7 +66,7 @@ namespace PlayTogether.Core.Services.Business.Image
             }
         }
 
-        public async Task<bool> DeleteMultiImageAsync(IList<string> listImageId)
+        public async Task<Result<bool>> DeleteMultiImageAsync(IList<string> listImageId)
         {
             try {
                 if (listImageId is null) {
@@ -94,7 +94,7 @@ namespace PlayTogether.Core.Services.Business.Image
             }
         }
 
-        public async Task<ImageGetByIdResponse> GetImageByIdAsync(string imageId)
+        public async Task<Result<ImageGetByIdResponse>> GetImageByIdAsync(string imageId)
         {
             try {
                 if (String.IsNullOrEmpty(imageId)) {

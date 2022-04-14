@@ -21,46 +21,70 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
         {
         }
 
-        public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
+        public async Task<Result<ImageGetByIdResponse>> CreateImageAsync(ImageCreateRequest request)
         {
+            var result = new Result<ImageGetByIdResponse>();
             var model = _mapper.Map<Core.Entities.Image>(request);
             _context.Images.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
-                return _mapper.Map<ImageGetByIdResponse>(model);
+                var response = _mapper.Map<ImageGetByIdResponse>(model);
+                result.Content = response;
+                return result;
             }
-            return null;
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> CreateMultiImageAsync(IList<ImageCreateRequest> request)
+        public async Task<Result<bool>> CreateMultiImageAsync(IList<ImageCreateRequest> request)
         {
+            var result = new Result<bool>();
             var model = _mapper.Map<IList<Core.Entities.Image>>(request);
             _context.Images.AddRange(model);
 
-            return await _context.SaveChangesAsync() >= 0;
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> DeleteImageAsync(string imageId)
+        public async Task<Result<bool>> DeleteImageAsync(string imageId)
         {
+            var result = new Result<bool>();
             var image = await _context.Images.FindAsync(imageId);
             if (image is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" image.");
+                return result;
             }
             _context.Images.Remove(image);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
-        public async Task<bool> DeleteMultiImageAsync(IList<string> listImageId)
+        public async Task<Result<bool>> DeleteMultiImageAsync(IList<string> listImageId)
         {
+            var result = new Result<bool>();
             var listImage = new List<Core.Entities.Image>();
             foreach (var imageId in listImageId) {
                 var image = await _context.Images.FindAsync(imageId);
                 if (image is null) {
-                    return false;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" image.");
+                    return result;
                 }
                 listImage.Add(image);
             }
             _context.Images.RemoveRange(listImage);
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<ImageGetByIdResponse>> GetAllImagesByUserId(string userId, ImageParameters param)
@@ -96,13 +120,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
             }
         }
 
-        public async Task<ImageGetByIdResponse> GetImageByIdAsync(string imageId)
+        public async Task<Result<ImageGetByIdResponse>> GetImageByIdAsync(string imageId)
         {
+            var result = new Result<ImageGetByIdResponse>();
             var image = await _context.Images.FindAsync(imageId);
-            if (image is not null) {
-                return _mapper.Map<ImageGetByIdResponse>(image);
+            if (image is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" image.");
+                return result;
             }
-            return null;
+            var response = _mapper.Map<ImageGetByIdResponse>(image);
+            result.Content = response;
+            return result;
         }
     }
 }

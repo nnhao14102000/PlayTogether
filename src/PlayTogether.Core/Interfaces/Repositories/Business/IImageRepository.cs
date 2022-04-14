@@ -9,11 +9,11 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IImageRepository
     {
-        Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request);
-        Task<ImageGetByIdResponse> GetImageByIdAsync(string imageId);
-        Task<bool> DeleteImageAsync(string imageId);
-        Task<bool> CreateMultiImageAsync(IList<ImageCreateRequest> request);
-        Task<bool> DeleteMultiImageAsync(IList<string> listImageId);
+        Task<Result<ImageGetByIdResponse>> CreateImageAsync(ImageCreateRequest request);
+        Task<Result<ImageGetByIdResponse>> GetImageByIdAsync(string imageId);
+        Task<Result<bool>> DeleteImageAsync(string imageId);
+        Task<Result<bool>> CreateMultiImageAsync(IList<ImageCreateRequest> request);
+        Task<Result<bool>> DeleteMultiImageAsync(IList<string> listImageId);
         Task<PagedResult<ImageGetByIdResponse>> GetAllImagesByUserId(string userId, ImageParameters param);
 
     }

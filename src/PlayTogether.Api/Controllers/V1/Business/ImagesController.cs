@@ -31,10 +31,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("{imageId}", Name = "GetImageById")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<ImageGetByIdResponse>> GetImageById(string imageId)
+        public async Task<ActionResult> GetImageById(string imageId)
         {
             var response = await _imageService.GetImageByIdAsync(imageId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -47,13 +55,21 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<ImageGetByIdResponse>> CreateImage(ImageCreateRequest request)
+        public async Task<ActionResult> CreateImage(ImageCreateRequest request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
             var response = await _imageService.CreateImageAsync(request);
-            return response is null ? BadRequest() : CreatedAtRoute(nameof(GetImageById), new { imageId = response.Id }, response);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return CreatedAtRoute(nameof(GetImageById), new { imageId = response.Content.Id }, response);
         }
 
         /// <summary>
@@ -72,7 +88,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 return BadRequest();
             }
             var response = await _imageService.CreateMultiImageAsync(request);
-            return response ? Ok() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -88,7 +112,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteImage(string imageId)
         {
             var response = await _imageService.DeleteImageAsync(imageId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
         /// <summary>
         /// Delete multi Images
@@ -103,7 +135,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> DeleteMultiImage(IList<string> listImageId)
         {
             var response = await _imageService.DeleteMultiImageAsync(listImageId);
-            return response ? NoContent() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }
