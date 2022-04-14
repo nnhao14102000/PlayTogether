@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using PlayTogether.Core.Dtos.Incoming.Generic;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
 {
@@ -25,41 +26,58 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             _userManager = userManager;
         }
 
-        public async Task<bool> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId)
+        public async Task<Result<bool>> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var searchHistory = await _context.SearchHistories.FindAsync(searchHistoryId);
-            if (searchHistory is null) return false;
-            if (searchHistory.UserId != user.Id) return false;
+            if (searchHistory is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
+                return result;
+            }
+            if (searchHistory.UserId != user.Id) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotOwnInfo);
+                return result;
+            }
 
             searchHistory.UpdateDate = DateTime.UtcNow.AddHours(7);
             searchHistory.IsActive = false;
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<SearchHistoryResponse>> GetAllSearchHistoryAsync(
             ClaimsPrincipal principal,
             SearchHistoryParameters param)
         {
+            var result = new PagedResult<SearchHistoryResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id; //new Guid(loggedInUser.Id).ToString()
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
             }
 
             var searchHistories = await _context.SearchHistories.Where(x => x.UserId == user.Id).ToListAsync();
@@ -79,7 +97,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
                 return;
             }
             var listSearch = _context.SearchHistories.GroupBy(x => x.SearchString)
-                                .Select(g => new { searchName = g.Key, count = g.Count()})
+                                .Select(g => new { searchName = g.Key, count = g.Count() })
                                 .OrderByDescending(x => x.count).ToList();
 
             var list = new List<Core.Entities.SearchHistory>();

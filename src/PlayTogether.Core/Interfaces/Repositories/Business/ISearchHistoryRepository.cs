@@ -8,6 +8,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
     public interface ISearchHistoryRepository
     {
         Task<PagedResult<SearchHistoryResponse>> GetAllSearchHistoryAsync(ClaimsPrincipal principal, SearchHistoryParameters param);
-        Task<bool> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId);
+        Task<Result<bool>> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId);
     }
 }

@@ -20,7 +20,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         {
             _searchHistoryService = searchHistoryService;
         }
-        
+
         /// <summary>
         /// Get all search histories of authentication user
         /// </summary>
@@ -31,11 +31,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<SearchHistoryResponse>>> GetAllSearchHistories(
+        public async Task<ActionResult> GetAllSearchHistories(
             [FromQuery] SearchHistoryParameters param)
         {
             var response = await _searchHistoryService.GetAllSearchHistoryAsync(HttpContext.User, param);
-
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
             var metaData = new {
                 response.TotalCount,
                 response.PageSize,
@@ -46,7 +53,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -59,9 +66,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpDelete, Route("{searchHistoryId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> DeleteSearchHistory(string searchHistoryId){
+        public async Task<ActionResult> DeleteSearchHistory(string searchHistoryId)
+        {
             var response = await _searchHistoryService.DeleteSearchHistoryAsync(HttpContext.User, searchHistoryId);
-            return response ? NoContent() : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
     }
 }

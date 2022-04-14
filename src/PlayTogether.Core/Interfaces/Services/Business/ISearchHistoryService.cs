@@ -9,6 +9,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface ISearchHistoryService
     {
         Task<PagedResult<SearchHistoryResponse>> GetAllSearchHistoryAsync(ClaimsPrincipal principal, SearchHistoryParameters param);
-        Task<bool> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId);
+        Task<Result<bool>> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId);
     }
 }

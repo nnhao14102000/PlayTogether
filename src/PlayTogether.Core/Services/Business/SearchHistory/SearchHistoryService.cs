@@ -20,7 +20,7 @@ namespace PlayTogether.Core.Services.Business.SearchHistory
             _searchHistoryRepository = searchHistoryRepository;
             _logger = logger;
         }
-        public async Task<bool> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId)
+        public async Task<Result<bool>> DeleteSearchHistoryAsync(ClaimsPrincipal principal, string searchHistoryId)
         {
             try {
                 if (principal is null) {
