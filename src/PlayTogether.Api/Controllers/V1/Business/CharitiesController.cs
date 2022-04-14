@@ -149,7 +149,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet("dash-board")]
         [Authorize(Roles = AuthConstant.RoleCharity)]
-        public async Task<ActionResult<(int, float, int, float)>> GetNumberOfDonateInDay()
+        public async Task<ActionResult> GetNumberOfDonateInDay()
         {
             var response = await _donateService.CalculateDonateAsync(HttpContext.User);
             if (!response.IsSuccess) {

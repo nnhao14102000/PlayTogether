@@ -19,8 +19,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
         {
         }
 
-        public async Task<(int, int, int, int)> AdminStatisticAsync()
+        public async Task<Result<(int, int, int, int)>> AdminStatisticAsync()
         {
+            var result = new Result<(int, int, int, int)>();
             int numOfReport = 0;
             int numOfDisableUser = 0;
             int numOfSuggestFeedback = 0;
@@ -39,8 +40,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
                     numOfNewUser += 1;
                 }
             }
-
-            return (numOfReport, numOfDisableUser, numOfSuggestFeedback, numOfNewUser);
+            result.Content = (numOfReport, numOfDisableUser, numOfSuggestFeedback, numOfNewUser);
+            return result;
         }
 
         // public async Task<PagedResult<AdminResponse>> GetAllAdminsAsync(AdminParameters param)

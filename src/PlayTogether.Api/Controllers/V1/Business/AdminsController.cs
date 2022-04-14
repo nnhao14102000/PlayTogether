@@ -404,13 +404,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("dash-board")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<(int, int, int, int)>> AdminStatistic()
+        public async Task<ActionResult> AdminStatistic()
         {
             var response = await _adminService.AdminStatisticAsync();
-            return response.Item1 >= 0
-                   && response.Item2 >= 0
-                   && response.Item3 >= 0
-                   && response.Item4 >= 0 ? Ok(response) : BadRequest();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
         /// <summary>

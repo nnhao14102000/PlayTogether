@@ -32,7 +32,7 @@ namespace PlayTogether.Core.Services.Business.Admin
         // }
 
 
-        public async Task<(int, int, int, int)> AdminStatisticAsync()
+        public async Task<Result<(int, int, int, int)>> AdminStatisticAsync()
         {
             try {
                 return await _adminRepository.AdminStatisticAsync();
