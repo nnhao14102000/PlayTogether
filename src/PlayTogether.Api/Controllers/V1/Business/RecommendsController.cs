@@ -35,21 +35,22 @@ namespace PlayTogether.Api.Controllers.V1.Business
         ///
         /// </remarks>
         [HttpPost]
-        public async Task<ActionResult<string>> Post([FromBody] RecommendData request)
+        public async Task<ActionResult> Post([FromBody] RecommendData request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
             RecommendPredict prediction = _predictEnginePool.Predict(modelName: "PTORecommenderModel", example: request);
-            string result = "";
-            if (Math.Round(prediction.Score, 1) > 3.5) {
-                result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is recommended for user " + request.userId;
-                return Ok(result);
-            }
-            else {
-                result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is not recommended for user " + request.userId;
-                return Ok(result);
-            }
+            // string result = "";
+            // if (Math.Round(prediction.Score, 1) > 3.5) {
+            //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is recommended for user " + request.userId;
+            //     return Ok(result);
+            // }
+            // else {
+            //     result = "With score: " + Math.Round(prediction.Score, 1) + ", " + "Player " + request.playerId + " is not recommended for user " + request.userId;
+            //     return Ok(result);
+            // }
+            return Ok(Math.Round(prediction.Score, 1));
         }
     }
 }
