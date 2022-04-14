@@ -443,9 +443,11 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <summary>
         /// Train model
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Root Mean Square Error and RSQuared</returns>
         /// <remarks>
         /// Roles Access: Admin
+        /// 
+        /// Return: Root Mean Square Error and RSQuared
         /// </remarks>
         [HttpGet, Route("train-model")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
