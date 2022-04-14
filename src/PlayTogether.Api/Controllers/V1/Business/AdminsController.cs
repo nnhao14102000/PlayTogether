@@ -430,7 +430,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> TrainModel()
         {
             var response = await _recommendService.TrainModel();
-            return response ? Ok() : NoContent();
+            return Ok(response);
         }
     }
 }

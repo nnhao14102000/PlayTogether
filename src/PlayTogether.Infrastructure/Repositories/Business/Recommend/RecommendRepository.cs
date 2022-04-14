@@ -1,9 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using PlayTogether.Core.Dtos.Incoming.Business.Recommend;
 using PlayTogether.Core.Dtos.Outcoming.Business.Recommend;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Infrastructure.Data;
 using System;
@@ -20,16 +22,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
         {
         }
 
-        public async Task<bool> TrainModel()
+        public async Task<Result<(double rootMeanSquaredError, double rSquared)>> TrainModel()
         {
+            var result = new Result<(double rootMeanSquaredError, double rSquared)>();
             await WriteDataToFile();
             MLContext mlContext = new MLContext();
             (IDataView trainingDataView, IDataView testDataView) = LoadData(mlContext);
             ITransformer model = BuildAndTrainModel(mlContext, trainingDataView);
-            EvaluateModel(mlContext, testDataView, model);
-            UseModelForSinglePrediction(mlContext, model);
+            // UseModelForSinglePrediction(mlContext, model);
             SaveModel(mlContext, trainingDataView.Schema, model);
-            return false;
+            var metric = EvaluateModel(mlContext, testDataView, model);
+            result.Content = (metric.RootMeanSquaredError, metric.RSquared);
+            return result;
         }
 
         void SaveModel(MLContext mlContext, DataViewSchema trainingDataViewSchema, ITransformer model)
@@ -56,13 +60,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Recommend
             }
         }
 
-        void EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
+        RegressionMetrics EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
         {
             Console.WriteLine("=============== Evaluating the model ===============");
             var prediction = model.Transform(testDataView);
             var metrics = mlContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
-            Console.WriteLine("Root Mean Squared Error : " + metrics.RootMeanSquaredError.ToString());
-            Console.WriteLine("RSquared: " + metrics.RSquared.ToString());
+            return metrics;
         }
 
         ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)

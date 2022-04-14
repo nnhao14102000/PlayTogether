@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Services.Business;
 using System;
@@ -16,7 +17,7 @@ namespace PlayTogether.Core.Services.Business.Recommend
             _recommendRepository = recommendRepository;
             _logger = logger;
         }
-        public async Task<bool> TrainModel()
+        public async Task<Result<(double rootMeanSquaredError, double rSquared)>> TrainModel()
         {
             try {
                 return await _recommendRepository.TrainModel();
