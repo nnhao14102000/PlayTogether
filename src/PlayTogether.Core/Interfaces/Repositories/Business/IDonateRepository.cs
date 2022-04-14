@@ -9,9 +9,9 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 {
     public interface IDonateRepository
     {
-        Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal);
-        Task<bool> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request);
+        Task<Result<(int, float, int, float)>> CalculateDonateAsync(ClaimsPrincipal principal);
+        Task<Result<bool>> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request);
         Task<PagedResult<DonateResponse>> GetAllDonatesAsync(ClaimsPrincipal principal, DonateParameters param);
-        Task<DonateResponse> GetDonateByIdAsync(string donateId);
+        Task<Result<DonateResponse>> GetDonateByIdAsync(string donateId);
     }
 }

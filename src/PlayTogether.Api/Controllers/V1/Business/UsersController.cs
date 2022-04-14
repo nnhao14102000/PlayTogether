@@ -667,7 +667,15 @@ namespace PlayTogether.Api.Controllers.V1.Business
         public async Task<ActionResult> Donate(string charityId, DonateCreateRequest request)
         {
             var response = await _donateService.CreateDonateAsync(HttpContext.User, charityId, request);
-            return response ? Ok() : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
 
 

@@ -29,9 +29,17 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = AuthConstant.RoleCharity + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<PagedResult<DonateResponse>>> GetAllDonates([FromQuery] DonateParameters param)
+        public async Task<ActionResult> GetAllDonates([FromQuery] DonateParameters param)
         {
             var response = await _donateService.GetAllDonatesAsync(HttpContext.User, param);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
 
             var metaData = new {
                 response.TotalCount,
@@ -43,7 +51,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
 
             Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
 
-            return response is not null ? Ok(response) : NotFound();
+            return Ok(response);
         }
 
         /// <summary>
@@ -56,10 +64,18 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpGet, Route("{donateId}")]
         [Authorize(Roles = AuthConstant.RoleCharity + "," + AuthConstant.RoleUser)]
-        public async Task<ActionResult<DonateResponse>> GetDonateById(string donateId)
+        public async Task<ActionResult> GetDonateById(string donateId)
         {
             var response = await _donateService.GetDonateByIdAsync(donateId);
-            return response is not null ? Ok(response) : NotFound();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
         }
     }
 }

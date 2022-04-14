@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Donate
             _logger = logger;
         }
 
-        public async Task<bool> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request)
+        public async Task<Result<bool>> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request)
         {
             try {
                 if (principal is null) {
@@ -60,7 +60,7 @@ namespace PlayTogether.Core.Services.Business.Donate
         }
 
 
-        public async Task<DonateResponse> GetDonateByIdAsync(string donateId)
+        public async Task<Result<DonateResponse>> GetDonateByIdAsync(string donateId)
         {
             try {
                 if (String.IsNullOrEmpty(donateId) || String.IsNullOrWhiteSpace(donateId)) {
@@ -76,7 +76,7 @@ namespace PlayTogether.Core.Services.Business.Donate
         }
 
 
-        public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
+        public async Task<Result<(int, float, int, float)>> CalculateDonateAsync(ClaimsPrincipal principal)
         {
             try {
                 if (principal is null) {

@@ -27,27 +27,47 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             _userManager = userManager;
         }
 
-        public async Task<bool> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request)
+        public async Task<Result<bool>> CreateDonateAsync(ClaimsPrincipal principal, string charityId, DonateCreateRequest request)
         {
+            var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            if (user is null || user.IsActive is false || user.Status is not UserStatusConstants.Online) {
-                return false;
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            if (user.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
+                return result;
+            }
+
+            if (user.Status is not UserStatusConstants.Online) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.NotReady + $" Hiện tài khoản bạn đang ở chế độ {user.Status}. Vui lòng thử lại sau khi tất cả các thao tác hoàn tất.");
+                return result;
             }
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
             if (user.UserBalance.ActiveBalance < request.Money) {
-                return false;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản khả dụng của bạn ({user.UserBalance.ActiveBalance}) hiện đang không đủ để donate.");
+                return result;
             }
 
             var charity = await _context.Charities.FindAsync(charityId);
-            if (charity is null || charity.IsActive is false) {
-                return false;
+            if (charity is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy tổ chức từ thiện này.");
+                return result;
+            }
+
+            if (charity.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Tổ chức từ thiện này hiện không khả dụng.");
+                return result;
             }
 
             var model = _mapper.Map<Core.Entities.Donate>(request);
@@ -86,14 +106,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                 );
             }
 
-            return (await _context.SaveChangesAsync() >= 0);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
         }
 
         public async Task<PagedResult<DonateResponse>> GetAllDonatesAsync(ClaimsPrincipal principal, DonateParameters param)
         {
+            var result = new PagedResult<DonateResponse>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
@@ -102,7 +129,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
             if (user is null) {
                 if (charity is null) {
-                    return null;
+                    result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "KHông xác định được tài khoản.");
+                    return result;
                 }
                 else {
                     isCharity = true;
@@ -153,29 +181,36 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 
-        public async Task<DonateResponse> GetDonateByIdAsync(string donateId)
+        public async Task<Result<DonateResponse>> GetDonateByIdAsync(string donateId)
         {
+            var result = new Result<DonateResponse>();
             var donate = await _context.Donates.FindAsync(donateId);
             if (donate is null) {
-                return null;
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thông tin donate.");
+                return result;
             }
             await _context.Entry(donate).Reference(x => x.User).LoadAsync();
             await _context.Entry(donate).Reference(x => x.Charity).LoadAsync();
-            return _mapper.Map<DonateResponse>(donate);
+            var response = _mapper.Map<DonateResponse>(donate);
+            result.Content = response;
+            return result;
         }
 
-        public async Task<(int, float, int, float)> CalculateDonateAsync(ClaimsPrincipal principal)
+        public async Task<Result<(int, float, int, float)>> CalculateDonateAsync(ClaimsPrincipal principal)
         {
+            var result = new Result<(int, float, int, float)>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
-                return (0, 0, 0, 0);
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
             var identityId = loggedInUser.Id;
 
             var charity = await _context.Charities.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
             if (charity is null) {
-                return (0, 0, 0, 0);
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.Unauthenticate);
+                return result;
             }
 
             var donate = await _context.Donates.Where(x => x.CharityId == charity.Id).ToListAsync();
@@ -183,8 +218,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             float totalMoneyDonatedInDay = TotalMoneyDonateReceiveInDay(donate);
             int count3 = donate.Count();
             float count4 = TotalMoneyReceive(donate);
-
-            return (countNumberOfDonateInDay, totalMoneyDonatedInDay, count3, count4);
+            result.Content = (countNumberOfDonateInDay, totalMoneyDonatedInDay, count3, count4);
+            return result;
         }
 
         private float TotalMoneyReceive(List<Core.Entities.Donate> donates)
