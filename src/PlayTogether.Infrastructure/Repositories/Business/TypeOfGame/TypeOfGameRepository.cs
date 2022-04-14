@@ -40,7 +40,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TypeOfGame
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" thể loại game.");
                 return result;
             }
-            var model = _mapper.Map<Entities.TypeOfGame>(request);
+            var model = _mapper.Map<Core.Entities.TypeOfGame>(request);
             await _context.TypeOfGames.AddAsync(model);
 
             if (await _context.SaveChangesAsync() >= 0) {

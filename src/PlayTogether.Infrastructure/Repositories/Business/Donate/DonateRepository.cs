@@ -50,7 +50,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                 return false;
             }
 
-            var model = _mapper.Map<Entities.Donate>(request);
+            var model = _mapper.Map<Core.Entities.Donate>(request);
             model.UserId = user.Id;
             model.CharityId = charityId;
             model.UpdateDate = null;
@@ -108,7 +108,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
                     isCharity = true;
                 }
             }
-            var donates = new List<Entities.Donate>();
+            var donates = new List<Core.Entities.Donate>();
             if (isCharity) {
                 donates = await _context.Donates.Where(x => x.CharityId == charity.Id)
                                                 .ToListAsync();
@@ -132,7 +132,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             return PagedResult<DonateResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void OrderNewestDonate(ref IQueryable<Entities.Donate> query, bool? isNew)
+        private void OrderNewestDonate(ref IQueryable<Core.Entities.Donate> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -145,7 +145,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             }
         }
 
-        private void FilterDateRange(ref IQueryable<Entities.Donate> query, DateTime? fromDate, DateTime? toDate)
+        private void FilterDateRange(ref IQueryable<Core.Entities.Donate> query, DateTime? fromDate, DateTime? toDate)
         {
             if (!query.Any() || fromDate is null || toDate is null) {
                 return;
@@ -187,7 +187,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             return (countNumberOfDonateInDay, totalMoneyDonatedInDay, count3, count4);
         }
 
-        private float TotalMoneyReceive(List<Entities.Donate> donates)
+        private float TotalMoneyReceive(List<Core.Entities.Donate> donates)
         {
             if (!donates.Any()) {
                 return 0;
@@ -200,7 +200,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             return total;
         }
 
-        private int CountNumberOfDonateInDay(List<Entities.Donate> donates)
+        private int CountNumberOfDonateInDay(List<Core.Entities.Donate> donates)
         {
             if (!donates.Any()) {
                 return 0;
@@ -216,7 +216,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             return count;
         }
 
-        private float TotalMoneyDonateReceiveInDay(List<Entities.Donate> donates)
+        private float TotalMoneyDonateReceiveInDay(List<Core.Entities.Donate> donates)
         {
             if (!donates.Any()) {
                 return 0;

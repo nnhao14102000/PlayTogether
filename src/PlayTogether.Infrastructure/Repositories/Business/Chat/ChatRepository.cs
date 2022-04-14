@@ -38,7 +38,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
-            var model = _mapper.Map<Entities.Chat>(request);
+            var model = _mapper.Map<Core.Entities.Chat>(request);
             model.UserId = user.Id;
             model.ReceiveId = receiveId;
             model.UpdateDate = null;

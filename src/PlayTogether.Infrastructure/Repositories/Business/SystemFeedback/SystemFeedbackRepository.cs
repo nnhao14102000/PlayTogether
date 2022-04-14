@@ -49,7 +49,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
                 return false;
             }
 
-            var model = _mapper.Map<Entities.SystemFeedback>(request);
+            var model = _mapper.Map<Core.Entities.SystemFeedback>(request);
             model.UserId = user.Id;
             model.IsApprove = null;
             await _context.SystemFeedbacks.AddAsync(model);
@@ -68,7 +68,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
-            var listFeedbacks = new List<Entities.SystemFeedback>();
+            var listFeedbacks = new List<Core.Entities.SystemFeedback>();
             if (user is null) {
                 listFeedbacks = await _context.SystemFeedbacks.ToListAsync();
             }
@@ -88,7 +88,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             return PagedResult<SystemFeedbackResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterByIsApprove(ref IQueryable<Entities.SystemFeedback> query, bool? isApprove)
+        private void FilterByIsApprove(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isApprove)
         {
             if (!query.Any()) {
                 return;
@@ -96,7 +96,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             query = query.Where(x => x.IsApprove == isApprove);
         }
 
-        private void OrderByNewFeedback(ref IQueryable<Entities.SystemFeedback> query, bool? isNew)
+        private void OrderByNewFeedback(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -109,7 +109,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             }
         }
 
-        private void FilterInDayRange(ref IQueryable<Entities.SystemFeedback> query, DateTime? fromDate, DateTime? toDate)
+        private void FilterInDayRange(ref IQueryable<Core.Entities.SystemFeedback> query, DateTime? fromDate, DateTime? toDate)
         {
             if (!query.Any() || fromDate is null || toDate is null) {
                 return;
@@ -121,7 +121,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 
-        private void FilterByType(ref IQueryable<Entities.SystemFeedback> query, string type)
+        private void FilterByType(ref IQueryable<Core.Entities.SystemFeedback> query, string type)
         {
             if (!query.Any() || String.IsNullOrEmpty(type) || String.IsNullOrWhiteSpace(type)) {
                 return;

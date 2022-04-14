@@ -57,7 +57,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
                     param.PageSize);
         }
 
-        private void FilterByOperation(ref IQueryable<Entities.TransactionHistory> query, string operation)
+        private void FilterByOperation(ref IQueryable<Core.Entities.TransactionHistory> query, string operation)
         {
             if(!query.Any() || String.IsNullOrEmpty(operation) || String.IsNullOrWhiteSpace(operation)){
                 return ;
@@ -65,7 +65,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             query = query.Where(x => x.Operation.ToLower().Contains(operation.ToLower()));
         }
 
-        private void SortNewTransaction(ref IQueryable<Entities.TransactionHistory> query, bool? isNew)
+        private void SortNewTransaction(ref IQueryable<Core.Entities.TransactionHistory> query, bool? isNew)
         {
             if(!query.Any() || isNew is null){
                 return ;
@@ -77,7 +77,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             }
         }
 
-        private void FilterByDateRange(ref IQueryable<Entities.TransactionHistory> query, DateTime? fromDate, DateTime? toDate)
+        private void FilterByDateRange(ref IQueryable<Core.Entities.TransactionHistory> query, DateTime? fromDate, DateTime? toDate)
         {
             if(!query.Any() || fromDate is null || toDate is null){
                 return ;
@@ -85,7 +85,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 
-        private void FilterByTransactionType(ref IQueryable<Entities.TransactionHistory> query, string type)
+        private void FilterByTransactionType(ref IQueryable<Core.Entities.TransactionHistory> query, string type)
         {
             if(!query.Any() || String.IsNullOrEmpty(type) || String.IsNullOrWhiteSpace(type)){
                 return ;

@@ -98,7 +98,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
             await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
-            var model = _mapper.Map<Entities.Rating>(request);
+            var model = _mapper.Map<Core.Entities.Rating>(request);
             model.OrderId = orderId;
             model.UserId = order.UserId;
             model.ToUserId = order.ToUserId;
@@ -500,7 +500,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterActiveFeedback(ref IQueryable<Entities.Rating> query, bool? isActive)
+        private void FilterActiveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isActive)
         {
             if (!query.Any() || isActive is null) {
                 return;
@@ -513,7 +513,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
         }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Rating> query, bool? isNew)
+        private void OrderByCreatedDate(ref IQueryable<Core.Entities.Rating> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -526,7 +526,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
         }
 
-        private void FilterByVote(ref IQueryable<Entities.Rating> query, float vote)
+        private void FilterByVote(ref IQueryable<Core.Entities.Rating> query, float vote)
         {
             if (!query.Any() || vote == 0 || vote > 5 || vote < 0) {
                 return;

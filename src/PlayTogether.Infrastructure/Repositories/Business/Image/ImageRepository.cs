@@ -23,7 +23,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
 
         public async Task<ImageGetByIdResponse> CreateImageAsync(ImageCreateRequest request)
         {
-            var model = _mapper.Map<Entities.Image>(request);
+            var model = _mapper.Map<Core.Entities.Image>(request);
             _context.Images.Add(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 return _mapper.Map<ImageGetByIdResponse>(model);
@@ -33,7 +33,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
 
         public async Task<bool> CreateMultiImageAsync(IList<ImageCreateRequest> request)
         {
-            var model = _mapper.Map<IList<Entities.Image>>(request);
+            var model = _mapper.Map<IList<Core.Entities.Image>>(request);
             _context.Images.AddRange(model);
 
             return await _context.SaveChangesAsync() >= 0;
@@ -51,7 +51,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
 
         public async Task<bool> DeleteMultiImageAsync(IList<string> listImageId)
         {
-            var listImage = new List<Entities.Image>();
+            var listImage = new List<Core.Entities.Image>();
             foreach (var imageId in listImageId) {
                 var image = await _context.Images.FindAsync(imageId);
                 if (image is null) {
@@ -83,7 +83,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Image
             return PagedResult<ImageGetByIdResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void OrderNewImage(ref IQueryable<Entities.Image> query, bool? isNew)
+        private void OrderNewImage(ref IQueryable<Core.Entities.Image> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;

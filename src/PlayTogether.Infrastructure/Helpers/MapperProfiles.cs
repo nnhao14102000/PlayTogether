@@ -37,7 +37,7 @@ using PlayTogether.Core.Dtos.Outcoming.Business.SystemFeedback;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
-using PlayTogether.Infrastructure.Entities;
+using PlayTogether.Core.Entities;
 
 namespace PlayTogether.Infrastructure.Helpers
 {

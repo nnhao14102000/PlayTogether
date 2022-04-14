@@ -1,5 +1,5 @@
 using System;
-using PlayTogether.Infrastructure.Entities;
+using PlayTogether.Core.Entities;
 
 namespace PlayTogether.Infrastructure.Helpers
 {

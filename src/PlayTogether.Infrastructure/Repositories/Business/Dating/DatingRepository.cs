@@ -203,7 +203,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
                 }
             }
 
-            var model = _mapper.Map<Entities.Dating>(request);
+            var model = _mapper.Map<Core.Entities.Dating>(request);
             model.UserId = user.Id;
             await _context.Datings.AddAsync(model);
 
@@ -280,7 +280,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Dating
             return PagedResult<DatingUserResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void SortByDay(ref IQueryable<Entities.Dating> query, bool? sortByDay)
+        private void SortByDay(ref IQueryable<Core.Entities.Dating> query, bool? sortByDay)
         {
             if (!query.Any() || sortByDay is null) {
                 return;

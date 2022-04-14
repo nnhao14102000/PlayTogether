@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PlayTogether.Infrastructure.Entities;
+using PlayTogether.Core.Entities;
 
 namespace PlayTogether.Infrastructure.Data
 {

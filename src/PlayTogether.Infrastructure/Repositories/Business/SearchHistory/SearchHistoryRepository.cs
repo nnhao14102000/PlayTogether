@@ -73,7 +73,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             return PagedResult<SearchHistoryResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void GetHotSearch(ref IQueryable<Entities.SearchHistory> query, bool? isHotSearch)
+        private void GetHotSearch(ref IQueryable<Core.Entities.SearchHistory> query, bool? isHotSearch)
         {
             if (isHotSearch is null || isHotSearch is false) {
                 return;
@@ -82,7 +82,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
                                 .Select(g => new { searchName = g.Key, count = g.Count()})
                                 .OrderByDescending(x => x.count).ToList();
 
-            var list = new List<Entities.SearchHistory>();
+            var list = new List<Core.Entities.SearchHistory>();
             foreach (var item in listSearch) {
                 var s = _context.SearchHistories.FirstOrDefault(x => x.SearchString == item.searchName);
                 if (s is null) {
@@ -93,7 +93,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             query = list.AsQueryable();
         }
 
-        private void SortNewSearch(ref IQueryable<Entities.SearchHistory> query, bool? isNew)
+        private void SortNewSearch(ref IQueryable<Core.Entities.SearchHistory> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -106,7 +106,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             }
         }
 
-        private void FilterByContent(ref IQueryable<Entities.SearchHistory> query, string content)
+        private void FilterByContent(ref IQueryable<Core.Entities.SearchHistory> query, string content)
         {
             if (!query.Any() || String.IsNullOrEmpty(content) || String.IsNullOrWhiteSpace(content)) {
                 return;
@@ -114,7 +114,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SearchHistory
             query = query.Where(x => x.SearchString.ToLower().Contains(content.ToLower()));
         }
 
-        private void FilterActiveHistory(ref IQueryable<Entities.SearchHistory> query, bool v)
+        private void FilterActiveHistory(ref IQueryable<Core.Entities.SearchHistory> query, bool v)
         {
             if (!query.Any()) {
                 return;

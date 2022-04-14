@@ -123,7 +123,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 }
             }
 
-            var model = _mapper.Map<Entities.Order>(request);
+            var model = _mapper.Map<Core.Entities.Order>(request);
             model.ToUserId = toUserId;
             model.UserId = user.Id;
             model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
@@ -137,7 +137,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     var existGame = await _context.GameOfOrders.Where(x => x.OrderId == model.Id)
                                                                 .AnyAsync(x => x.GameId == game.GameId);
                     if (existGame) continue;
-                    var g = _mapper.Map<Entities.GameOfOrder>(game);
+                    var g = _mapper.Map<Core.Entities.GameOfOrder>(game);
                     g.OrderId = model.Id;
                     g.CreatedDate = DateTime.UtcNow.AddHours(7);
                     _context.GameOfOrders.Add(g);
@@ -285,7 +285,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
 
         private void FilterOrderRecent(
-            ref IQueryable<Entities.Order> query,
+            ref IQueryable<Core.Entities.Order> query,
             bool? isNew)
         {
             if (!query.Any() || isNew is null) {
@@ -300,7 +300,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
 
         private void FilterOrderByStatus(
-            ref IQueryable<Entities.Order> query,
+            ref IQueryable<Core.Entities.Order> query,
             string status)
         {
             if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
@@ -1071,7 +1071,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
 
         private void FilterInDate(
-            ref IQueryable<Entities.Order> query,
+            ref IQueryable<Core.Entities.Order> query,
             DateTime? fromDate,
             DateTime? toDate)
         {

@@ -8,7 +8,7 @@ using PlayTogether.Core.Dtos.Incoming.Generic;
 using PlayTogether.Core.Dtos.Outgoing.Auth;
 using PlayTogether.Core.Interfaces.Repositories.Auth;
 using PlayTogether.Infrastructure.Data;
-using PlayTogether.Infrastructure.Entities;
+using PlayTogether.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

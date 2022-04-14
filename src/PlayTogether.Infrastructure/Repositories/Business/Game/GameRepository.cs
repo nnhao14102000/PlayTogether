@@ -29,7 +29,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
                 return result;
             }
 
-            var model = _mapper.Map<Entities.Game>(request);
+            var model = _mapper.Map<Core.Entities.Game>(request);
             await _context.Games.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var response = _mapper.Map<GameCreateResponse>(model);
@@ -118,14 +118,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
 
         }
 
-        private void OrderByMostFavorite(ref IQueryable<Entities.Game> query, bool? isMostFavorite)
+        private void OrderByMostFavorite(ref IQueryable<Core.Entities.Game> query, bool? isMostFavorite)
         {
             if (!query.Any() || isMostFavorite is null || isMostFavorite is false) {
                 return;
             }
             var listGameFavorite = _context.GameOfUsers.GroupBy(x => x.GameId).Select(g => new { gameId = g.Key, count = g.Count() }).Union(_context.Hobbies.GroupBy(x => x.GameId).Select(g => new { gameId = g.Key, count = g.Count() })).OrderByDescending(x => x.count);
 
-            var listGame = new List<Entities.Game>();
+            var listGame = new List<Core.Entities.Game>();
             foreach (var gameOfUser in listGameFavorite) {
                 var game = _context.Games.Find(gameOfUser.gameId);
                 if (game is null) continue;
@@ -134,7 +134,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             query = listGame.AsQueryable();
         }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Game> query, bool? isNew)
+        private void OrderByCreatedDate(ref IQueryable<Core.Entities.Game> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -147,7 +147,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Game
             }
         }
 
-        private void FilterByName(ref IQueryable<Entities.Game> query, string name)
+        private void FilterByName(ref IQueryable<Core.Entities.Game> query, string name)
         {
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;

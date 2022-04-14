@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PlayTogether.Infrastructure.Entities
+namespace PlayTogether.Core.Entities
 {
     public class GameType : BaseEntity
     {

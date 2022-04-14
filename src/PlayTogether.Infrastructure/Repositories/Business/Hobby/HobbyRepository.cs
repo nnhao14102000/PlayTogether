@@ -64,7 +64,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
                 var existGameInHobby = await _context.Hobbies.Where(x => x.GameId == request.GameId && x.UserId == user.Id).ToListAsync();
                 if (existGameInHobby.Count == 1) continue;
 
-                var model = _mapper.Map<Entities.Hobby>(request);
+                var model = _mapper.Map<Core.Entities.Hobby>(request);
                 model.UserId = user.Id;
                 await _context.Hobbies.AddAsync(model);
                 if (await _context.SaveChangesAsync() < 0) {
@@ -100,7 +100,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
             return PagedResult<HobbiesGetAllResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Hobby> query, bool? isNew)
+        private void OrderByCreatedDate(ref IQueryable<Core.Entities.Hobby> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -183,7 +183,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Hobby
                 return result;
             }
 
-            var list = new List<Entities.Hobby>();
+            var list = new List<Core.Entities.Hobby>();
             foreach (var hobbyId in hobbyIds) {
                 var hobby = await _context.Hobbies.FindAsync(hobbyId.HobbyId);
                 if (hobby is null) {

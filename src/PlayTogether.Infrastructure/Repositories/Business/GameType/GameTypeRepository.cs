@@ -28,7 +28,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Exist + $" thể loại game {request.Name}");
                 return result;
             }
-            var model = _mapper.Map<Entities.GameType>(request);
+            var model = _mapper.Map<Core.Entities.GameType>(request);
             await _context.GameTypes.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {
                 var response = _mapper.Map<GameTypeCreateResponse>(model);
@@ -78,7 +78,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameType
 
         }
 
-        private void FilterGameTypeByName(ref IQueryable<Entities.GameType> query, string name)
+        private void FilterGameTypeByName(ref IQueryable<Core.Entities.GameType> query, string name)
         {
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;

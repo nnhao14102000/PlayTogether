@@ -203,7 +203,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
             if (toUser.IdentityId == identityId) {
-                var model = _mapper.Map<Entities.Report>(request);
+                var model = _mapper.Map<Core.Entities.Report>(request);
                 model.OrderId = orderId;
                 model.UserId = order.ToUserId;
                 model.ToUserId = order.UserId;
@@ -216,7 +216,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 ));
             }
             else {
-                var model = _mapper.Map<Entities.Report>(request);
+                var model = _mapper.Map<Core.Entities.Report>(request);
                 model.OrderId = orderId;
                 model.UserId = order.UserId;
                 model.ToUserId = order.ToUserId;
@@ -257,7 +257,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             return PagedResult<ReportGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterFromDateToDate(ref IQueryable<Entities.Report> query, DateTime? fromDate, DateTime? toDate)
+        private void FilterFromDateToDate(ref IQueryable<Core.Entities.Report> query, DateTime? fromDate, DateTime? toDate)
         {
             if (!query.Any() || fromDate is null || toDate is null) {
                 return;
@@ -265,7 +265,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             query = query.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate);
         }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Report> query, bool? isNew)
+        private void OrderByCreatedDate(ref IQueryable<Core.Entities.Report> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -292,7 +292,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             return PagedResult<ReportGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterByStatus(ref IQueryable<Entities.Report> query, bool? isApprove)
+        private void FilterByStatus(ref IQueryable<Core.Entities.Report> query, bool? isApprove)
         {
             if (!query.Any()) {
                 return;

@@ -59,7 +59,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                     param.PageSize);
         }
 
-        private void FilterByIsRelease(ref IQueryable<Entities.UnActiveBalance> query, bool? isRelease)
+        private void FilterByIsRelease(ref IQueryable<Core.Entities.UnActiveBalance> query, bool? isRelease)
         {
             if (!query.Any() || isRelease is null) {
                 return;
@@ -69,7 +69,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
 
         }
 
-        private void SortNew(ref IQueryable<Entities.UnActiveBalance> query, bool? isNew)
+        private void SortNew(ref IQueryable<Core.Entities.UnActiveBalance> query, bool? isNew)
         {
             if (!query.Any() || isNew is null) {
                 return;
@@ -82,7 +82,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
             }
         }
 
-        private void FilterByDateRange(ref IQueryable<Entities.UnActiveBalance> query, DateTime? fromDate, DateTime? toDate)
+        private void FilterByDateRange(ref IQueryable<Core.Entities.UnActiveBalance> query, DateTime? fromDate, DateTime? toDate)
         {
             if (!query.Any() || fromDate is null || toDate is null) {
                 return;

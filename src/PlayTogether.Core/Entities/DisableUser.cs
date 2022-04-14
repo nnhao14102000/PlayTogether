@@ -1,6 +1,6 @@
 using System;
 
-namespace PlayTogether.Infrastructure.Entities
+namespace PlayTogether.Core.Entities
 {
     public class DisableUser : BaseEntity
     {

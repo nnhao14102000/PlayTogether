@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PlayTogether.Infrastructure.Entities
+namespace PlayTogether.Core.Entities
 {
     public class Order : BaseEntity
     {

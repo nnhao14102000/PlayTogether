@@ -1,5 +1,5 @@
 using PlayTogether.Core.Dtos.Incoming.Generic;
-using PlayTogether.Infrastructure.Entities;
+using PlayTogether.Core.Entities;
 using System;
 
 namespace PlayTogether.Infrastructure.Helpers

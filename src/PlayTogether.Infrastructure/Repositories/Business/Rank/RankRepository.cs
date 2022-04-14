@@ -44,7 +44,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rank
                 return result;
             }
 
-            var model = _mapper.Map<Entities.Rank>(request);
+            var model = _mapper.Map<Core.Entities.Rank>(request);
             model.GameId = gameId;
             await _context.Ranks.AddAsync(model);
             if ((await _context.SaveChangesAsync() >= 0)) {

@@ -290,13 +290,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     param.PageSize);
         }
 
-        private void FilterUserByDate(ref IQueryable<Entities.AppUser> query, int DayInWeek)
+        private void FilterUserByDate(ref IQueryable<Core.Entities.AppUser> query, int DayInWeek)
         {
             if (!query.Any()
                || DayInWeek == 0) {
                 return;
             }
-            var list = new List<Entities.AppUser>();
+            var list = new List<Core.Entities.AppUser>();
             if (DayInWeek == 2) {
                 var datings = _context.Datings.Where(x => x.DayInWeek == 2);
                 foreach (var item in datings) {
@@ -349,7 +349,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = list.AsQueryable();
         }
 
-        private void FilterUserByHour(ref IQueryable<Entities.AppUser> query, string fromHour, string toHour)
+        private void FilterUserByHour(ref IQueryable<Core.Entities.AppUser> query, string fromHour, string toHour)
         {
             if (!query.Any()
                || String.IsNullOrEmpty(fromHour)
@@ -364,7 +364,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (fH > tH) {
                 return;
             }
-            var list = new List<Entities.AppUser>();
+            var list = new List<Core.Entities.AppUser>();
             var datings = _context.Datings.Where(x => x.FromHour >= fH && x.ToHour >= tH);
             foreach (var item in datings) {
                 var user = _context.AppUsers.Find(item.UserId);
@@ -391,7 +391,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     param.PageSize);
         }
 
-        private void OrderUserByCreatedDate(ref IQueryable<Entities.AppUser> query, bool? isNewAccount)
+        private void OrderUserByCreatedDate(ref IQueryable<Core.Entities.AppUser> query, bool? isNewAccount)
         {
             if (!query.Any() || isNewAccount is null) {
                 return;
@@ -405,9 +405,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterHaveSkillSameHobby(
-            ref IQueryable<Entities.AppUser> query,
+            ref IQueryable<Core.Entities.AppUser> query,
             bool? isSameHobbies,
-            Entities.AppUser user,
+            Core.Entities.AppUser user,
             bool? isPlayer)
         {
             if (!query.Any() || isSameHobbies is false || isSameHobbies is null) {
@@ -415,8 +415,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
             
 
-            var final = new List<Entities.AppUser>();
-            var listGameOfUser = new List<Entities.GameOfUser>();
+            var final = new List<Core.Entities.AppUser>();
+            var listGameOfUser = new List<Core.Entities.GameOfUser>();
 
             _context.Entry(user).Collection(x => x.Hobbies).Load();
 
@@ -436,7 +436,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
         }
 
-        private void FilterUserByItSelf(ref IQueryable<Entities.AppUser> query, string id)
+        private void FilterUserByItSelf(ref IQueryable<Core.Entities.AppUser> query, string id)
         {
             if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
                 return;
@@ -444,7 +444,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.Id != id);
         }
 
-        private void OrderUserPricing(ref IQueryable<Entities.AppUser> query, bool? isOrderByPricing)
+        private void OrderUserPricing(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByPricing)
         {
             if (!query.Any() || isOrderByPricing is null) {
                 return;
@@ -457,7 +457,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             }
         }
 
-        private void OrderUserByHighestRating(ref IQueryable<Entities.AppUser> query, bool? isOrderByRating)
+        private void OrderUserByHighestRating(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByRating)
         {
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
@@ -465,7 +465,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.Rate).ThenByDescending(x => x.NumOfRate);
         }
 
-        private void OrderUserByASCName(ref IQueryable<Entities.AppUser> query, bool? isOrderByName)
+        private void OrderUserByASCName(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByName)
         {
             if (!query.Any() || isOrderByName is null) {
                 return;
@@ -479,7 +479,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterUserByGender(
-            ref IQueryable<Entities.AppUser> query,
+            ref IQueryable<Core.Entities.AppUser> query,
             bool? gender)
         {
             if (!query.Any() || gender is null) {
@@ -489,13 +489,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterUserByGameId(
-            ref IQueryable<Entities.AppUser> query,
+            ref IQueryable<Core.Entities.AppUser> query,
             string gameId)
         {
             if (!query.Any() || String.IsNullOrEmpty(gameId) || String.IsNullOrWhiteSpace(gameId)) {
                 return;
             }
-            List<Entities.AppUser> result = new();
+            List<Core.Entities.AppUser> result = new();
             var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == gameId);
             foreach (var item in gamesOfUser) {
                 result.Add(item.User);
@@ -503,7 +503,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = result.AsQueryable();
         }
 
-        private void FilterUserRecentHired(ref IQueryable<Entities.AppUser> query, bool? isRecent, string userId, bool? isPlayer)
+        private void FilterUserRecentHired(ref IQueryable<Core.Entities.AppUser> query, bool? isRecent, string userId, bool? isPlayer)
         {
             if ((!query.Any())
                 || isRecent is null
@@ -519,7 +519,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                                                         )
                                         .OrderByDescending(x => x.CreatedDate)
                                         .ToList();
-            List<Entities.AppUser> players = new();
+            List<Core.Entities.AppUser> players = new();
             foreach (var item in orders) {
                 // _context.Entry(item).Reference(x => x.User).Load();
                 var player = _context.AppUsers.Find(item.ToUserId);
@@ -533,7 +533,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterUserByName(
-            ref IQueryable<Entities.AppUser> query,
+            ref IQueryable<Core.Entities.AppUser> query,
             string userId,
             string name)
         {
@@ -556,7 +556,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         private void FilterUserByNameVsEmail(
-            ref IQueryable<Entities.AppUser> query,
+            ref IQueryable<Core.Entities.AppUser> query,
             string name)
         {
             if (!query.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
@@ -565,7 +565,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => (x.Name.ToLower() + " " + x.Email.ToLower()).Contains(name.ToLower()));
         }
 
-        private void FilterUserStatus(ref IQueryable<Entities.AppUser> query, string userStatus)
+        private void FilterUserStatus(ref IQueryable<Core.Entities.AppUser> query, string userStatus)
         {
             if (!query.Any() || String.IsNullOrEmpty(userStatus) || String.IsNullOrWhiteSpace(userStatus)) {
                 return;
@@ -573,7 +573,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.Status.ToLower() == userStatus.ToLower());
         }
 
-        private void FilterIsPlayerUser(ref IQueryable<Entities.AppUser> query, bool? isPlayer)
+        private void FilterIsPlayerUser(ref IQueryable<Core.Entities.AppUser> query, bool? isPlayer)
         {
             if (!query.Any() || isPlayer is null) {
                 return;
@@ -581,7 +581,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.IsPlayer == isPlayer);
         }
 
-        private void FilterActiveUser(ref IQueryable<Entities.AppUser> query, bool? isActive)
+        private void FilterActiveUser(ref IQueryable<Core.Entities.AppUser> query, bool? isActive)
         {
             if (!query.Any() || isActive is null) {
                 return;
@@ -589,7 +589,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = query.Where(x => x.IsActive == isActive);
         }
 
-        private void Search(ref IQueryable<Entities.AppUser> query, string userId, string searchString)
+        private void Search(ref IQueryable<Core.Entities.AppUser> query, string userId, string searchString)
         {
             if (String.IsNullOrEmpty(searchString) || String.IsNullOrWhiteSpace(searchString)) {
                 return;
@@ -609,7 +609,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             if (_context.SaveChanges() < 0) return;
 
-            var finalList = new List<Entities.AppUser>();
+            var finalList = new List<Core.Entities.AppUser>();
 
             var seperateSearchStrings = searchString.Split(" ");
             if (searchString.Contains(" ")) {
@@ -629,7 +629,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 var listFromGame = _context.Games.Where(x => (x.DisplayName + x.Name + x.OtherName).ToLower().Contains(item.ToLower()))
                                                  .ToList();
 
-                var listGameOfUser = new List<Entities.GameOfUser>();
+                var listGameOfUser = new List<Core.Entities.GameOfUser>();
                 foreach (var game in listFromGame) {
                     var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
                     listGameOfUser = listGameOfUser.Union(list).ToList();
@@ -652,21 +652,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                                                         .ToList();
 
                 // type of game
-                var listTypeOfGame = new List<Entities.TypeOfGame>();
+                var listTypeOfGame = new List<Core.Entities.TypeOfGame>();
                 foreach (var gameType in listFromGameType) {
                     var list = _context.TypeOfGames.Where(x => x.GameTypeId == gameType.Id).ToList();
                     listTypeOfGame = listTypeOfGame.Union(list).ToList();
                 }
 
                 // game from type of game
-                var listFromGame02 = new List<Entities.Game>();
+                var listFromGame02 = new List<Core.Entities.Game>();
                 foreach (var typeOfGame in listTypeOfGame) {
                     var list = _context.Games.Where(x => x.Id == typeOfGame.GameId).ToList();
                     listFromGame02 = listFromGame02.Union(list).ToList();
                 }
 
                 // game of player from game
-                var listGameOfPlayer02 = new List<Entities.GameOfUser>();
+                var listGameOfPlayer02 = new List<Core.Entities.GameOfUser>();
                 foreach (var game in listFromGame02) {
                     var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
                     listGameOfPlayer02 = listGameOfPlayer02.Union(list).ToList();
@@ -680,7 +680,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = finalList.AsQueryable();
         }
 
-        private void FilterByStatus(ref IQueryable<Entities.AppUser> query, string status)
+        private void FilterByStatus(ref IQueryable<Core.Entities.AppUser> query, string status)
         {
             if (!query.Any() || String.IsNullOrEmpty(status) || String.IsNullOrWhiteSpace(status)) {
                 return;

@@ -101,7 +101,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             return result;
         }
 
-        private void FilterByIsReadNotification(ref IQueryable<Entities.Notification> query, bool? isRead)
+        private void FilterByIsReadNotification(ref IQueryable<Core.Entities.Notification> query, bool? isRead)
         {
             if (!query.Any() || isRead is null) {
                 return;
@@ -114,7 +114,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             }
         }
 
-        private void FilterByReceiverId(ref IQueryable<Entities.Notification> query, string id)
+        private void FilterByReceiverId(ref IQueryable<Core.Entities.Notification> query, string id)
         {
             if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
                 return;
@@ -122,7 +122,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             query = query.Where(x => x.ReceiverId == id);
         }
 
-        private void OrderByCreatedDate(ref IQueryable<Entities.Notification> query, bool? orderByCreatedDate)
+        private void OrderByCreatedDate(ref IQueryable<Core.Entities.Notification> query, bool? orderByCreatedDate)
         {
             if (!query.Any() || orderByCreatedDate is null) {
                 return;
@@ -164,7 +164,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" thông báo.");
                 return result;
             }
-            var model = _mapper.Map<Entities.Notification>(request);
+            var model = _mapper.Map<Core.Entities.Notification>(request);
             await _context.Notifications.AddAsync(model);
 
             if (await _context.SaveChangesAsync() >= 0) {

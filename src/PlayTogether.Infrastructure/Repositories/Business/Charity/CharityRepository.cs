@@ -36,7 +36,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             return PagedResult<CharityResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterCharitiesByName(ref IQueryable<Entities.Charity> queryCharity, string name)
+        private void FilterCharitiesByName(ref IQueryable<Core.Entities.Charity> queryCharity, string name)
         {
             if (!queryCharity.Any() || String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) {
                 return;
@@ -44,7 +44,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
             queryCharity = queryCharity.Where(x => x.OrganizationName.ToLower().Contains(name.ToLower()));
         }
 
-        private void FilterActiveCharities(ref IQueryable<Entities.Charity> queryCharity, bool? isActive)
+        private void FilterActiveCharities(ref IQueryable<Core.Entities.Charity> queryCharity, bool? isActive)
         {
             if (!queryCharity.Any() || isActive is null) {
                 return;
@@ -119,7 +119,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
                 return false;
             }
 
-            var model = _mapper.Map<Entities.CharityWithdraw>(request);
+            var model = _mapper.Map<Core.Entities.CharityWithdraw>(request);
             model.CharityId = charity.Id;
             await _context.CharityWithdraws.AddAsync(model);
 

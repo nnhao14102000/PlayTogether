@@ -104,7 +104,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                 return result;
             }
 
-            var model = _mapper.Map<Entities.GameOfUser>(request);
+            var model = _mapper.Map<Core.Entities.GameOfUser>(request);
             model.UserId = user.Id;
             if (String.IsNullOrEmpty(request.RankId) || String.IsNullOrWhiteSpace(request.RankId)) {
                 model.RankId = "None";
@@ -306,7 +306,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.GameOfUser
                     continue;
                 }
 
-                var model = _mapper.Map<Entities.GameOfUser>(request);
+                var model = _mapper.Map<Core.Entities.GameOfUser>(request);
                 model.UserId = user.Id;
 
                 var ranksOfGame = await _context.Ranks.Where(x => x.GameId == game.Id).ToListAsync();
