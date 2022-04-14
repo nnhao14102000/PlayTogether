@@ -148,6 +148,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy tài khoản tổ chức của bạn.");
                 return result;
             }
+            if(charity.Balance < request.MoneyWithdraw){
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Số tiền rút ra lớn hơn tiền trong tài khoản. Vui lòng nhập lại số tiền mà bạn muốn rút.");
+                return result;
+            }
+            charity.Balance -= request.MoneyWithdraw;
 
             var model = _mapper.Map<Core.Entities.CharityWithdraw>(request);
             model.CharityId = charity.Id;
