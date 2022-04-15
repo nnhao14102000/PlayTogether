@@ -7,6 +7,7 @@ namespace PlayTogether.Core.Entities
     public class UserBalance : BaseEntity
     {
         [MaxLength(100)]
+        [Required]
         public string UserId { get; set; }
         public AppUser User { get; set; }
 

@@ -7,6 +7,7 @@ namespace PlayTogether.Core.Entities
     public class Charity : BaseEntity
     {
         [MaxLength(100)]
+        [Required]
         public string IdentityId { get; set; }
 
         [MaxLength(50)]

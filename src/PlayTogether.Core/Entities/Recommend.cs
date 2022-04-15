@@ -5,6 +5,7 @@ namespace PlayTogether.Core.Entities
 {
     public class Recommend : BaseEntity
     {
+        [Required]
         [MaxLength(100)]
         public string UserId { get; set; }
         public AppUser User { get; set; }
@@ -18,6 +19,7 @@ namespace PlayTogether.Core.Entities
         public string GameOrderId { get; set; }
 
 
+        [Required]
         [MaxLength(100)]
         public string PlayerId { get; set; }
 

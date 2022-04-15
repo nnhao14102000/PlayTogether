@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayTogether.Infrastructure.Data;
 
 namespace PlayTogether.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220415030442_Report")]
+    partial class Report
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,7 +391,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("IdentityId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -422,8 +423,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CharityId")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -463,7 +462,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ReceiveId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -471,7 +469,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -543,8 +540,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
@@ -561,7 +556,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CharityId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -575,7 +569,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -628,13 +621,9 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("GameId")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdateDate")
@@ -758,9 +747,7 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("IgnoreUserId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -775,7 +762,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -802,7 +788,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -963,7 +948,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OrderId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -975,7 +959,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ToUserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -983,7 +966,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -1020,7 +1002,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PlayerId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -1037,7 +1018,6 @@ namespace PlayTogether.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -1383,9 +1363,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.Charity", "Charity")
                         .WithMany("CharityWithdraws")
-                        .HasForeignKey("CharityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CharityId");
 
                     b.Navigation("Charity");
                 });
@@ -1394,9 +1372,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Chats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1416,9 +1392,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("DisableUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1427,15 +1401,11 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.Charity", "Charity")
                         .WithMany("Donates")
-                        .HasForeignKey("CharityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CharityId");
 
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Donates")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Charity");
 
@@ -1446,15 +1416,11 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GameId");
 
                     b.HasOne("PlayTogether.Core.Entities.Order", "Order")
                         .WithMany("GameOfOrders")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Game");
 
@@ -1503,9 +1469,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Ignores")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1514,9 +1478,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Images")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1545,15 +1507,11 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.Order", "Order")
                         .WithMany("Ratings")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Ratings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Order");
 
@@ -1564,9 +1522,7 @@ namespace PlayTogether.Infrastructure.Migrations
                 {
                     b.HasOne("PlayTogether.Core.Entities.AppUser", "User")
                         .WithMany("Recommends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
