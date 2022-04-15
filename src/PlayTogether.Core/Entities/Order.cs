@@ -7,11 +7,13 @@ namespace PlayTogether.Core.Entities
 {
     public class Order : BaseEntity
     {
-        [MaxLength(100)]
+        [MaxLength(100)]   
+        [Required]     
         public string UserId { get; set; }
         public AppUser User { get; set; }
 
         [MaxLength(100)]
+        [Required]
         public string ToUserId { get; set; }
         //public User ToUser { get; set; }
 
@@ -35,6 +37,8 @@ namespace PlayTogether.Core.Entities
 
         // reason order finish soon
 
+        [MaxLength(50)]
+        [Required]
         public string Status { get; set; }
 
         public DateTime ProcessExpired {get; set; }
