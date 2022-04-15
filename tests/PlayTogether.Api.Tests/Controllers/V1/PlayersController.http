@@ -261,3 +261,28 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# updaet IsPlayer
+PUT {{baseUrl}}/api/play-together/v1/users/player
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "isPlayer": false
+}
+
+###
+
+
+# add dating
+POST {{baseUrl}}/api/play-together/v1/dating
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "fromHour": 900,
+  "toHour": 960,
+  "dayInWeek": 6
+}
+
+###

@@ -235,7 +235,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
                 return result;
             }
-            var identityId = loggedInUser.Id; 
+            var identityId = loggedInUser.Id;
 
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
@@ -256,21 +256,70 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var users = await _context.AppUsers.ToListAsync();
 
+            foreach (var item in users) {
+                if (item.IsActive is false) {
+                    continue;
+                }
+
+                if (item.PricePerHour < ValueConstants.PricePerHourMinValue) {
+                    continue;
+                }
+
+                if (item.MaxHourHire < ValueConstants.MaxHourHireMinValue
+                    || item.MaxHourHire > ValueConstants.MaxHourHireMaxValue) {
+                    continue;
+                }
+
+                var gameOfUserExist = await _context.GameOfUsers.AnyAsync(x => x.UserId == item.Id);
+                if (!gameOfUserExist) {
+                    continue;
+                }
+
+                if (item.IsPlayer is true) {
+                    continue;
+                }
+
+                var datings = await _context.Datings.Where(x => x.UserId == item.Id).ToListAsync();
+                if (datings.Count == 0) {
+                    continue;
+                }
+                int toDay = CalculateDayInWeekToday(DateTime.UtcNow.AddHours(7).DayOfWeek);
+                var toDayDate = datings.Where(x => x.DayInWeek == toDay).ToList();
+                if (toDayDate.Count == 0) {
+                    continue;
+                }
+                var hourNow = DateTime.UtcNow.AddHours(7).Hour;                
+                var minuteNow = DateTime.UtcNow.AddHours(7).Minute;
+                var timeNow = hourNow*60 + minuteNow;
+                var existDatingNow = toDayDate.Any(x => x.FromHour <= timeNow && timeNow <= x.ToHour);
+                if (existDatingNow) {
+                    item.IsPlayer = true;
+                }
+                if (await _context.SaveChangesAsync() < 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+                }
+
+            }
+
             var query = users.AsQueryable();
 
             Search(ref query, user.Id, param.Search);
-            FilterActiveUser(ref query, true);
-            FilterIsPlayerUser(ref query, param.IsPlayer);
-            FilterUserStatus(ref query, param.Status);
-            FilterUserByName(ref query, user.Id, param.Name);
-            FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id, param.IsPlayer);
-            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user, param.IsPlayer);
-            FilterUserByGameId(ref query, param.GameId);
-            FilterUserByGender(ref query, param.Gender);
+            
+            FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
+            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
+            
             FilterUserByDate(ref query, param.DayInWeek);
             FilterUserByHour(ref query, param.FromHour, param.ToHour);
-
+            
+            FilterUserByName(ref query, user.Id, param.Name);
+            FilterUserByGameId(ref query, param.GameId);
+            FilterUserByGender(ref query, param.Gender);
+            FilterUserStatus(ref query, param.Status);
+            
+            FilterIsPlayerUser(ref query, param.IsPlayer);
             FilterUserByItSelf(ref query, user.Id);
+            FilterActiveUser(ref query, true);
 
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
@@ -278,6 +327,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             OrderUserByCreatedDate(ref query, param.IsNewAccount);
 
             users = query.ToList();
+
             var response = _mapper.Map<List<UserSearchResponse>>(users);
             foreach (var item in response) {
                 var rates = await _context.Ratings.Where(x => x.ToUserId == item.Id).ToListAsync();
@@ -288,6 +338,35 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private int CalculateDayInWeekToday(DayOfWeek dayOfWeek)
+        {
+            var result = 0;
+            switch (dayOfWeek) {
+                case DayOfWeek.Monday:
+                    result = 2;
+                    break;
+                case DayOfWeek.Tuesday:
+                    result = 3;
+                    break;
+                case DayOfWeek.Wednesday:
+                    result = 4;
+                    break;
+                case DayOfWeek.Thursday:
+                    result = 5;
+                    break;
+                case DayOfWeek.Friday:
+                    result = 6;
+                    break;
+                case DayOfWeek.Saturday:
+                    result = 7;
+                    break;
+                default:
+                    result = 8;
+                    break;
+            }
+            return result;
         }
 
         private void FilterUserByDate(ref IQueryable<Core.Entities.AppUser> query, int DayInWeek)
@@ -407,13 +486,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         private void FilterHaveSkillSameHobby(
             ref IQueryable<Core.Entities.AppUser> query,
             bool? isSameHobbies,
-            Core.Entities.AppUser user,
-            bool? isPlayer)
+            Core.Entities.AppUser user)
         {
             if (!query.Any() || isSameHobbies is false || isSameHobbies is null) {
                 return;
             }
-            
+
 
             var final = new List<Core.Entities.AppUser>();
             var listGameOfUser = new List<Core.Entities.GameOfUser>();
@@ -429,10 +507,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 final.Add(gameOfUser.User);
             }
             query = final.AsQueryable().Distinct();
-            if(isPlayer is null){
-                return ;
-            }
-            query = query.Where(x => x.IsPlayer == isPlayer);
 
         }
 
@@ -503,7 +577,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             query = result.AsQueryable();
         }
 
-        private void FilterUserRecentHired(ref IQueryable<Core.Entities.AppUser> query, bool? isRecent, string userId, bool? isPlayer)
+        private void FilterUserRecentHired(ref IQueryable<Core.Entities.AppUser> query, bool? isRecent, string userId)
         {
             if ((!query.Any())
                 || isRecent is null
@@ -526,10 +600,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 players.Add(player);
             }
             query = players.AsQueryable().Distinct();
-            if(isPlayer is null){
-                return ;
-            }
-            query = query.Where(x => x.IsPlayer == isPlayer);
         }
 
         private void FilterUserByName(
