@@ -29,10 +29,11 @@ namespace PlayTogether.Core.Entities
         [Column(TypeName = "float")]
         public float FinalPrices { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
+        [Required]
         public string Message { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
         public string Reason { get; set; }
 
         // reason order finish soon
