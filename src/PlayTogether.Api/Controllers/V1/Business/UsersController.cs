@@ -18,6 +18,7 @@ using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PlayTogether.Core.Dtos.Incoming.Business.TransactionHistory;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -750,11 +751,33 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /*
         *================================================
         *                                              ||
-        * ML APIs SECTION                              ||
+        * Money APIs SECTION                           ||
         *                                              ||
         *================================================
         */
 
+        /// <summary>
+        /// Deposit
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost, Route("deposit")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> Deposit(DepositRequest request){
+            var response = await _transactionHistoryService.DepositAsync(HttpContext.User, request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
 
     }
 }

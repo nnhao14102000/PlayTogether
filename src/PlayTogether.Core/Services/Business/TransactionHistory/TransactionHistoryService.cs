@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Incoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Business;
@@ -20,6 +21,24 @@ namespace PlayTogether.Core.Services.Business.TransactionHistory
             _transactionHistoryRepository = transactionHistoryRepository;
             _logger = logger;
         }
+
+        public async Task<Result<bool>> DepositAsync(ClaimsPrincipal principal, DepositRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _transactionHistoryRepository.DepositAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call DepositAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesAsync(ClaimsPrincipal principal, TransactionParameters param)
         {
             try {

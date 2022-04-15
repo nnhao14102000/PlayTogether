@@ -254,6 +254,9 @@
 >   ***Role Access***: User, Admin  
 >   ***Extension***: Paging, Order by Created Date, Filter by number of star vote  
 >
+> - ``POST /api/play-together/v1/users/deposit ``  
+>   ***Description***: Deposit money  
+>   ***Role Access***: User  
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

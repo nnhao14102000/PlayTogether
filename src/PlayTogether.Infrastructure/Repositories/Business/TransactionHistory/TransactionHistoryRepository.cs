@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Generic;
+using PlayTogether.Core.Dtos.Incoming.Business.TransactionHistory;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
 {
@@ -116,6 +117,39 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        public async Task<Result<bool>> DepositAsync(ClaimsPrincipal principal, DepositRequest request)
+        {
+            var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+            user.UserBalance.Balance += request.Money;
+            user.UserBalance.ActiveBalance += request.Money;
+            await _context.TransactionHistories.AddAsync(Helpers.TransactionHelpers.PopulateTransactionHistory(
+                user.UserBalance.Id, TransactionTypeConstants.Add, request.Money, TransactionTypeConstants.Deposit, request.MomoTransactionId
+            ));
+            await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                user.Id, "Nạp tiền thành công!", $"Bạn đã nạp {request.Money} vào tài khoản thành công lúc {DateTime.Now.AddHours(7)}.", ""
+            ));
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+
         }
     }
 }
