@@ -49,7 +49,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
-        
+
 
         /// <summary>
         /// Get rating by Id
@@ -77,6 +77,30 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
+        /// Get rating detail by Id
+        /// </summary>
+        /// <param name="ratingId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpGet("detail/{ratingId}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> GetRatingDetailById(string ratingId)
+        {
+            var response = await _ratingService.GetRatingByDetailAdminAsync(ratingId);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Report violate feedback
         /// </summary>
         /// <param name="rateId"></param>
@@ -86,9 +110,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPut("violate/{rateId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> ReportViolateFeedback(string rateId)
+        public async Task<ActionResult> ReportViolateFeedback(string rateId, RatingViolateRequest request)
         {
-            var response = await _ratingService.ViolateRatingAsync(rateId);
+            var response = await _ratingService.ViolateRatingAsync(rateId, request);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);

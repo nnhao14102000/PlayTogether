@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using PlayTogether.Core.Dtos.Outcoming.Business.Order;
 
 namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 {
@@ -490,6 +491,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             var query = ratings.AsQueryable();
 
             FilterActiveFeedback(ref query, param.IsActive);
+            FilterApproveFeedback(ref query, param.IsApprove);
             OrderByCreatedDate(ref query, param.IsNew);
 
             ratings = query.ToList();
@@ -498,6 +500,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
             var response = _mapper.Map<List<RatingGetResponse>>(ratings);
             return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void FilterApproveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isApprove)
+        {
+            if(!query.Any() || isApprove is null){
+                return;
+            }
+            query = query.Where(x => x.IsApprove == isApprove);
         }
 
         private void FilterActiveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isActive)
@@ -535,7 +545,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             query = query.Where(x => x.Rate == vote);
         }
 
-        public async Task<Result<bool>> ViolateRatingAsync(string ratingId)
+        public async Task<Result<bool>> ViolateRatingAsync(string ratingId, RatingViolateRequest request)
         {
             var result = new Result<bool>();
             var rating = await _context.Ratings.FindAsync(ratingId);
@@ -555,9 +565,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
             if (rating.IsViolate is true) {
                 rating.IsViolate = false;
+                rating.Reason = request.Reason;
             }
             else if (rating.IsViolate is false) {
                 rating.IsViolate = true;
+                rating.Reason = request.Reason;
             }
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;
@@ -858,6 +870,50 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
             await _context.Entry(rating).Reference(x => x.User).LoadAsync();
             var response = _mapper.Map<RatingGetResponse>(rating);
+            result.Content = response;
+            return result;
+        }
+
+        public async Task<Result<RatingGetDetailResponse>> GetRatingByDetailAdminAsync(string ratingId)
+        {
+            var result = new Result<RatingGetDetailResponse>();
+            var rating = await _context.Ratings.FindAsync(ratingId);
+            if (rating is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
+                return result;
+            }
+            await _context.Entry(rating).Reference(x => x.User).LoadAsync();
+            await _context.Entry(rating).Reference(x => x.Order).LoadAsync();
+
+            await _context.Entry(rating.Order).Reference(x => x.User).LoadAsync();
+
+            await _context.Entry(rating.Order)
+                .Collection(x => x.Ratings)
+                .LoadAsync();
+
+            await _context.Entry(rating.Order)
+                .Collection(x => x.Reports)
+                .LoadAsync();
+
+            await _context.Entry(rating.Order)
+                    .Collection(x => x.GameOfOrders)
+                    .Query()
+                    .Include(x => x.Game)
+                    .LoadAsync();
+            
+            var response = _mapper.Map<RatingGetDetailResponse>(rating);
+
+            var toUser = await _context.AppUsers.FindAsync(rating.Order.ToUserId);
+
+            response.Order.ToUser = new OrderUserResponse {
+                Id = toUser.Id,
+                Name = toUser.Name,
+                Email = toUser.Email,
+                Avatar = toUser.Avatar,
+                IsActive = toUser.IsActive,
+                IsPlayer = toUser.IsPlayer,
+                Status = toUser.Status
+            };
             result.Content = response;
             return result;
         }

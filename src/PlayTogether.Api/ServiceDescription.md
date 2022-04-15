@@ -308,8 +308,12 @@
 <h2 id="rating">Rating  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
 > - ``GET /api/play-together/v1/rating/{ratingId} ``  
->   ***Description***: Get a Ratings   
+>   ***Description***: Get a Rating   
 >   ***Role Access***: User, Admin  
+>
+> - ``GET /api/play-together/v1/rating/detail/{ratingId} ``  
+>   ***Description***: Get a Rating in detail   
+>   ***Role Access***: Admin  
 >
 > - ``GET /api/play-together/v1/rating/violates ``  
 >   ***Description***: Get all Violate Ratings of a User   

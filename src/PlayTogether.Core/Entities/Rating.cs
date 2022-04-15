@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayTogether.Core.Entities
 {
@@ -17,11 +16,14 @@ namespace PlayTogether.Core.Entities
         [MaxLength(100)]
         public string ToUserId { get; set; }
 
+        [MaxLength(200)]
         public string Comment { get; set; }
 
         [Range(1, 5)]
         public int Rate { get; set; }
         public bool IsViolate { get; set; }
+        [MaxLength(200)]
+        public string Reason { get; set; }
         public bool IsActive { get; set; }
         public bool? IsApprove { get; set; }
     }

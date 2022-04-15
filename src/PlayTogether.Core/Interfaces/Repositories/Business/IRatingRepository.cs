@@ -12,7 +12,8 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PagedResult<RatingGetResponse>> GetAllRatingsAsync(string userId, RatingParameters param);
         Task<Result<RatingGetResponse>> GetRatingByIdAsync(string ratingId);
         Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param);
-        Task<Result<bool>> ViolateRatingAsync(string ratingId);
+        Task<Result<RatingGetDetailResponse>> GetRatingByDetailAdminAsync(string ratingId);
+        Task<Result<bool>> ViolateRatingAsync(string ratingId, RatingViolateRequest request);
         Task<Result<bool>> ProcessViolateRatingAsync (string ratingId, ProcessViolateRatingRequest request);
     }
 }
