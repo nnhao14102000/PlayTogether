@@ -192,3 +192,14 @@ Authorization: {{authToken}}
 }
 
 ###
+
+# Send email
+POST {{baseUrl}}/api/play-together/v1/email/send
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "toEmail": "nnhao9a3@gmail.com",
+  "subject": "Test",
+  "body": "Test email"
+}
