@@ -10,6 +10,7 @@ using Microsoft.Extensions.ML;
 using Microsoft.IdentityModel.Tokens;
 using PlayTogether.Api.Helpers;
 using PlayTogether.Core.Dtos.Incoming.Business.Recommend;
+using PlayTogether.Core.Dtos.Incoming.Mail;
 using PlayTogether.Infrastructure.Data;
 using System;
 using System.Text;
@@ -31,7 +32,7 @@ namespace PlayTogether.Api
             services.ConfigureServiceInjection(Configuration);
             services.AddPredictionEnginePool<RecommendData, RecommendPredict>()
                 .FromFile(modelName: "PTORecommenderModel", filePath: "DataFile/PTORecommenderModel.zip", watchForChanges: true);
-
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddControllers()
                 .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

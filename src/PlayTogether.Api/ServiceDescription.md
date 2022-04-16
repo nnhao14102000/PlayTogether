@@ -24,6 +24,7 @@
 - <a href="#feedback" target="_self">System Feedback</a> <br>
 - <a href="#dating" target="_self">Dating</a> <br>
 - <a href="#recommend" target="_self">Recommend</a> <br>
+- <a href="#email" target="_self">Email</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -646,6 +647,13 @@
 > - ``POST /api/play-together/v1/recommends ``  
 >   ***Description***: Check is Player recommend for User  
 >   ***Role Access***: User  
+>
+
+<h2 id="email">Email  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/email/send ``  
+>   ***Description***: Send email to a specific user    
+>   ***Role Access***: Admin, user    
 >
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
