@@ -1,22 +1,16 @@
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlayTogether.Core.Dtos.Incoming.Auth;
 using PlayTogether.Core.Dtos.Incoming.Business.AppUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Donate;
-using PlayTogether.Core.Dtos.Incoming.Business.GameOfUser;
 using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
-using PlayTogether.Core.Dtos.Outcoming.Business.GameOfUser;
-using PlayTogether.Core.Dtos.Outcoming.Business.Hobby;
 using PlayTogether.Core.Dtos.Outcoming.Business.Order;
-using PlayTogether.Core.Dtos.Outcoming.Business.TransactionHistory;
 using PlayTogether.Core.Dtos.Outcoming.Business.UnActiveBalance;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Parameters;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Incoming.Business.TransactionHistory;
 
@@ -766,8 +760,38 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost, Route("deposit")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> Deposit(DepositRequest request){
+        public async Task<ActionResult> Deposit(DepositRequest request)
+        {
             var response = await _transactionHistoryService.DepositAsync(HttpContext.User, request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
+        /*
+        *================================================
+        *                                              ||
+        * Extend APIs SECTION                          ||
+        *                                              ||
+        *================================================
+        */
+        /// <summary>
+        /// Check to turn on IsPlayer if On time in Dating
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPost, Route("check-dating")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> TurnOnIsPlayerWhenDatingComeOn(){
+            var response = await _appUserService.TurnOnIsPlayerWhenDatingComeOnAsync();
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);

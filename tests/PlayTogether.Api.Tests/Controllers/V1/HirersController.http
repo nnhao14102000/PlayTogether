@@ -38,7 +38,12 @@ Authorization: {{authToken}}
 ###
 
 # Get all users / Search users
-GET {{baseUrl}}/api/play-together/v1/users/?pageSize=50&pageNumber=1
+GET {{baseUrl}}/api/play-together/v1/users/
+?search=Tham
+&fromPrice=0
+&toPrice=100
+&pageSize=50
+&pageNumber=1
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

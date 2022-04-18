@@ -154,7 +154,7 @@
 > - ``GET /api/play-together/v1/users/ ``  
 >   ***Description***: Get all users / Search users  
 >   ***Role Access***: User  
->   ***Extension***: Paging, searching, filtering by name, gameId, gender, status, recent ordered, sort by Name, Price, Rate, New account     
+>   ***Extension***: Paging, searching, filtering by price, gameId, gender, status, recent ordered, sort by Name, Price, Rate, New account     
 >
 > - ``GET /api/play-together/v1/users/personal ``  
 >   ***Description***: Get user personal profile  
@@ -258,6 +258,10 @@
 >
 > - ``POST /api/play-together/v1/users/deposit ``  
 >   ***Description***: Deposit money  
+>   ***Role Access***: User  
+>
+> - ``POST /api/play-together/v1/users/check-dating ``  
+>   ***Description***: Check to Turn on Is Player base on dating  
 >   ***Role Access***: User  
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 

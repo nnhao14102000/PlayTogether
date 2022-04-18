@@ -153,6 +153,17 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<Result<bool>> TurnOnIsPlayerWhenDatingComeOnAsync()
+        {
+            try {
+                return await _appUserRepository.TurnOnIsPlayerWhenDatingComeOnAsync();
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call TurnOnIsPlayerWhenDatingComeOnAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> UpdatePersonalInfoAsync(
             ClaimsPrincipal principal,
             UserPersonalInfoUpdateRequest request)

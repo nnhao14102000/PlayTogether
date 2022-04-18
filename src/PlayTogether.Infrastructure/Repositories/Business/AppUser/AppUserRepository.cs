@@ -256,70 +256,24 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var users = await _context.AppUsers.ToListAsync();
 
-            foreach (var item in users) {
-                if (item.IsActive is false) {
-                    continue;
-                }
-
-                if (item.PricePerHour < ValueConstants.PricePerHourMinValue) {
-                    continue;
-                }
-
-                if (item.MaxHourHire < ValueConstants.MaxHourHireMinValue
-                    || item.MaxHourHire > ValueConstants.MaxHourHireMaxValue) {
-                    continue;
-                }
-
-                var gameOfUserExist = await _context.GameOfUsers.AnyAsync(x => x.UserId == item.Id);
-                if (!gameOfUserExist) {
-                    continue;
-                }
-
-                if (item.IsPlayer is true) {
-                    continue;
-                }
-
-                var datings = await _context.Datings.Where(x => x.UserId == item.Id).ToListAsync();
-                if (datings.Count == 0) {
-                    continue;
-                }
-                int toDay = CalculateDayInWeekToday(DateTime.UtcNow.AddHours(7).DayOfWeek);
-                var toDayDate = datings.Where(x => x.DayInWeek == toDay).ToList();
-                if (toDayDate.Count == 0) {
-                    continue;
-                }
-                var hourNow = DateTime.UtcNow.AddHours(7).Hour;                
-                var minuteNow = DateTime.UtcNow.AddHours(7).Minute;
-                var timeNow = hourNow*60 + minuteNow;
-                var existDatingNow = toDayDate.Any(x => x.FromHour <= timeNow && timeNow <= x.ToHour);
-                if (existDatingNow) {
-                    item.IsPlayer = true;
-                }
-                if (await _context.SaveChangesAsync() < 0) {
-                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
-                    return result;
-                }
-
-            }
-
             var query = users.AsQueryable();
 
             Search(ref query, user.Id, param.Search);
-            
+
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
             FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
-            
+
             FilterUserByDate(ref query, param.DayInWeek);
             FilterUserByHour(ref query, param.FromHour, param.ToHour);
-            
-            FilterUserByName(ref query, user.Id, param.Name);
+
             FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
             FilterUserStatus(ref query, param.Status);
-            
+
             FilterIsPlayerUser(ref query, param.IsPlayer);
             FilterUserByItSelf(ref query, user.Id);
             FilterActiveUser(ref query, true);
+            FilterUserByRangePrice(ref query, param.FromPrice, param.ToPrice);
 
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
@@ -338,6 +292,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     response,
                     param.PageNumber,
                     param.PageSize);
+        }
+
+        private void FilterUserByRangePrice(ref IQueryable<Core.Entities.AppUser> query, float? fromPrice, float? toPrice)
+        {
+            if(!query.Any() || fromPrice is null || toPrice is null || fromPrice >= toPrice){
+                return;
+            }
+            
+            query = query.Where(x => x.PricePerHour >= fromPrice && x.PricePerHour <= toPrice);
         }
 
         private int CalculateDayInWeekToday(DayOfWeek dayOfWeek)
@@ -679,75 +642,81 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             if (_context.SaveChanges() < 0) return;
 
-            var finalList = new List<Core.Entities.AppUser>();
-
-            var seperateSearchStrings = searchString.Split(" ");
-            if (searchString.Contains(" ")) {
-
+            query = query.Where(x => x.Name.ToLower().Contains(searchString.ToLower()));
+            if (query.Any()) {
+                return;
             }
-            else if (searchString.Contains("_")) {
-                seperateSearchStrings = searchString.Split("_");
+            else {
+                var finalList = new List<Core.Entities.AppUser>();
+
+                var seperateSearchStrings = searchString.Split(" ");
+                if (searchString.Contains(" ")) {
+
+                }
+                else if (searchString.Contains("_")) {
+                    seperateSearchStrings = searchString.Split("_");
+                }
+                else if (searchString.Contains("-")) {
+                    seperateSearchStrings = searchString.Split("-");
+                }
+
+                foreach (var item in seperateSearchStrings) {
+                    finalList = finalList.Union(_context.AppUsers.Where(x => x.Name.ToLower().Contains(item.ToLower()))
+                                                                 .ToList()).ToList();
+
+                    var listFromGame = _context.Games.Where(x => (x.DisplayName + x.Name + x.OtherName).ToLower().Contains(item.ToLower()))
+                                                     .ToList();
+
+                    var listGameOfUser = new List<Core.Entities.GameOfUser>();
+                    foreach (var game in listFromGame) {
+                        var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
+                        listGameOfUser = listGameOfUser.Union(list).ToList();
+                    }
+
+                    foreach (var gameOfPlayer in listGameOfUser) {
+                        var list = _context.AppUsers.Where(x => x.Id == gameOfPlayer.UserId).ToList();
+                        finalList = finalList.Union(list).ToList();
+                    }
+
+                    // gametype
+                    var listFromGameType = _context.GameTypes.Where(x => (x.Name
+                                                                                + " "
+                                                                                + x.ShortName
+                                                                                + " "
+                                                                                + x.OtherName
+                                                                                + " "
+                                                                                + x.Description).ToLower()
+                                                                                                .Contains(item.ToLower()))
+                                                            .ToList();
+
+                    // type of game
+                    var listTypeOfGame = new List<Core.Entities.TypeOfGame>();
+                    foreach (var gameType in listFromGameType) {
+                        var list = _context.TypeOfGames.Where(x => x.GameTypeId == gameType.Id).ToList();
+                        listTypeOfGame = listTypeOfGame.Union(list).ToList();
+                    }
+
+                    // game from type of game
+                    var listFromGame02 = new List<Core.Entities.Game>();
+                    foreach (var typeOfGame in listTypeOfGame) {
+                        var list = _context.Games.Where(x => x.Id == typeOfGame.GameId).ToList();
+                        listFromGame02 = listFromGame02.Union(list).ToList();
+                    }
+
+                    // game of player from game
+                    var listGameOfPlayer02 = new List<Core.Entities.GameOfUser>();
+                    foreach (var game in listFromGame02) {
+                        var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
+                        listGameOfPlayer02 = listGameOfPlayer02.Union(list).ToList();
+                    }
+
+                    foreach (var gameOfPlayer in listGameOfPlayer02) {
+                        var list = _context.AppUsers.Where(x => x.Id == gameOfPlayer.UserId).ToList();
+                        finalList = finalList.Union(list).ToList();
+                    }
+                }
+                query = finalList.AsQueryable();
             }
-            else if (searchString.Contains("-")) {
-                seperateSearchStrings = searchString.Split("-");
-            }
-
-            foreach (var item in seperateSearchStrings) {
-                finalList = finalList.Union(_context.AppUsers.Where(x => x.Name.ToLower().Contains(item.ToLower()))
-                                                             .ToList()).ToList();
-
-                var listFromGame = _context.Games.Where(x => (x.DisplayName + x.Name + x.OtherName).ToLower().Contains(item.ToLower()))
-                                                 .ToList();
-
-                var listGameOfUser = new List<Core.Entities.GameOfUser>();
-                foreach (var game in listFromGame) {
-                    var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
-                    listGameOfUser = listGameOfUser.Union(list).ToList();
-                }
-
-                foreach (var gameOfPlayer in listGameOfUser) {
-                    var list = _context.AppUsers.Where(x => x.Id == gameOfPlayer.UserId).ToList();
-                    finalList = finalList.Union(list).ToList();
-                }
-
-                // gametype
-                var listFromGameType = _context.GameTypes.Where(x => (x.Name
-                                                                            + " "
-                                                                            + x.ShortName
-                                                                            + " "
-                                                                            + x.OtherName
-                                                                            + " "
-                                                                            + x.Description).ToLower()
-                                                                                            .Contains(item.ToLower()))
-                                                        .ToList();
-
-                // type of game
-                var listTypeOfGame = new List<Core.Entities.TypeOfGame>();
-                foreach (var gameType in listFromGameType) {
-                    var list = _context.TypeOfGames.Where(x => x.GameTypeId == gameType.Id).ToList();
-                    listTypeOfGame = listTypeOfGame.Union(list).ToList();
-                }
-
-                // game from type of game
-                var listFromGame02 = new List<Core.Entities.Game>();
-                foreach (var typeOfGame in listTypeOfGame) {
-                    var list = _context.Games.Where(x => x.Id == typeOfGame.GameId).ToList();
-                    listFromGame02 = listFromGame02.Union(list).ToList();
-                }
-
-                // game of player from game
-                var listGameOfPlayer02 = new List<Core.Entities.GameOfUser>();
-                foreach (var game in listFromGame02) {
-                    var list = _context.GameOfUsers.Where(x => x.GameId == game.Id).ToList();
-                    listGameOfPlayer02 = listGameOfPlayer02.Union(list).ToList();
-                }
-
-                foreach (var gameOfPlayer in listGameOfPlayer02) {
-                    var list = _context.AppUsers.Where(x => x.Id == gameOfPlayer.UserId).ToList();
-                    finalList = finalList.Union(list).ToList();
-                }
-            }
-            query = finalList.AsQueryable();
         }
 
         private void FilterByStatus(ref IQueryable<Core.Entities.AppUser> query, string status)
@@ -896,6 +865,59 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return result;
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Tài khoản của bạn sẽ được mở lại lúc {disable.DateActive}.");
+            return result;
+        }
+
+        public async Task<Result<bool>> TurnOnIsPlayerWhenDatingComeOnAsync()
+        {
+            var result = new Result<bool>();
+            var users = await _context.AppUsers.ToListAsync();
+            foreach (var item in users) {
+                if (item.IsActive is false) {
+                    continue;
+                }
+
+                if (item.PricePerHour < ValueConstants.PricePerHourMinValue) {
+                    continue;
+                }
+
+                if (item.MaxHourHire < ValueConstants.MaxHourHireMinValue
+                    || item.MaxHourHire > ValueConstants.MaxHourHireMaxValue) {
+                    continue;
+                }
+
+                var gameOfUserExist = await _context.GameOfUsers.AnyAsync(x => x.UserId == item.Id);
+                if (!gameOfUserExist) {
+                    continue;
+                }
+
+                if (item.IsPlayer is true) {
+                    continue;
+                }
+
+                var datings = await _context.Datings.Where(x => x.UserId == item.Id).ToListAsync();
+                if (datings.Count == 0) {
+                    continue;
+                }
+                int toDay = CalculateDayInWeekToday(DateTime.UtcNow.AddHours(7).DayOfWeek);
+                var toDayDate = datings.Where(x => x.DayInWeek == toDay).ToList();
+                if (toDayDate.Count == 0) {
+                    continue;
+                }
+                var hourNow = DateTime.UtcNow.AddHours(7).Hour;
+                var minuteNow = DateTime.UtcNow.AddHours(7).Minute;
+                var timeNow = hourNow * 60 + minuteNow;
+                var existDatingNow = toDayDate.Any(x => x.FromHour <= timeNow && timeNow <= x.ToHour);
+                if (existDatingNow) {
+                    item.IsPlayer = true;
+                }
+                if (await _context.SaveChangesAsync() < 0) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    return result;
+                }
+
+            }
+            result.Content = true;
             return result;
         }
     }

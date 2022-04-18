@@ -1,9 +1,9 @@
+using System;
 namespace PlayTogether.Core.Parameters
 {
     public class UserParameters : QueryStringParameters
     {
         public string Search { get; set; }
-        public string Name {get; set;}
         public bool? Gender { get; set; }
         public string GameId { get; set; }
         public string Status { get; set; }
@@ -17,5 +17,7 @@ namespace PlayTogether.Core.Parameters
         public string FromHour { get; set; }
         public string ToHour { get; set; }
         public int DayInWeek { get; set; }
+        public float? FromPrice { get; set; }
+        public float? ToPrice { get; set; }
     }
 }
