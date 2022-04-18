@@ -39,5 +39,6 @@ namespace PlayTogether.Infrastructure.Data
         public DbSet<Dating> Datings { get; set; }
         public DbSet<Ignore> Ignores { get; set; }
         public DbSet<SystemFeedback> SystemFeedbacks { get; set; }
+        public DbSet<SystemConfig> SystemConfigs { get; set; }
     }
 }

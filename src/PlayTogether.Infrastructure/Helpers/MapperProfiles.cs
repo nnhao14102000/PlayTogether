@@ -16,6 +16,7 @@ using PlayTogether.Core.Dtos.Incoming.Business.Order;
 using PlayTogether.Core.Dtos.Incoming.Business.Rank;
 using PlayTogether.Core.Dtos.Incoming.Business.Rating;
 using PlayTogether.Core.Dtos.Incoming.Business.Report;
+using PlayTogether.Core.Dtos.Incoming.Business.SystemConfig;
 using PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback;
 using PlayTogether.Core.Dtos.Incoming.Business.TypeOfGame;
 using PlayTogether.Core.Dtos.Outcoming.Business.AppUser;
@@ -137,6 +138,7 @@ namespace PlayTogether.Infrastructure.Helpers
             // Rating mapper profile
             CreateMap<Rating, RatingGetResponse>();
             CreateMap<AppUser, UserRateResponse>();
+            CreateMap<Rating, RatingGetDetailResponse>();
             CreateMap<RatingCreateRequest, Rating>();
 
             // Report mapper profile
@@ -181,6 +183,10 @@ namespace PlayTogether.Infrastructure.Helpers
 
             // Charity with draw
             CreateMap<CharityWithDrawRequest, CharityWithdraw>();
+
+            // System config
+            CreateMap<ConfigCreateRequest, SystemConfig>();
+            CreateMap<ConfigUpdateRequest, SystemConfig>();
 
             // src => target
         }

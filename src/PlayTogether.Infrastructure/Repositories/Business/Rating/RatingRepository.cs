@@ -504,7 +504,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
         private void FilterApproveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isApprove)
         {
-            if(!query.Any() || isApprove is null){
+            if(!query.Any()){
                 return;
             }
             query = query.Where(x => x.IsApprove == isApprove);
@@ -594,13 +594,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
             if (request.IsApprove is false) {
                 rating.IsViolate = false;
-                rating.IsApprove = true;
+                rating.IsApprove = false;
             }
             else {
                 var toUser = await _context.AppUsers.FindAsync(rating.ToUserId);
                 await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
                 rating.IsActive = false;
-                rating.IsApprove = false;
+                rating.IsApprove = true;
                 rating.IsViolate = true;
                 toUser.NumOfRate -= 1;
 

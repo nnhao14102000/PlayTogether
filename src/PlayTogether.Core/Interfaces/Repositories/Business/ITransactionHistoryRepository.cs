@@ -13,5 +13,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
 
         Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesForAdminAsync(string userId, TransactionParameters param);
         Task<Result<bool>> DepositAsync(ClaimsPrincipal principal, DepositRequest request);
+        // Task<Result<(float, float, float)>> CalculateTypeMoney(ClaimsPrincipal principal);
     }
 }

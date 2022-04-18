@@ -151,5 +151,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
             return result;
 
         }
+
+    //     public async Task<Result<(float, float, float)>> CalculateTypeMoney(ClaimsPrincipal principal)
+    //     {
+    //         throw new NotImplementedException();
+    //     }
     }
 }

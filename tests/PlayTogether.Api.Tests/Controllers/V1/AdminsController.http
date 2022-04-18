@@ -82,7 +82,14 @@ Authorization: {{authToken}}
 # Get all player rating violate
 GET {{baseUrl}}/api/play-together/v1/rating/violates
 ?IsNew=true
-&IsActive=true
+&IsActive=false
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get a rating detail
+GET {{baseUrl}}/api/play-together/v1/rating/detail/f2959786-3ae6-4cca-9f02-cb4dda88f65f
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 
