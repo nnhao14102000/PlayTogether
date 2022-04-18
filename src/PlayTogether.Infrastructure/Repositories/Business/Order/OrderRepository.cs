@@ -34,6 +34,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             OrderCreateRequest request)
         {
             var result = new Result<OrderGetResponse>();
+
+            // Check hirer
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
@@ -69,13 +71,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return result;
             }
 
-            if (toUser.Status is not UserStatusConstants.Online) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện không sẵn sàng nhận thuê. Vui lòng thử lại sau.");
+            if (toUser.IsActive is false) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện đang bị khóa tài khoản. Vui lòng thử lại sau.");
                 return result;
             }
 
-            if (toUser.IsActive is false) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện đang bị khóa tài khoản. Vui lòng thử lại sau.");
+            // only online, offline can be receive order
+            if (toUser.Status is not UserStatusConstants.Online && toUser.Status is not UserStatusConstants.Offline) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Player{toUser.Name} hiện không sẵn sàng nhận thuê. Vui lòng thử lại sau.");
                 return result;
             }
 
