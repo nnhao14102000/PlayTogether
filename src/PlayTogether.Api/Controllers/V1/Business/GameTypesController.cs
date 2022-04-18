@@ -38,9 +38,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _gameTypeService.GetAllGameTypesAsync(param);
 
             if(!response.IsSuccess){
-                if (response.Error.Code == 400){
-                    return BadRequest(response);
-                }else if(response.Error.Code == 404){
+                if(response.Error.Code == 404){
                     return NotFound(response);
                 }
                 else{

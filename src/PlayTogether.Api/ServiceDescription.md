@@ -25,6 +25,7 @@
 - <a href="#dating" target="_self">Dating</a> <br>
 - <a href="#recommend" target="_self">Recommend</a> <br>
 - <a href="#email" target="_self">Email</a> <br>
+- <a href="#config" target="_self">System Config</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
 
@@ -654,6 +655,31 @@
 > - ``POST /api/play-together/v1/email/send ``  
 >   ***Description***: Send email to a specific user    
 >   ***Role Access***: Admin, user    
+>
+
+
+<h2 id="config">System Config  <a href="#table-of-contents" target="_self">🔙</a></h2>   
+
+> - ``GET /api/play-together/v1/system-configs ``  
+>   ***Description***: Get all system configs   
+>   ***Role Access***: Admin, User  
+>   ***Extension***: Paging, Filter by title  
+>
+> - ``GET /api/play-together/v1/system-configs/{configId} ``  
+>   ***Description***: Get config by Id   
+>   ***Role Access***: Admin, User  
+>
+> - ``POST /api/play-together/v1/system-configs/{configId} ``  
+>   ***Description***: Create a system config    
+>   ***Role Access***: Admin  
+>
+> - ``PUT /api/play-together/v1/system-configs/{configId} ``  
+>   ***Description***: Update a system config  
+>   ***Role Access***: Admin  
+> 
+> - ``DELETE /api/play-together/v1/system-configs/{configId} ``  
+>   ***Description***: Delete a system config    
+>   ***Role Access***: Admin  
 >
 
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
