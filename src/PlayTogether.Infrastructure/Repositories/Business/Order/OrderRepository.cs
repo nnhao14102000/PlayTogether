@@ -611,8 +611,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
-                        DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
+                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                        // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                         )
                 );
                 if (await _context.SaveChangesAsync() >= 0) {

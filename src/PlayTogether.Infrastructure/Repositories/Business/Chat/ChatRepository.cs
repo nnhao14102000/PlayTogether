@@ -84,6 +84,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Chat
                                                         || (x.UserId == receiveId && x.ReceiveId == user.Id))
                                             .OrderByDescending(x => x.CreatedDate)
                                             .ToListAsync();
+            foreach (var item in chats)
+            {
+                await _context.Entry(item).Reference(x => x.User).LoadAsync();
+            }
             
             var response = _mapper.Map<List<ChatGetResponse>>(chats);
             foreach (var item in response)

@@ -168,3 +168,22 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# Get all system config
+GET {{baseUrl}}/api/play-together/v1/system-configs
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Creat a system config
+POST {{baseUrl}}/api/play-together/v1/system-configs
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "title": "string",
+  "value": 0
+}
+
+###

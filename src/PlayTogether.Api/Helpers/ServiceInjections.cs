@@ -30,6 +30,7 @@ using PlayTogether.Core.Services.Business.Rating;
 using PlayTogether.Core.Services.Business.Recommend;
 using PlayTogether.Core.Services.Business.Report;
 using PlayTogether.Core.Services.Business.SearchHistory;
+using PlayTogether.Core.Services.Business.SystemConfig;
 using PlayTogether.Core.Services.Business.SystemFeedback;
 using PlayTogether.Core.Services.Business.TransactionHistory;
 using PlayTogether.Core.Services.Business.TypeOfGame;
@@ -59,6 +60,7 @@ using PlayTogether.Infrastructure.Repositories.Business.Rating;
 using PlayTogether.Infrastructure.Repositories.Business.Recommend;
 using PlayTogether.Infrastructure.Repositories.Business.Report;
 using PlayTogether.Infrastructure.Repositories.Business.SearchHistory;
+using PlayTogether.Infrastructure.Repositories.Business.SystemConfig;
 using PlayTogether.Infrastructure.Repositories.Business.SystemFeedback;
 using PlayTogether.Infrastructure.Repositories.Business.TransactionHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
@@ -213,6 +215,10 @@ namespace PlayTogether.Api.Helpers
             // Config for Mail service DI
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<IMailRepository, MailRepository>();
+
+            // Config for SystemConfig service DI
+            services.AddTransient<ISystemConfigService, SystemConfigService>();
+            services.AddTransient<ISystemConfigRepository, SystemConfigRepository>();
 
             services.AddHttpClient();
 
