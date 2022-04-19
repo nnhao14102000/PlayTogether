@@ -126,12 +126,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 }
             }
 
+            var processTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.Title.Equals("Order Process Expire Time"));
+            if(processTime is null){
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ xử lí yêu cầu thuê. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
             var model = _mapper.Map<Core.Entities.Order>(request);
             model.ToUserId = toUserId;
             model.UserId = user.Id;
             model.TotalPrices = request.TotalTimes * toUser.PricePerHour;
             model.Status = OrderStatusConstants.Processing;
-            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
+            model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(processTime.Value);
+            // model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTime);
             // model.ProcessExpired = DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.OrderProcessExpireTimeForTest);
 
             _context.Orders.Add(model);
