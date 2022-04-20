@@ -126,7 +126,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 }
             }
 
-            var processTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.Title.Equals("Order Process Expire Time"));
+            var processTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 1);
             if (processTime is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ xử lí yêu cầu thuê. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
