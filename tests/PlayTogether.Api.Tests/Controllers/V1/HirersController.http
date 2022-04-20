@@ -53,11 +53,8 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?search=Tham
-&fromPrice=0
-&toPrice=100
-&pageSize=50
-&pageNumber=1
+?gameId=7c35408c-7988-4f3b-8479-6822cb222d77 a686bb05-1fb0-413d-958a-ab5b710e13a4
+&IsOrderByRating=true
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

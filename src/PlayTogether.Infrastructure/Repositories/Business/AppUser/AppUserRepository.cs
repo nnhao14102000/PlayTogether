@@ -262,11 +262,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
             FilterHaveSkillSameHobby(ref query, param.IsSkillSameHobbies, user);
+            FilterUserByGameId(ref query, param.GameId);
 
             FilterUserByDate(ref query, param.DayInWeek);
             FilterUserByHour(ref query, param.FromHour, param.ToHour);
 
-            FilterUserByGameId(ref query, param.GameId);
             FilterUserByGender(ref query, param.Gender);
             FilterUserStatus(ref query, param.Status);
 
@@ -296,10 +296,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
         private void FilterUserByRangePrice(ref IQueryable<Core.Entities.AppUser> query, float? fromPrice, float? toPrice)
         {
-            if(!query.Any() || fromPrice is null || toPrice is null || fromPrice >= toPrice){
+            if (!query.Any() || fromPrice is null || toPrice is null || fromPrice >= toPrice) {
                 return;
             }
-            
+
             query = query.Where(x => x.PricePerHour >= fromPrice && x.PricePerHour <= toPrice);
         }
 
@@ -531,12 +531,26 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || String.IsNullOrEmpty(gameId) || String.IsNullOrWhiteSpace(gameId)) {
                 return;
             }
-            List<Core.Entities.AppUser> result = new();
-            var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == gameId);
-            foreach (var item in gamesOfUser) {
-                result.Add(item.User);
+            if (gameId.Contains(" ")) {
+                var seperatringGameId = gameId.Split(" ");
+                List<Core.Entities.AppUser> result = new();
+                foreach (var sprId in seperatringGameId) {                    
+                    var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == sprId);
+                    foreach (var item in gamesOfUser) {
+                        result.Add(item.User);
+                    }                    
+                }
+                query = result.Distinct().AsQueryable();
             }
-            query = result.AsQueryable();
+            else {
+                List<Core.Entities.AppUser> result = new();
+                var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == gameId);
+                foreach (var item in gamesOfUser) {
+                    result.Add(item.User);
+                }
+                query = result.AsQueryable();
+            }
+
         }
 
         private void FilterUserRecentHired(ref IQueryable<Core.Entities.AppUser> query, bool? isRecent, string userId)
@@ -548,6 +562,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 || String.IsNullOrWhiteSpace(userId)) {
                 return;
             }
+
             var orders = _context.Orders.Where(x => x.UserId == userId
                                                     && (x.Status == OrderStatusConstants.Complete
                                                         || x.Status == OrderStatusConstants.FinishSoonHirer
