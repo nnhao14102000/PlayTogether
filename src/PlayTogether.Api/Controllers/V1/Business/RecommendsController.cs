@@ -54,7 +54,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
                 RecommendPredict prediction = _predictEnginePool.Predict(modelName: "PTORecommenderModel", example: item);
                 var recommendResult = new RecommendResult{
                     PlayerId = item.playerId, 
-                    Score = Math.Round(prediction.Score, 1)
+                    Score = Math.Round(prediction.Score, 1).ToString()
                 };
                 result.Add(recommendResult);
             }
