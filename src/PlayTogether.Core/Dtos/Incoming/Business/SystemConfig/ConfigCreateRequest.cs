@@ -9,6 +9,10 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.SystemConfig
         public string Title { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue)]
+        public int NO { get; set; }
+
+        [Required]
         [Range(0, float.MaxValue)]
         public float Value { get; set; }
     }

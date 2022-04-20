@@ -10,6 +10,10 @@ namespace PlayTogether.Core.Entities
         public string Title { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue)]
+        public int NO { get; set; }
+
+        [Required]
         [Column(TypeName = "float")]
         public float Value { get; set; }
     }
