@@ -541,6 +541,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     }                    
                 }
                 query = result.Distinct().AsQueryable();
+            }else if (gameId.Contains(",")) {
+                var seperatringGameId = gameId.Split(",");
+                List<Core.Entities.AppUser> result = new();
+                foreach (var sprId in seperatringGameId) {                    
+                    var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == sprId);
+                    foreach (var item in gamesOfUser) {
+                        result.Add(item.User);
+                    }                    
+                }
+                query = result.Distinct().AsQueryable();
             }
             else {
                 List<Core.Entities.AppUser> result = new();
