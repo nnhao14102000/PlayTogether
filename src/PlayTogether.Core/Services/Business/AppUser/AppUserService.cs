@@ -41,10 +41,10 @@ namespace PlayTogether.Core.Services.Business.AppUser
         public async Task<Result<bool>> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request)
         {
             try {
-                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
                     throw new ArgumentNullException(nameof(userId));
                 }
-                if (request is null){
+                if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 return await _appUserRepository.ChangeIsActiveUserForAdminAsync(userId, request);
@@ -61,7 +61,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
                 if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
-                if (request is null){
+                if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 return await _appUserRepository.ChangeIsPlayerAsync(principal, request);
@@ -97,6 +97,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId)
+        {
+            try {
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _appUserRepository.GetBehaviorPointAsync(userId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetBehaviorPointAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<DisableUserResponse>> GetDisableInfoAsync(ClaimsPrincipal principal)
         {
             try {
@@ -128,7 +142,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
         public async Task<Result<UserGetBasicInfoResponse>> GetUserBasicInfoByIdAsync(string userId)
         {
             try {
-                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
                     throw new ArgumentNullException(nameof(userId));
                 }
                 return await _appUserRepository.GetUserBasicInfoByIdAsync(userId);
@@ -142,7 +156,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
         public async Task<Result<UserGetServiceInfoResponse>> GetUserServiceInfoByIdAsync(string userId)
         {
             try {
-                if(String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)){
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
                     throw new ArgumentNullException(nameof(userId));
                 }
                 return await _appUserRepository.GetUserServiceInfoByIdAsync(userId);
@@ -172,7 +186,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
                 if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
-                if (request is null){
+                if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 return await _appUserRepository.UpdatePersonalInfoAsync(principal, request);
@@ -191,7 +205,7 @@ namespace PlayTogether.Core.Services.Business.AppUser
                 if (principal is null) {
                     throw new ArgumentNullException(nameof(principal));
                 }
-                if (request is null){
+                if (request is null) {
                     throw new ArgumentNullException(nameof(request));
                 }
                 return await _appUserRepository.UpdateUserServiceInfoAsync(principal, request);

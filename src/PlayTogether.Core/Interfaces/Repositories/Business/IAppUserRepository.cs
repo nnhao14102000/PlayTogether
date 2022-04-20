@@ -23,5 +23,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<Result<bool>> ChangeIsActiveUserForAdminAsync(string userId, IsActiveChangeRequest request);
         Task<Result<DisableUserResponse>> GetDisableInfoAsync(ClaimsPrincipal principal);
         Task<Result<bool>> ActiveUserAsync(ClaimsPrincipal principal);
+        Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId);
     }
 }

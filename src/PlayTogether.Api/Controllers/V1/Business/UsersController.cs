@@ -420,6 +420,29 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
+        /// <summary>
+        /// Get behavior point
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet, Route("{userId}/behavior-point")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetBehaviorPoint(string userId)
+        {
+            var response = await _appUserService.GetBehaviorPointAsync(userId);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
         /*
         *================================================
         *                                              ||
@@ -790,7 +813,8 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost, Route("check-dating")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> TurnOnIsPlayerWhenDatingComeOn(){
+        public async Task<ActionResult> TurnOnIsPlayerWhenDatingComeOn()
+        {
             var response = await _appUserService.TurnOnIsPlayerWhenDatingComeOnAsync();
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {

@@ -263,6 +263,11 @@
 > - ``POST /api/play-together/v1/users/check-dating ``  
 >   ***Description***: Check to Turn on Is Player base on dating  
 >   ***Role Access***: User  
+>
+> - ``GET /api/play-together/v1/users/{userId}/behavior-point ``  
+>   ***Description***: Get behavior point of a specific user  
+>   ***Role Access***: User, Admin  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

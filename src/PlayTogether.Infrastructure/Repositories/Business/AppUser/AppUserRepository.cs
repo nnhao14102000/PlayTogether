@@ -920,5 +920,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             result.Content = true;
             return result;
         }
+
+        public async Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId)
+        {
+            var result = new Result<BehaviorPointResponse>();
+            var user = await _context.AppUsers.FindAsync(userId);
+
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
+            var response = _mapper.Map<BehaviorPointResponse>(user.BehaviorPoint);
+            result.Content = response;
+            return result;
+        }
     }
 }
