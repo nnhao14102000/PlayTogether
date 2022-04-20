@@ -127,7 +127,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             var processTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.Title.Equals("Order Process Expire Time"));
-            if(processTime is null){
+            if (processTime is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ xử lí yêu cầu thuê. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
             }
@@ -461,7 +461,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var toUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
             if (toUser is null) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy người bạn muốn thuê.");
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.Unauthenticate);
                 return result;
             }
 
@@ -482,7 +482,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             if (order.ProcessExpired < DateTime.UtcNow.AddHours(7)) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này đã hết hạn xử lí. Bạn chậm tay mất rồi.");
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này đã hết hạn xử lí.");
                 return result;
             }
 
@@ -532,31 +532,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     ""));
             }
             else {
-                fromUser.NumOfOrder += 1;
+                toUser.NumOfOrder += 1;
                 fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
                 fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
-                toUser.Status = UserStatusConstants.Hiring;
-
-                order.Status = OrderStatusConstants.Start;
-                order.TimeStart = DateTime.UtcNow.AddHours(7);
-                order.User.Status = UserStatusConstants.Hiring;
-            }
-
-            if ((await _context.SaveChangesAsync() >= 0)) {
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
-                        order.User.UserBalance.Id,
+                        fromUser.UserBalance.Id,
                         TransactionTypeConstants.Sub,
                         order.TotalPrices,
                         TransactionTypeConstants.Order,
                         orderId)
                 );
-                if (await _context.SaveChangesAsync() >= 0) {
-                    result.Content = true;
-                    return result;
-                }
-                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+
+                toUser.Status = UserStatusConstants.Hiring;
+
+                order.Status = OrderStatusConstants.Start;
+                order.TimeStart = DateTime.UtcNow.AddHours(7);
+
+                fromUser.Status = UserStatusConstants.Hiring;
+            }
+
+            if ((await _context.SaveChangesAsync() >= 0)) {
+                result.Content = true;
                 return result;
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
