@@ -73,6 +73,20 @@ namespace PlayTogether.Core.Services.Business.SystemConfig
             }
         }
 
+        public async Task<Result<Entities.SystemConfig>> GetSystemConfigByNOAsync(int numberOfOrder)
+        {
+            try {
+                if (numberOfOrder < 1 || numberOfOrder > int.MaxValue) {
+                    throw new ArgumentOutOfRangeException(nameof(numberOfOrder));
+                }
+                return await _systemConfigRepository.GetSystemConfigByNOAsync(numberOfOrder);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetSystemConfigByNOAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> UpdateConfigAsync(string configId, ConfigUpdateRequest request)
         {
             try {

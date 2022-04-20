@@ -12,6 +12,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<Result<bool>> UpdateConfigAsync (string configId, ConfigUpdateRequest request);
         Task<Result<bool>> DeleteConfigAsync (string configId);
         Task<Result<SystemConfig>> GetSystemConfigByIdAsync (string configId);
+        Task<Result<SystemConfig>> GetSystemConfigByNOAsync (int numberOfOrder);
         Task<PagedResult<SystemConfig>> GetAllSystemConfigAsync (SystemConfigParameters param);
     }
 }

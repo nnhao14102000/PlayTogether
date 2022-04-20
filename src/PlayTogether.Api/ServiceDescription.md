@@ -682,6 +682,10 @@
 >   ***Description***: Get config by Id   
 >   ***Role Access***: Admin, User  
 >
+> - ``GET /api/play-together/v1/system-configs/no-{numberOfOrder} ``  
+>   ***Description***: Get config by Number of Order   
+>   ***Role Access***: Admin, User  
+>
 > - ``POST /api/play-together/v1/system-configs/{configId} ``  
 >   ***Description***: Create a system config    
 >   ***Role Access***: Admin  

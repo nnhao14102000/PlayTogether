@@ -105,5 +105,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemConfig
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
+
+        public async Task<Result<Core.Entities.SystemConfig>> GetSystemConfigByNOAsync(int numberOfOrder)
+        {
+            var result = new Result<Core.Entities.SystemConfig>();
+            var config = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == numberOfOrder);
+
+            if (config is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" cấu hình.");
+                return result;
+            }
+            result.Content = config;
+            return result;
+        }
     }
 }

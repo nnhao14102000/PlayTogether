@@ -90,6 +90,29 @@ namespace PlayTogether.Api.Controllers.V1.Business
         }
 
         /// <summary>
+        /// Get config by NO
+        /// </summary>
+        /// <param name="numberOfOrder"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet, Route("no-{numberOfOrder}")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetAllConfigByNO (int numberOfOrder){
+            var response = await _systemConfigService.GetSystemConfigByNOAsync(numberOfOrder);
+            if(!response.IsSuccess){
+                if(response.Error.Code == 404){
+                    return NotFound(response);
+                }
+                else{
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Delete config
         /// </summary>
         /// <param name="configId"></param>

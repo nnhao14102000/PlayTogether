@@ -183,7 +183,23 @@ Authorization: {{authToken}}
 
 {
   "title": "Order Process Expire Time",
+  "nO": 1,
   "value": 5
 }
+
+
+###
+
+# Delete systemconfig
+DELETE  {{baseUrl}}/api/play-together/v1/system-configs/1a7ca621-4e0f-4e1f-ac82-0ecf06f22e4a
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
+
+# Get system config by NO
+GET {{baseUrl}}/api/play-together/v1/system-configs/no-1
+Content-type: {{contentType}}
+Authorization: {{authToken}}
 
 ###
