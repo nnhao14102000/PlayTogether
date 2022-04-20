@@ -443,6 +443,29 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
+        /// <summary>
+        /// Get balance of a user
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin, User
+        /// </remarks>
+        [HttpGet, Route("{userId}/balance")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetBalance(string userId)
+        {
+            var response = await _appUserService.GetBalanceAsync(userId);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
         /*
         *================================================
         *                                              ||

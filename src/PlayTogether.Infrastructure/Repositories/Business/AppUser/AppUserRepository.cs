@@ -936,5 +936,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             result.Content = response;
             return result;
         }
+
+        public async Task<Result<UserBalanceResponse>> GetBalanceAsync(string userId)
+        {
+            var result = new Result<UserBalanceResponse>();
+            var user = await _context.AppUsers.FindAsync(userId);
+
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+            var response = _mapper.Map<UserBalanceResponse>(user.UserBalance);
+            result.Content = response;
+            return result;
+        }
     }
 }

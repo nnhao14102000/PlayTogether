@@ -24,5 +24,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<Result<DisableUserResponse>> GetDisableInfoAsync(ClaimsPrincipal principal);
         Task<Result<bool>> ActiveUserAsync(ClaimsPrincipal principal);
         Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId);
+        Task<Result<UserBalanceResponse>> GetBalanceAsync(string userId);
     }
 }

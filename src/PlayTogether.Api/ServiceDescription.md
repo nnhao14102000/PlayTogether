@@ -268,6 +268,10 @@
 >   ***Description***: Get behavior point of a specific user  
 >   ***Role Access***: User, Admin  
 >
+> - ``GET /api/play-together/v1/users/{userId}/balance ``  
+>   ***Description***: Get balance of a specific user  
+>   ***Role Access***: User, Admin  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

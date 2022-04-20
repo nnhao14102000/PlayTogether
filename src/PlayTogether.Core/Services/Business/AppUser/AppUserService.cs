@@ -97,6 +97,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<Result<UserBalanceResponse>> GetBalanceAsync(string userId)
+        {
+            try {
+                if (String.IsNullOrEmpty(userId) || String.IsNullOrWhiteSpace(userId)) {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+                return await _appUserRepository.GetBalanceAsync(userId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call GetBalanceAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId)
         {
             try {
