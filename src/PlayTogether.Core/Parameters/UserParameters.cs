@@ -11,7 +11,7 @@ namespace PlayTogether.Core.Parameters
         public bool? IsOrderByRating { get; set; }
         public bool? IsOrderByPricing { get; set; }
         public bool? IsRecentOrder { get; set; }
-        public bool? IsSameHobbies { get; set; }
+        public bool? IsSkillSameHobbies { get; set; }
         public bool? IsNewAccount { get; set; }
         public bool? IsPlayer { get; set; }
         public string FromHour { get; set; }

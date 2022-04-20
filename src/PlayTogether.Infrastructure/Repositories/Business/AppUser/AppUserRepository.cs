@@ -261,7 +261,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             Search(ref query, user.Id, param.Search);
 
             FilterUserRecentHired(ref query, param.IsRecentOrder, user.Id);
-            FilterHaveSkillSameHobby(ref query, param.IsSameHobbies, user);
+            FilterHaveSkillSameHobby(ref query, param.IsSkillSameHobbies, user);
 
             FilterUserByDate(ref query, param.DayInWeek);
             FilterUserByHour(ref query, param.FromHour, param.ToHour);
@@ -270,10 +270,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterUserByGender(ref query, param.Gender);
             FilterUserStatus(ref query, param.Status);
 
-            FilterIsPlayerUser(ref query, param.IsPlayer);
-            FilterUserByItSelf(ref query, user.Id);
-            FilterActiveUser(ref query, true);
             FilterUserByRangePrice(ref query, param.FromPrice, param.ToPrice);
+            FilterIsPlayerUser(ref query, param.IsPlayer);
+            FilterActiveUser(ref query, true);
+            FilterUserByItSelf(ref query, user.Id);
 
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
@@ -454,7 +454,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isSameHobbies is false || isSameHobbies is null) {
                 return;
             }
-
 
             var final = new List<Core.Entities.AppUser>();
             var listGameOfUser = new List<Core.Entities.GameOfUser>();
