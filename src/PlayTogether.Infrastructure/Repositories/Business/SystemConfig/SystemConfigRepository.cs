@@ -57,7 +57,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemConfig
 
         public async Task<PagedResult<Core.Entities.SystemConfig>> GetAllSystemConfigAsync(SystemConfigParameters param)
         {
-            var configs = await _context.SystemConfigs.ToListAsync();
+            var configs = await _context.SystemConfigs.OrderBy(x => x.NO).ToListAsync();
             var query = configs.AsQueryable();
 
             FilterByName(ref query, param.Title);
