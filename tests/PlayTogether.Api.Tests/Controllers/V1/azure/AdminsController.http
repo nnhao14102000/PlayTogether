@@ -185,9 +185,9 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "title": "Time Active Money",
-  "nO": 2,
-  "value": 6
+  "title": "Time Active Rating/Report",
+  "nO": 3,
+  "value": 3
 }
 
 ###
@@ -200,7 +200,7 @@ Authorization: {{authToken}}
 ###
 
 # Get system config by NO
-GET {{baseUrl}}/api/play-together/v1/system-configs/no-1
+GET {{baseUrl}}/api/play-together/v1/system-configs/no-3
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

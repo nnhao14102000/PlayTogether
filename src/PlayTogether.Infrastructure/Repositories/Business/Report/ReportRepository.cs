@@ -170,13 +170,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 return result;
             }
 
-            if (DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
-                // || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
-                ) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Đã hết thời gian cho phép đánh giá.");
+            var allowReportTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 3);
+            if (allowReportTime is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian cho phép tố cáo. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
             }
 
+            if (DateTime.UtcNow.AddHours(7).AddHours(-allowReportTime.Value) > order.TimeFinish
+                // || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
+                ) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đã hết thời gian cho phép tố cáo. Bạn chỉ được phép tố cáo trong khoản thời gian {(int)allowReportTime.Value} giờ sau khi kết thúc thuê.");
+                return result;
+            }
 
             await _context.Entry(order).Reference(x => x.User).LoadAsync();
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);

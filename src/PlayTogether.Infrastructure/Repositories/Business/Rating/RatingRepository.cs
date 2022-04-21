@@ -75,10 +75,16 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return result;
             }
 
-            if (DateTime.UtcNow.AddHours(7).AddHours(-ValueConstants.HourActiveFeedbackReport) > order.TimeFinish
+            var allowRatingTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 3);
+            if (allowRatingTime is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian cho phép đánh giá. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
+
+            if (DateTime.UtcNow.AddHours(7).AddHours(-allowRatingTime.Value) > order.TimeFinish
                 // || DateTime.UtcNow.AddHours(7).AddMinutes(-ValueConstants.HourActiveFeedbackReportForTest) > order.TimeFinish
                 ) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Đã hết thời gian cho phép đánh giá.");
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đã hết thời gian cho phép tố cáo. Bạn chỉ được phép đánh giá trong khoản thời gian {(int)allowRatingTime.Value} giờ sau khi kết thúc thuê.");
                 return result;
             }
 
