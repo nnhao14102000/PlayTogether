@@ -811,13 +811,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             "")
                     );
                     toUser.UserBalance.Balance += order.FinalPrices;
-                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
-                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    order.User.UserBalance.Balance += (order.TotalPrices - ((float)priceDone.Item1));
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - ((float)priceDone.Item1));
                     await _context.TransactionHistories.AddRangeAsync(
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            (order.TotalPrices - order.FinalPrices),
+                            (order.TotalPrices - ((float)priceDone.Item1)),
                             TransactionTypeConstants.OrderRefund,
                             orderId)
                         ,
@@ -926,13 +926,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             "")
                     );
                     toUser.UserBalance.Balance += order.FinalPrices;
-                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
-                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    order.User.UserBalance.Balance += (order.TotalPrices - ((float)priceDone.Item1));
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - ((float)priceDone.Item1));
                     await _context.TransactionHistories.AddRangeAsync(
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            (order.TotalPrices - order.FinalPrices),
+                            (order.TotalPrices - ((float)priceDone.Item1)),
                             TransactionTypeConstants.OrderRefund,
                             orderId)
                         ,
