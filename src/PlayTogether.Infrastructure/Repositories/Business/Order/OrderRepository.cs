@@ -717,6 +717,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
             order.FinalPrices = ((float)priceDone.Item1);
 
+            var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
+            if (moneyActiveTime is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ kích hoạt tiền. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
+
             if (order.User.IdentityId == identityId) { // Hirer finish soon
                 order.Reason = request.Reason;
                 if (priceDone.Item2 == 0) {
@@ -724,36 +730,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     return result;
                 }
                 else if (priceDone.Item2 == 1) {
-                    await _context.Notifications.AddRangeAsync(
-                        Helpers.NotificationHelpers.PopulateNotification(
-                            toUser.Id,
-                            $"{order.User.Name} đã yêu cầu kết thúc sớm",
-                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho {order.User.Name}.",
-                            ""),
-                        Helpers.NotificationHelpers.PopulateNotification(
-                            order.User.Id,
-                            $"Bạn đã yêu cầu kết thúc sớm",
-                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho bạn.",
-                            "")
-                    );
-                    order.User.UserBalance.Balance += order.TotalPrices;
-                    order.User.UserBalance.ActiveBalance += order.TotalPrices;
-                    await _context.TransactionHistories.AddRangeAsync(
-                        Helpers.TransactionHelpers.PopulateTransactionHistory(
-                            order.User.UserBalance.Id,
-                            TransactionTypeConstants.Add,
-                            order.TotalPrices,
-                            TransactionTypeConstants.OrderRefund,
-                            orderId)
-                    );
-                    order.Status = OrderStatusConstants.FinishSoonHirer;
-                    order.User.Status = UserStatusConstants.Online;
-                    toUser.Status = UserStatusConstants.Online;
-                    if (await _context.SaveChangesAsync() >= 0) {
-                        result.Content = true;
-                        return result;
-                    }
-                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê.");
                     return result;
 
                 }
@@ -792,7 +769,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             toUser.UserBalance.Id,
                             orderId,
                             order.TotalPrices,
-                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
+                            // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                             )
                     );
@@ -844,7 +822,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             toUser.UserBalance.Id,
                             orderId,
                             order.FinalPrices,
-                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
+                            // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                             )
                     );
@@ -866,47 +845,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     return result;
                 }
                 else if (priceDone.Item2 == 1) {
-                    await _context.Notifications.AddRangeAsync(
-                        Helpers.NotificationHelpers.PopulateNotification(
-                            order.User.Id,
-                            $"{toUser.Name} đã yêu cầu kết thúc sớm",
-                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho bạn.",
-                            ""),
-                        Helpers.NotificationHelpers.PopulateNotification(
-                            toUser.Id,
-                            $"Bạn đã yêu cầu kết thúc sớm",
-                            (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do yếu cầu kết thúc quá sớm nên sẽ hoàn tiền lại hết cho {order.User.Name}. Bạn bị trừ 9 điểm tích cực vì đã kết thúc order quá sớm.",
-                            "")
-                    );
-                    order.User.UserBalance.Balance += order.TotalPrices;
-                    order.User.UserBalance.ActiveBalance += order.TotalPrices;
-                    await _context.TransactionHistories.AddRangeAsync(
-                        Helpers.TransactionHelpers.PopulateTransactionHistory(
-                            order.User.UserBalance.Id,
-                            TransactionTypeConstants.Add,
-                            order.TotalPrices,
-                            TransactionTypeConstants.OrderRefund,
-                            orderId)
-                    );
-                    order.Status = OrderStatusConstants.FinishSoonPlayer;
-                    order.User.Status = UserStatusConstants.Online;
-                    toUser.Status = UserStatusConstants.Online;
-                    toUser.BehaviorPoint.SatisfiedPoint -= 9;
-                    await _context.BehaviorHistories.AddRangeAsync(
-                        Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(
-                            toUser.BehaviorPoint.Id,
-                            BehaviorTypeConstants.Sub,
-                            BehaviorTypeConstants.OrderFinishSoon,
-                            9,
-                            BehaviorTypeConstants.SatisfiedPoint,
-                            orderId
-                        )
-                    );
-                    if (await _context.SaveChangesAsync() >= 0) {
-                        result.Content = true;
-                        return result;
-                    }
-                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê.");
                     return result;
 
                 }
@@ -945,7 +884,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             toUser.UserBalance.Id,
                             orderId,
                             order.TotalPrices,
-                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
+                            // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                             )
                     );
@@ -997,7 +937,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             toUser.UserBalance.Id,
                             orderId,
                             order.FinalPrices,
-                            DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                            DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
+                            // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                             )
                     );
