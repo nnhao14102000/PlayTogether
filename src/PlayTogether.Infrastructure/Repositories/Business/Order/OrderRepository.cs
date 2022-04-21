@@ -493,11 +493,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return result;
             }
 
-            if (order.ProcessExpired < DateTime.UtcNow.AddHours(7)) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này đã hết hạn xử lí.");
-                return result;
-            }
-
             if (order.Status is not OrderStatusConstants.Processing) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Order request này không thể xử lí.");
                 return result;
