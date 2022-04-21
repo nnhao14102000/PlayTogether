@@ -417,6 +417,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                .LoadAsync();
 
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+            await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
 
             toUser.Status = UserStatusConstants.Online;
             order.User.Status = UserStatusConstants.Online;
@@ -425,9 +426,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             if (DateTime.UtcNow.AddHours(7) >= order.ProcessExpired) {
                 order.Status = OrderStatusConstants.OverTime; // change status of Order
                 toUser.IsPlayer = false;
+                toUser.BehaviorPoint.Point -= 1;
+                toUser.BehaviorPoint.SatisfiedPoint -= 2;
                 await _context.Notifications.AddRangeAsync(
-                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}.", ""),
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}. Bạn sẽ bị trừ 1 điểm uy tín, 2 điểm tích cực. Mong bạn chú ý.", ""),
                     Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Chế độ nhận thuê đã tắt!!!", $"Có lẽ bạn không thật sự Online. Hệ thống đã tự động tắt chế độ nhận thuê!!!", "")
+                );
+                await _context.BehaviorHistories.AddRangeAsync(
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderOverTime, 1, BehaviorTypeConstants.Point, orderId),
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderOverTime, 2, BehaviorTypeConstants.SatisfiedPoint, orderId)
                 );
             }
             else {
@@ -515,43 +522,63 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 .Reference(x => x.BehaviorPoint)
                 .LoadAsync();
 
-            if (request.IsAccept == false) {
-                order.Status = OrderStatusConstants.Reject;
-                order.User.Status = UserStatusConstants.Online;
-
+            if (DateTime.UtcNow.AddHours(7) >= order.ProcessExpired) {
+                order.Status = OrderStatusConstants.OverTime;
+                fromUser.Status = UserStatusConstants.Online;
                 toUser.Status = UserStatusConstants.Online;
-                order.Reason = request.Reason;
-
-                toUser.BehaviorPoint.SatisfiedPoint -= 1;
-                await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderReject, 1, BehaviorTypeConstants.SatisfiedPoint, orderId));
-
-                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
-                    order.UserId,
-                    $"{toUser.Name} đã từ chối đề nghị!",
-                    $"Xin lỗi vì không thể ghép được với bạn, vì {request.Reason}. Mong có thể ghép với bạn vào lần sau!",
-                    ""));
+                toUser.IsPlayer = false;
+                toUser.BehaviorPoint.Point -= 1;
+                toUser.BehaviorPoint.SatisfiedPoint -= 2;
+                await _context.Notifications.AddRangeAsync(
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Bạn đã bỏ lỡ 1 đề nghị từ {order.User.Name}", $"Bạn đã bỏ lỡ 1 yêu cầu từ {order.User.Name} lúc {order.CreatedDate}. Bạn sẽ bị trừ 1 điểm uy tín, 2 điểm tích cực. Mong bạn chú ý.", ""),
+                    Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Chế độ nhận thuê đã tắt!!!", $"Có lẽ bạn không thật sự Online. Hệ thống đã tự động tắt chế độ nhận thuê!!!", "")
+                );
+                await _context.BehaviorHistories.AddRangeAsync(
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderOverTime, 1, BehaviorTypeConstants.Point, orderId),
+                    Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderOverTime, 2, BehaviorTypeConstants.SatisfiedPoint, orderId)
+                );
             }
             else {
-                toUser.NumOfOrder += 1;
-                fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
-                fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
+                if (request.IsAccept == false) {
+                    order.Status = OrderStatusConstants.Reject;
+                    order.User.Status = UserStatusConstants.Online;
 
-                await _context.TransactionHistories.AddAsync(
-                    Helpers.TransactionHelpers.PopulateTransactionHistory(
-                        fromUser.UserBalance.Id,
-                        TransactionTypeConstants.Sub,
-                        order.TotalPrices,
-                        TransactionTypeConstants.Order,
-                        orderId)
-                );
+                    toUser.Status = UserStatusConstants.Online;
+                    order.Reason = request.Reason;
 
-                toUser.Status = UserStatusConstants.Hiring;
+                    toUser.BehaviorPoint.SatisfiedPoint -= 1;
+                    await _context.BehaviorHistories.AddAsync(Helpers.BehaviorHistoryHelpers.PopulateBehaviorHistory(toUser.BehaviorPoint.Id, BehaviorTypeConstants.Sub, BehaviorTypeConstants.OrderReject, 1, BehaviorTypeConstants.SatisfiedPoint, orderId));
 
-                order.Status = OrderStatusConstants.Start;
-                order.TimeStart = DateTime.UtcNow.AddHours(7);
+                    await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                        order.UserId,
+                        $"{toUser.Name} đã từ chối đề nghị!",
+                        $"Xin lỗi vì không thể ghép được với bạn, vì {request.Reason}. Mong có thể ghép với bạn vào lần sau!",
+                        ""));
+                }
+                else {
+                    toUser.NumOfOrder += 1;
+                    fromUser.UserBalance.Balance = fromUser.UserBalance.Balance - order.TotalPrices;
+                    fromUser.UserBalance.ActiveBalance = fromUser.UserBalance.ActiveBalance - order.TotalPrices;
 
-                fromUser.Status = UserStatusConstants.Hiring;
+                    await _context.TransactionHistories.AddAsync(
+                        Helpers.TransactionHelpers.PopulateTransactionHistory(
+                            fromUser.UserBalance.Id,
+                            TransactionTypeConstants.Sub,
+                            order.TotalPrices,
+                            TransactionTypeConstants.Order,
+                            orderId)
+                    );
+
+                    toUser.Status = UserStatusConstants.Hiring;
+
+                    order.Status = OrderStatusConstants.Start;
+                    order.TimeStart = DateTime.UtcNow.AddHours(7);
+
+                    fromUser.Status = UserStatusConstants.Hiring;
+                }
             }
+
+
 
             if ((await _context.SaveChangesAsync() >= 0)) {
                 result.Content = true;

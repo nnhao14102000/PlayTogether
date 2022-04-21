@@ -10,6 +10,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
 
         public const string OrderReject = "Order - Reject";
         public const string OrderFinishSoon = "Order - Finish Soon";
+        public const string OrderOverTime = "Order - Overtime";
         public const string ReportFalse = "Report - False";
         public const string ReportTrue = "Report - True";
         public const string Report = "Report";
