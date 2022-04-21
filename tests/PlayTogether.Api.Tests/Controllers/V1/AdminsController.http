@@ -182,9 +182,9 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "title": "Order Process Expire Time",
-  "nO": 1,
-  "value": 5
+  "title": "Time Active Money",
+  "nO": 2,
+  "value": 6
 }
 
 
@@ -198,7 +198,7 @@ Authorization: {{authToken}}
 ###
 
 # Get system config by NO
-GET {{baseUrl}}/api/play-together/v1/system-configs/no-1
+GET {{baseUrl}}/api/play-together/v1/system-configs/no-2
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

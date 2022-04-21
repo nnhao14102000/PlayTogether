@@ -49,6 +49,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return result;
             }
 
+            if (user.Id == toUserId) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn không thể thuê chính bạn được.");
+                return result;
+            }
+
             if (user.IsActive is false) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Disable);
                 return result;
@@ -626,6 +631,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.FinalPrices = order.TotalPrices;
 
+            var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
+            if (moneyActiveTime is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ kích hoạt tiền. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
+
             if ((await _context.SaveChangesAsync() >= 0)) {
                 toUser.UserBalance.Balance += order.TotalPrices;
                 await _context.TransactionHistories.AddAsync(
@@ -642,7 +653,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         toUser.UserBalance.Id,
                         orderId,
                         order.FinalPrices,
-                        DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
+                        DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
+                        // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                         // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
                         )
                 );
