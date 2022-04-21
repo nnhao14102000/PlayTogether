@@ -21,6 +21,18 @@ Content-type: {{contentType}}
 
 ###
 
+# Get search history
+GET {{baseUrl}}/api/play-together/v1/search-histories
+?content=
+&isNew=true
+&PageNumber=1
+&PageSize=20
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
 # Get order request (receiver order)
 GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true
 Content-type: {{contentType}}
@@ -111,7 +123,7 @@ Authorization: {{authToken}}
 
 # Get all users / Search users
 GET {{baseUrl}}/api/play-together/v1/users/
-?searchString=th
+?searchString=Xu ka
 Content-Type: : {{contentType}}
 Authorization: {{authToken}}
 

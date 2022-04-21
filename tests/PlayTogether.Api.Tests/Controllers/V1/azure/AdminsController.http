@@ -185,9 +185,9 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "title": "Time Active Rating/Report",
-  "nO": 3,
-  "value": 3
+  "title": "Percent Money Pay for System",
+  "nO": 4,
+  "value": 0.2
 }
 
 ###

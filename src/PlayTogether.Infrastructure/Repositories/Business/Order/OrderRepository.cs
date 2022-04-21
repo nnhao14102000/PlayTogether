@@ -624,7 +624,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             toUser.TotalTimeOrder += order.TotalTimes;
 
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
-            order.FinalPrices = order.TotalPrices;
+
+            var percentMoneyPayForSystem = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 4);
+            if (percentMoneyPayForSystem is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình phần trăm tiền trích cho hệ thống. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
+            order.FinalPrices = order.TotalPrices - (order.TotalPrices*percentMoneyPayForSystem.Value);
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {
@@ -713,9 +719,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             order.TimeFinish = DateTime.UtcNow.AddHours(7);
             order.Reason = request.Reason;
 
+            var percentMoneyPayForSystem = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 4);
+            if (percentMoneyPayForSystem is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình phần trăm tiền trích cho hệ thống. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
+                return result;
+            }
+
             // var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
-            order.FinalPrices = ((float)priceDone.Item1);
+            order.FinalPrices = ((float)priceDone.Item1)-(((float)priceDone.Item1)*percentMoneyPayForSystem.Value);
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {
