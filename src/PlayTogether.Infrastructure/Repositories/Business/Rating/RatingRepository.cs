@@ -510,7 +510,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
         private void FilterApproveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isApprove)
         {
-            if(!query.Any()){
+            if (!query.Any()) {
                 return;
             }
             query = query.Where(x => x.IsApprove == isApprove);
@@ -551,9 +551,23 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             query = query.Where(x => x.Rate == vote);
         }
 
-        public async Task<Result<bool>> ViolateRatingAsync(string ratingId, RatingViolateRequest request)
+        public async Task<Result<bool>> ViolateRatingAsync(ClaimsPrincipal principal, string ratingId, RatingViolateRequest request)
         {
             var result = new Result<bool>();
+
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
             var rating = await _context.Ratings.FindAsync(ratingId);
             if (rating is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound + $" đánh giá này.");
@@ -569,6 +583,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return result;
             }
 
+            if(rating.ToUserId != user.Id){
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đánh giá này không phải là của bạn.");
+                return result;
+            }            
+
             if (rating.IsViolate is true) {
                 rating.IsViolate = false;
                 rating.Reason = request.Reason;
@@ -577,10 +596,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 rating.IsViolate = true;
                 rating.Reason = request.Reason;
             }
+            
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;
                 return result;
             }
+
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
@@ -848,7 +869,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                                 toUser.BehaviorPoint.Id, BehaviorTypeConstants.Add, BehaviorTypeConstants.RatingViolate, 10, BehaviorTypeConstants.SatisfiedPoint, rating.Id
                             ));
                             break;
-                    }                    
+                    }
                 }
 
                 if ((await _context.SaveChangesAsync() >= 0)) {
@@ -906,7 +927,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     .Query()
                     .Include(x => x.Game)
                     .LoadAsync();
-            
+
             var response = _mapper.Map<RatingGetDetailResponse>(rating);
 
             var toUser = await _context.AppUsers.FindAsync(rating.Order.ToUserId);

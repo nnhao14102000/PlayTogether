@@ -84,16 +84,19 @@ namespace PlayTogether.Core.Services.Business.Rating
             }
         }
 
-        public async Task<Result<bool>> ViolateRatingAsync(string ratingId, RatingViolateRequest request)
+        public async Task<Result<bool>> ViolateRatingAsync(ClaimsPrincipal principal, string ratingId, RatingViolateRequest request)
         {
             try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
                 if (String.IsNullOrEmpty(ratingId)) {
                     throw new ArgumentNullException(nameof(ratingId));
                 }
                 if (request is null) {
                     throw new ArgumentNullException(nameof(ratingId));
                 }
-                return await _ratingRepository.ViolateRatingAsync(ratingId, request);
+                return await _ratingRepository.ViolateRatingAsync(principal, ratingId, request);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call ViolateRatingAsync in service class, Error Message: {ex}.");

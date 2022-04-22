@@ -112,7 +112,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult> ReportViolateFeedback(string rateId, RatingViolateRequest request)
         {
-            var response = await _ratingService.ViolateRatingAsync(rateId, request);
+            var response = await _ratingService.ViolateRatingAsync(HttpContext.User, rateId, request);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);
