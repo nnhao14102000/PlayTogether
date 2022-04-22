@@ -156,6 +156,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Charity
 
             var model = _mapper.Map<Core.Entities.CharityWithdraw>(request);
             model.CharityId = charity.Id;
+            model.CreatedDate = DateTime.UtcNow.AddHours(7);
             await _context.CharityWithdraws.AddAsync(model);
 
             if (await _context.SaveChangesAsync() >= 0) {

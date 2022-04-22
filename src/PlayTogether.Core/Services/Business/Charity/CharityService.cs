@@ -69,7 +69,7 @@ namespace PlayTogether.Core.Services.Business.Charity
         public async Task<Result<CharityResponse>> GetCharityByIdAsync(string charityId)
         {
             try {
-                if (String.IsNullOrEmpty(charityId)) {
+                if (String.IsNullOrEmpty(charityId) || String.IsNullOrWhiteSpace(charityId)) {
                     throw new ArgumentNullException(nameof(charityId));
                 }
                 return await _charityRepository.GetCharityByIdAsync(charityId);

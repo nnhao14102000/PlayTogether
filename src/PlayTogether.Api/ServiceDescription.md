@@ -284,6 +284,10 @@
 >   ***Description***: Get a Charity by Id   
 >   ***Role Access***: Admin, Player   
 >
+> - ``GET /api/play-together/v1/charities/{charityId}/withdraw-histories ``  
+>   ***Description***: Get all withdraw histories of a specific charity     
+>   ***Role Access***: Admin, Player   
+>
 > - ``PUT /api/play-together/v1/charities/{charityId} ``  
 >   ***Description***: Update a Charity profile   
 >   ***Role Access***: Charity, Admin     

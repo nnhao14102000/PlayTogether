@@ -11,6 +11,7 @@ using PlayTogether.Core.Services.Auth;
 using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.AppUser;
 using PlayTogether.Core.Services.Business.Charity;
+using PlayTogether.Core.Services.Business.CharityWithdraw;
 using PlayTogether.Core.Services.Business.Chat;
 using PlayTogether.Core.Services.Business.Dating;
 using PlayTogether.Core.Services.Business.Donate;
@@ -41,6 +42,7 @@ using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
 using PlayTogether.Infrastructure.Repositories.Business.AppUser;
 using PlayTogether.Infrastructure.Repositories.Business.Charity;
+using PlayTogether.Infrastructure.Repositories.Business.CharityWithdraw;
 using PlayTogether.Infrastructure.Repositories.Business.Chat;
 using PlayTogether.Infrastructure.Repositories.Business.Dating;
 using PlayTogether.Infrastructure.Repositories.Business.Donate;
@@ -219,6 +221,10 @@ namespace PlayTogether.Api.Helpers
             // Config for SystemConfig service DI
             services.AddTransient<ISystemConfigService, SystemConfigService>();
             services.AddTransient<ISystemConfigRepository, SystemConfigRepository>();
+
+            // Config for CharityWithdraw service DI
+            services.AddTransient<ICharityWithdrawService, CharityWithdrawService>();
+            services.AddTransient<ICharityWithdrawRepository, CharityWithdrawRepository>();
 
             services.AddHttpClient();
 

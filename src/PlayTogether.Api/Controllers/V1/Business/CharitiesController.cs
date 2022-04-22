@@ -23,11 +23,13 @@ namespace PlayTogether.Api.Controllers.V1.Business
         private readonly ICharityService _charityService;
         private readonly IDonateService _donateService;
         private readonly string _azureConnectionString;
+        private readonly ICharityWithdrawService _charityWithdrawService;
 
-        public CharitiesController(ICharityService charityService, IDonateService donateService, IConfiguration configuration)
+        public CharitiesController(ICharityService charityService, IDonateService donateService, IConfiguration configuration, ICharityWithdrawService charityWithdrawService)
         {
             _charityService = charityService;
             _donateService = donateService;
+            _charityWithdrawService = charityWithdrawService;
             _azureConnectionString = configuration.GetConnectionString("ImageAzureConnectionString");
         }
 
@@ -44,6 +46,39 @@ namespace PlayTogether.Api.Controllers.V1.Business
             [FromQuery] CharityParameters param)
         {
             var response = await _charityService.GetAllCharitiesAsync(param).ConfigureAwait(false);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+
+            var metaData = new {
+                response.TotalCount,
+                response.PageSize,
+                response.CurrentPage,
+                response.HasNext,
+                response.HasPrevious
+            };
+
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metaData));
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all withdraw history of a specific charity
+        /// </summary>
+        /// <param name="charityId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{charityId}/withdraw-histories")]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetAllCharityWithdrawHistories(string charityId, CharityWithdrawParameters param)
+        {
+            var response = await _charityWithdrawService.GetAllCharityWithdrawHistoriesAsync(charityId, param);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);
