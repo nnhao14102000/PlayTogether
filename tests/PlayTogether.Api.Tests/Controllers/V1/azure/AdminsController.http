@@ -23,7 +23,9 @@ content-type: {{contentType}}
 
 
 # Get all users
-GET {{baseUrl}}/api/play-together/v1/admins/users?name=manh
+GET {{baseUrl}}/api/play-together/v1/admins/users
+?pageNumber=1
+&pageSize=50
 content-type: {{contentType}}
 Authorization: {{authToken}}
 
@@ -185,7 +187,7 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "value": 0.1
+  "value": 0.2
 }
 
 ###

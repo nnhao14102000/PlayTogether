@@ -424,6 +424,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             FilterByStatus(ref query, param.Status);
             FilterUserByNameVsEmail(ref query, param.Name);
 
+            OrderUserByCreatedDate(ref query, param.IsNew);
+
             users = query.ToList();
             var response = _mapper.Map<List<UserGetByAdminResponse>>(users);
             return PagedResult<UserGetByAdminResponse>
