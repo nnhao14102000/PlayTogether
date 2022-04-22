@@ -20,28 +20,28 @@ namespace PlayTogether.Api.Controllers.V1.Business
             _systemConfigService = systemConfigService;
         }
 
-        /// <summary>
-        /// Create system config
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin
-        /// </remarks>
-        [HttpPost]
-        [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> CreateSystemConfig (ConfigCreateRequest request){
-            var response = await _systemConfigService.CreateConfigAsync(request);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
-                    return NotFound(response);
-                }
-                else{
-                    return BadRequest(response);
-                }
-            }
-            return Ok(response);
-        }
+        // /// <summary>
+        // /// Create system config
+        // /// </summary>
+        // /// <param name="request"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Admin
+        // /// </remarks>
+        // [HttpPost]
+        // [Authorize(Roles = AuthConstant.RoleAdmin)]
+        // public async Task<ActionResult> CreateSystemConfig (ConfigCreateRequest request){
+        //     var response = await _systemConfigService.CreateConfigAsync(request);
+        //     if(!response.IsSuccess){
+        //         if(response.Error.Code == 404){
+        //             return NotFound(response);
+        //         }
+        //         else{
+        //             return BadRequest(response);
+        //         }
+        //     }
+        //     return Ok(response);
+        // }
         
         /// <summary>
         /// Get all configs
@@ -112,28 +112,28 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
-        /// <summary>
-        /// Delete config
-        /// </summary>
-        /// <param name="configId"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Roles Access: Admin
-        /// </remarks>
-        [HttpDelete, Route("{configId}")]
-        [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult> DeleteSystemConfig (string configId){
-            var response = await _systemConfigService.DeleteConfigAsync(configId);
-            if(!response.IsSuccess){
-                if(response.Error.Code == 404){
-                    return NotFound(response);
-                }
-                else{
-                    return BadRequest(response);
-                }
-            }
-            return NoContent();
-        }
+        // /// <summary>
+        // /// Delete config
+        // /// </summary>
+        // /// <param name="configId"></param>
+        // /// <returns></returns>
+        // /// <remarks>
+        // /// Roles Access: Admin
+        // /// </remarks>
+        // [HttpDelete, Route("{configId}")]
+        // [Authorize(Roles = AuthConstant.RoleAdmin)]
+        // public async Task<ActionResult> DeleteSystemConfig (string configId){
+        //     var response = await _systemConfigService.DeleteConfigAsync(configId);
+        //     if(!response.IsSuccess){
+        //         if(response.Error.Code == 404){
+        //             return NotFound(response);
+        //         }
+        //         else{
+        //             return BadRequest(response);
+        //         }
+        //     }
+        //     return NoContent();
+        // }
 
         /// <summary>
         /// Update config
