@@ -690,18 +690,9 @@
 >   ***Description***: Get config by Number of Order   
 >   ***Role Access***: Admin, User  
 >
-> - ``POST /api/play-together/v1/system-configs/{configId} ``  
->   ***Description***: Create a system config    
->   ***Role Access***: Admin  
->
 > - ``PUT /api/play-together/v1/system-configs/{configId} ``  
 >   ***Description***: Update a system config  
 >   ***Role Access***: Admin  
 > 
-> - ``DELETE /api/play-together/v1/system-configs/{configId} ``  
->   ***Description***: Delete a system config    
->   ***Role Access***: Admin  
->
-
 <h2 id="api">PlayTogether API  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 

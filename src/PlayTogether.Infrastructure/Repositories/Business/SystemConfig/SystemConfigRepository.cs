@@ -97,6 +97,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemConfig
                 return result;
             }
 
+            config.Value = request.Value;
             _context.SystemConfigs.Update(config);
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;

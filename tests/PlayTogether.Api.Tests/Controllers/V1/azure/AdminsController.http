@@ -179,15 +179,13 @@ Authorization: {{authToken}}
 
 ###
 
-# Creat a system config
-POST {{baseUrl}}/api/play-together/v1/system-configs
+# Update a system config
+PUT {{baseUrl}}/api/play-together/v1/system-configs/4d226516-aee8-4024-ba25-ec33bd39b26b
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 {
-  "title": "Percent Money Pay for System",
-  "nO": 4,
-  "value": 0.2
+  "value": 0.1
 }
 
 ###
