@@ -62,7 +62,7 @@ Authorization: {{authToken}}
 
 
 # Get user basic information
-GET {{baseUrl}}/api/play-together/v1/users/14085799-aec5-41b5-9fd9-46aa9a773443
+GET {{baseUrl}}/api/play-together/v1/users/6863bf6e-f44c-458c-9002-e1bfcfa90db5
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 

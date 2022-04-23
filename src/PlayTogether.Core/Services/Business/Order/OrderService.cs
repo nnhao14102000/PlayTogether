@@ -22,7 +22,7 @@ namespace PlayTogether.Core.Services.Business.Order
             _logger = logger;
         }
 
-        public async Task<Result<bool>> CancelOrderAsync(string orderId, ClaimsPrincipal principal)
+        public async Task<Result<bool>> CancelOrderAsync(string orderId, ClaimsPrincipal principal, OrderCancelRequest request)
         {
             try {
                 if (principal is null) {
@@ -31,7 +31,10 @@ namespace PlayTogether.Core.Services.Business.Order
                 if (String.IsNullOrEmpty(orderId)) {
                     throw new ArgumentNullException(nameof(orderId));
                 }
-                return await _orderRepository.CancelOrderAsync(orderId, principal);
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _orderRepository.CancelOrderAsync(orderId, principal, request);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call CancelOrderAsync in service class, Error Message: {ex}.");

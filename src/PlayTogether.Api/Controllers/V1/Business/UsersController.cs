@@ -540,9 +540,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPut("orders/cancel/{orderId}")]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> CancelOrderRequest(string orderId)
+        public async Task<ActionResult> CancelOrderRequest(string orderId, OrderCancelRequest request)
         {
-            var response = await _orderService.CancelOrderAsync(orderId, HttpContext.User);
+            var response = await _orderService.CancelOrderAsync(orderId, HttpContext.User, request);
             if (!response.IsSuccess) {
                 if (response.Error.Code == 404) {
                     return NotFound(response);

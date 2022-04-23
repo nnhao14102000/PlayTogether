@@ -109,12 +109,12 @@ POST {{baseUrl}}/api/play-together/v1/accounts/register-user
 content-type: {{contentType}}
 
 {
-  "email": "user@example.com",
+  "email": "nnhao9a3@gmail.com",
   "password": "Pa55w0rd!",
   "confirmPassword": "Pa55w0rd!",
-  "name": "user",
-  "city": "Ho Chi Minh City",
-  "dateOfBirth": "2002-01-22",
+  "name": "Hao Nguyen",
+  "city": "Long An",
+  "dateOfBirth": "2000-01-01",
   "gender": true,
   "confirmEmail": true
 }

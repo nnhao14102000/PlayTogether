@@ -24,7 +24,8 @@ content-type: {{contentType}}
 
 # Get all users
 GET {{baseUrl}}/api/play-together/v1/admins/users
-?pageNumber=1
+?isNew=true
+&pageNumber=1
 &pageSize=50
 content-type: {{contentType}}
 Authorization: {{authToken}}

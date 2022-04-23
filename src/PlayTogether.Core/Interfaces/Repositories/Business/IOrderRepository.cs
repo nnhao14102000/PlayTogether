@@ -15,7 +15,7 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<PagedResult<OrderGetResponse>> GetAllOrderByUserIdForAdminAsync(string userId, AdminOrderParameters param);
         Task<Result<OrderGetDetailResponse>> GetOrderByIdInDetailAsync(string orderId);
         Task<Result<bool>> ProcessOrderAsync(string orderId, ClaimsPrincipal principal, OrderProcessByPlayerRequest request);
-        Task<Result<bool>> CancelOrderAsync(string orderId, ClaimsPrincipal principal);
+        Task<Result<bool>> CancelOrderAsync(string orderId, ClaimsPrincipal principal, OrderCancelRequest request);
         Task<Result<bool>> FinishOrderAsync(string orderId);
         Task<Result<bool>> FinishOrderSoonAsync(string orderId, ClaimsPrincipal principal, FinishSoonRequest request);
     }

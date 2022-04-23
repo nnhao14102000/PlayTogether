@@ -379,8 +379,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
         }
 
         public async Task<Result<bool>> CancelOrderAsync(
-            string orderId,
-            ClaimsPrincipal principal)
+            string orderId, ClaimsPrincipal principal, OrderCancelRequest request)
         {
             var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
@@ -444,6 +443,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
             else {
                 order.Status = OrderStatusConstants.Cancel; // change status of Order
+                order.Reason = request.Reason;
                 await _context.Notifications.AddAsync(
                     Helpers.NotificationHelpers.PopulateNotification(order.ToUserId, $"Yêu cầu đã bị Hủy bời {order.User.Name}", $"Yêu cầu đã bị Hủy bời {order.User.Name} lúc {DateTime.UtcNow.AddHours(7)}", "")
                 );
