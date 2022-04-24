@@ -30,6 +30,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.LoginUserAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -45,6 +48,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.LoginAdminAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -60,6 +66,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.LoginCharityAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -86,6 +95,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.LoginUserByGoogleAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -103,6 +115,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.RegisterAdminAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -122,6 +137,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.RegisterCharityAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -137,6 +155,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                 return BadRequest();
             }
             var response = await _accountService.RegisterUserAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -182,6 +203,9 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         public async Task<ActionResult<AuthResult>> LogoutUser()
         {
             var response = await _accountService.LogoutAsync(HttpContext.User);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -199,8 +223,12 @@ namespace PlayTogether.Api.Controllers.V1.Auth
                            + AuthConstant.RoleCharity
                            + ","
                            + AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<AuthResult>> ChangePassword (ChangePasswordRequest request) {
+        public async Task<ActionResult<AuthResult>> ChangePassword(ChangePasswordRequest request)
+        {
             var response = await _accountService.ChangePasswordAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -214,8 +242,12 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// </remarks>
         [HttpPut, Route("reset-password-admin")]
         [Authorize(Roles = AuthConstant.RoleAdmin)]
-        public async Task<ActionResult<AuthResult>> ResetPasswordAdmin(ResetPasswordAdminRequest request){
+        public async Task<ActionResult<AuthResult>> ResetPasswordAdmin(ResetPasswordAdminRequest request)
+        {
             var response = await _accountService.ResetPasswordAdminAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -228,8 +260,12 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// Roles Access: Not required
         /// </remarks>
         [HttpPut, Route("reset-password-token")]
-        public async Task<ActionResult<AuthResult>> ResetPasswordToken(ResetPasswordTokenRequest request){
+        public async Task<ActionResult<AuthResult>> ResetPasswordToken(ResetPasswordTokenRequest request)
+        {
             var response = await _accountService.ResetPasswordTokenAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -242,8 +278,12 @@ namespace PlayTogether.Api.Controllers.V1.Auth
         /// Roles Access: Not required
         /// </remarks>
         [HttpPut, Route("reset-password")]
-        public async Task<ActionResult<AuthResult>> ResetPassword(ResetPasswordRequest request){
+        public async Task<ActionResult<AuthResult>> ResetPassword(ResetPasswordRequest request)
+        {
             var response = await _accountService.ResetPasswordAsync(request);
+            if (!response.Success) {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
     }
