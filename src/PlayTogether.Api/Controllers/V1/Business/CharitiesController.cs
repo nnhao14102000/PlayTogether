@@ -75,7 +75,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpGet, Route("{charityId}/withdraw-histories")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleCharity)]
         public async Task<ActionResult> GetAllCharityWithdrawHistories(string charityId, CharityWithdrawParameters param)
         {
             var response = await _charityWithdrawService.GetAllCharityWithdrawHistoriesAsync(charityId, param);
