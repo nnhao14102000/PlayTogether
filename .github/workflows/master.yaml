@@ -1,4 +1,4 @@
-name: Master - Continuous Integration and Deployment
+name: Master - Continuous Integration
 
 on: 
   push:
