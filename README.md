@@ -20,6 +20,8 @@ Tools use to develop project:
 
 - Clone newest code (from branch test):  
 `git clone -b test https://github.com/nnhao14102000/PlayTogether.git`
+- Clone stable code (from branch master):  
+`git clone https://github.com/nnhao14102000/PlayTogether.git`
 
 - Modify the connection strings in **appsettings.Development.json**    
 Default is: <br> `Server=(local);Database=PlayTogetherDb;Trusted_Connection=True;`  
