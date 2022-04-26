@@ -91,7 +91,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
 
             FilterByType(ref query, param.Type);
             FilterInDayRange(ref query, param.FromDate, param.ToDate);
-            FilterByIsApprove(ref query, param.IsApprove);
+            FilterByIsApprove(ref query, param.IsApprove, param.GetAll);
             OrderByNewFeedback(ref query, param.IsNew);
 
             listFeedbacks = query.ToList();
@@ -99,12 +99,17 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             return PagedResult<SystemFeedbackResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterByIsApprove(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isApprove)
+        private void FilterByIsApprove(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isApprove, bool getAll)
         {
             if (!query.Any()) {
                 return;
             }
-            query = query.Where(x => x.IsApprove == isApprove);
+            
+            if(getAll is true){
+                return;
+            }else{
+                query = query.Where(x => x.IsApprove == isApprove);
+            }
         }
 
         private void OrderByNewFeedback(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isNew)
