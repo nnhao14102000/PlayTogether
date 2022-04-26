@@ -26,5 +26,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public bool IsActive { get; set; } = true;
         public float PricePerHour { get; set; }
         public int MaxHourHire { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
