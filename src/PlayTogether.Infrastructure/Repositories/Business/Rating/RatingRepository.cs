@@ -433,6 +433,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == order.ToUserId).Average(x => x.Rate);
 
                 toUser.Rate = (float)rateOfPlayer;
+
+                if (toUser.NumOfRate != 0) {
+                    var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(toUser.CreatedDate));
+                    var point = (float)Math.Log10(toUser.Rate * toUser.NumOfRate / date);
+                    toUser.RankingPoint = point;
+                }
+
                 if ((await _context.SaveChangesAsync() < 0)) {
                     result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                     return result;
@@ -583,10 +590,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 return result;
             }
 
-            if(rating.ToUserId != user.Id){
+            if (rating.ToUserId != user.Id) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đánh giá này không phải là của bạn.");
                 return result;
-            }            
+            }
 
             if (rating.IsViolate is true) {
                 rating.IsViolate = false;
@@ -596,7 +603,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 rating.IsViolate = true;
                 rating.Reason = request.Reason;
             }
-            
+
             if (await _context.SaveChangesAsync() >= 0) {
                 result.Content = true;
                 return result;
@@ -875,8 +882,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                 if ((await _context.SaveChangesAsync() >= 0)) {
                     var rateOfPlayer = _context.Ratings.Where(x => x.IsActive == true && x.ToUserId == rating.ToUserId).Average(x => x.Rate);
                     toUser.Rate = (float)rateOfPlayer;
+                    if (toUser.NumOfRate != 0) {
+                        var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(toUser.CreatedDate));
+                        var point = (float)Math.Log10(toUser.Rate * toUser.NumOfRate / date);
+                        toUser.RankingPoint = point;
+                    }
                 }
-
             }
 
             if (await _context.SaveChangesAsync() >= 0) {

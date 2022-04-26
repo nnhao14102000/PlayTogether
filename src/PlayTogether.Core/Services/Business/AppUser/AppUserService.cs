@@ -211,6 +211,17 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<Result<bool>> UpdateRankingPointAsync()
+        {
+            try {
+                return await _appUserRepository.UpdateRankingPointAsync();
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UpdateRankingPointAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> UpdateUserServiceInfoAsync(
             ClaimsPrincipal principal,
             UserInfoForIsPlayerUpdateRequest request)

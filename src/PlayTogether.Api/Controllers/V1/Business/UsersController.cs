@@ -850,5 +850,28 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return Ok(response);
         }
 
+        /// <summary>
+        /// Update Ranking point
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("update-ranking")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> UpdateRankingPoint()
+        {
+            var response = await _appUserService.UpdateRankingPointAsync();
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
+
     }
 }

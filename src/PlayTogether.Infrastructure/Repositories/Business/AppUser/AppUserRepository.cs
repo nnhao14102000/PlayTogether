@@ -500,12 +500,8 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
-            foreach (var item in query)
-            {
-                item.RankingPoint = Math.Log10(item.Rate*item.NumOfRate/Helpers.UtilsHelpers.GetDayDiffer(item.CreatedDate));
-                _context.SaveChanges();
-            }
-            query = query.OrderByDescending(x => x.RankingPoint);
+
+            query = query.OrderByDescending(x => x.RankingPoint).Where(x => x.NumOfRate != 0);
         }
 
         private void OrderUserByASCName(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByName)
@@ -541,21 +537,22 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (gameId.Contains(" ")) {
                 var seperatringGameId = gameId.Split(" ");
                 List<Core.Entities.AppUser> result = new();
-                foreach (var sprId in seperatringGameId) {                    
+                foreach (var sprId in seperatringGameId) {
                     var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == sprId);
                     foreach (var item in gamesOfUser) {
                         result.Add(item.User);
-                    }                    
+                    }
                 }
                 query = result.Distinct().AsQueryable();
-            }else if (gameId.Contains(",")) {
+            }
+            else if (gameId.Contains(",")) {
                 var seperatringGameId = gameId.Split(",");
                 List<Core.Entities.AppUser> result = new();
-                foreach (var sprId in seperatringGameId) {                    
+                foreach (var sprId in seperatringGameId) {
                     var gamesOfUser = _context.GameOfUsers.Where(x => x.GameId == sprId);
                     foreach (var item in gamesOfUser) {
                         result.Add(item.User);
-                    }                    
+                    }
                 }
                 query = result.Distinct().AsQueryable();
             }
@@ -981,6 +978,27 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
             var response = _mapper.Map<UserBalanceResponse>(user.UserBalance);
             result.Content = response;
+            return result;
+        }
+
+        public async Task<Result<bool>> UpdateRankingPointAsync()
+        {
+            var result = new Result<bool>();
+            var listUser = await _context.AppUsers.ToListAsync();
+            foreach (var item in listUser) {
+                if(item.Rate ==0 || item.NumOfRate == 0){
+                    continue;
+                }
+                var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(item.CreatedDate));
+                var point = (float)Math.Log10(item.Rate * item.NumOfRate / date);
+                item.RankingPoint = point;
+            }
+            _context.AppUsers.UpdateRange(listUser);
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
     }

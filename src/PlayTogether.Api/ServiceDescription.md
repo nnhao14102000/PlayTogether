@@ -272,6 +272,10 @@
 >   ***Description***: Get balance of a specific user  
 >   ***Role Access***: User, Admin  
 >
+> - ``PUT /api/play-together/v1/users/update-ranking ``  
+>   ***Description***: Update ranking point  
+>   ***Role Access***: User  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

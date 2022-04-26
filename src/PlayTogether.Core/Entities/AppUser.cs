@@ -53,7 +53,9 @@ namespace PlayTogether.Core.Entities
         public int NumOfOrder { get; set; }
         public int TotalTimeOrder { get; set; }
         public int NumOfFinishOnTime { get; set; }
-        public double RankingPoint { get; set; }
+        
+        [Column(TypeName = "float")]
+        public float RankingPoint { get; set; }
 
         public ICollection<Order> Orders { get; set; }
         public ICollection<Rating> Ratings { get; set; }

@@ -12,6 +12,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.AppUser
         public int NumOfRate { get; set; }
         public string Status { get; set; }
         public float PricePerHour { get; set; }
+        public float RankingPoint { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }
