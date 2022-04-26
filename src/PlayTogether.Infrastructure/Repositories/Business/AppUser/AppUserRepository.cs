@@ -500,7 +500,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             if (!query.Any() || isOrderByRating is null || isOrderByRating is false) {
                 return;
             }
-            query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.Rate).ThenByDescending(x => x.NumOfRate);
+            query = query.OrderBy(x => x.CreatedDate).ThenByDescending(x => x.NumOfRate).ThenByDescending(x => x.Rate);
         }
 
         private void OrderUserByASCName(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByName)
