@@ -243,7 +243,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             string strDate = DateTime.UtcNow.AddHours(7).ToShortDateString();
             int count = 0;
             foreach (var item in donates) {
-                var date = item.CreatedDate?.ToShortDateString();
+                var date = item.CreatedDate.ToShortDateString();
                 if (date.Contains(strDate)) {
                     count++;
                 }
@@ -259,7 +259,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Donate
             float total = 0;
             string strDate = DateTime.UtcNow.AddHours(7).ToShortDateString();
             foreach (var item in donates) {
-                var date = item.CreatedDate?.ToShortDateString();
+                var date = item.CreatedDate.ToShortDateString();
                 if (date.Contains(strDate)) {
                     total += item.Money;
                 }

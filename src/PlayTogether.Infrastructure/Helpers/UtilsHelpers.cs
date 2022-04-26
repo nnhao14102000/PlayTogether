@@ -18,5 +18,12 @@ namespace PlayTogether.Infrastructure.Helpers
             return timeDone;
         }
 
+        public static double GetDayDiffer(DateTime date)
+        {
+            TimeSpan ts = DateTime.UtcNow.AddHours(7) - date;
+            var differDate = ts.TotalDays;
+            return differDate;
+        }
+
     }
 }

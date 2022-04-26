@@ -11,7 +11,7 @@ namespace PlayTogether.Core.Entities
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Column(TypeName = "datetime")]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? UpdateDate { get; set; }

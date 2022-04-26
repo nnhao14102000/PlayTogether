@@ -34,7 +34,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             var users = await _context.AppUsers.ToListAsync();
             foreach (var item in users)
             {
-                var date = item.CreatedDate?.ToShortDateString();
+                var date = item.CreatedDate.ToShortDateString();
                 var toDay = DateTime.UtcNow.AddHours(7).ToShortDateString();
                 if(date.Equals(toDay)){
                     numOfNewUser += 1;

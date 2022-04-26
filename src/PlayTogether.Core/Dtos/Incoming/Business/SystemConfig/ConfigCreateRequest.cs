@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayTogether.Core.Dtos.Incoming.Business.SystemConfig
@@ -15,5 +16,6 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.SystemConfig
         [Required]
         [Range(0, float.MaxValue)]
         public float Value { get; set; }
+        public DateTime CreatedDate = DateTime.UtcNow.AddHours(7);
     }
 }
