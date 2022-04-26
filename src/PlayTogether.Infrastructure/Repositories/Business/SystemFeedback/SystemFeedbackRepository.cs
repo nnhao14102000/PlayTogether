@@ -104,10 +104,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             if (!query.Any()) {
                 return;
             }
-            
-            if(getAll is true){
+
+            if (getAll is true) {
                 return;
-            }else{
+            }
+            else {
                 query = query.Where(x => x.IsApprove == isApprove);
             }
         }
