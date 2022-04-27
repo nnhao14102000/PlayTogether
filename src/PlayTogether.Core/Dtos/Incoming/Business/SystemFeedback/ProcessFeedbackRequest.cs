@@ -5,6 +5,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Business.SystemFeedback
     public class ProcessFeedbackRequest
     {
         [Required]
-        public bool IsApprove { get; set; }
+        [Range(0,1)]
+        public int IsApprove { get; set; }
     }
 }

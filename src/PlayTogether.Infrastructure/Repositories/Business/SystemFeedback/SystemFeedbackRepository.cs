@@ -55,7 +55,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
 
             var model = _mapper.Map<Core.Entities.SystemFeedback>(request);
             model.UserId = user.Id;
-            model.IsApprove = null;
+            model.IsApprove = -1;
             await _context.SystemFeedbacks.AddAsync(model);
 
             if (await _context.SaveChangesAsync() >= 0) {
@@ -99,7 +99,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
             return PagedResult<SystemFeedbackResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
         }
 
-        private void FilterByIsApprove(ref IQueryable<Core.Entities.SystemFeedback> query, bool? isApprove, bool getAll)
+        private void FilterByIsApprove(ref IQueryable<Core.Entities.SystemFeedback> query, int isApprove, bool getAll)
         {
             if (!query.Any()) {
                 return;
@@ -203,7 +203,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
                 return result;
             }
 
-            if (feedback.IsApprove is not null) {
+            if (feedback.IsApprove != -1) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đóng góp của bạn đã được admin xử lí.");
                 return result;
             }
@@ -244,7 +244,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
                 return result;
             }
 
-            if (feedback.IsApprove is not null) {
+            if (feedback.IsApprove != -1) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đóng góp của bạn đã được admin xử lí.");
                 return result;
             }

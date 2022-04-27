@@ -8,6 +8,6 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.SystemFeedback
         public string Title { get; set; }
         public string TypeOfFeedback { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsApprove { get; set; }
+        public int IsApprove { get; set; }
     }
 }

@@ -20,6 +20,6 @@ namespace PlayTogether.Core.Entities
         [Required]
         [MaxLength(100)]
         public string TypeOfFeedback { get; set; }
-        public bool? IsApprove { get; set; }
+        public int IsApprove { get; set; }
     }
 }
