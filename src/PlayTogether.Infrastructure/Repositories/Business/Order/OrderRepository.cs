@@ -734,7 +734,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ kích hoạt tiền. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
             }
-
+            toUser.TotalTimeOrder += Convert.ToInt32(Math.Ceiling(Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)/3600));
             if (order.User.IdentityId == identityId) { // Hirer finish soon
                 order.Reason = request.Reason;
                 if (priceDone.Item2 == 0) {
@@ -976,7 +976,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     return result;
                 }
             }
-
+            
         }
 
         private (float, int) CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone)
