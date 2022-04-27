@@ -170,6 +170,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.SystemFeedback
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.NotFound);
                 return result;
             }
+            if (feedback.IsApprove != -1) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, $"Đóng góp của bạn đã được admin xử lí.");
+                return result;
+            }
             var model = _mapper.Map(request, feedback);
             _context.SystemFeedbacks.Update(model);
             if (await _context.SaveChangesAsync() >= 0) {
