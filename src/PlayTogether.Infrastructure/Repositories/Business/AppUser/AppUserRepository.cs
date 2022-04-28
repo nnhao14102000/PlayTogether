@@ -203,10 +203,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                                                                 && x.Status == OrderStatusConstants.Complete).ToListAsync();
             double totalTime = 0;
             foreach (var item in orders) {
-                totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
+                if (item.Status == OrderStatusConstants.Complete || item.Status == OrderStatusConstants.FinishSoonHirer || item.Status == OrderStatusConstants.FinishSoonPlayer) {
+                    totalTime += Helpers.UtilsHelpers.GetTime(item.TimeStart, item.TimeFinish);
+                }
             }
             user.NumOfRate = rates.Count();
-            user.NumOfOrder = orders.Count();
+            user.NumOfOrder = orders.Where(x => x.Status == OrderStatusConstants.Complete || x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer).Count();
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
