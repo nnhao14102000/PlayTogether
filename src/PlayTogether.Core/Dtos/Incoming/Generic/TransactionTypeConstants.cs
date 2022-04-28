@@ -4,7 +4,7 @@ namespace PlayTogether.Core.Dtos.Incoming.Generic
     {
         public const string Order = "Order";
         public const string OrderRefund = "Order - Refund";
-        public const string WithDraw = "WithDraw";
+        public const string Withdraw = "Withdraw";
         public const string Deposit = "Deposit";
         public const string Donate = "Donate";
 

@@ -1046,7 +1046,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             await _context.TransactionHistories.AddAsync(
                 Helpers.TransactionHelpers.PopulateTransactionHistory(
-                    user.UserBalance.Id, TransactionTypeConstants.Sub, request.MoneyWithdraw, TransactionTypeConstants.WithDraw, request.PhoneNumberMomo
+                    user.UserBalance.Id, TransactionTypeConstants.Sub, request.MoneyWithdraw, TransactionTypeConstants.Withdraw, request.PhoneNumberMomo
                 )
             );
 
