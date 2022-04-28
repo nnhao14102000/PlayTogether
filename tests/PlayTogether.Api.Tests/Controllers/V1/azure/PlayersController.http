@@ -42,7 +42,7 @@ Authorization: {{authToken}}
 ###
 
 # Get order request (receiver order)
-GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true
+GET {{baseUrl}}/api/play-together/v1/users/orders/requests?isNew=true&status=Complete
 Content-type: {{contentType}}
 Authorization: {{authToken}}
 
