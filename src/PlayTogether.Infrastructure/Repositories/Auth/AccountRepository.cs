@@ -182,7 +182,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
 
             if (payload is null) {
                 return new AuthResult {
-                    Errors = new List<string>() { "Lỗi xác thực với Google!" }
+                    Errors = new List<string>() { "IdToken không hợp lệ." }
                 };
             }
 
