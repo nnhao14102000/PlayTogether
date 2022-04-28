@@ -276,6 +276,10 @@
 >   ***Description***: Update ranking point  
 >   ***Role Access***: User  
 >
+> - ``PUT /api/play-together/v1/users/withdraw ``  
+>   ***Description***: Withdraw money  
+>   ***Role Access***: User  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 

@@ -1001,5 +1001,45 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
+
+        public async Task<Result<bool>> UserWithdrawMoneyAsync(ClaimsPrincipal principal, UserWithdrawMoneyRequest request)
+        {            
+            var result = new Result<bool>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            await _context.Entry(user).Reference(x=> x.UserBalance).LoadAsync();
+
+            if(user.UserBalance.ActiveBalance < request.MoneyWithdraw){
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Số dư khả dụng ít hơn số tiền bạn muốn rút.");
+                return result;
+            }
+            user.UserBalance.Balance -= request.MoneyWithdraw;
+            user.UserBalance.ActiveBalance -= request.MoneyWithdraw;
+
+            await _context.TransactionHistories.AddAsync(
+                Helpers.TransactionHelpers.PopulateTransactionHistory(
+                    user.UserBalance.Id, TransactionTypeConstants.Sub, request.MoneyWithdraw, TransactionTypeConstants.WithDraw, request.PhoneNumberMomo
+                )
+            );
+
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
     }
 }

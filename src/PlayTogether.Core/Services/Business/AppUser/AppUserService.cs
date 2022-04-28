@@ -240,5 +240,22 @@ namespace PlayTogether.Core.Services.Business.AppUser
                 throw;
             }
         }
+
+        public async Task<Result<bool>> UserWithdrawMoneyAsync(ClaimsPrincipal principal, UserWithdrawMoneyRequest request)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _appUserRepository.UserWithdrawMoneyAsync(principal, request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UserWithdrawMoneyAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
     }
 }

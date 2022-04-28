@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -870,7 +871,31 @@ namespace PlayTogether.Api.Controllers.V1.Business
                     return BadRequest(response);
                 }
             }
-            return Ok(response);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Withdraw money
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpPut, Route("withdraw")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> WithdrawMoney(UserWithdrawMoneyRequest request)
+        {
+            var response = await _appUserService.UserWithdrawMoneyAsync(HttpContext.User, request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return NoContent();
         }
 
     }
