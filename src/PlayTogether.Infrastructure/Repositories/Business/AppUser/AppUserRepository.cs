@@ -115,7 +115,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             }
             user.NumOfRate = rates.Count();
-            user.NumOfOrder = orders.Where(x => x.Status == OrderStatusConstants.Complete || x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer).Count();
+            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status == OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
@@ -208,7 +208,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 }
             }
             user.NumOfRate = rates.Count();
-            user.NumOfOrder = orders.Where(x => x.Status == OrderStatusConstants.Complete || x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer).Count();
+            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status == OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
