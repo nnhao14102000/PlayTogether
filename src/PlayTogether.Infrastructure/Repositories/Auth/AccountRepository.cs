@@ -207,12 +207,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                     if (result.Succeeded) {
                         var userEntityModel = new AppUser();
                         userEntityModel.IdentityId = user.Id;
-                        if (payload.Any(x => x.Key.Contains("family_name"))) {
-                            userEntityModel.Name = payload["family_name"].ToString() + " " + payload["given_name"].ToString();
-                        }else{
-                            userEntityModel.Name = payload["given_name"].ToString();
-                        }
-
+                        userEntityModel.Name = payload["name"].ToString();
                         userEntityModel.Email = payload["email"].ToString();
                         userEntityModel.Avatar = payload["picture"].ToString();
                         userEntityModel.CreatedDate = DateTime.UtcNow.AddHours(7);
