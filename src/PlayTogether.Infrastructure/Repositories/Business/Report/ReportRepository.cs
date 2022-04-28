@@ -192,7 +192,6 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             await _context.Entry(order).Reference(x => x.User).LoadAsync();
             var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
 
-
             await _context.Entry(order).Collection(x => x.Reports).LoadAsync();
             if (order.Reports.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã tố cáo rồi.");
@@ -205,10 +204,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
             }
 
             await _context.Entry(order).Collection(x => x.Ratings).LoadAsync();
-            if (order.Ratings.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
-                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã đánh giá người chơi nên bạn không thể tố cáo.");
-                return result;
-            }
+
 
             await _context.Entry(user).Reference(x => x.BehaviorPoint).LoadAsync();
             await _context.Entry(toUser).Reference(x => x.BehaviorPoint).LoadAsync();
@@ -227,6 +223,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 ));
             }
             else {
+                if (order.Ratings.Where(x => x.OrderId == order.Id).Any(x => x.UserId == order.UserId)) {
+                    result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Bạn đã đánh giá người chơi nên bạn không thể tố cáo.");
+                    return result;
+                }
                 var model = _mapper.Map<Core.Entities.Report>(request);
                 model.OrderId = orderId;
                 model.UserId = order.UserId;
