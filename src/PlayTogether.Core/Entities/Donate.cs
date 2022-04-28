@@ -18,5 +18,9 @@ namespace PlayTogether.Core.Entities
         [Column(TypeName = "float")]
         [Required]
         public float Money { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        public string Message { get; set; }
     }
 }
