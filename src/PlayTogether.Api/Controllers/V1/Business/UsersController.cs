@@ -898,5 +898,28 @@ namespace PlayTogether.Api.Controllers.V1.Business
             return NoContent();
         }
 
+        /// <summary>
+        /// Get user day income, month income, percent complete in day, percent complete in month
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: User
+        /// </remarks>
+        [HttpGet, Route("statistic")]
+        [Authorize(Roles = AuthConstant.RoleUser)]
+        public async Task<ActionResult> GetStatistic(){
+            var response = await _appUserService.UserGetStatisticAsync(HttpContext.User);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+
+        }
+
     }
 }

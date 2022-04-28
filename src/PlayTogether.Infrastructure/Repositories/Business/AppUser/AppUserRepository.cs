@@ -986,7 +986,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             var result = new Result<bool>();
             var listUser = await _context.AppUsers.ToListAsync();
             foreach (var item in listUser) {
-                if(item.Rate ==0 || item.NumOfRate == 0){
+                if (item.Rate == 0 || item.NumOfRate == 0) {
                     continue;
                 }
                 var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(item.CreatedDate));
@@ -1003,7 +1003,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
         }
 
         public async Task<Result<bool>> UserWithdrawMoneyAsync(ClaimsPrincipal principal, UserWithdrawMoneyRequest request)
-        {            
+        {
             var result = new Result<bool>();
             var loggedInUser = await _userManager.GetUserAsync(principal);
             if (loggedInUser is null) {
@@ -1019,9 +1019,9 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return result;
             }
 
-            await _context.Entry(user).Reference(x=> x.UserBalance).LoadAsync();
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
 
-            if(user.UserBalance.ActiveBalance < request.MoneyWithdraw){
+            if (user.UserBalance.ActiveBalance < request.MoneyWithdraw) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Số dư khả dụng ít hơn số tiền bạn muốn rút.");
                 return result;
             }
@@ -1039,6 +1039,40 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return result;
             }
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
+
+        public async Task<Result<(float, float, float, float)>> UserGetStatisticAsync(ClaimsPrincipal principal)
+        {
+            var result = new Result<(float, float, float, float)>();
+            var loggedInUser = await _userManager.GetUserAsync(principal);
+            if (loggedInUser is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.Unauthenticate);
+                return result;
+            }
+            var identityId = loggedInUser.Id;
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == identityId);
+
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+
+            float dayIncome = 0;
+            float monthIncome = 0;
+            float percentCompleteInDay = 0;
+            float percentCompleteInMonth = 0;
+
+            var ordersInDay = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.ToShortDateString() == DateTime.UtcNow.AddHours(7).ToShortDateString()).ToListAsync();
+            dayIncome = (from order in ordersInDay select order.FinalPrices).Sum();
+            percentCompleteInDay = (from order in ordersInDay where order.Status == OrderStatusConstants.Complete select order).Count() /ordersInDay.Count() * 100;
+
+            var ordersInMonth = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.Month == DateTime.UtcNow.AddHours(7).Month).ToListAsync();
+            monthIncome = (from order in ordersInMonth select order.FinalPrices).Sum();
+            percentCompleteInMonth = (from order in ordersInMonth where order.Status == OrderStatusConstants.Complete select order).Count() /ordersInMonth.Count() * 100;
+            
+            result.Content = (dayIncome, monthIncome, percentCompleteInDay, percentCompleteInMonth);
             return result;
         }
     }

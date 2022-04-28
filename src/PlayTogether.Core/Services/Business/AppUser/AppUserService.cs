@@ -241,6 +241,20 @@ namespace PlayTogether.Core.Services.Business.AppUser
             }
         }
 
+        public async Task<Result<(float, float, float, float)>> UserGetStatisticAsync(ClaimsPrincipal principal)
+        {
+            try {
+                if (principal is null) {
+                    throw new ArgumentNullException(nameof(principal));
+                }
+                return await _appUserRepository.UserGetStatisticAsync(principal);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call UserGetStatisticAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> UserWithdrawMoneyAsync(ClaimsPrincipal principal, UserWithdrawMoneyRequest request)
         {
             try {

@@ -27,5 +27,6 @@ namespace PlayTogether.Core.Interfaces.Repositories.Business
         Task<Result<BehaviorPointResponse>> GetBehaviorPointAsync(string userId);
         Task<Result<UserBalanceResponse>> GetBalanceAsync(string userId);
         Task<Result<bool>> UserWithdrawMoneyAsync(ClaimsPrincipal principal, UserWithdrawMoneyRequest request);
+        Task<Result<(float, float, float, float)>> UserGetStatisticAsync(ClaimsPrincipal principal);
     }
 }

@@ -280,6 +280,10 @@
 >   ***Description***: Withdraw money  
 >   ***Role Access***: User  
 >
+> - ``GET /api/play-together/v1/users/statistic ``  
+>   ***Description***: Get user day income, month income, percent complete in day, percent complete in month  
+>   ***Role Access***: User  
+>
 
 <h2 id="charity">Charity  <a href="#table-of-contents" target="_self">🔙</a></h2> 
 
