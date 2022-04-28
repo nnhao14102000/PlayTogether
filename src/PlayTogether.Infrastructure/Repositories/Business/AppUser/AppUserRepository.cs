@@ -119,6 +119,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
+            if (await _context.SaveChangesAsync() < 0) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
+            }
+
+
             var response = _mapper.Map<PersonalInfoResponse>(user);
             result.Content = response;
             return result;
@@ -212,6 +218,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
+            if (await _context.SaveChangesAsync() < 0) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                return result;
+            }
+            
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);
             result.Content = response;
             return result;
