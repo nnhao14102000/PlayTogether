@@ -171,6 +171,11 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Report
                 return result;
             }
 
+            if (order.Status is OrderStatusConstants.Reject) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, "Order đã bị từ chối.");
+                return result;
+            }
+
             var allowReportTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 3);
             if (allowReportTime is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian cho phép tố cáo. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
