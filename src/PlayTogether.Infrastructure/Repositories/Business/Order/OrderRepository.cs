@@ -639,7 +639,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             if ((await _context.SaveChangesAsync() >= 0)) {
-                toUser.UserBalance.Balance += order.TotalPrices;
+                toUser.UserBalance.Balance += order.FinalPrices;
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
