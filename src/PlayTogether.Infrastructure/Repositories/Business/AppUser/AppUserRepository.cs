@@ -826,6 +826,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     Helpers.DisableUserHelpers.PopulateDisableUser(user.Id, request.DateDisable, request.DateActive, request.Note, request.NumDateDisable)
                 );
 
+                await _context.Entry(user).Reference(x => x.Orders).LoadAsync();
+                var orders = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
+                if (orders.Count() > 0) {
+                    foreach (var order in orders) {
+                        await _context.Entry(order).Reference(x => x.User).LoadAsync();
+                        order.Status = OrderStatusConstants.Interrupt;
+                        if(order.UserId == user.Id){
+                            var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+                            toUser.Status = UserStatusConstants.Online;
+                        }else{
+                            order.User.Status = UserStatusConstants.Online;
+                        }
+                    }
+                }
+
                 if (await _context.SaveChangesAsync() >= 0) {
                     user.IsActive = false;
                     await _context.Notifications.AddAsync(
