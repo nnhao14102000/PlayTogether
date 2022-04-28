@@ -25,7 +25,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// Roles Access: Admin, User
         /// </remarks>
         [HttpPost("send")]
-        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser)]
+        [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser + "," + AuthConstant.RoleCharity)]
         public async Task<ActionResult> Send(MailRequest request)
         {
             await _mailService.SendEmailAsync(request);
