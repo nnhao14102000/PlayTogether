@@ -29,6 +29,9 @@ namespace PlayTogether.Core.Entities
         [Column(TypeName = "float")]
         public float FinalPrices { get; set; }
 
+        [Column(TypeName = "float")]
+        public float PercentSub {get; set;}
+
         [MaxLength(200)]
         [Required]
         public string Message { get; set; }

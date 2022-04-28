@@ -631,6 +631,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 return result;
             }
             order.FinalPrices = order.TotalPrices - (order.TotalPrices*percentMoneyPayForSystem.Value);
+            order.PercentSub = percentMoneyPayForSystem.Value;
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {
@@ -728,6 +729,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             // var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
             order.FinalPrices = ((float)priceDone.Item1)-(((float)priceDone.Item1)*percentMoneyPayForSystem.Value);
+            order.PercentSub = percentMoneyPayForSystem.Value;
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {

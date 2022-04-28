@@ -19,6 +19,7 @@ namespace PlayTogether.Core.Dtos.Outcoming.Business.Order
         public int TotalTimes { get; set; }
         public float TotalPrices { get; set; }
         public float FinalPrices { get; set; }
+        public float PercentSub {get; set;}
 
         public ICollection<RatingInOrderResponse> Ratings { get; set; }
         public ICollection<ReportInOrderResponse> Reports { get; set; }
