@@ -683,7 +683,7 @@
 
 > - ``POST /api/play-together/v1/email/send ``  
 >   ***Description***: Send email to a specific user    
->   ***Role Access***: Admin, user    
+>   ***Role Access***: Admin, user, charity    
 >
 
 
