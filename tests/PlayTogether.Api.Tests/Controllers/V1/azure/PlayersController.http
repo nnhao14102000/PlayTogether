@@ -21,6 +21,14 @@ Content-type: {{contentType}}
 
 ###
 
+# Get statistic
+GET {{baseUrl}}/api/play-together/v1/users/statistic
+Content-Type: : {{contentType}}
+Authorization: {{authToken}}
+
+
+###
+
 # Get search history
 GET {{baseUrl}}/api/play-together/v1/search-histories
 ?content=

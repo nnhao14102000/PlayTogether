@@ -1064,7 +1064,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
             float percentCompleteInDay = 0;
             float percentCompleteInMonth = 0;
 
-            var ordersInDay = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.ToShortDateString() == DateTime.UtcNow.AddHours(7).ToShortDateString()).ToListAsync();
+            var ordersInDay = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.Day == DateTime.UtcNow.AddHours(7).Day).ToListAsync();
             dayIncome = (from order in ordersInDay select order.FinalPrices).Sum();
             percentCompleteInDay = (from order in ordersInDay where order.Status == OrderStatusConstants.Complete select order).Count() /ordersInDay.Count() * 100;
 
