@@ -630,8 +630,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình phần trăm tiền trích cho hệ thống. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
             }
-            order.PricePlayerReceive = order.TotalPrices - (order.TotalPrices * percentMoneyPayForSystem.Value);
-            order.FinalPrices = order.TotalPrices;
+            order.FinalPrices = order.TotalPrices - (order.TotalPrices*percentMoneyPayForSystem.Value);
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {
@@ -640,12 +639,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
             }
 
             if ((await _context.SaveChangesAsync() >= 0)) {
-                toUser.UserBalance.Balance += order.PricePlayerReceive;
+                toUser.UserBalance.Balance += order.TotalPrices;
                 await _context.TransactionHistories.AddAsync(
                     Helpers.TransactionHelpers.PopulateTransactionHistory(
                         toUser.UserBalance.Id,
                         TransactionTypeConstants.Add,
-                        order.PricePlayerReceive,
+                        order.FinalPrices,
                         TransactionTypeConstants.Order,
                         orderId)
                 );
@@ -654,7 +653,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                         toUser.UserBalance.Id,
                         orderId,
-                        order.PricePlayerReceive,
+                        order.FinalPrices,
                         DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
                         // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                         // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
@@ -728,15 +727,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             // var priceDone = (order.TotalPrices * Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)) / (order.TotalTimes * 60 * 60);
             var priceDone = CalculateMoneyFinish(order.TotalTimes * 3600, order.TotalPrices, Helpers.UtilsHelpers.GetTimeDone(order.TimeStart));
-            order.PricePlayerReceive = ((float)priceDone.Item1) - (((float)priceDone.Item1) * percentMoneyPayForSystem.Value);
-            order.FinalPrices = (float) priceDone.Item1;
+            order.FinalPrices = ((float)priceDone.Item1)-(((float)priceDone.Item1)*percentMoneyPayForSystem.Value);
 
             var moneyActiveTime = await _context.SystemConfigs.FirstOrDefaultAsync(x => x.NO == 2);
             if (moneyActiveTime is null) {
                 result.Error = Helpers.ErrorHelpers.PopulateError(404, APITypeConstants.NotFound_404, "Không tìm thấy cấu hình thời gian chờ kích hoạt tiền. Vui lòng thông báo tới quản trị viên. Xin chân thành cảm ơn.");
                 return result;
             }
-            toUser.TotalTimeOrder += Convert.ToInt32(Math.Ceiling(Helpers.UtilsHelpers.GetTimeDone(order.TimeStart) / 3600));
+            toUser.TotalTimeOrder += Convert.ToInt32(Math.Ceiling(Helpers.UtilsHelpers.GetTimeDone(order.TimeStart)/3600));
             if (order.User.IdentityId == identityId) { // Hirer finish soon
                 order.Reason = request.Reason;
                 if (priceDone.Item2 == 0) {
@@ -761,7 +759,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
                             "")
                     );
-                    toUser.UserBalance.Balance += order.PricePlayerReceive;
+                    toUser.UserBalance.Balance += order.TotalPrices;
                     await _context.TransactionHistories.AddRangeAsync(
                         // Helpers.TransactionHelpers.PopulateTransactionHistory(
                         //     order.User.UserBalance.Id,
@@ -773,7 +771,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            order.PricePlayerReceive,
+                            order.TotalPrices,
                             TransactionTypeConstants.Order,
                             orderId)
                     );
@@ -782,7 +780,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                             toUser.UserBalance.Id,
                             orderId,
-                            order.PricePlayerReceive,
+                            order.TotalPrices,
                             DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
                             // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
@@ -812,21 +810,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}.",
                             "")
                     );
-                    toUser.UserBalance.Balance += order.PricePlayerReceive;
-                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
-                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    toUser.UserBalance.Balance += order.FinalPrices;
+                    order.User.UserBalance.Balance += (order.TotalPrices - ((float)priceDone.Item1));
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - ((float)priceDone.Item1));
                     await _context.TransactionHistories.AddRangeAsync(
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            (order.TotalPrices - order.FinalPrices),
+                            (order.TotalPrices - ((float)priceDone.Item1)),
                             TransactionTypeConstants.OrderRefund,
                             orderId)
                         ,
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            order.PricePlayerReceive,
+                            order.FinalPrices,
                             TransactionTypeConstants.Order,
                             orderId)
                     );
@@ -835,7 +833,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                             toUser.UserBalance.Id,
                             orderId,
-                            order.PricePlayerReceive,
+                            order.FinalPrices,
                             DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
                             // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
@@ -876,7 +874,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Do order đã hoàn thành hơn 90% thời lượng nên sẽ được tính là order đã hoàn thành.",
                             "")
                     );
-                    toUser.UserBalance.Balance += order.PricePlayerReceive;
+                    toUser.UserBalance.Balance += order.TotalPrices;
                     await _context.TransactionHistories.AddRangeAsync(
                         // Helpers.TransactionHelpers.PopulateTransactionHistory(
                         //     order.User.UserBalance.Id,
@@ -888,7 +886,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            order.PricePlayerReceive,
+                            order.TotalPrices,
                             TransactionTypeConstants.Order,
                             orderId)
                     );
@@ -897,7 +895,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                             toUser.UserBalance.Id,
                             orderId,
-                            order.PricePlayerReceive,
+                            order.TotalPrices,
                             DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
                             // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
@@ -927,21 +925,21 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                             (String.IsNullOrEmpty(request.Reason) || String.IsNullOrWhiteSpace(request.Reason)) ? $"Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}" : $"{order.User.Name} đã yêu cầu kết thúc sớm với lời nhắn: {request.Reason}. Yêu cầu đã kết thúc lúc {DateTime.UtcNow.AddHours(7)}. Bạn bị trừ {10 - priceDone.Item2} điểm tích cực vì đã kết thúc order sớm.",
                             "")
                     );
-                    toUser.UserBalance.Balance += order.PricePlayerReceive;
-                    order.User.UserBalance.Balance += (order.TotalPrices - order.FinalPrices);
-                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - order.FinalPrices);
+                    toUser.UserBalance.Balance += order.FinalPrices;
+                    order.User.UserBalance.Balance += (order.TotalPrices - ((float)priceDone.Item1));
+                    order.User.UserBalance.ActiveBalance += (order.TotalPrices - ((float)priceDone.Item1));
                     await _context.TransactionHistories.AddRangeAsync(
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             order.User.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            (order.TotalPrices - order.FinalPrices),
+                            (order.TotalPrices - ((float)priceDone.Item1)),
                             TransactionTypeConstants.OrderRefund,
                             orderId)
                         ,
                         Helpers.TransactionHelpers.PopulateTransactionHistory(
                             toUser.UserBalance.Id,
                             TransactionTypeConstants.Add,
-                            order.PricePlayerReceive,
+                            order.FinalPrices,
                             TransactionTypeConstants.Order,
                             orderId)
                     );
@@ -950,7 +948,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                         Helpers.UnActiveBalanceHelpers.PopulateUnActiveBalance(
                             toUser.UserBalance.Id,
                             orderId,
-                            order.PricePlayerReceive,
+                            order.FinalPrices,
                             DateTime.UtcNow.AddHours(7).AddHours(moneyActiveTime.Value)
                             // DateTime.UtcNow.AddHours(7).AddHours(ValueConstants.HourActiveMoney)
                             // DateTime.UtcNow.AddHours(7).AddMinutes(ValueConstants.HourActiveMoneyForTest)
@@ -978,7 +976,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
                     return result;
                 }
             }
-
+            
         }
 
         private (float, int) CalculateMoneyFinish(int totalTime, float totalPrice, double timeDone)

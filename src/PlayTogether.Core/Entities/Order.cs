@@ -29,9 +29,6 @@ namespace PlayTogether.Core.Entities
         [Column(TypeName = "float")]
         public float FinalPrices { get; set; }
 
-        [Column(TypeName = "float")]
-        public float PricePlayerReceive { get; set; }
-
         [MaxLength(200)]
         [Required]
         public string Message { get; set; }
