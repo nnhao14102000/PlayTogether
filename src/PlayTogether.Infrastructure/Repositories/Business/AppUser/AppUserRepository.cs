@@ -115,7 +115,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             }
             user.NumOfRate = rates.Count();
-            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status == OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
+            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status != OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
@@ -214,7 +214,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 }
             }
             user.NumOfRate = rates.Count();
-            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status == OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
+            user.NumOfOrder = orders.Where(x => x.Status != OrderStatusConstants.Cancel && x.Status != OrderStatusConstants.OverTime && x.Status != OrderStatusConstants.Reject && x.Status != OrderStatusConstants.Interrupt).Count();
             user.TotalTimeOrder = Convert.ToInt32(Math.Ceiling(totalTime / 3600));
             user.NumOfFinishOnTime = orderOnTimes.Count();
 
@@ -222,7 +222,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                 return result;
             }
-            
+
             var response = _mapper.Map<UserGetBasicInfoResponse>(user);
             result.Content = response;
             return result;
