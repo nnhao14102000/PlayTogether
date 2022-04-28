@@ -1066,12 +1066,18 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             var ordersInDay = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.Day == DateTime.UtcNow.AddHours(7).Day).ToListAsync();
             dayIncome = (from order in ordersInDay select order.FinalPrices).Sum();
-            percentCompleteInDay = (from order in ordersInDay where order.Status == OrderStatusConstants.Complete select order).Count() /ordersInDay.Count() * 100;
+            if (ordersInDay.Count() != 0) {                
+                percentCompleteInDay = (from order in ordersInDay where order.Status == OrderStatusConstants.Complete select order).Count() / ordersInDay.Count() * 100;
+            }
+
 
             var ordersInMonth = await _context.Orders.Where(x => x.ToUserId == user.Id && (x.Status == OrderStatusConstants.FinishSoonHirer || x.Status == OrderStatusConstants.FinishSoonPlayer || x.Status == OrderStatusConstants.Complete) && x.CreatedDate.Month == DateTime.UtcNow.AddHours(7).Month).ToListAsync();
             monthIncome = (from order in ordersInMonth select order.FinalPrices).Sum();
-            percentCompleteInMonth = (from order in ordersInMonth where order.Status == OrderStatusConstants.Complete select order).Count() /ordersInMonth.Count() * 100;
-            
+            if (ordersInMonth.Count() != 0) {                
+                percentCompleteInMonth = (from order in ordersInMonth where order.Status == OrderStatusConstants.Complete select order).Count() / ordersInMonth.Count() * 100;
+            }
+
+
             result.Content = (dayIncome, monthIncome, percentCompleteInDay, percentCompleteInMonth);
             return result;
         }
