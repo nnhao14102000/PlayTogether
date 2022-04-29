@@ -121,14 +121,15 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
             else {
                 foreach (var item in unActive) {
                     await _context.Entry(item).Reference(x => x.Order).Query().Include(x => x.Reports).LoadAsync();
-                    if (item.Order.Reports.Count > 0) {
-                        foreach (var report in item.Order.Reports) {
+
+                    if (item.Order.Reports.Count > 0) { // any reports in order
+                        foreach (var report in item.Order.Reports) { // get each report in reports
                             if (report.IsApprove == true && report.UserId == item.Order.UserId) {
-                                // + tiền lại cho user
+                                // report accept, report is from user create order (Hirer)
                                 var fromUser = await _context.AppUsers.FindAsync(item.Order.UserId);
                                 await _context.Entry(fromUser).Reference(x => x.UserBalance).LoadAsync();
-                                fromUser.UserBalance.Balance += item.Order.TotalPrices;
-                                fromUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                fromUser.UserBalance.Balance += item.Order.FinalPrices / (1 - item.Order.PercentSub);
+                                fromUser.UserBalance.ActiveBalance += item.Order.FinalPrices / (1 - item.Order.PercentSub);
                                 if (await _context.SaveChangesAsync() < 0) {
                                     result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                                     return result;
@@ -136,7 +137,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
 
                                 var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                                 await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                                toUser.UserBalance.Balance -= item.Order.TotalPrices;
+                                toUser.UserBalance.Balance -= item.Order.FinalPrices;
                                 if (await _context.SaveChangesAsync() < 0) {
                                     result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                                     return result;
@@ -145,9 +146,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                                 item.IsRelease = true;
                                 item.UpdateDate = DateTime.UtcNow.AddHours(7);
                                 await _context.TransactionHistories.AddRangeAsync(
-                                    Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Money, "Order", item.OrderId),
-                                    Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Money, "Order", item.OrderId)
+                                    Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Order.FinalPrices / (1 - item.Order.PercentSub), TransactionTypeConstants.ReportRefund, item.OrderId),
+                                    Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Order.FinalPrices, TransactionTypeConstants.Repoft, item.OrderId)
                                 );
+
                                 if (await _context.SaveChangesAsync() >= 0) {
                                     result.Content = true;
                                     return result;
@@ -156,9 +158,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                                 return result;
                             }
                             else if (report.IsApprove == false && report.UserId == item.Order.UserId) {
+                                // Report is reject, report from user create Order (Hirer)
                                 var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                                 await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                                toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                toUser.UserBalance.ActiveBalance += item.Order.FinalPrices;
                                 if (await _context.SaveChangesAsync() < 0) {
                                     result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                                     return result;
@@ -174,9 +177,29 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                                 return result;
                             }
                             else if (report.IsApprove == null && report.UserId == item.Order.UserId && DateTime.UtcNow.AddHours(7) >= item.DateActive) {
+                                // report not process, report from user create Order (Hirer), out of time release
                                 var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                                 await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                                toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                                toUser.UserBalance.ActiveBalance += item.Order.FinalPrices;
+                                if (await _context.SaveChangesAsync() < 0) {
+                                    result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                    return result;
+                                }
+
+                                item.IsRelease = true;
+                                item.UpdateDate = DateTime.UtcNow.AddHours(7);
+                                if (await _context.SaveChangesAsync() >= 0) {
+                                    result.Content = true;
+                                    return result;
+                                }
+                                result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                                return result;
+                            }
+                            else if (DateTime.UtcNow.AddHours(7) >= item.DateActive) {
+                                // report of toUser, report is approve or not, or not process, don't care these report, check unActive to time release, release
+                                var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
+                                await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
+                                toUser.UserBalance.ActiveBalance += item.Order.FinalPrices;
                                 if (await _context.SaveChangesAsync() < 0) {
                                     result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                                     return result;
@@ -195,9 +218,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                     }
                     else {
                         if (DateTime.UtcNow.AddHours(7) >= item.DateActive) {
+                            // Not any reports, just check to time, release it.
                             var toUser = await _context.AppUsers.FindAsync(item.Order.ToUserId);
                             await _context.Entry(toUser).Reference(x => x.UserBalance).LoadAsync();
-                            toUser.UserBalance.ActiveBalance += item.Order.TotalPrices;
+                            toUser.UserBalance.ActiveBalance += item.Order.FinalPrices;
                             if (await _context.SaveChangesAsync() < 0) {
                                 result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                                 return result;
