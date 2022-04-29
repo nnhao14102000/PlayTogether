@@ -288,13 +288,13 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
             FilterUserByRangePrice(ref query, param.FromPrice, param.ToPrice);
             FilterIsPlayerUser(ref query, param.IsPlayer);
-            FilterActiveUser(ref query, true);
-            FilterUserByItSelf(ref query, user.Id);
+            FilterActiveUser(ref query, true);            
 
             OrderUserByASCName(ref query, param.IsOrderByName);
             OrderUserByHighestRating(ref query, param.IsOrderByRating);
             OrderUserPricing(ref query, param.IsOrderByPricing);
             OrderUserByCreatedDate(ref query, param.IsNewAccount);
+            FilterUserByItSelf(ref query, user.Id, param.IsOrderByRating);
 
             users = query.ToList();
 
@@ -490,9 +490,12 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
 
         }
 
-        private void FilterUserByItSelf(ref IQueryable<Core.Entities.AppUser> query, string id)
+        private void FilterUserByItSelf(ref IQueryable<Core.Entities.AppUser> query, string id, bool? isOrderByRating)
         {
             if (!query.Any() || String.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id)) {
+                return;
+            }
+            if(isOrderByRating is true){
                 return;
             }
             query = query.Where(x => x.Id != id);
@@ -517,7 +520,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
 
-            query = _context.AppUsers.OrderByDescending(x => x.RankingPoint).Where(x => x.NumOfRate != 0);
+            query = query.OrderByDescending(x => x.RankingPoint).Where(x => x.NumOfRate != 0);
         }
 
         private void OrderUserByASCName(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByName)
