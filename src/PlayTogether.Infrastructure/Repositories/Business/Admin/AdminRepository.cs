@@ -32,15 +32,53 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             numOfSuggestFeedback = await _context.SystemFeedbacks
                                                     .Where(x => x.IsApprove == null).CountAsync();
             var users = await _context.AppUsers.ToListAsync();
-            foreach (var item in users)
-            {
+            foreach (var item in users) {
                 var date = item.CreatedDate.ToShortDateString();
                 var toDay = DateTime.UtcNow.AddHours(7).ToShortDateString();
-                if(date.Equals(toDay)){
+                if (date.Equals(toDay)) {
                     numOfNewUser += 1;
                 }
             }
             result.Content = (numOfReport, numOfDisableUser, numOfSuggestFeedback, numOfNewUser);
+            return result;
+        }
+
+        public async Task<Result<bool>> MaintainAsync()
+        {
+            var result = new Result<bool>();
+            var users = await _context.AppUsers.ToListAsync();
+            foreach (var user in users) {
+                if (user.Status is not UserStatusConstants.Maintain) {
+                    user.Status = UserStatusConstants.Maintain;
+                    await _context.Entry(user).Reference(x => x.Orders).LoadAsync();
+                    var orders = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
+                    if (orders.Count() > 0) {
+                        foreach (var order in orders) {
+                            await _context.Entry(order).Reference(x => x.User).LoadAsync();
+                            order.Status = OrderStatusConstants.Interrupt;
+                            if (order.UserId == user.Id) {
+                                var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+                                toUser.Status = UserStatusConstants.Maintain;
+                            }
+                            else {
+                                order.User.Status = UserStatusConstants.Maintain;
+                            }
+                        }
+                    }
+                    if (await _context.SaveChangesAsync() < 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                        return result;
+                    }
+                }else{
+                    user.Status = UserStatusConstants.Offline;
+                    if (await _context.SaveChangesAsync() < 0) {
+                        result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+                        return result;
+                    }
+                }
+
+            }
+            result.Content = true;
             return result;
         }
 

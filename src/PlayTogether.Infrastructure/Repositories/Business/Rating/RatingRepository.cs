@@ -441,7 +441,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
                 if (toUser.NumOfRate != 0) {
                     var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(toUser.CreatedDate));
-                    var point = (float)Math.Log10(toUser.Rate * toUser.NumOfRate / date);
+                    var point = (float) (toUser.Rate * toUser.NumOfRate - date);
                     toUser.RankingPoint = point;
                 }
 
@@ -889,7 +889,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
                     toUser.Rate = (float)rateOfPlayer;
                     if (toUser.NumOfRate != 0) {
                         var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(toUser.CreatedDate));
-                        var point = (float)Math.Log10(toUser.Rate * toUser.NumOfRate / date);
+                        var point = (float) (toUser.Rate * toUser.NumOfRate - date);
                         toUser.RankingPoint = point;
                     }
                 }

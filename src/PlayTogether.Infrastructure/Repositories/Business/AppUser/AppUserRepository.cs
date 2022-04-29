@@ -1021,7 +1021,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     continue;
                 }
                 var date = Math.Ceiling(Helpers.UtilsHelpers.GetDayDiffer(item.CreatedDate));
-                var point = (float)Math.Log10(item.Rate * item.NumOfRate / date);
+                var point = (float) (toUser.Rate * toUser.NumOfRate - date);
                 item.RankingPoint = point;
             }
             _context.AppUsers.UpdateRange(listUser);
