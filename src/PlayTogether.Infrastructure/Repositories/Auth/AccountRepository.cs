@@ -214,6 +214,7 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                         userEntityModel.IsPlayer = false;
                         userEntityModel.Status = UserStatusConstants.Online;
                         userEntityModel.Description = "";
+                        userEntityModel.City = "";
                         userEntityModel.PricePerHour = 10000;
 
                         await _context.AppUsers.AddAsync(userEntityModel);
