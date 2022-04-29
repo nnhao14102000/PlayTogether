@@ -517,7 +517,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                 return;
             }
 
-            query = query.OrderByDescending(x => x.RankingPoint).Where(x => x.NumOfRate != 0);
+            query = _context.AppUsers.OrderByDescending(x => x.RankingPoint).Where(x => x.NumOfRate != 0);
         }
 
         private void OrderUserByASCName(ref IQueryable<Core.Entities.AppUser> query, bool? isOrderByName)
