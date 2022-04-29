@@ -619,6 +619,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Order
 
             order.Status = OrderStatusConstants.Complete;
             order.User.Status = UserStatusConstants.Online;
+            order.Reason = "";
             toUser.Status = UserStatusConstants.Online;
             toUser.NumOfFinishOnTime += 1;
             toUser.TotalTimeOrder += order.TotalTimes;
