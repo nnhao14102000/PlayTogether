@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayTogether.Core.Dtos.Incoming.Auth;
+using PlayTogether.Core.Dtos.Incoming.Momo;
 using PlayTogether.Core.Interfaces.Services.Momo;
 
 namespace PlayTogether.Api.Controllers.V1.Business
@@ -26,8 +27,12 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = AuthConstant.RoleUser)]
-        public async Task<ActionResult> GetLink(){
-            var response = await _momoService.GenerateMomoLinkAsync();
+        public async Task<ActionResult> GetLink(WebPaymentRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _momoService.GenerateMomoLinkAsync(request);
             return Ok(response);
         }
     }

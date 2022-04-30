@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PlayTogether.Core.Dtos.Incoming.Momo;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Momo;
 using PlayTogether.Core.Interfaces.Services.Momo;
@@ -17,10 +18,13 @@ namespace PlayTogether.Core.Services.Momo
             _momoRepository = momoRepository;
             _logger = logger;
         }
-        public async Task<Result<string>> GenerateMomoLinkAsync()
+        public async Task<Result<string>> GenerateMomoLinkAsync(WebPaymentRequest request)
         {
             try {
-                return await _momoRepository.GenerateMomoLinkAsync();
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _momoRepository.GenerateMomoLinkAsync(request);
             }
             catch (Exception ex) {
                 _logger.LogError($"Error while trying to call GenerateMomoLinkAsync in service class, Error Message: {ex}.");

@@ -28,6 +28,9 @@ namespace PlayTogether.Api.Controllers.V1.Business
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser + "," + AuthConstant.RoleCharity)]
         public async Task<ActionResult> Send(MailRequest request)
         {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
             await _mailService.SendEmailAsync(request);
             return Ok();
         }
