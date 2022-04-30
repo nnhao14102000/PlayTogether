@@ -35,7 +35,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             //response from MoMo
             string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, jsonRequest.ToString());
             JObject jmessage = JObject.Parse(responseFromMomo);
-            result.Content = jmessage.ToString();
+            result.Content = responseFromMomo;
             return result;
         }
     }
