@@ -6,5 +6,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
     public interface IAdminService
     {
         Task<Result<(int, int, int, int)>> AdminStatisticAsync();
+        Task<Result<bool>> MaintainAsync();
     }
 }

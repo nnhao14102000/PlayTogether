@@ -146,6 +146,10 @@
 >   ***Description***: Train the model    
 >   ***Role Access***: Admin  
 >
+> - ``PUT /api/play-together/v1/admins/maintain ``  
+>   ***Description***: Maintain server    
+>   ***Role Access***: Admin  
+>
 
 
 

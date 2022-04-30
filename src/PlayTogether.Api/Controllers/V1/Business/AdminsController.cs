@@ -456,5 +456,20 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _recommendService.TrainModel();
             return Ok(response);
         }
+
+        /// <summary>
+        /// Maintain server
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPut, Route("maintain")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> Maintain()
+        {
+            var response = await _adminService.MaintainAsync();
+            return Ok(response);
+        }
     }
 }

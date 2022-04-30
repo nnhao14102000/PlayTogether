@@ -46,14 +46,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
         public async Task<Result<bool>> MaintainAsync()
         {
             var result = new Result<bool>();
-            var users = await _context.AppUsers.ToListAsync();
+            var users = await _context.AppUsers.ToListAsync(); // get all users
             foreach (var user in users) {
-                if (user.Status is not UserStatusConstants.Maintain) {
+                if (user.Status is not UserStatusConstants.Maintain) { // user is not maintain
                     user.Status = UserStatusConstants.Maintain;
                     await _context.Entry(user).Reference(x => x.Orders).LoadAsync();
-                    var orders = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
-                    if (orders.Count() > 0) {
-                        foreach (var order in orders) {
+                    var orderProcesses = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
+                    if (orderProcesses.Count() > 0) { // get order in process
+                        foreach (var order in orderProcesses) {
                             await _context.Entry(order).Reference(x => x.User).LoadAsync();
                             order.Status = OrderStatusConstants.Interrupt;
                             if (order.UserId == user.Id) {
@@ -63,13 +63,46 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
                             else {
                                 order.User.Status = UserStatusConstants.Maintain;
                             }
+                            order.Reason = "Bảo trì hệ thống";
+                            order.FinalPrices = 0;
+                            order.TimeFinish = DateTime.UtcNow.AddHours(7);
                         }
                     }
                     if (await _context.SaveChangesAsync() < 0) {
                         result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
                         return result;
                     }
-                }else{
+                    var orderStarts = user.Orders.Where(x => x.Status == OrderStatusConstants.Start);
+                    if (orderStarts.Count() > 0) { // get order in starting
+                        foreach (var order in orderStarts) {
+                            await _context.Entry(order).Reference(x => x.User).LoadAsync();
+                            order.Status = OrderStatusConstants.Interrupt;
+                            if (order.UserId == user.Id) {
+                                var toUser = await _context.AppUsers.FindAsync(order.ToUserId);
+                                toUser.Status = UserStatusConstants.Maintain;
+                                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                                    toUser.Id, "Đã hủy cuộc hẹn để bảo trì.", $"Xin chào {toUser.Name}, do bảo trì hệ thống, nên chúng tôi đã hủy cuộc hẹn này, đã có thông báo bảo trì từ trước. Xin cảm ơn.", ""
+                                ));
+                            }
+                            else {
+                                order.User.Status = UserStatusConstants.Maintain;
+                                await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                                    order.User.Id, "Đã hủy cuộc hẹn để bảo trì.", $"Xin chào {order.User.Name}, do bảo trì hệ thống, nên chúng tôi đã hủy cuộc hẹn này, đã có thông báo bảo trì từ trước. Xin cảm ơn.", ""
+                                ));
+                                await _context.Entry(order.User).Reference(x => x.UserBalance).LoadAsync();
+                                order.User.UserBalance.ActiveBalance += order.TotalPrices;
+                                order.User.UserBalance.Balance += order.TotalPrices;
+                                await _context.TransactionHistories.AddAsync(Helpers.TransactionHelpers.PopulateTransactionHistory(
+                                    order.User.UserBalance.Id, TransactionTypeConstants.Add, order.TotalPrices, TransactionTypeConstants.MaintainRefund, order.Id
+                                ));
+                                order.Reason = "Bảo trì hệ thống";
+                                order.FinalPrices = 0;
+                                order.TimeFinish = DateTime.UtcNow.AddHours(7);
+                            }
+                        }
+                    }
+                }
+                else {
                     user.Status = UserStatusConstants.Offline;
                     if (await _context.SaveChangesAsync() < 0) {
                         result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);

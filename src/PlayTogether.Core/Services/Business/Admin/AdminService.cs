@@ -43,6 +43,15 @@ namespace PlayTogether.Core.Services.Business.Admin
             }
         }
 
-        
+        public async Task<Result<bool>> MaintainAsync()
+        {
+            try {
+                return await _adminRepository.MaintainAsync();
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call MaintainAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
     }
 }
