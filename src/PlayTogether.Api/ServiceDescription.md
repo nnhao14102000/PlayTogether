@@ -576,6 +576,11 @@
 >   ***Use for***: Send a notification reply to a specific user  
 >   ***Role Access***: Admin, User  
 >
+> - ``POST /api/play-together/v1/notification/all ``  
+>   ***Description***: Create a Notification to all user   
+>   ***Use for***: Send a notification to all server announce time maintain system  
+>   ***Role Access***: Admin    
+>
 > - ``GET /api/play-together/v1/notification ``  
 >   ***Description***: Get all Notifications   
 >   ***Use for***: View all notifications  

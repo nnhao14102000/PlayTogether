@@ -174,5 +174,26 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Notification
             result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
             return result;
         }
+
+        public async Task<Result<bool>> CreateNotificationAllServerAsync(NotificationCreateAllServerRequest request)
+        {
+            var result = new Result<bool>();
+            var users = await _context.AppUsers.ToListAsync();
+            var listModel = new List<Core.Entities.Notification>();
+            
+            foreach (var user in users) {
+                var model = _mapper.Map<Core.Entities.Notification>(request);
+                model.ReceiverId = user.Id;
+                listModel.Add(model);
+            }
+            await _context.Notifications.AddRangeAsync(listModel);
+
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
     }
 }

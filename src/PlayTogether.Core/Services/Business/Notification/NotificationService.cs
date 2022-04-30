@@ -22,6 +22,20 @@ namespace PlayTogether.Core.Services.Business.Notification
             _logger = logger;
         }
 
+        public async Task<Result<bool>> CreateNotificationAllServerAsync(NotificationCreateAllServerRequest request)
+        {
+            try {
+                if (request is null) {
+                    throw new ArgumentNullException(nameof(request));
+                }
+                return await _notificationRepository.CreateNotificationAllServerAsync(request);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call CreateNotificationAllServerAsync in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<Result<bool>> CreateNotificationAsync(NotificationCreateRequest request)
         {
             try {

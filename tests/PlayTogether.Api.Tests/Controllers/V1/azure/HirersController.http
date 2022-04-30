@@ -222,5 +222,13 @@ Authorization: {{authToken}}
 ###
 
 
+# Get momo payment link
+POST {{baseUrl}}/api/play-together/v1/momo
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+  "amount": 100000
+}
 
 ###

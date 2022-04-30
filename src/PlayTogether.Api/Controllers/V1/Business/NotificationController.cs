@@ -137,5 +137,32 @@ namespace PlayTogether.Api.Controllers.V1.Business
             }
             return Ok(response);
         }
+
+        /// <summary>
+        /// Create notification all server
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Roles Access: Admin
+        /// </remarks>
+        [HttpPost, Route("all")]
+        [Authorize(Roles = AuthConstant.RoleAdmin)]
+        public async Task<ActionResult> CreateNotificationToAll(NotificationCreateAllServerRequest request)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var response = await _notificationService.CreateNotificationAllServerAsync(request);
+            if (!response.IsSuccess) {
+                if (response.Error.Code == 404) {
+                    return NotFound(response);
+                }
+                else {
+                    return BadRequest(response);
+                }
+            }
+            return Ok(response);
+        }
     }
 }

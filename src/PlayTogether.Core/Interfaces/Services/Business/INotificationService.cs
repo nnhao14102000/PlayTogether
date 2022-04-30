@@ -16,5 +16,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
         Task<Result<bool>> DeleteNotificationAsync(string id);
 
         Task<Result<bool>> CreateNotificationAsync(NotificationCreateRequest request);
+        Task<Result<bool>> CreateNotificationAllServerAsync(NotificationCreateAllServerRequest request);
     }
 }
