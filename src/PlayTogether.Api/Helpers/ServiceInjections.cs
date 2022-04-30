@@ -4,9 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using PlayTogether.Core.Interfaces.Repositories.Auth;
 using PlayTogether.Core.Interfaces.Repositories.Business;
 using PlayTogether.Core.Interfaces.Repositories.Mail;
+using PlayTogether.Core.Interfaces.Repositories.Momo;
 using PlayTogether.Core.Interfaces.Services.Auth;
 using PlayTogether.Core.Interfaces.Services.Business;
 using PlayTogether.Core.Interfaces.Services.Mail;
+using PlayTogether.Core.Interfaces.Services.Momo;
 using PlayTogether.Core.Services.Auth;
 using PlayTogether.Core.Services.Business.Admin;
 using PlayTogether.Core.Services.Business.AppUser;
@@ -37,6 +39,7 @@ using PlayTogether.Core.Services.Business.TransactionHistory;
 using PlayTogether.Core.Services.Business.TypeOfGame;
 using PlayTogether.Core.Services.Business.UnActiveBalance;
 using PlayTogether.Core.Services.Mail;
+using PlayTogether.Core.Services.Momo;
 using PlayTogether.Infrastructure.Data;
 using PlayTogether.Infrastructure.Repositories.Auth;
 using PlayTogether.Infrastructure.Repositories.Business.Admin;
@@ -68,6 +71,7 @@ using PlayTogether.Infrastructure.Repositories.Business.TransactionHistory;
 using PlayTogether.Infrastructure.Repositories.Business.TypeOfGame;
 using PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance;
 using PlayTogether.Infrastructure.Repositories.Mail;
+using PlayTogether.Infrastructure.Repositories.MomoRepository;
 using System;
 
 namespace PlayTogether.Api.Helpers
@@ -225,6 +229,10 @@ namespace PlayTogether.Api.Helpers
             // Config for CharityWithdraw service DI
             services.AddTransient<ICharityWithdrawService, CharityWithdrawService>();
             services.AddTransient<ICharityWithdrawRepository, CharityWithdrawRepository>();
+
+            // Config for Momo service DI
+            services.AddTransient<IMomoService, MomoService>();
+            services.AddTransient<IMomoRepository, MomoRepository>();
 
             services.AddHttpClient();
 

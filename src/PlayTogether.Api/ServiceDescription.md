@@ -25,6 +25,7 @@
 - <a href="#dating" target="_self">Dating</a> <br>
 - <a href="#recommend" target="_self">Recommend</a> <br>
 - <a href="#email" target="_self">Email</a> <br>
+- <a href="#momo" target="_self">Momo</a> <br>
 - <a href="#config" target="_self">System Config</a> <br>
 - <a href="#api" target="_self">PlayTogether API</a> <br>
 
@@ -690,6 +691,13 @@
 >   ***Role Access***: Admin, user, charity    
 >
 
+
+<h2 id="momo">Momo  <a href="#table-of-contents" target="_self">🔙</a></h2>  
+
+> - ``POST /api/play-together/v1/momo ``  
+>   ***Description***: Get momo payment link    
+>   ***Role Access***: User    
+>
 
 <h2 id="config">System Config  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 

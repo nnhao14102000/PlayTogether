@@ -22,7 +22,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// <param name="request"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Roles Access: Admin, User
+        /// Roles Access: Admin, User, Charity
         /// </remarks>
         [HttpPost("send")]
         [Authorize(Roles = AuthConstant.RoleAdmin + "," + AuthConstant.RoleUser + "," + AuthConstant.RoleCharity)]
