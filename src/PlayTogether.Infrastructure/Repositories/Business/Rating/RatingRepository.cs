@@ -505,9 +505,10 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
 
         public async Task<PagedResult<RatingGetResponse>> GetAllViolateRatingsForAdminAsync(RatingParametersAdmin param)
         {
-            var ratings = await _context.Ratings.Where(x => x.IsViolate == true).ToListAsync();
+            var ratings = await _context.Ratings.ToListAsync();
             var query = ratings.AsQueryable();
 
+            FilterByIsViolateFeedback(ref query, param.IsViolate);
             FilterActiveFeedback(ref query, param.IsActive);
             FilterApproveFeedback(ref query, param.IsApprove);
             OrderByCreatedDate(ref query, param.IsNew);
@@ -518,6 +519,14 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Rating
             }
             var response = _mapper.Map<List<RatingGetResponse>>(ratings);
             return PagedResult<RatingGetResponse>.ToPagedList(response, param.PageNumber, param.PageSize);
+        }
+
+        private void FilterByIsViolateFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isViolate)
+        {
+            if(!query.Any() || isViolate is null){
+                return;
+            }
+            query = query.Where(x => x.IsViolate == isViolate);
         }
 
         private void FilterApproveFeedback(ref IQueryable<Core.Entities.Rating> query, bool? isApprove)
