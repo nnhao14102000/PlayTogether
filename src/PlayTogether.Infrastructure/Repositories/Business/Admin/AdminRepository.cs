@@ -50,7 +50,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.Admin
             foreach (var user in users) {
                 if (user.Status is not UserStatusConstants.Maintain) { // user is not maintain
                     user.Status = UserStatusConstants.Maintain;
-                    await _context.Entry(user).Reference(x => x.Orders).LoadAsync();
+                    await _context.Entry(user).Collection(x => x.Orders).LoadAsync();
                     var orderProcesses = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
                     if (orderProcesses.Count() > 0) { // get order in process
                         foreach (var order in orderProcesses) {

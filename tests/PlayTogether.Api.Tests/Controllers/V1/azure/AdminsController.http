@@ -206,3 +206,10 @@ Content-type: {{contentType}}
 Authorization: {{authToken}}
 
 ###
+
+# Maintain model
+PUT {{baseUrl}}/api/play-together/v1/admins/maintain
+Content-type: {{contentType}}
+Authorization: {{authToken}}
+
+###
