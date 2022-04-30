@@ -9,9 +9,9 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
 {
     public class MomoRepository : IMomoRepository
     {
-        public async Task<Result<string>> GenerateMomoLinkAsync(WebPaymentRequest request)
+        public async Task<Result<JObject>> GenerateMomoLinkAsync(WebPaymentRequest request)
         {
-            var result = new Result<string>();
+            var result = new Result<JObject>();
             //request params need to request to MoMo system
             string endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
             string partnerCode = "MOMOVFTR20220325";
@@ -23,7 +23,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             string requestType = "captureWallet";
 
             string amount = request.Amount.ToString();
-            string orderId = "MOMOVFTR20220325_" +  Guid.NewGuid().ToString()+ "_" + DateTime.UtcNow.AddHours(7).ToLongDateString();
+            string orderId = "MOMOVFTR20220325_" +  Guid.NewGuid().ToString();
             string requestId = Guid.NewGuid().ToString();
             string extraData = "";
 
@@ -49,7 +49,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             JObject message = new JObject
             {
                 { "partnerCode", partnerCode },
-                { "partnerName", "Test" },
+                { "partnerName", "PlayTogether" },
                 { "storeId", "MomoTestStore" },
                 { "requestId", requestId },
                 { "amount", amount },
@@ -66,7 +66,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
 
             JObject jmessage = JObject.Parse(responseFromMomo);
-            result.Content = responseFromMomo;
+            result.Content = jmessage;
             return result;
         }
     }

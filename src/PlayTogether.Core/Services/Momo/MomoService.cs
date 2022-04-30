@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using PlayTogether.Core.Dtos.Incoming.Momo;
 using PlayTogether.Core.Dtos.Outcoming.Generic;
 using PlayTogether.Core.Interfaces.Repositories.Momo;
@@ -18,7 +19,7 @@ namespace PlayTogether.Core.Services.Momo
             _momoRepository = momoRepository;
             _logger = logger;
         }
-        public async Task<Result<string>> GenerateMomoLinkAsync(WebPaymentRequest request)
+        public async Task<Result<JObject>> GenerateMomoLinkAsync(WebPaymentRequest request)
         {
             try {
                 if (request is null) {
