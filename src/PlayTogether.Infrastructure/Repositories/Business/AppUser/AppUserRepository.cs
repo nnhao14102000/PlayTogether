@@ -829,7 +829,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.AppUser
                     Helpers.DisableUserHelpers.PopulateDisableUser(user.Id, request.DateDisable, request.DateActive, request.Note, request.NumDateDisable)
                 );
 
-                await _context.Entry(user).Reference(x => x.Orders).LoadAsync();
+                await _context.Entry(user).Collection(x => x.Orders).LoadAsync();
                 var orders = user.Orders.Where(x => x.Status == OrderStatusConstants.Processing);
                 if (orders.Count() > 0) {
                     foreach (var order in orders) {
