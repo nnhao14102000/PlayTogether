@@ -136,8 +136,9 @@ Authorization: {{authToken}}
 # Get all player rating violate
 GET {{baseUrl}}/api/play-together/v1/rating/violates
 ?IsNew=
+&IsViolate=
 &IsActive=
-&IsApprove=true
+&IsApprove=
 Content-Type: {{contentType}}
 Authorization: {{authToken}}
 

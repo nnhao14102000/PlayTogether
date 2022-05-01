@@ -134,6 +134,7 @@ namespace PlayTogether.Infrastructure.Helpers
             CreateMap<Notification, NotificationGetAllResponse>();
             CreateMap<Notification, NotificationGetDetailResponse>();
             CreateMap<NotificationCreateRequest, Notification>();
+            CreateMap<NotificationCreateAllServerRequest, Notification>();
 
             // Rating mapper profile
             CreateMap<Rating, RatingGetResponse>();
