@@ -703,6 +703,9 @@
 >   ***Description***: Get momo payment link    
 >   ***Role Access***: User    
 >
+> - ``POST /api/play-together/v1/momo/ipn ``  
+>   ***Description***: IPN Momo invoke to deposit    
+>
 
 <h2 id="config">System Config  <a href="#table-of-contents" target="_self">🔙</a></h2>   
 
