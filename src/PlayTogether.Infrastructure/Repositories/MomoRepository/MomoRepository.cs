@@ -18,7 +18,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             string accessKey = "mZEfBbA18qzzbgNg";
             string serectkey = "l7YkkLd9pQZR7Kk08bsEMeK2Grk7x20e";
             string orderInfo = "NẠP TIỀN PLAY TOGETHER";
-            string redirectUrl = "https://playtogether.page.link";
+            string redirectUrl = "https://playtogether.page.link/pto";
             //https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b
             string ipnUrl = "https://play-together.azurewebsites.net/api/play-together/v1/momo/ipn";
             string requestType = "captureWallet";
