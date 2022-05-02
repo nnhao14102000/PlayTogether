@@ -46,3 +46,7 @@ Example: <br> `Server=YOUR_SQL_SERVER_NAME;Database=NAME_OF_DB;User=sa;Password=
 - Machine Learning with ML.NET
     - [Tutorial: Build a movie recommender using matrix factorization with ML.NET | Microsoft Document](https://docs.microsoft.com/vi-vn/dotnet/machine-learning/tutorials/movie-recommendation)
     - [Matrix Factorization Collaborative Filtering | Machine Learning cơ bản | VietNamese Language](https://machinelearningcoban.com/2017/05/31/matrixfactorization/)
+
+- Momo Wallet Payment
+    - [Instant Payment Notification](https://developers.momo.vn/v2/#/docs/aiov2/?id=instant-payment-notification)
+    - [Sample Code Momo](https://github.com/momo-wallet/payment)
