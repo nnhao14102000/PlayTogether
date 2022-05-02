@@ -35,5 +35,14 @@ namespace PlayTogether.Api.Controllers.V1.Business
             var response = await _momoService.GenerateMomoLinkAsync(request);
             return Ok(response);
         }
+
+        /// <summary>
+        /// Get IPN Response
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Route("ipn")]
+        public async Task<ActionResult> GetIPNResponse(){
+            return Ok();
+        }
     }
 }
