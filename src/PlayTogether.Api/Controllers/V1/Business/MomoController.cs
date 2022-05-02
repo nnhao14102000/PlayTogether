@@ -41,7 +41,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("ipn")]
-        public async Task<ActionResult> GetIPNResponse(MomoIPNRequest request){
+        public async Task<ActionResult> GetIPNResponse([FromBody] MomoIPNRequest request){
             return Ok(request);
         }
     }
