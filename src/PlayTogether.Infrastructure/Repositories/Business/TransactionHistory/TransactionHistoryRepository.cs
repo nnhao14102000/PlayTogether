@@ -152,9 +152,34 @@ namespace PlayTogether.Infrastructure.Repositories.Business.TransactionHistory
 
         }
 
-    //     public async Task<Result<(float, float, float)>> CalculateTypeMoney(ClaimsPrincipal principal)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
+        public async Task<Result<bool>> Deposit_v2_Async(string userId, float amount, string transId)
+        {
+            var result = new Result<bool>();
+            var user = await _context.AppUsers.FindAsync(userId);
+            if (user is null) {
+                result.Error = Helpers.ErrorHelpers.PopulateError(400, APITypeConstants.BadRequest_400, ErrorMessageConstants.UserNotFound);
+                return result;
+            }
+            await _context.Entry(user).Reference(x => x.UserBalance).LoadAsync();
+            user.UserBalance.Balance += amount;
+            user.UserBalance.ActiveBalance += amount;
+            await _context.TransactionHistories.AddAsync(Helpers.TransactionHelpers.PopulateTransactionHistory(
+                user.UserBalance.Id, TransactionTypeConstants.Add, amount, TransactionTypeConstants.Deposit, transId
+            ));
+            await _context.Notifications.AddAsync(Helpers.NotificationHelpers.PopulateNotification(
+                user.Id, "Nạp tiền thành công!", $"Bạn đã nạp {amount} vào tài khoản thành công lúc {DateTime.Now.AddHours(7)}.", ""
+            ));
+            if (await _context.SaveChangesAsync() >= 0) {
+                result.Content = true;
+                return result;
+            }
+            result.Error = Helpers.ErrorHelpers.PopulateError(0, APITypeConstants.SaveChangesFailed, ErrorMessageConstants.SaveChangesFailed);
+            return result;
+        }
+
+        //     public async Task<Result<(float, float, float)>> CalculateTypeMoney(ClaimsPrincipal principal)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
     }
 }

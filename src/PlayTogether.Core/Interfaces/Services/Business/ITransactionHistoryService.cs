@@ -13,5 +13,6 @@ namespace PlayTogether.Core.Interfaces.Services.Business
 
         Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesForAdminAsync(string userId, TransactionParameters param);
         Task<Result<bool>> DepositAsync(ClaimsPrincipal principal, DepositRequest request);
+        Task<Result<bool>> Deposit_v2_Async(string userId, float amount, string transId);
     }
 }

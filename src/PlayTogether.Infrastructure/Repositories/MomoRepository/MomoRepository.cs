@@ -24,7 +24,7 @@ namespace PlayTogether.Infrastructure.Repositories.MomoRepository
             string requestType = "captureWallet";
 
             string amount = request.Amount.ToString();
-            string orderId = "MOMOVFTR20220325_" +  Guid.NewGuid().ToString();
+            string orderId = request.UserId + "_" +  Guid.NewGuid().ToString();
             string requestId = Guid.NewGuid().ToString();
             string extraData = "";
 

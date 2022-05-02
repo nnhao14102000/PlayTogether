@@ -39,6 +39,17 @@ namespace PlayTogether.Core.Services.Business.TransactionHistory
             }
         }
 
+        public async Task<Result<bool>> Deposit_v2_Async(string userId, float amount, string transId)
+        {
+            try {
+                return await _transactionHistoryRepository.Deposit_v2_Async(userId, amount, transId);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error while trying to call _transactionHistoryRepository in service class, Error Message: {ex}.");
+                throw;
+            }
+        }
+
         public async Task<PagedResult<TransactionHistoryResponse>> GetAllTransactionHistoriesAsync(ClaimsPrincipal principal, TransactionParameters param)
         {
             try {
