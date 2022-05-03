@@ -1,3 +1,4 @@
+[![Test - Continuous Integration and Deployment](https://github.com/nnhao14102000/PlayTogether/actions/workflows/test.yaml/badge.svg)](https://github.com/nnhao14102000/PlayTogether/actions/workflows/test.yaml)
 # Play Together API
 
 ## Technical vs Tools
