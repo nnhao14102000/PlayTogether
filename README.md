@@ -1,3 +1,4 @@
+[![HaoNN - Continuous Integration](https://github.com/nnhao14102000/PlayTogether/actions/workflows/haonn.yaml/badge.svg)](https://github.com/nnhao14102000/PlayTogether/actions/workflows/haonn.yaml)
 # Play Together API
 
 ## Technical vs Tools
