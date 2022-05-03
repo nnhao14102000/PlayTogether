@@ -147,7 +147,7 @@ namespace PlayTogether.Infrastructure.Repositories.Business.UnActiveBalance
                                 item.UpdateDate = DateTime.UtcNow.AddHours(7);
                                 await _context.TransactionHistories.AddRangeAsync(
                                     Helpers.TransactionHelpers.PopulateTransactionHistory(fromUser.UserBalance.Id, TransactionTypeConstants.Add, item.Order.FinalPrices / (1 - item.Order.PercentSub), TransactionTypeConstants.ReportRefund, item.OrderId),
-                                    Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Order.FinalPrices, TransactionTypeConstants.Repoft, item.OrderId)
+                                    Helpers.TransactionHelpers.PopulateTransactionHistory(toUser.UserBalance.Id, TransactionTypeConstants.Sub, item.Order.FinalPrices, TransactionTypeConstants.Report, item.OrderId)
                                 );
 
                                 if (await _context.SaveChangesAsync() >= 0) {

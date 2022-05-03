@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using PlayTogether.Core.Dtos.Outcoming.Business.Recommend;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using PlayTogether.Core.Dtos.Incoming.Auth;
 
 namespace PlayTogether.Api.Controllers.V1.Business
 {
@@ -44,6 +46,7 @@ namespace PlayTogether.Api.Controllers.V1.Business
         ///
         /// </remarks>
         [HttpPost]
+        [Authorize(Roles = AuthConstant.RoleUser)]
         public async Task<ActionResult> Post([FromBody] List<RecommendData> request)
         {
             if (!ModelState.IsValid) {
