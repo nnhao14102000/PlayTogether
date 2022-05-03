@@ -1,3 +1,4 @@
+[![Master - Continuous Integration](https://github.com/nnhao14102000/PlayTogether/actions/workflows/master.yaml/badge.svg)](https://github.com/nnhao14102000/PlayTogether/actions/workflows/master.yaml)
 # Play Together API
 
 ## Technical vs Tools
