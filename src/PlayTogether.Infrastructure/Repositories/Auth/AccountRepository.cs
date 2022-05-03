@@ -60,6 +60,11 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
             var appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
 
             if (appUser is not null) {
+                if (appUser.Status == UserStatusConstants.Maintain) {
+                    return new AuthResult {
+                        Errors = new List<string>() { "Hệ thống đang bảo trì." }
+                    };
+                }
                 if (appUser.IsActive == true) {
                     if (appUser.Status == UserStatusConstants.Offline) {
                         appUser.Status = UserStatusConstants.Online;
@@ -255,6 +260,11 @@ namespace PlayTogether.Infrastructure.Repositories.Auth
                 var appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.IdentityId == user.Id);
 
                 if (appUser is not null) {
+                    if (appUser.Status == UserStatusConstants.Maintain) {
+                        return new AuthResult {
+                            Errors = new List<string>() { "Hệ thống đang bảo trì." }
+                        };
+                    }
                     if (appUser.IsActive == true) {
                         if (appUser.Status == UserStatusConstants.Offline) {
                             appUser.Status = UserStatusConstants.Online;
