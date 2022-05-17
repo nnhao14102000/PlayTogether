@@ -6,7 +6,7 @@ on:
       - test
 
 env:
-  DOTNET_VERSION: '5.0.x'
+  DOTNET_VERSION: '6.0.x'
   AZURE_WEBAPP_NAME: play-together
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       - name: Check out code 🛎️
         uses: actions/checkout@v2
         
-      - name: Setup .NET 5 👻
+      - name: Setup .NET 6 👻
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
